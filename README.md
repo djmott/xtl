@@ -2,8 +2,10 @@ eXtended Template Library
 =========================
 |                                                                                                           |
 |---------------------------------------|-------------------------------------------------------------------|
-|Travis                                 |![Build Status](https://travis-ci.org/djmott/xtl.svg?branch=master)|
+|Travis                                 |![Travis Build Status](https://travis-ci.org/djmott/xtl.svg?branch=master)|
+|Open Hub                               | [![Open Hub project report](https://www.openhub.net/p/libxtl/widgets/project_thin_badge.gif)](https://www.openhub.net/p/libxtl?ref=sample)|
 |                                       |                                                                   |
+
 
 XTL is a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. XTL supplements and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard. The library can be used out-of-the-box in many cases by simply including the desired header since most components are header-only. A few components require linking to a run-time component so they will need to be compiled. Also included are a number of tutorials on C++ template metaprogramming (TMP) that explains the various techniques used.
 
