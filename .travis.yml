@@ -19,7 +19,7 @@ before_install:
   - mkdir -p      $TRAVIS_BUILD_DIR/3rdparty                    $TRAVIS_BUILD_DIR/build
 
   - sudo apt-get update -qq
-  - sudo apt-get install -y -qq lcov curl libgtest-dev unzip valgrind rats cppcheck vera++
+  - sudo apt-get install -y -qq lcov gcovr curl libgtest-dev unzip valgrind rats cppcheck vera++
   - cd /usr/src/gtest
   - sudo cmake .
   - sudo cmake --build .
@@ -45,13 +45,13 @@ script:
   - for item in $(find src -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
   - for item in $(find include -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
 
-  - for item in $(find include -name *.hpp); do cppcheck --inline-suppr --suppressions-list=cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 --library=/usr/local/share/CppCheck/posix.cfg --library=/usr/local/share/CppCheck/gnu.cfg --library=/usr/local/share/CppCheck/std.cfg $item 2> docs/reports/cppcheck/$(basename $item).xml; done
-  - for item in $(find src -name *.cpp); do cppcheck --inline-suppr --suppressions-list=cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 --library=/usr/local/share/CppCheck/posix.cfg --library=/usr/local/share/CppCheck/gnu.cfg --library=/usr/local/share/CppCheck/std.cfg $item 2> docs/reports/cppcheck/$(basename $item).xml; done
+  - for item in $(find include -name *.hpp); do cppcheck --inline-suppr --suppressions-list=cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
+  - for item in $(find src -name *.cpp); do cppcheck --inline-suppr --suppressions-list=cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
 
   - rats --xml -w 3 src include > docs/reports/rats/rats.xml
 
   - cp build/tests/*.xml docs/reports/gtest
-  - for item in $( find build/tests -name '*.gcda' ); do gcov -l -m $item; done
-  - for item in $( find build/tests -name '*.gcda' ); do gcovr -g -x -r .  > docs/reports/gcov/$(basename $item).xml
+  - for item in $( find build/tests -name '*.gcda' ); do gcov -l $item; done
+  - for item in $( find build/tests -name '*.gcda' ); do gcovr -g -x -r .  > docs/reports/gcov/$(basename $item).xml; done
 
   - sonar-scanner -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
