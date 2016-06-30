@@ -9,8 +9,8 @@ include:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - g++-4.9
-    env: COMPILER=g++-4.9
+          - g++-5
+    env: COMPILER=g++-5
 
 before_install:
   - mkdir -p      $TRAVIS_BUILD_DIR/docs/reports/cppcheck       $TRAVIS_BUILD_DIR/docs/reports/gcov        $TRAVIS_BUILD_DIR/docs/reports/gtest
