@@ -50,7 +50,7 @@ script:
 
   - rats --xml -w 3 src include > docs/reports/rats/rats.xml
 
-  - cp build/tests/*.xml docs/reports/gtest
+  - if [ -e "$(ls build/tests/*.xml)" ]; then cp build/tests/*.xml docs/reports/gtest; fi
   - for item in $( find build/tests -name '*.gcda' ); do gcov -l $item; done
   - for item in $( find build/tests -name '*.gcda' ); do gcovr -x -r .  > docs/reports/gcov/$(basename $item).xml; done
 
