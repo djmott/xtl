@@ -36,11 +36,11 @@ script:
   - cd $TRAVIS_BUILD_DIR/build
   - cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. 2>&1 | tee ../docs/reports/make/cmake.log
   - build-wrapper-linux-x86-64 --out-dir . make clean all unit_tests coverage_tests examples
-  - $TRAVIS_BUILD_DIR/build/tests/coverage_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest
-  - $TRAVIS_BUILD_DIR/build/tests/unit_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest
+  - $TRAVIS_BUILD_DIR/build/tests/coverage_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest -gtest_filter=-test_parser*regex*
+  - $TRAVIS_BUILD_DIR/build/tests/unit_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest -gtest_filter=-test_parser*regex*
   - cd $TRAVIS_BUILD_DIR/
 
-  - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/unit_tests.memcheck.xml build/tests/unit_tests
+  - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/unit_tests.memcheck.xml build/tests/unit_tests -gtest_filter=-test_parser*regex*
 
   - for item in $(find src -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
   - for item in $(find include -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
