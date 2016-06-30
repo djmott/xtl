@@ -34,13 +34,15 @@ before_install:
   - mkdir 3rdparty
   - pushd 3rdparty
   - wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-2.6.1.zip
+  - wget https://sonarqube.com/static/cpp/build-wrapper-linux-x86.zip
   - unzip sonar-scanner-2.6.1.zip
-  - export PATH=$PWD/sonar-scanner-2.6.1/bin:$PATH
+  - unzip build-wrapper-linux-x86.zip
+  - export PATH=$PWD/sonar-scanner-2.6.1/bin:$PWD/build-wrapper-linux-x86:$PATH
   - popd
 script:
   - mkdir build
   - pushd build
   - cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. 2>&1 | tee ../docs/reports/make/cmake.log
-  - make all unit_tests coverage_tests examples  2>&1 | tee ../docs/reports/make/make.log
+  - build-wrapper-linux-x86-64 --out-dir . make clean all unit_tests coverage_tests examples
   - popd
   - sonar-scanner -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
