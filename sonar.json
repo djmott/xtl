@@ -1,0 +1,4 @@
+{
+  "sonarHost": "https://sonarqube.com",
+  "sonarProjectKey": "xtl"
+}

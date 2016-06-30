@@ -1,0 +1,8 @@
+language: cpp
+install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq lcov curl
+  - sudo apt-get install libgtest-dev
+  - pushd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; popd
+script:
+  - mkdir build && cd build && cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug .. && cmake --build . && cmake --build . --target unit_tests && cmake --build . --target coverage_tests && cmake --build . --target examples
