@@ -13,6 +13,17 @@ include:
     env: COMPILER=g++-4.9
 
 before_install:
+
+  - if [ ! -e docs/reports/cppcheck ]; then mkdir -p docs/reports/cppcheck; fi
+  - if [ ! -e docs/reports/gcov ]; then mkdir -p docs/reports/gcov; fi
+  - if [ ! -e docs/reports/gtest ]; then mkdir -p docs/reports/gtest; fi
+  - if [ ! -e docs/reports/make ]; then mkdir -p docs/reports/make; fi
+  - if [ ! -e docs/reports/oclint ]; then mkdir -p docs/reports/oclint; fi
+  - if [ ! -e docs/reports/rats ]; then mkdir -p docs/reports/rats; fi
+  - if [ ! -e docs/reports/valgrind ]; then mkdir -p docs/reports/valgrind; fi
+  - if [ ! -e docs/reports/vera++ ]; then mkdir -p docs/reports/vera++; fi
+  - if [ ! -e docs/reports/lcov ]; then mkdir -p docs/reports/lcov; fi
+
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq lcov curl libgtest-dev unzip valgrind rats cppcheck vera++
   - pushd /usr/src/gtest
@@ -29,7 +40,7 @@ before_install:
 script:
   - mkdir build
   - pushd build
-  - cmake -DCMAKE_BUILD_TYPE=Debug ..
-  - make all unit_tests coverage_tests examples
+  - cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. 2>&1 | tee ../docs/reports/make/cmake.log
+  - make all unit_tests coverage_tests examples  2>&1 | tee ../docs/reports/make/make.log
   - popd
   - sonar-scanner -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
