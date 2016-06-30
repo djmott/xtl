@@ -52,6 +52,6 @@ script:
 
   - cp build/tests/*.xml docs/reports/gtest
   - for item in $( find build/tests -name '*.gcda' ); do gcov -l $item; done
-  - for item in $( find build/tests -name '*.gcda' ); do gcovr -g -x -r .  > docs/reports/gcov/$(basename $item).xml; done
+  - for item in $( find build/tests -name '*.gcda' ); do gcovr -x -r .  > docs/reports/gcov/$(basename $item).xml; done
 
   - sonar-scanner -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
