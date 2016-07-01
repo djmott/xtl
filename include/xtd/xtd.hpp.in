@@ -16,7 +16,7 @@
 #endif
 
 #if !defined(XTD_CI_BUILD)
-    #define XTD_CI_BUILD @XTD_CI_BUILD@
+    #cmakedefine01 XTD_CI_BUILD
 #endif
 
 /** @name XTD_COMPILER
