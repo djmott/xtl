@@ -16,28 +16,31 @@ namespace xtd{
   using wstring = xstring<wchar_t>;
   using tstring = xstring<tchar>;
 
+#if !(DOXY_INVOKED)
   namespace _{
     template <typename, typename > struct xstring_tostring;
     template <typename, typename ...> struct xstring_format;
 
   }
+#endif
 
-  /**
-   \struct  xstring
-  
-   \brief An xstring.
-  
-   \tparam  _ChT  type of the t.
+  /** Extends std::string with some added functionality
+   @tparam _ChT character type
    */
-
   template <typename _ChT> struct xstring : std::basic_string<_ChT>{
     using _super_t = std::basic_string<_ChT>;
     using size_type = typename _super_t::size_type;
 
+    ///Generic constructor forwards everything to the base class
     template <typename ... _ArgsT>
     xstring(_ArgsT&&...oArgs)
       : _super_t(std::forward<_ArgsT>(oArgs)...){}
 
+    /**
+    Type safe formatting
+    Appends each item in the parameter list together performing type-safe verification and printing
+    @param _ArgsT variable elements appended together
+     */
     template <typename ... _ArgsT>
     static xstring format(_ArgsT&&...oArgs){
       xstring sRet;
@@ -45,6 +48,10 @@ namespace xtd{
       return  sRet;
     }
 
+    /**
+    Converts the string to lower case
+    @param loc The locale to use during conversion
+     */
     xstring& to_lower(const std::locale& loc){
       for (auto & ch : *this){
         ch = std::tolower(ch, loc);
@@ -52,6 +59,10 @@ namespace xtd{
       return *this;
     }
 
+    /**
+    Converts the string to upper case
+    @param loc The locale to use during conversion
+     */
     xstring& to_upper(const std::locale& loc){
       for (auto & ch : *this){
         ch = std::toupper(ch, loc);
@@ -59,32 +70,37 @@ namespace xtd{
       return *this;
     }
 
+    ///Trim leading whitespace
     xstring& ltrim(){
-      for (; _super_t::size();){
-        if (!std::iswspace(_super_t::front())){
+      auto oBegin = _super_t::begin();
+      for(;oBegin != _super_t::end() ; ++oBegin){
+        if (!std::iswspace(*oBegin)){
           break;
         }
-        _super_t::erase(0, 1);
       }
+      _super_t::erase(_super_t::begin(), oBegin);
       return *this;
     }
 
+    ///Trim trailing whitespace
     xstring& rtrim(){
-      for (; _super_t::size();){
-        if (!iswspace(_super_t::back())){
+      auto oBegin = _super_t::end()--;
+      for(;oBegin != _super_t::begin() ; --oBegin){
+        if (!std::iswspace(*oBegin) && *oBegin){
           break;
         }
-        _super_t::erase(_super_t::end() - 1);
       }
+      _super_t::erase(++oBegin, _super_t::end());
       return *this;
     }
 
+    //Trim leading and trailing whitespace
     xstring& trim(){
       ltrim();
-      rtrim();
-      return *this;
+      return rtrim();
     }
 
+    //replaces all occurances of the characters in the oItems list with a specified character
     xstring& replace(std::initializer_list<_ChT> oItems, _ChT chReplace){
       for (auto & oCh : *this){
         bool bFound = false;
@@ -102,14 +118,13 @@ namespace xtd{
       return *this;
     }
 
+    ///finds the first occurance of any item
     size_type find_first_of(const std::initializer_list<_ChT>& delimiters, size_type pos = 0) const{
       size_type sRet = _super_t::npos;
       for (const _ChT ch : delimiters){
         auto x = _super_t::find_first_of(ch, pos);
         if (_super_t::npos != x){
-          if (_super_t::npos == sRet){
-            sRet = x;
-          } else if (x < sRet){
+          if (_super_t::npos == sRet || x < sRet){
             sRet = x;
           }
         }
@@ -117,6 +132,7 @@ namespace xtd{
       return sRet;
     }
 
+    ///splits the string by the specified delmiters into constituent elements
     std::vector<xstring<_ChT>> split(const std::initializer_list<_ChT>& delimiters, bool trimEmpty = false) const{
       using container_t = std::vector<xstring<_ChT>>;
       container_t oRet;
@@ -142,21 +158,15 @@ namespace xtd{
       return oRet;
     }
 
+    ///Convert data to a string
     template <typename _Ty> inline static xstring<_ChT> from(const _Ty&);
     template <typename _Ty> inline static xstring<_ChT> from(const _Ty*);
+
 #if (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
 
-    /**
-     \struct  iconv_helper
-
-     \brief An iconv helper.
-
-     */
-
+    ///iconv handle wrapper
     struct iconv_helper{
-
       iconv_helper(const iconv_helper&) = delete;
-
       iconv_helper& operator=(const iconv_helper&) = delete;
       iconv_helper(const char * to, const char * from) : _iconv(iconv_open(to, from)){
         if ((iconv_t)-1 == _iconv){
@@ -173,6 +183,7 @@ namespace xtd{
 #endif
   };
 
+#if !(DOXY_INVOKED)
 #if (XTD_STR_CONVERT_CODECVT & XTD_STR_CONVERT)
   template <> template <> inline string string::from<wchar_t>(const wchar_t* src){
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
@@ -271,32 +282,14 @@ namespace xtd{
   template <> template <> inline string string::from<string>(const string& src){ return string(src); }
   template <> template <> inline wstring wstring::from<wstring>(const wstring& src){ return wstring(src); }
 
-#if (!DOXYGEN_INVOKED)
   namespace _{
 
-    //xstring::format()
-
-    /**
-     \struct  xstring_format<_ChT>
-    
-     \brief An xstring format.
-        
-     \tparam  _ChT  type of the t.
-     */
 
     template <typename _ChT>
     struct xstring_format<_ChT>{
       inline static void format(const xstring<_ChT>&){}
     };
 
-    /**
-     \struct  xstring_format<_ChT,const _ChT*const&,_ArgsT...>
-    
-     \brief An xstring format.
-    
-     \tparam  _ChT    type of the t.
-     \tparam  _ArgsT  type of the arguments t.
-     */
 
     template <typename _ChT, typename ... _ArgsT>
     struct xstring_format<_ChT, const _ChT*const&, _ArgsT...>{
@@ -305,15 +298,6 @@ namespace xtd{
       }
     };
 
-    //wstring::format(const wchar_t*)
-
-    /**
-     \struct  xstring_format<wchar_t,const wchar_t *,_ArgsT...>
-    
-     \brief An xstring format.
-    
-     \tparam  _ArgsT  type of the arguments t.
-     */
 
     template <typename ... _ArgsT>
     struct xstring_format<wchar_t, const wchar_t *, _ArgsT...>{
@@ -324,16 +308,6 @@ namespace xtd{
     };
 
 
-    //wstring::format(const char*)
-
-    /**
-     \struct  xstring_format<wchar_t,const char *,_ArgsT...>
-    
-     \brief An xstring format.
-    
-     \tparam  _ArgsT  type of the arguments t.
-     */
-
     template <typename ... _ArgsT>
     struct xstring_format<wchar_t, const char *, _ArgsT...>{
       inline static void format(wstring& dest, const char * src, _ArgsT&&...oArgs){
@@ -342,16 +316,6 @@ namespace xtd{
       }
     };
 
-
-    //string::format(const char*)
-
-    /**
-     \struct  xstring_format<char,const char *,_ArgsT...>
-    
-     \brief An xstring format.
-    
-     \tparam  _ArgsT  type of the arguments t.
-     */
 
     template <typename ... _ArgsT>
     struct xstring_format<char, const char *, _ArgsT...>{
@@ -362,16 +326,6 @@ namespace xtd{
     };
 
 
-    //string::format(const wchar_t*)
-
-    /**
-     \struct  xstring_format<char,const wchar_t *,_ArgsT...>
-    
-     \brief An xstring format.
-
-     \tparam  _ArgsT  type of the arguments t.
-     */
-
     template <typename ... _ArgsT>
     struct xstring_format<char, const wchar_t *, _ArgsT...>{
       inline static void format(string& dest, const wchar_t * src, _ArgsT&&...oArgs){
@@ -380,15 +334,6 @@ namespace xtd{
       }
     };
 
-    /**
-     \struct  xstring_format<_ChT,const _ChT(&)[_Len],_ArgsT...>
-    
-     \brief An xstring format.
-     \tparam  _ChT    type of the t.
-     \tparam  _Len    type of the length.
-     \tparam  _ArgsT  type of the arguments t.
-     */
-
     template <typename _ChT, int _Len, typename ... _ArgsT>
     struct xstring_format<_ChT, const _ChT(&)[_Len], _ArgsT...>{
       inline static void format(xstring<_ChT>& dest, const _ChT(&src)[_Len], _ArgsT&&...oArgs){
@@ -396,13 +341,6 @@ namespace xtd{
         xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
       }
     };
-
-    /** An xstring format.
-
-
-     \tparam  _ChT    type of the t.
-     \tparam  _ArgsT  type of the arguments t.
-     */
 
     template <typename _ChT, typename ... _ArgsT>
     struct xstring_format<_ChT, const xstring<_ChT>&, _ArgsT...>{
