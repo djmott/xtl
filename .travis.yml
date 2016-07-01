@@ -31,8 +31,8 @@ before_install:
   - export PATH=$PWD/sonar-scanner-2.6.1/bin:$PWD/build-wrapper-linux-x86:$PATH
 script:
   - cd $TRAVIS_BUILD_DIR/build
-  - cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. 2>&1 | tee ../docs/reports/make/cmake.log
-  - build-wrapper-linux-x86-64 --out-dir . CFLAGS="$CFLAGS -DCI_BUILD" CXXFLAGS="$CXXFLAGS -DCI_BUILD" make clean all coverage_tests examples
+  - cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DXTD_CI_BUILD=TRUE .. 2>&1 | tee ../docs/reports/make/cmake.log
+  - build-wrapper-linux-x86-64 --out-dir . make clean all coverage_tests examples
   - $TRAVIS_BUILD_DIR/build/tests/coverage_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest
   - cd $TRAVIS_BUILD_DIR/
   - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/coverage_tests.memcheck.xml $TRAVIS_BUILD_DIR/build/tests/coverage_tests

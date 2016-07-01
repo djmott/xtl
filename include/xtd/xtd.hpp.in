@@ -15,6 +15,10 @@
     #define DOXY_INVOKED 0
 #endif
 
+#if !defined(XTD_CI_BUILD)
+    #define XTD_CI_BUILD @XTD_CI_BUILD@
+#endif
+
 /** @name XTD_COMPILER
     @{*/
 #define XTD_COMPILER_MSVC 1

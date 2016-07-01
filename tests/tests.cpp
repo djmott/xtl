@@ -15,10 +15,10 @@
 #endif
 
 
-#if defined(CI_BUILD)
-#define CI_DISABLE(x) DISABLED_##x
+#if (XTD_CI_BUILD)
+  #define CI_DISABLE(x) DISABLED_##x
 #else
-#define CI_DISABLE(x) x
+  #define CI_DISABLE(x) x
 #endif
 
 #include "test_callback.hpp"
