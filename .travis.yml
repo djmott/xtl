@@ -55,4 +55,6 @@ script:
   - for item in $( find -name '*.gcda' ); do gcov -l $item; done
   - for item in $( find -name '*.gcda' ); do gcovr -x -r .  > $TRAVIS_BUILD_DIR/docs/reports/gcov/$(basename $item).xml; done
 
+  - cd $TRAVIS_BUILD_DIR/
+
   - sonar-scanner -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
