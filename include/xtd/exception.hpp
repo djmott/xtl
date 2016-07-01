@@ -7,15 +7,6 @@
 
 #pragma once
 
-#include <xtd.hpp>
-
-#include <string.h>
-#include <string>
-#include <exception>
-
-
-#include <xtd/source_location.hpp>
-
 /**
  @def throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
 

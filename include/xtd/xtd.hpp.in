@@ -181,6 +181,88 @@ namespace xtd{
     /// @endinternal
 }
 
+
+//System
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     #include <winsock2.h>
+    #include <windows.h>
+    #include <Ws2ipdef.h>
+    #include <rpc.h>
 #endif
+
+#if ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
+  #include <unistd.h>
+  #include <limits.h>
+  #include <sys/types.h>
+  #include <dlfcn.h>
+  #include <poll.h>
+  #include <sys/socket.h>
+  #include <sys/ioctl.h>
+  #include <netinet/in.h>
+  #include <arpa/inet.h>
+#endif
+
+//CRT
+#include <string.h>
+
+
+//STL
+#if (XTD_STR_CONVERT_CODECVT & XTD_STR_CONVERT)
+  #include <codecvt>
+#endif
+
+#include <algorithm>
+#include <chrono>
+#include <condition_variable>
+#include <cstdint>
+#include <cstdlib>
+#include <cwctype>
+#include <deque>
+#include <exception>
+#include <functional>
+#include <future>
+#include <iostream>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <regex>
+#include <stack>
+#include <stdexcept>
+#include <string>
+#include <thread>
+#include <typeinfo>
+#include <type_traits>
+#include <vector>
+
+//3rd party
+#if (XTD_HAS_UUID)
+    #include <uuid/uuid.h>
+#endif
+
+#if (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
+  #include <iconv.h>
+#endif
+
+#if (XTD_LOG_TARGET_SYSLOG)
+    #include <syslog.h>
+#endif
+
+//XTL
+#include <xtd/callback.hpp>
+#include <xtd/data_convert.hpp>
+#include <xtd/source_location.hpp>
+#include <xtd/exception.hpp>
+#include <xtd/string.hpp>
+#include <xtd/path.hpp>
+#include <xtd/dynamic_library.hpp>
+#include <xtd/event_trace.hpp>
+#include <xtd/executable.hpp>
+#include <xtd/log.hpp>
+#include <xtd/meta.hpp>
+#include <xtd/parse.hpp>
+#include <xtd/socket.hpp>
+#include <xtd/unique_id.hpp>
+#include <xtd/var.hpp>
+

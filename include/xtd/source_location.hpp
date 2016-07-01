@@ -6,9 +6,6 @@
 
 #pragma once
 
-#include <string>
-#include <string.h>
-
 namespace xtd{
 
 #define here() xtd::source_location(__FILE__,__LINE__)

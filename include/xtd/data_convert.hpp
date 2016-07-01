@@ -6,9 +6,6 @@
 
 #pragma once
 
-#include <xtd.hpp>
-#include <cstdint>
-#include <type_traits>
 namespace xtd{
 
   struct Mask{

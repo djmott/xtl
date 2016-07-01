@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <xtd.hpp>
-#include <type_traits>
 namespace xtd{
 
   template <typename, typename...> struct is_a;

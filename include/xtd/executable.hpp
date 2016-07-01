@@ -7,14 +7,6 @@
 
 #pragma once
 
-#include <xtd.hpp>
-#include <xtd/path.hpp>
-
-#if (XTD_OS_UNIX & XTD_OS)
-  #include <unistd.h>
-  #include <limits.h>
-
-#endif
 
 namespace xtd {
 

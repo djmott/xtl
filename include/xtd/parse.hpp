@@ -5,14 +5,6 @@ Simple text parsing library
 
 #pragma once
 
-#include <xtd.hpp>
-#include <xtd/meta.hpp>
-
-#include <memory>
-#include <vector>
-#include <string>
-#include <regex>
-
 namespace xtd{
 
   /** @namespace xtd::parse

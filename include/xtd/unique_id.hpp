@@ -6,15 +6,6 @@
 
 #pragma once
 
-#include <xtd.hpp>
-#include <xtd/exception.hpp>
-
-#if (XTD_HAS_UUID)
-#include <uuid/uuid.h>
-#elif ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-#include <rpc.h>
-#endif
-
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma comment(lib, "rpcrt4")
 #endif

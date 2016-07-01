@@ -6,16 +6,7 @@
 
 #pragma once
 
-#include <xtd.hpp>
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-  #include <windows.h>
-#elif ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
-  #include <dlfcn.h>
-#endif
 
-#include <xtd/exception.hpp>
-#include <xtd/path.hpp>
-#include <memory>
 
 namespace xtd{
 

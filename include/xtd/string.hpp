@@ -6,25 +6,7 @@
 
 #pragma once
 
-#include <xtd.hpp>
 
-#include <locale>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <stdexcept>
-#include <cwctype>
-
-#if (XTD_STR_CONVERT_CODECVT & XTD_STR_CONVERT)
-  #include <codecvt>
-#elif (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
-  #include <iconv.h>
-#else
-  #include <cstdlib>
-#endif
-
-#include <xtd/exception.hpp>
-#include <xtd/data_convert.hpp>
 
 namespace xtd{
 

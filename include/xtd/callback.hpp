@@ -5,10 +5,6 @@ Single producer - multiple consumer signal-slot
 
 #pragma once
 
-#include <xtd.hpp>
-#include <vector>
-#include <memory>
-
 namespace xtd{
   /** notifies multiple receivers of an event
 

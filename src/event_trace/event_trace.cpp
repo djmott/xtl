@@ -3,8 +3,6 @@
  */
 
 #include <xtd.hpp>
-#include <stack>
-#include <string>
 
 namespace{
   thread_local std::stack<std::string> _ThreadStack;

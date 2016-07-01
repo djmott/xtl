@@ -8,19 +8,8 @@ General purpose socket
 
 #pragma once
 
-#include <xtd.hpp>
-
-#if ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
-  #include <unistd.h>
-  #include <poll.h>
-  #include <sys/socket.h>
-  #include <sys/ioctl.h>
-  #include <netinet/in.h>
-  #include <arpa/inet.h>
-#elif ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
   static_assert(_WIN32_WINNT >= 0x600, "unsupported target Windows version");
-  #include <WinSock2.h>
-  #include <Ws2ipdef.h>
   #define poll WSAPoll
 #endif
 
@@ -31,13 +20,6 @@ General purpose socket
 #if (XTD_COMPILER_IS_MSVC)
   #pragma comment(lib, "ws2_32")
 #endif
-
-#include <memory>
-#include <functional>
-
-#include <xtd/exception.hpp>
-#include <xtd/string.hpp>
-#include <xtd/callback.hpp>
 
 namespace xtd{
 

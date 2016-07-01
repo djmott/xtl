@@ -6,31 +6,11 @@
 
 #pragma once
 
-#include <xtd.hpp>
-#include <xtd/source_location.hpp>
-#include <xtd/string.hpp>
-#include <xtd/process.hpp>
-
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
 #define WARNING(...)  xtd::log::get().write(xtd::log::type::warning, here(), __VA_ARGS__)
 #define INFO(...) xtd::log::get().write(xtd::log::type::info, here(), __VA_ARGS__)
 #define DBG(...)  xtd::log::get().write(xtd::log::type::debug, here(), __VA_ARGS__)
-
-
-#include <chrono>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <deque>
-
-#if (XTD_LOG_TARGET_SYSLOG)
-#include <syslog.h>
-#endif
-
-#if (XTD_LOG_TARGET_COUT)
-#include <iostream>
-#endif
 
 namespace xtd{
 

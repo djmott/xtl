@@ -7,9 +7,6 @@
 
 #pragma once
 
-#include <xtd.hpp>
-#include <xtd/string.hpp>
-
 namespace xtd{
 
   namespace socket{

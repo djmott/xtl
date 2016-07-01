@@ -121,12 +121,12 @@ configure_file("${XTL_SOURCE_DIR}/include/xtd/xtd.hpp.in" "${CMAKE_CURRENT_BINAR
 
 if(DOXYGEN_FOUND)
 
-  configure_file("${XTL_SOURCE_DIR}/Doxyfile.in" "${XTL_SOURCE_DIR}/Doxyfile")
+  configure_file("${XTL_SOURCE_DIR}/docs/Doxyfile.in" "${XTL_SOURCE_DIR}/docs/Doxyfile")
 
   add_custom_target(
     docs COMMAND "${DOXYGEN_EXECUTABLE}" Doxyfile
     COMMENT "Generating Doxygen API Documentation" VERBATIM
-    WORKING_DIRECTORY "${XTL_SOURCE_DIR}"
+    WORKING_DIRECTORY "${XTL_SOURCE_DIR}/docs"
   )
 endif()
 

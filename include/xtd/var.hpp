@@ -4,12 +4,7 @@
 
 */
 
-
 #pragma once
-
-#include <xtd.hpp>
-#include <xtd/string.hpp>
-#include <memory>
 
 namespace xtd {
 

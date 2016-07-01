@@ -4,18 +4,7 @@
 
 */
 
-
 #pragma once
-
-#include <xtd.hpp>
-
-
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
-  #include <windows.h>
-#else
-  #include <sys/types.h>
-  #include <unistd.h>
-#endif
 
 namespace xtd{
 
