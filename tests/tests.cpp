@@ -5,42 +5,70 @@
 #include <xtd.hpp>
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
-#pragma warning(push, 0)
+  #pragma warning(push, 0)
 #endif
 
 #include "gtest/gtest.h"
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
-#pragma warning(pop)
+  #pragma warning(pop)
 #endif
 
-
-
-#if (XTD_CI_BUILD)
-  #define CI_DISABLE(x) DISABLED_##x
-#else
-  #define CI_DISABLE(x) x
+#if (ON==TEST_CALLBACK)
+  #include "test_callback.hpp"
 #endif
 
+#if (ON==TEST_DATA_CONVERT)
+  #include "test_data_convert.hpp"
+#endif
 
-#include "test_callback.hpp"
-#include "test_data_convert.hpp"
-#include "test_dynamic_library.hpp"
-#include "test_event_trace.hpp"
-#include "test_exception.hpp"
-#include "test_executable.hpp"
-#include "test_logging.hpp"
-#include "test_meta.hpp"
-#include "test_parse.hpp"
-#include "test_path.hpp"
-#include "test_socket.hpp"
-#include "test_string.hpp"
-#if (XTD_HAS_UUID)
+#if (ON==TEST_DYNAMIC_LIBRARY)
+  #include "test_dynamic_library.hpp"
+#endif
+
+#if (ON==TEST_EVENT_TRACE)
+  #include "test_event_trace.hpp"
+#endif
+
+#if (ON==TEST_EXCEPTION)
+  #include "test_exception.hpp"
+#endif
+
+#if (ON==TEST_EXCUTABLE)
+  #include "test_executable.hpp"
+#endif
+
+#if (ON==TEST_LOGGING)
+  #include "test_logging.hpp"
+#endif
+
+#if (ON==TEST_META)
+  #include "test_meta.hpp"
+#endif
+
+#if (ON==TEST_PARSE)
+  #include "test_parse.hpp"
+#endif
+
+#if (ON==TEST_PATH)
+  #include "test_path.hpp"
+#endif
+
+#if (ON==TEST_SOCKET)
+  #include "test_socket.hpp"
+#endif
+
+#if (ON==TEST_STRING)
+  #include "test_string.hpp"
+#endif
+
+#if (ON==TEST_UNIQUE_ID)
   #include "test_unique_id.hpp"
 #endif
-#include "test_var.hpp"
 
-
+#if (ON==TEST_VAR)
+  #include "test_var.hpp"
+#endif
 
 int main(int argc, char *argv[]){
   ::testing::InitGoogleTest(&argc, argv);

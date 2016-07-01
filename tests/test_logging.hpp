@@ -3,7 +3,7 @@
  */
 
 
-TEST(test_logging, CI_DISABLE(message_types)){
+TEST(test_logging, message_types){
   FATAL("fatal message");
   ERR("error message");
   WARNING("warning message");

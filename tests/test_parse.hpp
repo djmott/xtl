@@ -47,7 +47,7 @@ TEST(test_parser, string_case){
   EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
 }
 
-TEST(CI_DISABLE(test_parser), CI_DISABLE(regex_no_case)){
+TEST(test_parser, regex_no_case){
   //the regex tests fail under certain gcc versions with buggy regex implementations
   std::string s = "abc";
   using test_parse = xtd::parser<test_grammar::Version, true>;
@@ -57,7 +57,7 @@ TEST(CI_DISABLE(test_parser), CI_DISABLE(regex_no_case)){
 }
 
 
-TEST(CI_DISABLE(test_parser), CI_DISABLE(regex_case)){
+TEST(test_parser, regex_case){
   std::string s = "ABC";
   using test_parse = xtd::parser<test_grammar::Version>;
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));

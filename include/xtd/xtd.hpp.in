@@ -11,12 +11,11 @@
 #define ON    1
 #define OFF   0
 
+#define YES   1
+#define NO    0
+
 #if !defined(DOXY_INVOKED)
     #define DOXY_INVOKED 0
-#endif
-
-#if !defined(XTD_CI_BUILD)
-    #cmakedefine01 XTD_CI_BUILD
 #endif
 
 /** @name XTD_COMPILER

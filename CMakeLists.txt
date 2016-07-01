@@ -14,7 +14,6 @@ set(CMAKE_CXX_STANDARD 11)
 project(XTL)
 
 set(XTD_COLOR_MESSAGES TRUE CACHE BOOLEAN "use color escape sequences in console compiler output")
-set(XTD_CI_BUILD FALSE CACHE BOOLEAN "build for CI")
 
 find_package(Threads)
 find_package(Doxygen)
