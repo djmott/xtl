@@ -34,3 +34,7 @@ docs/html
 .idea
 Doxyfile
 .build
+!.travis.yml
+.*
+
+
