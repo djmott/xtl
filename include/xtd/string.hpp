@@ -73,6 +73,9 @@ namespace xtd{
     ///Trim leading whitespace
     xstring& ltrim(){
       auto oBegin = _super_t::begin();
+      if (oBegin >= _super_t::end()){
+        return *this;
+      }
       for(;oBegin != _super_t::end() ; ++oBegin){
         if (!std::iswspace(*oBegin)){
           break;
@@ -84,7 +87,11 @@ namespace xtd{
 
     ///Trim trailing whitespace
     xstring& rtrim(){
-      auto oBegin = _super_t::end()--;
+      auto oBegin = _super_t::end();
+      if (oBegin <= _super_t::begin()){
+        return *this;
+      }
+      --oBegin;
       for(;oBegin != _super_t::begin() ; --oBegin){
         if (!std::iswspace(*oBegin) && *oBegin){
           break;

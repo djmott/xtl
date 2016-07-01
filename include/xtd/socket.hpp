@@ -5,12 +5,12 @@ General purpose socket
 @{
 */
 
-
 #pragma once
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
   static_assert(_WIN32_WINNT >= 0x600, "unsupported target Windows version");
   #define poll WSAPoll
+  #pragma comment(lib, "ws2_32.lib")
 #endif
 
 #if (XTD_OS_MINGW & XTD_OS)
