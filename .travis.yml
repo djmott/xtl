@@ -40,7 +40,7 @@ script:
 #  - $TRAVIS_BUILD_DIR/build/tests/unit_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest --gtest_filter=-test_parser*regex*
   - cd $TRAVIS_BUILD_DIR/
 
-  - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/coverage_tests.memcheck.xml build/tests/coverage_tests --gtest_filter=-test_parser*regex*
+  - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/coverage_tests.memcheck.xml --gtest_filter=-test_parser*regex*
 
   - for item in $(find src -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
   - for item in $(find include -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
