@@ -10,14 +10,9 @@ General purpose socket
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
   static_assert(_WIN32_WINNT >= 0x600, "unsupported target Windows version");
   #define poll WSAPoll
-  #pragma comment(lib, "ws2_32.lib")
 #endif
 
-#if (XTD_OS_MINGW & XTD_OS)
-  #define POLLFD WSAPOLLFD
-#endif
-
-#if (XTD_COMPILER_IS_MSVC)
+#if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma comment(lib, "ws2_32")
 #endif
 
@@ -33,8 +28,10 @@ namespace xtd{
     using SOCKET = int;
   #define closesocket close
   #define ioctlsocket ioctl
-#elif ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+#elif (XTD_OS_WINDOWS & XTD_OS)
     using POLLFD = pollfd;
+#elif (XTD_OS_MINGW & XTD_OS)
+    using POLLFD = WSAPOLLFD;
 #endif
     ///Represents an socket error
     struct exception : xtd::os_exception{

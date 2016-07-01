@@ -4,36 +4,39 @@
 
 */
 
-
 #pragma once
+
+#if (XTD_COMPILER_GCC & XTD_COMPILER)
+#define XTD_EXCEPTION_MEMBER_NOEXCEPT noexcept
+#else
+#define XTD_EXCEPTION_MEMBER_NOEXCEPT
+#endif
 
 /**
  @def throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
 
- \brief A macro that defines throw if.
+ Simplifies use of exception::_throw_if
 
- \author  David
- \date  6/11/2016
-
- @param _test       The test.
- @param _expression The expression.
+ @param _test       Expression to test
+ @param _expression Expression to evaluate the value of _test
  */
-
 #define throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
 
 namespace xtd{
 
-  /**
-   \struct  exception
-  
-   \brief An exception.
-  
-   \author  David
-   \date  6/11/2016
-   */
-
+  /// Base exception for XTL
   struct exception : std::exception{
+    using _super_t = std::exception;
 
+    /** Helper function template to test for an expression and throw an exception
+    Throws exception if the test expression returns true. _throw_if methods are present in many XTL exception classes. Typically, the throw_if macro will be used as in exception::throw_if to properly fill parameters
+    @tparam _ReturnT The return type of the function and type of the expression to evaluate. Implicitly deduced at compile time.
+    @tparam _ExpressionT the type of expression tester that evaluates _ReturnT, normally a lambda.
+    @param source The location in source code where called.
+    @param ret The return value of _throw_if and parameter to exp used to test for success or failure
+    @param expstr String value passed to the exceptions constructor when thrown
+    @returns ret if no exception is thrown
+     */
     template <typename _ReturnT, typename _ExpressionT>
     inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
       if (exp(ret)){
@@ -42,8 +45,7 @@ namespace xtd{
       return ret;
     }
 
-    using _super_t = std::exception;
-
+    /// Constructors @{
     exception(const source_location& Source, const std::string& What)
       : _super_t()
       , _source(Source)
@@ -56,28 +58,21 @@ namespace xtd{
       : _super_t()
       , _source(std::move(src._source))
       , _what(std::move(src._what)){}
+    ///}@
 
-    virtual const char * what() const noexcept{ return _what.c_str(); }
+    ///explaination of the exception
+    virtual const char * what() const XTD_EXCEPTION_MEMBER_NOEXCEPT { return _what.c_str(); }
 
-    virtual const source_location& location() const noexcept{ return _source; }
+    ///location in source that caused the exception
+    virtual const source_location& location() const XTD_EXCEPTION_MEMBER_NOEXCEPT { return _source; }
 
   protected:
-    /** \brief Source for the. */
     const source_location& _source;
-    /** \brief The what. */
     std::string _what;
   };
 
-  /**
-   \struct  os_exception
-  
-   \brief Exception for signalling operating system errors.
-  
-   \author  David
-   \date  6/11/2016
-   */
-
-  struct os_exception : xtd::exception{
+  /// Represents an exception of the kernel or core OS component
+struct os_exception : xtd::exception{
     template <typename _ReturnT, typename _ExpressionT>
     inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
       if (exp(ret)){
