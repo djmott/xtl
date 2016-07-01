@@ -15,6 +15,12 @@
 #endif
 
 
+#if defined(CI_BUILD)
+#define CI_DISABLE(x) DISABLED_##x
+#else
+#define CI_DISABLE(x) x
+#endif
+
 #include "test_callback.hpp"
 #include "test_data_convert.hpp"
 #include "test_dynamic_library.hpp"

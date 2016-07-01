@@ -33,3 +33,4 @@
 docs/html
 .idea
 Doxyfile
+.build

@@ -20,7 +20,7 @@ TEST(test_socket, ipv4_bind_and_listen){
 }
 
 
-TEST(test_socket, ipv4_connect){
+TEST(test_socket, CI_DISABLE(ipv4_connect)){
 
   auto do_ipv4_connect_test = []()->void {
     static const uint16_t iPort = 9977;
@@ -53,7 +53,7 @@ TEST(test_socket, ipv4_connect){
 
 
 
-TEST(test_socket, ipv4_stream){
+TEST(test_socket, CI_DISABLE(ipv4_stream)){
 
   auto do_ipv4_write_server_test = [](){
 
