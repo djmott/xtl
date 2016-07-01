@@ -3,6 +3,32 @@
  */
 
 #include <xtd.hpp>
+#include <xtd/parse.hpp>
+#include <xtd/callback.hpp>
+#include <xtd/data_convert.hpp>
+#include <xtd/dynamic_library.hpp>
+#include <xtd/string.hpp>
+#include <xtd/executable.hpp>
+#include <xtd/event_trace.hpp>
+
+#include <xtd/exception.hpp>
+#include <xtd/executable.hpp>
+#include <xtd/log.hpp>
+
+#include <xtd/meta.hpp>
+#include <xtd/path.hpp>
+
+#include <xtd/socket.hpp>
+
+#include <thread>
+#include <future>
+#include <chrono>
+#include <xtd/string.hpp>
+
+#include <xtd/unique_id.hpp>
+
+#include <xtd/var.hpp>
+
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
 #pragma warning(push, 0)
@@ -13,6 +39,7 @@
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
 #pragma warning(pop)
 #endif
+
 
 
 #if (XTD_CI_BUILD)

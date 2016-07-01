@@ -3,7 +3,6 @@
  */
 
 
-#include <xtd/string.hpp>
 
 TEST(test_string, Initialization){
   xtd::string s("abcdefghijklmnopqrstuvwxyz");

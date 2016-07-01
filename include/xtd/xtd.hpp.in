@@ -42,8 +42,8 @@
     @{*/
 #define XTD_OS_ANDROID    1
 #define XTD_OS_BAREMETAL  2
-#define XTD_OS_APPLE      4
-#define XTD_OS_UNIX      8
+#define XTD_OS_IOS        4
+#define XTD_OS_UNIX       8
 #define XTD_OS_WINDOWS    16
 #define XTD_OS_CYGWIN     32
 #define XTD_OS_MINGW      64

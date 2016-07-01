@@ -2,7 +2,6 @@
  * \copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
  */
 
-#include <xtd/parse.hpp>
 
 
 namespace test_grammar{
@@ -48,7 +47,7 @@ TEST(test_parser, string_case){
   EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
 }
 
-TEST(test_parser, CI_DISABLE(regex_no_case)){
+TEST(CI_DISABLE(test_parser), CI_DISABLE(regex_no_case)){
   //the regex tests fail under certain gcc versions with buggy regex implementations
   std::string s = "abc";
   using test_parse = xtd::parser<test_grammar::Version, true>;
@@ -58,7 +57,7 @@ TEST(test_parser, CI_DISABLE(regex_no_case)){
 }
 
 
-TEST(test_parser, CI_DISABLE(regex_case)){
+TEST(CI_DISABLE(test_parser), CI_DISABLE(regex_case)){
   std::string s = "ABC";
   using test_parse = xtd::parser<test_grammar::Version>;
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));

@@ -2,9 +2,6 @@
  * \copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
  */
 
-#include <xtd/dynamic_library.hpp>
-#include <xtd/string.hpp>
-#include <xtd/executable.hpp>
 
 auto get_dummy_library = []() -> xtd::dynamic_library::ptr {
   auto sPath = xtd::this_executable::get_path();
