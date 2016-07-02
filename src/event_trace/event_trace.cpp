@@ -11,14 +11,18 @@ namespace{
 
 extern "C"{
   void __xtd_EventEnter(void *){
-    if (_InTrace) return;
+    if (_InTrace){
+      return;
+    }
     _InTrace = true;
     _ThreadStack.push("");
     _InTrace = false;
   }
 
   void __xtd_EventLeave(void *){
-    if (_InTrace) return;
+    if (_InTrace){
+      return;
+    }
     _InTrace = true;
     _ThreadStack.pop();
     _InTrace = false;
