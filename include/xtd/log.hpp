@@ -59,7 +59,7 @@ namespace xtd{
 
     class log_target{
     public:
-      virtual ~log_target(){}
+      virtual ~log_target() = default;
       using pointer_type = std::shared_ptr<log_target>;
       using vector_type = std::vector<pointer_type>;
       virtual void operator()(const message::pointer_type&) = 0;
@@ -121,7 +121,7 @@ namespace xtd{
 #if (XTD_LOG_TARGET_COUT)
     class std_cout_target : public log_target{
     public:
-      virtual ~std_cout_target(){}
+      virtual ~std_cout_target() = default;
       void operator()(const message::pointer_type& oMessage) override{
         std::cout << oMessage->_text << std::endl;
       }

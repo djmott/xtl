@@ -4,25 +4,14 @@
 
 #include <xtd.hpp>
 
-/*
-#if (XTD_COMPILER & XTD_COMPILER_CLANG)
-NOTE("Compiler : CLANG");
-#endif
-#if (XTD_COMPILER & XTD_COMPILER_DMC)
-NOTE("Compiler : Digital Mars C++");
-#endif
-*/
+
 #if (XTD_COMPILER & XTD_COMPILER_GCC)
 NOTE("Compiler : GCC");
 #endif
 #if (XTD_COMPILER & XTD_COMPILER_MSVC)
 NOTE("Compiler : MSVC");
 #endif
-/*
-#if (XTD_COMPILER & XTD_COMPILER_ICL)
-NOTE("Compiler : Intel C++");
-#endif
-*/
+
 
 #if (XTD_OS & XTD_OS_ANDROID)
 NOTE("OS : Android");

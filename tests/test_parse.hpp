@@ -35,6 +35,8 @@ TEST(test_parser, string_no_case){
   std::string s = "Snafoo";
   using test_parse = xtd::parser<test_grammar::Snafoo, true>;
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
+  s = "Snafoooo";
+  EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
   s = "Squeegy";
   EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
 }
@@ -43,6 +45,8 @@ TEST(test_parser, string_case){
   std::string s = "Snafoo";
   using test_parse = xtd::parser<test_grammar::Snafoo>;
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
+  s = "Snafoooo";
+  EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
   s = "snafoo";
   EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
 }
