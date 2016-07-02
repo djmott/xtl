@@ -49,7 +49,7 @@ namespace xtd {
     class inner_base {
     public:
       using ptr = std::unique_ptr < inner_base >;
-      virtual ~inner_base() {}
+      virtual ~inner_base() = default;
       virtual inner_base * clone() const = 0;
       virtual const std::type_info& get_type() const = 0;
       virtual bool is_pod() const = 0;
@@ -61,11 +61,11 @@ namespace xtd {
 
     class empty : public inner_base{
     public:
-      virtual ~empty(){}
-      virtual inner_base * clone() const override { return new empty; }
-      virtual const std::type_info& get_type() const override { return typeid(empty); }
-      virtual bool is_pod() const override { throw std::runtime_error("reference to uninitialized variable"); }
-      virtual size_t size() const override { throw std::runtime_error("reference to uninitialized variable"); }
+      virtual ~empty() = default;
+      inner_base * clone() const override { return new empty; }
+      const std::type_info& get_type() const override { return typeid(empty); }
+      bool is_pod() const override { throw std::runtime_error("reference to uninitialized variable"); }
+      size_t size() const override { throw std::runtime_error("reference to uninitialized variable"); }
     };
 
     template <typename _Ty> class inner : public inner_base {
@@ -74,12 +74,12 @@ namespace xtd {
       inner(const inner&)=delete;
       inner() = delete;
       inner& operator=(const inner&) = delete;
-      virtual inner_base * clone() const override { return new inner(_value); }
-      virtual const std::type_info& get_type() const override { return typeid(_Ty); }
+      inner_base * clone() const override { return new inner(_value); }
+      const std::type_info& get_type() const override { return typeid(_Ty); }
       _Ty & operator * () { return _value; }
       const _Ty & operator * () const { return _value; }
-      virtual bool is_pod() const override { return std::is_pod<_Ty>::value; }
-      virtual size_t size() const override { return sizeof(_Ty); }
+      bool is_pod() const override { return std::is_pod<_Ty>::value; }
+      size_t size() const override { return sizeof(_Ty); }
     private:
       _Ty _value;
     };
@@ -94,12 +94,12 @@ namespace xtd {
     inner(const inner&)=delete;
     inner() = delete;
     inner& operator=(const inner&) = delete;
-    virtual inner_base * clone() const override { return new inner(_value); }
-    virtual const std::type_info& get_type() const override { return typeid(xtd::xstring<_ChT>); }
+    inner_base * clone() const override { return new inner(_value); }
+    const std::type_info& get_type() const override { return typeid(xtd::xstring<_ChT>); }
     xtd::xstring<_ChT> & operator * () { return _value; }
     const std::basic_string<_ChT> & operator * () const { return _value; }
-    virtual bool is_pod() const override { return false; }
-    virtual size_t size() const override { return _value.size(); }
+    bool is_pod() const override { return false; }
+    size_t size() const override { return _value.size(); }
   private:
     xtd::xstring<_ChT> _value;
   };

@@ -10,11 +10,6 @@
 
 namespace xtd {
 
-  class executable {
-  public:
-  };
-
-
   namespace this_executable {
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     static inline xtd::path get_path(){

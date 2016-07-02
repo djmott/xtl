@@ -118,10 +118,9 @@ namespace xtd{
             break;
           }
         }
-        if (!bFound){
-          continue;
+        if (bFound) {
+          oCh = chReplace;
         }
-        oCh = chReplace;
       }
       return *this;
     }
@@ -131,10 +130,8 @@ namespace xtd{
       size_type sRet = _super_t::npos;
       for (const _ChT ch : delimiters){
         auto x = _super_t::find_first_of(ch, pos);
-        if (_super_t::npos != x){
-          if (_super_t::npos == sRet || x < sRet){
-            sRet = x;
-          }
+        if ((_super_t::npos != x) && (_super_t::npos == sRet || x < sRet)){
+          sRet = x;
         }
       }
       return sRet;
@@ -145,7 +142,8 @@ namespace xtd{
       using container_t = std::vector<xstring<_ChT>>;
       container_t oRet;
       using _my_t = xstring<_ChT>;
-      size_type pos, lastPos = 0;
+      size_type pos;
+      size_type lastPos = 0;
 
       using value_type = typename container_t::value_type;
 
@@ -167,8 +165,8 @@ namespace xtd{
     }
 
     ///Convert data to a string
-    template <typename _Ty> inline static xstring<_ChT> from(const _Ty&);
-    template <typename _Ty> inline static xstring<_ChT> from(const _Ty*);
+    template <typename _Ty> inline static xstring<_ChT> from(const _Ty& src);
+    template <typename _Ty> inline static xstring<_ChT> from(const _Ty* src);
 
 #if (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
 
@@ -294,12 +292,12 @@ namespace xtd{
   namespace _{
 
 
-    template <typename _ChT>
-    class xstring_format<_ChT>{
+    template <typename _ChT> class xstring_format<_ChT>{
     public:
-      inline static void format(const xstring<_ChT>&){}
+      inline static void format(const xstring<_ChT>&){
+        //specialization terminates 'recursive' calls to xstring_format::format() chains
+      }
     };
-
 
     template <typename _ChT, typename ... _ArgsT>
     class xstring_format<_ChT, const _ChT*const&, _ArgsT...>{

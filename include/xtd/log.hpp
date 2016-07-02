@@ -57,14 +57,19 @@ namespace xtd{
       time_type _time;
     };
 
-    class syslog_target{
+    class log_target{
     public:
-    #if (!XTD_LOG_TARGET_SYSLOG)
-      void operator()(const message::pointer_type&){}
-    #else
+      using pointer_type = std::shared_ptr<log_target>;
+      using vector_type = std::vector<pointer_type>;
+      virtual void operator()(const message::pointer_type&) = 0;
+    };
+
+#if (XTD_LOG_TARGET_SYSLOG)
+    class syslog_target : public log_target{
+    public:
       syslog_target(){ openlog(nullptr, LOG_PID | LOG_NDELAY, 0); }
       ~syslog_target(){ closelog(); }
-      void operator()(const message::pointer_type& oMessage) {
+      virtual void operator()(const message::pointer_type& oMessage) override {
         int iFacility = LOG_MAKEPRI(LOG_USER, LOG_DEBUG);
         switch (oMessage->type){
           case message::type::fatal:
@@ -97,49 +102,30 @@ namespace xtd{
         }
         syslog(iFacility, "%s", oMessage->_text.c_str());
       }
-
-    #endif
     };
-    syslog_target _syslog_target;
+#endif
 
-    class win_dbg_target{
+#if (XTD_LOG_TARGET_WINDBG)
+    class win_dbg_target : public log_target{
     public:
-    #if (!XTD_LOG_TARGET_WINDBG)
-      void operator()(const message::pointer_type&){}
-    #else
-      void operator()(const message::pointer_type& oMessage) {
+      virtual void operator()(const message::pointer_type& oMessage) override {
         OutputDebugStringA(oMessage->_text.c_str());
       }
-    #endif
     };
-    win_dbg_target _win_dbg_target;
+#endif
 
-    class csv_target{
-    public:
-      void operator()(const message::pointer_type&){ TODO("Implement me"); }
-    };
-    csv_target _csv_target;
 
-    class xml_target{
+#if (XTD_LOG_TARGET_COUT)
+    class std_cout_target : public log_target{
     public:
-      void operator()(const message::pointer_type&){ TODO("Implement me"); }
-    };
-    xml_target _xml_target;
-
-    class std_cout_target {
-    public:
-    #if (!XTD_LOG_TARGET_COUT)
-      void operator()(const message::pointer_type&) const {}
-    #else
-      void operator()(const message::pointer_type& oMessage) const {
+      virtual void operator()(const message::pointer_type& oMessage) override{
         std::cout << oMessage->_text << std::endl;
       }
-    #endif
     };
-    std_cout_target _std_cout_target;
+#endif
 
     void callback_thread(){
-      for (; !_Exit;){
+      while ( !_Exit ){
         callback_type oCallback;
         {
           std::unique_lock<std::mutex> oLock(_CallbackLock);
@@ -151,12 +137,22 @@ namespace xtd{
           oLock.unlock();
           _CallbackCheck.notify_one();
         }
-        if (!oCallback) continue;
-        oCallback();
+        if (!!oCallback) {
+          oCallback();
+        }
       }
     }
 
-    log(){
+    log() : _Messages(), _Callbacks(), _CallbackThread(), _CallbackLock(), _CallbackCheck(), _LogTargets(){
+#if (XTD_LOG_TARGET_SYSLOG)
+      _LogTargets.emplace_back(new syslog_target);
+#endif
+#if (XTD_LOG_TARGET_WINDBG)
+      _LogTargets.emplace_back(new win_dbg_target);
+#endif
+#if (XTD_LOG_TARGET_COUT)
+      _LogTargets.emplace_back(new std_cout_target);
+#endif
       _CallbackThread = std::thread(&log::callback_thread, this);
     }
 
@@ -179,6 +175,7 @@ namespace xtd{
     std::thread _CallbackThread;
     std::mutex _CallbackLock;
     std::condition_variable _CallbackCheck;
+    log_target::vector_type _LogTargets;
     bool _Exit = false;
 
     public:
@@ -198,11 +195,9 @@ namespace xtd{
         {
           std::lock_guard<std::mutex> oLock(_CallbackLock);
           _Callbacks.push_back([oMessage, this](){
-            _std_cout_target(oMessage);
-            _win_dbg_target(oMessage);
-            _syslog_target(oMessage);
-            _csv_target(oMessage);
-            _xml_target(oMessage);
+            for (auto oTarget : _LogTargets){
+              (*oTarget)(oMessage);
+            }
           });
         }
         _CallbackCheck.notify_one();

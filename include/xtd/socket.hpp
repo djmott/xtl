@@ -198,7 +198,7 @@ namespace xtd{
       SOCKET _Socket;
 
       template <typename _ReturnT> _ReturnT get_option(int Option);
-      template <typename _ValueT> void set_option(_ValueT, int Option);
+
     };
 
 
@@ -233,7 +233,6 @@ namespace xtd{
       }
       template<typename ... _ArgTs>
       explicit polling_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
-    private:
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
       int poll(POLLFD *ufds, unsigned int nfds, int timeout){ return ::WSAPoll(ufds, nfds, timeout); }
@@ -309,7 +308,9 @@ namespace xtd{
 
       void select(int WaitMS, std::function<void()> onRead, std::function<void()> onWrite, std::function<void()> onError){
         timeval tv;
-        fd_set fdRead, fdWrite, fdErr;
+        fd_set fdRead;
+        fd_set fdWrite;
+        fd_set fdErr;
         FD_ZERO(&fdRead);
         FD_ZERO(&fdWrite);
         FD_ZERO(&fdErr);

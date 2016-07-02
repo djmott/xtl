@@ -115,9 +115,9 @@ namespace xtd{
   private:
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-    dynamic_library(const tchar * sPath) : _Handle(xtd::exception::throw_if(LoadLibrary(sPath), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
+    explicit dynamic_library(const tchar * sPath) : _Handle(xtd::exception::throw_if(LoadLibrary(sPath), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
 #elif ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
-    dynamic_library(const char * sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath, RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
+    explicit dynamic_library(const char * sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath, RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif
 
     native_handle_type _Handle;

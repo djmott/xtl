@@ -44,9 +44,11 @@ namespace xtd{
     }
 
     template <typename _Ty> path& append(const _Ty& src){
+      //add a seperator only if absent from the end of the current path and beginning of the appended item
       if (seperator != back() && seperator != src[0]){
         *this += seperator;
       }else if (seperator == back() && seperator == src[0]){
+        //if both the end of the current path and the beginning of the appended path have a seperator then remove one
         pop_back();
       }
       *this += src;
@@ -55,8 +57,9 @@ namespace xtd{
 
     template <typename _Ty> path& operator/=(const _Ty& src) { return append(src); }
 
+    TODO("path::replace_filename needs a lot of work to be TS compliant");
     path& replace_filename(const path& src){
-      TODO("path::replace_filename needs a lot of work to be TS compliant");
+
       resize(1+find_last_of(seperator));
       return append(src);
     }
