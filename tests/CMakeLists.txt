@@ -23,8 +23,13 @@ build_option(TEST_META "test meta programming")
 build_option(TEST_PARSE "test xtd::parse")
 build_option(TEST_PATH "test xtd::path")
 build_option(TEST_SOCKET "test xtd::socket")
+build_option(TEST_SOURCE_LOCATION "test xtd::source_location")
 build_option(TEST_STRING "test xtd::string")
-build_option(TEST_UNIQUE_ID "test xtd::unique_id")
+
+if(XTD_HAS_UUID)
+  build_option(TEST_UNIQUE_ID "test xtd::unique_id")
+endif()
+
 build_option(TEST_VAR "test xtd::var")
 
 add_executable(unit_tests "${TEST_SOURCE}")

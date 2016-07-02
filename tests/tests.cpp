@@ -58,11 +58,15 @@
   #include "test_socket.hpp"
 #endif
 
+#if (ON==TEST_SOCKET)
+  #include "test_source_location.hpp"
+#endif
+
 #if (ON==TEST_STRING)
   #include "test_string.hpp"
 #endif
 
-#if (ON==TEST_UNIQUE_ID)
+#if (ON==TEST_UNIQUE_ID && XTD_HAS_UUID)
   #include "test_unique_id.hpp"
 #endif
 
