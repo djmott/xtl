@@ -17,7 +17,8 @@ namespace xtd{
 #endif
   }
   
-  struct path : xtd::xstring<socket::path_value_type >{
+  class path : public xtd::xstring<socket::path_value_type >{
+  public:
     using string_type = xtd::xstring<socket::path_value_type >;
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     static const value_type seperator = __('\\');

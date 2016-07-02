@@ -14,7 +14,8 @@ namespace xtd{
 
 #if (XTD_HAS_UUID)
 
-  struct unique_id{
+  class unique_id{
+  public:
     unique_id(){
       uuid_generate(_uuid);
     }
@@ -48,7 +49,8 @@ namespace xtd{
 
 #elif ((XTD_OS_WINDOWS & XTD_OS) || (XTD_OS_MINGW & XTD_OS))
 
-  struct unique_id : uuid_t{
+  class unique_id : uuid_t{
+  public:
     unique_id(){
       xtd::exception::throw_if(UuidCreate(this), [](RPC_STATUS x){return (RPC_S_OK != x && RPC_S_UUID_LOCAL_ONLY != x && RPC_S_UUID_NO_ADDRESS != x); });
     }

@@ -11,7 +11,8 @@ namespace xtd {
   /** The var class implements a minimal type erasure idiom.
    *  A var is a container-wrapper for arbitrary value types similar to a ~variant~ or ~any~ type.
    */
-  struct var {
+  class var {
+  public:
     ///Default constructs a var object with an underlying empty object
     var() : _inner(new empty) {}
 
@@ -45,7 +46,8 @@ namespace xtd {
       return *dynamic_cast<inner<_Ty>&>(*_inner);
     }
 
-    struct inner_base {
+    class inner_base {
+    public:
       using ptr = std::unique_ptr < inner_base >;
       virtual ~inner_base() {}
       virtual inner_base * clone() const = 0;
@@ -57,7 +59,8 @@ namespace xtd {
       inner_base() = default;
     };
 
-    struct empty : inner_base{
+    class empty : public inner_base{
+    public:
       virtual ~empty(){}
       virtual inner_base * clone() const override { return new empty; }
       virtual const std::type_info& get_type() const override { return typeid(empty); }
@@ -65,7 +68,8 @@ namespace xtd {
       virtual size_t size() const override { throw std::runtime_error("reference to uninitialized variable"); }
     };
 
-    template <typename _Ty> struct inner : inner_base {
+    template <typename _Ty> class inner : public inner_base {
+    public:
       explicit inner(_Ty newval) : _value(newval) {}
       inner(const inner&)=delete;
       inner() = delete;
@@ -84,7 +88,8 @@ namespace xtd {
   };
 
   template <typename _ChT>
-  struct var::inner<xtd::xstring<_ChT>> : var::inner_base {
+  class var::inner<xtd::xstring<_ChT>> : public var::inner_base {
+  public:
     explicit inner(xtd::xstring<_ChT> newval) : _value(std::move(newval)) {}
     inner(const inner&)=delete;
     inner() = delete;

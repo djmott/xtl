@@ -1,31 +1,35 @@
 /** @file
 Single producer - multiple consumer signal-slot
-\copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+
 */
 
 #pragma once
 
 namespace xtd{
   /** notifies multiple receivers of an event
+  Callbacks are performed serially and the order is undefined when multiple receivers are attached
+  @example example_callback.cpp
+  */
+  template <typename> class callback;
 
-      Callbacks are performed serially and the order is undefined when multiple receivers are attached
-   */
-  template <typename> struct callback;
-
-  template <typename _ReturnT, typename ... _Args> struct callback < _ReturnT(_Args...) >{
-    struct invoker{
+  template <typename _ReturnT, typename ... _Args> class callback < _ReturnT(_Args...) >{
+    class invoker{
+    public:
       using ptr = std::unique_ptr<invoker>;
       using vector = std::vector<ptr>;
       virtual ~invoker() = default;
       virtual _ReturnT invoke(_Args...) const = 0;
     };
 
-    template <typename _MethodT, _MethodT * _method> struct method_invoker : invoker{
+    template <typename _MethodT, _MethodT * _method> class method_invoker : public invoker{
+    public:
       virtual ~method_invoker() = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { return (*_method)(std::forward<_Args>(oArgs)...); }
     };
 
-    template <typename _LambdaT> struct lamdba_invoker : invoker{
+    template <typename _LambdaT> class lamdba_invoker : public invoker{
+    public:
       virtual ~lamdba_invoker() = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { return _Lambda(std::forward<_Args>(oArgs)...); }
       explicit lamdba_invoker(_LambdaT oLambda) : _Lambda(oLambda){} //NOSONAR
@@ -41,7 +45,8 @@ namespace xtd{
       _LambdaT _Lambda;
     };
 
-    template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> struct member_invoker : invoker{
+    template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> class member_invoker : public invoker{
+    public:
       virtual ~member_invoker() = default;
       member_invoker() = delete;
       member_invoker& operator=(const member_invoker&) = delete;
@@ -61,8 +66,8 @@ namespace xtd{
       return_last
     };
 
-    ~callback(){}
-    callback() : _Invokers(){}
+    ~callback() = default;
+    callback() = default;
     callback(const callback&) = delete;
     callback(callback&& src) : _Invokers(std::move(src._Invokers)){}
     callback& operator=(const callback&) = delete;
@@ -96,19 +101,22 @@ namespace xtd{
 
     using _ReturnT = void;
 
-    struct invoker{
+    class invoker{
+    public:
       using ptr = std::unique_ptr<invoker>;
       using vector = std::vector<ptr>;
       virtual ~invoker() = default;
       virtual _ReturnT invoke(_Args...) const = 0;
     };
 
-    template <typename _MethodT, _MethodT * _method> struct method_invoker : invoker{
+    template <typename _MethodT, _MethodT * _method> class method_invoker : public invoker{
+    public:
       virtual ~method_invoker() = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { (*_method)(std::forward<_Args>(oArgs)...); }
     };
 
-    template <typename _LambdaT> struct lamdba_invoker : invoker{
+    template <typename _LambdaT> class lamdba_invoker : public invoker{
+    public:
       virtual ~lamdba_invoker() = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { _Lambda(std::forward<_Args>(oArgs)...); }
       explicit lamdba_invoker(_LambdaT oLambda) : _Lambda(oLambda){}
@@ -124,7 +132,8 @@ namespace xtd{
       _LambdaT _Lambda;
     };
 
-    template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> struct member_invoker : invoker{
+    template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> class member_invoker : public invoker{
+    public:
       virtual ~member_invoker() = default;
       member_invoker() = delete;
       member_invoker& operator=(const member_invoker&) = delete;
@@ -138,8 +147,8 @@ namespace xtd{
     typename invoker::vector _Invokers;
 
   public:
-    ~callback(){}
-    callback() : _Invokers(){}
+    ~callback() = default;
+    callback() = default;
     callback(const callback&) = delete;
     callback(callback&& src) : _Invokers(std::move(src._Invokers)){}
     callback& operator=(const callback&) = delete;

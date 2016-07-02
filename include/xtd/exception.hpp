@@ -25,7 +25,8 @@
 namespace xtd{
 
   /// Base exception for XTL
-  struct exception : std::exception{
+  class exception : std::exception{
+  public:
     using _super_t = std::exception;
 
     /** Helper function template to test for an expression and throw an exception
@@ -72,7 +73,8 @@ namespace xtd{
   };
 
   /// Represents an exception of the kernel or core OS component
-struct os_exception : xtd::exception{
+class os_exception : xtd::exception{
+public:
     template <typename _ReturnT, typename _ExpressionT>
     inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
       if (exp(ret)){

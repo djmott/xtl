@@ -34,14 +34,16 @@ namespace xtd{
     using POLLFD = WSAPOLLFD;
 #endif
     ///Represents an socket error
-    struct exception : xtd::os_exception{
+    class exception : public xtd::os_exception{
+    public:
       exception(const source_location& loc, const xtd::string& swhat) : os_exception(loc, swhat){}
       exception(const exception& ex) : os_exception(ex){}
       explicit exception(exception&& ex) : os_exception(std::move(ex)){}
     };
 
     ///IPv4 address wrapper around sockaddr_in
-    struct ipv4address : sockaddr_in{
+    class ipv4address : public sockaddr_in{
+    public:
       static const int address_family = AF_INET;
       ipv4address(const char * sIP, uint16_t iPort){
         sin_family = AF_INET;
@@ -51,7 +53,8 @@ namespace xtd{
     };
 
     ///IPv6 address wrapper around sockaddr_in6
-    struct ipv6address : sockaddr_in6{
+    class ipv6address : public sockaddr_in6{
+    public:
       static const int address_family = AF_INET6;
       TODO("Implement proper ipv6 address");
     };
@@ -83,14 +86,15 @@ namespace xtd{
 
     TODO("Refactor out socket::serializer into something more universal")
     ///Serializes data on a socket
-    template <typename> struct serializer;
+    template <typename> class serializer;
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     /** Initializes WinSock
     Winsock requires a call to WSAStartup before any other calls to the winsock library.
     winsock_initializer is a global static that ensures winsock is initialized and cleaned up properly
     */
-    struct winsock_initializer sealed{
+    class winsock_initializer sealed{
+    public:
       //singleton getter method
       static winsock_initializer &get(){
         static winsock_initializer oInit;
@@ -111,11 +115,12 @@ namespace xtd{
 
 
 #if (!DOXY_INVOKED)
-    template<typename _AddressT, socket_type, socket_protocol, template<class> class ... _Policies> struct socket_base;
+    template<typename _AddressT, socket_type, socket_protocol, template<class> class ... _Policies> class socket_base;
 
 
     template<typename _AddressT, socket_type _ST, socket_protocol _PR, template<class> class _HeadT, template<class> class ..._TailT>
-    struct socket_base<_AddressT, _ST, _PR, _HeadT, _TailT...> : _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >{
+    class socket_base<_AddressT, _ST, _PR, _HeadT, _TailT...> : public _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >{
+    public:
       template<typename ... _ArgsT> explicit socket_base(_ArgsT &&...oArgs) : _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >(std::forward<_ArgsT>(oArgs)...){}
     };
 #endif
@@ -124,7 +129,8 @@ namespace xtd{
     Hierarchy generation TMP pattern to create all the socket object types with the various behavioral policies.
      */
     template<typename _AddressT, socket_type _SocketT, socket_protocol _Protocol>
-    struct socket_base<_AddressT, _SocketT, _Protocol>{
+    class socket_base<_AddressT, _SocketT, _Protocol>{
+    public:
 
       using unique_ptr = std::unique_ptr<socket_base>;
       using shared_ptr = std::shared_ptr<socket_base>;
@@ -198,13 +204,14 @@ namespace xtd{
 
     ///Polling behavior policy
     template <typename _SuperT>
-    struct polling_socket : _SuperT{
+    class polling_socket : public _SuperT{
+    public:
       callback<void()> read_event;
       callback<void()> write_event;
       callback<void()> disconnect_event;
       callback<void()> error_event;
       void poll(int Timeout){
-        struct pollfd oPoll;
+        class pollfd oPoll;
         oPoll.events = POLLIN | POLLOUT;
         oPoll.fd = _SuperT::_Socket;
         oPoll.revents = 0;
@@ -236,7 +243,8 @@ namespace xtd{
 
     ///Server side binding behavior
     template <typename _SuperT>
-    struct bindable_socket : _SuperT{
+    class bindable_socket : public _SuperT{
+    public:
       using address_type = typename _SuperT::address_type;
 
       template<typename ... _ArgTs>
@@ -250,7 +258,8 @@ namespace xtd{
 
     ///Client side connecting behavior
     template <typename _SuperT>
-    struct connectable_socket : _SuperT{
+    class connectable_socket : public _SuperT{
+    public:
       using address_type = typename _SuperT::address_type;
 
       template<typename ... _ArgTs>
@@ -264,7 +273,8 @@ namespace xtd{
 
     ///Server side listening behavior
     template <typename _SuperT>
-    struct listening_socket : _SuperT{
+    class listening_socket : public _SuperT{
+    public:
       using address_type = typename _SuperT::address_type;
 
       template<typename ... _ArgTs>
@@ -282,7 +292,8 @@ namespace xtd{
 
 
     template <typename _SuperT>
-    struct ip_options : _SuperT{
+    class ip_options : public _SuperT{
+    public:
       using address_type = typename _SuperT::address_type;
 
       template<typename ... _ArgTs>
@@ -291,7 +302,8 @@ namespace xtd{
 
     ///Async IO select behavior
     template <typename _SuperT>
-    struct selectable_socket : _SuperT{
+    class selectable_socket : public _SuperT{
+    public:
       template<typename ... _ArgTs>
       explicit selectable_socket(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
@@ -330,7 +342,8 @@ namespace xtd{
 #if (!DOXY_INVOKED)
     TODO("Get rid of these")
     template <typename _Ty>
-    struct serializer{
+    class serializer{
+    public:
 
       template <typename _SocketT>
       static void write(_SocketT& oSocket, const _Ty& src){
@@ -347,7 +360,8 @@ namespace xtd{
 
 
     template <typename _Ty>
-    struct NON_POD_Vector_Serializer{
+    class NON_POD_Vector_Serializer{
+    public:
 
       template <typename _SocketT>
       static void write(_SocketT& oSocket, const std::vector<_Ty>& src){
@@ -371,7 +385,8 @@ namespace xtd{
 
 
     template <typename _Ty>
-    struct POD_Vector_Serializer{
+    class POD_Vector_Serializer{
+    public:
 
       template <typename _SocketT >
       static void write(_SocketT& oSocket, const std::vector<_Ty>& src){
@@ -391,7 +406,7 @@ namespace xtd{
 
 
     template <typename _Ty>
-    struct serializer<std::vector<_Ty>> : std::conditional<std::is_pod<_Ty>::value, POD_Vector_Serializer<_Ty>, NON_POD_Vector_Serializer<_Ty>>::type{};
+    class serializer<std::vector<_Ty>> : public std::conditional<std::is_pod<_Ty>::value, POD_Vector_Serializer<_Ty>, NON_POD_Vector_Serializer<_Ty>>::type{};
 #endif
 
     using ipv4_tcp_stream = socket_base<ipv4address, socket_type::stream, socket_protocol::tcp, ip_options, connectable_socket, bindable_socket, listening_socket, selectable_socket>;

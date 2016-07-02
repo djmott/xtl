@@ -10,7 +10,8 @@ namespace xtd{
 
 #define here() xtd::source_location(__FILE__,__LINE__)
 
-  struct source_location{
+  class source_location{
+  public:
     source_location(const char * File, int Line) : _file(File), _line(Line){}
     source_location(const source_location& src) : _file(src._file), _line(src._line){}
     source_location& operator=(const source_location& src){

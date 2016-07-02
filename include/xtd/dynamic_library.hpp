@@ -10,7 +10,8 @@
 
 namespace xtd{
 
-  struct dynamic_library_exception : xtd::exception{
+  class dynamic_library_exception : public xtd::exception{
+  public:
 
     template <typename _ReturnT, typename _ExpressionT>
     inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
@@ -30,8 +31,8 @@ namespace xtd{
 
   };
 
-  struct dynamic_library : std::enable_shared_from_this<dynamic_library>{
-
+  class dynamic_library : public std::enable_shared_from_this<dynamic_library>{
+  public:
   #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     using native_handle_type = HMODULE;
   #elif ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
@@ -46,7 +47,8 @@ namespace xtd{
     native_handle_type handle() const{ return _Handle; }
 
     template <typename _ReturnT, typename ... _ArgsT>
-    struct function{
+    class function{
+    public:
       using function_pointer_type = _ReturnT(*)(_ArgsT...);
 
       inline _ReturnT operator()(_ArgsT...oArgs) const{
@@ -65,7 +67,7 @@ namespace xtd{
         return *this;
       }
     private:
-      friend struct dynamic_library;
+      friend class dynamic_library;
       function(function_pointer_type fnptr, dynamic_library::ptr oLib) : _function_pointer(fnptr), _library(oLib){}
       function_pointer_type _function_pointer = nullptr;
       dynamic_library::ptr _library;

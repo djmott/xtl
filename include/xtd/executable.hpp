@@ -10,8 +10,8 @@
 
 namespace xtd {
 
-  struct executable {
-
+  class executable {
+  public:
   };
 
 

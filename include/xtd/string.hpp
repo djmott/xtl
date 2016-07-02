@@ -10,7 +10,7 @@
 
 namespace xtd{
 
-  template <typename _ChT> struct xstring;
+  template <typename _ChT> class xstring;
 
   using string = xstring<char>;
   using wstring = xstring<wchar_t>;
@@ -18,8 +18,8 @@ namespace xtd{
 
 #if !(DOXY_INVOKED)
   namespace _{
-    template <typename, typename > struct xstring_tostring;
-    template <typename, typename ...> struct xstring_format;
+    template <typename, typename > class xstring_tostring;
+    template <typename, typename ...> class xstring_format;
 
   }
 #endif
@@ -27,7 +27,8 @@ namespace xtd{
   /** Extends std::string with some added functionality
    @tparam _ChT character type
    */
-  template <typename _ChT> struct xstring : std::basic_string<_ChT>{
+  template <typename _ChT> class xstring : public std::basic_string<_ChT>{
+  public:
     using _super_t = std::basic_string<_ChT>;
     using size_type = typename _super_t::size_type;
 
@@ -172,7 +173,8 @@ namespace xtd{
 #if (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
 
     ///iconv handle wrapper
-    struct iconv_helper{
+    class iconv_helper{
+    public:
       iconv_helper(const iconv_helper&) = delete;
       iconv_helper& operator=(const iconv_helper&) = delete;
       iconv_helper(const char * to, const char * from) : _iconv(iconv_open(to, from)){
@@ -293,13 +295,15 @@ namespace xtd{
 
 
     template <typename _ChT>
-    struct xstring_format<_ChT>{
+    class xstring_format<_ChT>{
+    public:
       inline static void format(const xstring<_ChT>&){}
     };
 
 
     template <typename _ChT, typename ... _ArgsT>
-    struct xstring_format<_ChT, const _ChT*const&, _ArgsT...>{
+    class xstring_format<_ChT, const _ChT*const&, _ArgsT...>{
+    public:
       inline static void format(xstring<_ChT>& dest, const _ChT*const& oArg, _ArgsT&&...oArgs){
         xstring_format<_ChT, const _ChT*, _ArgsT...>::format(dest, oArg, std::forward<_ArgsT>(oArgs)...);
       }
@@ -307,7 +311,8 @@ namespace xtd{
 
 
     template <typename ... _ArgsT>
-    struct xstring_format<wchar_t, const wchar_t *, _ArgsT...>{
+    class xstring_format<wchar_t, const wchar_t *, _ArgsT...>{
+    public:
       inline static void format(wstring& dest, const wchar_t * src, _ArgsT&&...oArgs){
         dest += src;
         xstring_format<wchar_t, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
@@ -316,7 +321,8 @@ namespace xtd{
 
 
     template <typename ... _ArgsT>
-    struct xstring_format<wchar_t, const char *, _ArgsT...>{
+    class xstring_format<wchar_t, const char *, _ArgsT...>{
+    public:
       inline static void format(wstring& dest, const char * src, _ArgsT&&...oArgs){
         dest += wstring::from(src);
         xstring_format<wchar_t, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
@@ -325,7 +331,8 @@ namespace xtd{
 
 
     template <typename ... _ArgsT>
-    struct xstring_format<char, const char *, _ArgsT...>{
+    class xstring_format<char, const char *, _ArgsT...>{
+    public:
       inline static void format(string& dest, const char * src, _ArgsT&&...oArgs){
         dest += src;
         xstring_format<char, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
@@ -334,7 +341,8 @@ namespace xtd{
 
 
     template <typename ... _ArgsT>
-    struct xstring_format<char, const wchar_t *, _ArgsT...>{
+    class xstring_format<char, const wchar_t *, _ArgsT...>{
+    public:
       inline static void format(string& dest, const wchar_t * src, _ArgsT&&...oArgs){
         dest += string::from(src);
         xstring_format<char, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
@@ -342,7 +350,8 @@ namespace xtd{
     };
 
     template <typename _ChT, int _Len, typename ... _ArgsT>
-    struct xstring_format<_ChT, const _ChT(&)[_Len], _ArgsT...>{
+    class xstring_format<_ChT, const _ChT(&)[_Len], _ArgsT...>{
+    public:
       inline static void format(xstring<_ChT>& dest, const _ChT(&src)[_Len], _ArgsT&&...oArgs){
         dest.append(&src[0], &src[_Len - 1]);
         xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
@@ -350,7 +359,8 @@ namespace xtd{
     };
 
     template <typename _ChT, typename ... _ArgsT>
-    struct xstring_format<_ChT, const xstring<_ChT>&, _ArgsT...>{
+    class xstring_format<_ChT, const xstring<_ChT>&, _ArgsT...>{
+    public:
       inline static void format(xstring<_ChT> &dest, const xstring<_ChT> &oArg, _ArgsT &&...oArgs){
         dest.append(oArg);
         xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);

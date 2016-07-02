@@ -14,7 +14,8 @@
 
 namespace xtd{
 
-  struct log{
+  class log{
+  public:
     enum class type{
       fatal,
       error,
@@ -27,9 +28,8 @@ namespace xtd{
 
   private:
     
-    struct message{
-
-
+    class message{
+    public:
       using pointer_type = std::shared_ptr<message>;
       using deque_type = std::deque<pointer_type>;
       using time_type = std::chrono::time_point<std::chrono::system_clock>;
@@ -57,7 +57,8 @@ namespace xtd{
       time_type _time;
     };
 
-    struct syslog_target{
+    class syslog_target{
+    public:
     #if (!XTD_LOG_TARGET_SYSLOG)
       void operator()(const message::pointer_type&){}
     #else
@@ -101,7 +102,8 @@ namespace xtd{
     };
     syslog_target _syslog_target;
 
-    struct win_dbg_target{
+    class win_dbg_target{
+    public:
     #if (!XTD_LOG_TARGET_WINDBG)
       void operator()(const message::pointer_type&){}
     #else
@@ -112,17 +114,20 @@ namespace xtd{
     };
     win_dbg_target _win_dbg_target;
 
-    struct csv_target{
+    class csv_target{
+    public:
       void operator()(const message::pointer_type&){ TODO("Implement me"); }
     };
     csv_target _csv_target;
 
-    struct xml_target{
+    class xml_target{
+    public:
       void operator()(const message::pointer_type&){ TODO("Implement me"); }
     };
     xml_target _xml_target;
 
-    struct std_cout_target {
+    class std_cout_target {
+    public:
     #if (!XTD_LOG_TARGET_COUT)
       void operator()(const message::pointer_type&) const {}
     #else

@@ -8,7 +8,8 @@
 
 namespace xtd{
 
-  struct process{
+  class process{
+  public:
   #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     using id_type = DWORD;
   #endif

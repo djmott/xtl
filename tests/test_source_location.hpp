@@ -8,6 +8,7 @@ TEST(test_source_location, initialization){
   ASSERT_EQ(__LINE__-1, a.line());
   ASSERT_STREQ(__FILE__, a.file());
   auto b = here();
+  ASSERT_STREQ(a.file(), b.file());
   xtd::source_location c(a);
 }
 
