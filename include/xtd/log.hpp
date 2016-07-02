@@ -59,6 +59,7 @@ namespace xtd{
 
     class log_target{
     public:
+      virtual ~log_target(){}
       using pointer_type = std::shared_ptr<log_target>;
       using vector_type = std::vector<pointer_type>;
       virtual void operator()(const message::pointer_type&) = 0;
@@ -67,9 +68,10 @@ namespace xtd{
 #if (XTD_LOG_TARGET_SYSLOG)
     class syslog_target : public log_target{
     public:
+
       syslog_target(){ openlog(nullptr, LOG_PID | LOG_NDELAY, 0); }
-      ~syslog_target(){ closelog(); }
-      virtual void operator()(const message::pointer_type& oMessage) override {
+      virtual ~syslog_target(){ closelog(); }
+      void operator()(const message::pointer_type& oMessage) override {
         int iFacility = LOG_MAKEPRI(LOG_USER, LOG_DEBUG);
         switch (oMessage->type){
           case message::type::fatal:
@@ -108,7 +110,8 @@ namespace xtd{
 #if (XTD_LOG_TARGET_WINDBG)
     class win_dbg_target : public log_target{
     public:
-      virtual void operator()(const message::pointer_type& oMessage) override {
+      virtual ~win_dbg_target(){}
+      void operator()(const message::pointer_type& oMessage) override {
         OutputDebugStringA(oMessage->_text.c_str());
       }
     };
@@ -118,7 +121,8 @@ namespace xtd{
 #if (XTD_LOG_TARGET_COUT)
     class std_cout_target : public log_target{
     public:
-      virtual void operator()(const message::pointer_type& oMessage) override{
+      virtual ~std_cout_target(){}
+      void operator()(const message::pointer_type& oMessage) override{
         std::cout << oMessage->_text << std::endl;
       }
     };
@@ -137,7 +141,7 @@ namespace xtd{
           oLock.unlock();
           _CallbackCheck.notify_one();
         }
-        if (!!oCallback) {
+        if (oCallback) {
           oCallback();
         }
       }

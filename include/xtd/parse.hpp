@@ -71,7 +71,7 @@ namespace xtd{
       template <typename ... _ChildRuleTs>
       explicit rule_base(_ChildRuleTs&& ... oChildRules) : _Items{ std::forward<_ChildRuleTs>(oChildRules)... }{}
 
-      virtual ~rule_base(){}
+      virtual ~rule_base() = default;
       /** Determines if the interface is implemented by a concrete type
        @param[in] oType type to test
       @returns true if the implementation's is the specified type
@@ -107,7 +107,7 @@ namespace xtd{
       template <typename ... _ChildRuleTs>
       explicit rule(_ChildRuleTs&& ... oChildRules) : rule_base(std::forward<_ChildRuleTs>(oChildRules)...){}
 
-      virtual ~rule(){}
+      virtual ~rule() = default;
 
       virtual bool isa(const std::type_info& oType) const override{
         return (typeid(rule) == oType) || (typeid(decl_type) == oType) || (typeid(impl_type) == oType) || (typeid(rule_base) == oType);
@@ -360,7 +360,7 @@ namespace xtd{
         static bool parse(_IteratorT& begin, _IteratorT& end){
           _IteratorT oCurr = begin;
           
-          for (;oCurr < end;){
+          while (oCurr < end){
             if (*oCurr == _HeadCH){
               oCurr++;
               continue;
@@ -494,7 +494,7 @@ namespace xtd{
           auto oItem = parse_helper<_Ty, typename _Ty::impl_type, _IgnoreCase, _WhitespaceT>::parse(oBegin, end);
           if (!oItem){
             return rule_base::pointer_type(new _DeclT(std::forward<_ChildRuleTs>(oChildRules)...));
-          };
+          }
           return parse_helper<_DeclT, parse::zero_or_more_<_Ty>, _IgnoreCase, _WhitespaceT>::parse(oBegin, end, std::forward<_ChildRuleTs>(oChildRules)..., oItem);
         }
 

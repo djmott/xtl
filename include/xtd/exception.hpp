@@ -62,7 +62,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
 ///}@
 
 ///explaination of the exception
-    virtual const char * what() const XTD_EXCEPTION_MEMBER_NOEXCEPT override { return _what.c_str(); }
+    const char * what() const XTD_EXCEPTION_MEMBER_NOEXCEPT override { return _what.c_str(); }
 
 ///location in source that caused the exception
     virtual const source_location& location() const XTD_EXCEPTION_MEMBER_NOEXCEPT  { return _source; }
