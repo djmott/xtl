@@ -10,24 +10,23 @@ namespace xtd{
 
       Callbacks are performed serially and the order is undefined when multiple receivers are attached
    */
-  template <typename> class callback;
+  template <typename> struct callback;
 
-  template <typename _ReturnT, typename ... _Args> class callback < _ReturnT(_Args...) >{
-
+  template <typename _ReturnT, typename ... _Args> struct callback < _ReturnT(_Args...) >{
     struct invoker{
       using ptr = std::unique_ptr<invoker>;
       using vector = std::vector<ptr>;
-      virtual ~invoker(){}
+      virtual ~invoker() = default;
       virtual _ReturnT invoke(_Args...) const = 0;
     };
 
     template <typename _MethodT, _MethodT * _method> struct method_invoker : invoker{
-      virtual ~method_invoker(){}
+      virtual ~method_invoker() = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { return (*_method)(std::forward<_Args>(oArgs)...); }
     };
 
     template <typename _LambdaT> struct lamdba_invoker : invoker{
-      virtual ~lamdba_invoker(){}
+      virtual ~lamdba_invoker() = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { return _Lambda(std::forward<_Args>(oArgs)...); }
       explicit lamdba_invoker(_LambdaT oLambda) : _Lambda(oLambda){} //NOSONAR
       lamdba_invoker(lamdba_invoker&& src) : _Lambda(std::move(src._Lambda)){} //NOSONAR
@@ -43,7 +42,7 @@ namespace xtd{
     };
 
     template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> struct member_invoker : invoker{
-      virtual ~member_invoker(){}
+      virtual ~member_invoker() = default;
       member_invoker() = delete;
       member_invoker& operator=(const member_invoker&) = delete;
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}  //NOSONAR
@@ -100,17 +99,17 @@ namespace xtd{
     struct invoker{
       using ptr = std::unique_ptr<invoker>;
       using vector = std::vector<ptr>;
-      virtual ~invoker(){}
+      virtual ~invoker() = default;
       virtual _ReturnT invoke(_Args...) const = 0;
     };
 
     template <typename _MethodT, _MethodT * _method> struct method_invoker : invoker{
-      virtual ~method_invoker(){}
+      virtual ~method_invoker() = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { (*_method)(std::forward<_Args>(oArgs)...); }
     };
 
     template <typename _LambdaT> struct lamdba_invoker : invoker{
-      virtual ~lamdba_invoker(){}
+      virtual ~lamdba_invoker() = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { _Lambda(std::forward<_Args>(oArgs)...); }
       explicit lamdba_invoker(_LambdaT oLambda) : _Lambda(oLambda){}
       lamdba_invoker(lamdba_invoker&& src) : _Lambda(std::move(src._Lambda)){}
@@ -126,7 +125,7 @@ namespace xtd{
     };
 
     template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> struct member_invoker : invoker{
-      virtual ~member_invoker(){}
+      virtual ~member_invoker() = default;
       member_invoker() = delete;
       member_invoker& operator=(const member_invoker&) = delete;
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}
