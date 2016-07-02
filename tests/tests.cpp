@@ -66,6 +66,10 @@
   #include "test_source_location.hpp"
 #endif
 
+#if (ON==TEST_SPIN_LOCK)
+  #include "test_spin_lock.hpp"
+#endif
+
 #if (ON==TEST_STRING)
   #include "test_string.hpp"
 #endif

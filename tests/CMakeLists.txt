@@ -25,6 +25,7 @@ build_option(TEST_PATH "test xtd::path")
 build_option(TEST_RPC "test xtd::rpc")
 build_option(TEST_SOCKET "test xtd::socket")
 build_option(TEST_SOURCE_LOCATION "test xtd::source_location")
+build_option(TEST_SPIN_LOCK "test xtd::spin_lock")
 build_option(TEST_STRING "test xtd::string")
 
 if(XTD_HAS_UUID)

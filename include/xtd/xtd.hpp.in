@@ -265,6 +265,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/meta.hpp>
 #include <xtd/parse.hpp>
 #include <xtd/socket.hpp>
+#include <xtd/spin_lock.hpp>
 #include <xtd/tuple.hpp>
 #include <xtd/unique_id.hpp>
 #include <xtd/rpc.hpp>
