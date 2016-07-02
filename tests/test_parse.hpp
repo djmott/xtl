@@ -11,7 +11,7 @@ namespace test_grammar{
   STRING_(Snafoo);
   STRING_(ABC);
   STRING_(XYZ);
-  REGEX(Version, "ABC\\-[[:digit:]]\\.[[:digit:]]");
+  REGEX(Alphabet, "ABC[1|2|3]");
 }
 
 
@@ -48,20 +48,27 @@ TEST(test_parser, string_case){
 }
 
 TEST(test_parser, regex_no_case){
-  //the regex tests fail under certain gcc versions with buggy regex implementations
-  std::string s = "abc-2.2";
-  using test_parse = xtd::parser<test_grammar::Version, true>;
+  using test_parse = xtd::parser<test_grammar::Alphabet, true>;
+  std::string s = "abc1";
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
-  s = "snafoo";
+  s = "abc2";
+  EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
+  s = "abc3";
+  EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
+  s = "abc4";
   EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
 }
 
 
 TEST(test_parser, regex_case){
-  std::string s = "ABC-1.1";
-  using test_parse = xtd::parser<test_grammar::Version>;
+  using test_parse = xtd::parser<test_grammar::Alphabet, true>;
+  std::string s = "ABC1";
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
-  s = "abc-1.1";
+  s = "ABC2";
+  EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
+  s = "ABC3";
+  EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
+  s = "ABC4";
   EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
 }
 
