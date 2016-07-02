@@ -274,6 +274,18 @@ namespace xtd{
             }
           }
 
+          /*
+          Problem: The string comparison algorithms compare character by character and skip any leading or trailing whitespace between terminals.
+            Rules 'ABC' + 'XYZ' maybe defined expecting the two terminals be separated by whitespace but this algorithm could parse the string 'ABCXYZ' as two separate terminals.
+            There's a number of traditional approaches to solving this such as tokenizing before parsing or creating parse tables. 
+            A proper handling would compound the complexity of this library beyond it's intended scope, there are plenty of complex parsers around.
+            Currently, the last character parsed is checked against the next character in the stream to see if they're of the same 'class' and fail if so.
+            This isn't ideal because it maybe perfectly valid in some grammars to expect 'ABCXYZ' to appear in the input stream yet successfully parse into independent terminals.
+            This library assumes contiguous alpha-numeric terminals constitute a single terminal so the input stream of 'ABCXYZ' will fail to parse without grammar definition trickery
+          */
+          if (oCurr < end && isalnum(*oCurr) && isalnum(_str[_len - 2])){
+            return rule_base::pointer_type(nullptr);
+          }
           parse_helper< _WhitespaceT, void, true, void>::parse(oCurr, end);
 
           begin = oCurr;
@@ -300,7 +312,7 @@ namespace xtd{
             }
           }
           ///ensure there's an identifiable separation between terminals. this should be done differently
-          if (oCurr < end && isalnum(*oCurr) && isalnum(_str[_len - 1])){
+          if (oCurr < end && isalnum(*oCurr) && isalnum(_str[_len - 2])){
             return rule_base::pointer_type(nullptr);
           }
           

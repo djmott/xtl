@@ -18,7 +18,7 @@ before_install:
   - mkdir -p      $TRAVIS_BUILD_DIR/docs/html                   $TRAVIS_BUILD_DIR/3rdparty                 $TRAVIS_BUILD_DIR/build
   - pip install --user cpp-coveralls
   - sudo apt-get update -qq
-  - sudo apt-get install -y -qq lcov gcovr curl libgtest-dev unzip valgrind rats cppcheck vera++
+  - sudo apt-get install -y -qq lcov gcovr curl libgtest-dev unzip valgrind rats cppcheck vera++ uuid-dev
   - cd /usr/src/gtest
   - sudo cmake .
   - sudo cmake --build .
