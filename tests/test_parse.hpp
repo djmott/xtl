@@ -11,7 +11,7 @@ namespace test_grammar{
   STRING_(Snafoo);
   STRING_(ABC);
   STRING_(XYZ);
-  REGEX(Version, "ABC");
+  REGEX(Version, "ABC\\-[[:digit:]]\\.[[:digit:]]");
 }
 
 
@@ -49,7 +49,7 @@ TEST(test_parser, string_case){
 
 TEST(test_parser, regex_no_case){
   //the regex tests fail under certain gcc versions with buggy regex implementations
-  std::string s = "abc";
+  std::string s = "abc-2.2";
   using test_parse = xtd::parser<test_grammar::Version, true>;
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
   s = "snafoo";
@@ -58,10 +58,10 @@ TEST(test_parser, regex_no_case){
 
 
 TEST(test_parser, regex_case){
-  std::string s = "ABC";
+  std::string s = "ABC-1.1";
   using test_parse = xtd::parser<test_grammar::Version>;
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
-  s = "fnord99xx";
+  s = "abc-1.1";
   EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
 }
 
