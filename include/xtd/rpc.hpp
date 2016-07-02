@@ -175,6 +175,7 @@ namespace xtd {
       public:
         using pointer_type = std::shared_ptr<invoker_base>;
         using vector_type = std::vector<pointer_type>;
+        virtual ~invoker_base() = default;
         virtual void invoke(payload_type&) = 0;
       };
 
@@ -183,6 +184,7 @@ namespace xtd {
       template <typename _ReturnT, typename ... _ArgTs>
       class invoker : public invoker_base {
       public:
+        virtual ~invoker() = default;
         using handler_type = std::function<_ReturnT(_ArgTs...)>;
         handler_type _Handler;
         virtual void invoke(payload_type& oPayload) override {
@@ -255,6 +257,7 @@ namespace xtd {
     public:
       using client_type = null_transport;
       template <typename ... _ArgTs> null_transport(_ArgTs&&...oArgs){}
+      virtual ~null_transport() = default;
       virtual void start_server(){}
       virtual void stop_server(){}
       virtual void handle_client(client_type&& oClient){}
@@ -357,6 +360,7 @@ namespace xtd {
 
       client() = delete;
       client(const client&) = delete;
+      virtual ~client() = default;
 
       template <typename _CallT, typename ... _CallArgsT>
       typename _CallT::return_type call(_CallArgsT&&...oArgs) {
