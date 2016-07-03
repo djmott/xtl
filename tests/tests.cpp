@@ -4,6 +4,7 @@
 
 #include <xtd.hpp>
 
+
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(push, 0)
 #endif
@@ -13,6 +14,9 @@
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(pop)
 #endif
+
+#undef XTD_ASSERT
+#define XTD_ASSERT ASSERT_TRUE
 
 #if (ON==TEST_CALLBACK)
   #include "test_callback.hpp"

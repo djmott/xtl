@@ -1,470 +1,332 @@
-/** @file
-Light weight transport neutral RPC client and server
-@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
-*/
-
 #pragma once
 
-namespace xtd {
-  namespace rpc {
 
-    class communication_exception : public xtd::exception{
-    public:
-      communication_exception(const source_location& loc, const xtd::string& sWhat) : xtd::exception(loc, sWhat){}
-      communication_exception(const communication_exception& ex) : xtd::exception(ex){}
-      communication_exception(communication_exception&& ex) : xtd::exception(std::move(ex)){}
+namespace xtd{
+  namespace rpc{
+
+    template <typename _TransportT, class ... _Calls> class client;
+
+    struct protocol_exception : xtd::exception{
+      template <typename ... _ArgTs> protocol_exception(_ArgTs...oArgs) : xtd::exception(std::forward<_ArgTs>(oArgs)...){}
+    };
+    struct malformed_payload : protocol_exception{
+      template <typename ... _ArgTs> malformed_payload(_ArgTs...oArgs) : protocol_exception(std::forward<_ArgTs>(oArgs)...){}
+    };
+    struct bad_call : protocol_exception{
+      template <typename ... _ArgTs> bad_call(_ArgTs...oArgs) : protocol_exception(std::forward<_ArgTs>(oArgs)...){}
     };
 
-    class protocol_exception : public xtd::exception {
-    public:
-      protocol_exception(const source_location& loc, const xtd::string& sWhat) : xtd::exception(loc, sWhat) {}
-      protocol_exception(const protocol_exception& ex) : xtd::exception(ex) {}
-      protocol_exception(protocol_exception&& ex) : xtd::exception(std::move(ex)) {}
+
+    struct payload : std::vector<uint8_t>{
+      using _super_t = std::vector<uint8_t>;
+      template <typename _Ty> const _Ty& peek() const{
+        assert(_super_t::size() >= sizeof(_Ty));
+        if (_super_t::size() < sizeof(_Ty)){
+          throw malformed_payload(here(), "Invalid peek");
+        }
+        return *reinterpret_cast<const _Ty*>(&at(0));
+      }
     };
 
-    template <typename _Ty> class call;
+/** generic-form marshaler_base
+Used to recursively marshal a parameter pack of data into a payload
+*/
+    template <typename...> class marshaler_base;
 
-    namespace _ {
-
-      using payload_type = std::vector<uint8_t>;
-
-
-      template <typename...> class marshaler_base;
-
-      template <> class marshaler_base<> {
-      public:
-        static void marshal(payload_type&) {}
-        static void unmarshal(payload_type&) {}
-      };
-
-
-      template <typename _Ty>
-      class marshaler_base<_Ty> {
-      public:
-        static void marshal(payload_type& oPayload, const _Ty& val) {
-          static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
-          oPayload.insert(oPayload.end(), reinterpret_cast<const uint8_t*>(&val), sizeof(_Ty) + reinterpret_cast<const uint8_t*>(&val));
-        }
-        static _Ty unmarshal(payload_type& oPayload){
-          static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
-          XTD_ASSERT(oPayload.size() >= sizeof(_Ty));
-          _Ty oRet(*reinterpret_cast<_Ty*>(&oPayload[0]));
-          oPayload.erase(oPayload.begin(), oPayload.begin() + sizeof(_Ty));
-          return oRet;
-        }
-      };
-
-#if (XTD_HAS_UUID)
-      template <>
-      class marshaler_base<unique_id&> {
-      public:
-        static void marshal(payload_type &oPayload, const unique_id &val) {
-          oPayload.insert(oPayload.end(), reinterpret_cast<const uint8_t *>(&val),
-                          sizeof(unique_id) + reinterpret_cast<const uint8_t *>(&val));
-        }
-
-        static unique_id unmarshal(payload_type &oPayload) {
-          XTD_ASSERT(oPayload.size() >= sizeof(unique_id));
-          unique_id oRet(*reinterpret_cast<unique_id *>(&oPayload[0]));
-          oPayload.erase(oPayload.begin(), oPayload.begin() + sizeof(unique_id));
-          return oRet;
-        }
-      };
-#endif
-
-
-      template <typename _Ty, size_t _Len>
-      class marshaler_base<_Ty(&)[_Len] > {
-      public:
-        static void marshal(payload_type& oPayload, const _Ty(&val)[_Len]) {
-          marshaler_base<size_t>::marshal(oPayload, _Len);
-          for (const auto & oItem : val) marshaler_base<_Ty>::marshal(oPayload, oItem);
-        }
-      };
-
-
-      template <typename _Ty>
-      class marshaler_base<std::vector < _Ty>> {
-      public:
-        static void marshal(payload_type& oPayload, const std::vector<_Ty>& val) {
-          marshaler_base<size_t>::marshal(oPayload, val.size());
-          for (const auto & oItem : val) marshaler_base<_Ty>::marshal(oPayload, oItem);
-        }
-        static std::vector < _Ty> unmarshal(payload_type& oPayload) {
-          std::vector < _Ty> oRet;
-          auto iSize = marshaler_base<std::size_t>::unmarshal(oPayload);
-          for (std::size_t i = 0; i < iSize; i++) {
-            oRet.push_back(marshaler_base<_Ty>::unmarshal(oPayload));
-          }
-          return oRet;
-        }
-      };
-
-
-      template <>
-      class marshaler_base<std::string> {
-      public:
-        static void marshal(payload_type & oPayload, const std::string& val) {
-          marshaler_base<std::size_t>::marshal(oPayload, val.size());
-          oPayload.insert(oPayload.end(), val.cbegin(), val.cend());
-        }
-        static std::string unmarshal(payload_type& oPayload) {
-
-          auto iSize = marshaler_base<size_t>::unmarshal(oPayload);
-          std::string oRet(oPayload.begin(), oPayload.begin() + iSize);
-          oPayload.erase(oPayload.begin(), oPayload.begin() + iSize);
-          return oRet;
-        }
-      };
-
-      template <bool _SkipByVal, typename ...> class marshaler;
-
-      template <bool _SkipByVal> class marshaler<_SkipByVal> {
-      public:
-        static void marshal(payload_type&) {}
-        static void unmarshal(payload_type&) {}
-      };
-
-      template <typename _Ty, typename..._ArgTs> class marshaler<true, const _Ty&, _ArgTs...> {
-      public:
-        static void marshal(payload_type& oPayload, const _Ty&, _ArgTs...oArgs) {
-          marshaler<true, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
-        }
-        static void unmarshal(payload_type& oPayload, const _Ty&, _ArgTs...oArgs) {
-          marshaler<true, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
-        }
-      };
-
-
-      template <typename _Ty, typename ..._ArgTs> class marshaler<true, _Ty, _ArgTs...> {
-      public:
-        static void marshal(payload_type& oPayload, const _Ty&, _ArgTs...oArgs) {
-          marshaler<true, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
-        }
-        static void unmarshal(payload_type& oPayload, const _Ty&, _ArgTs...oArgs) {
-          marshaler<true, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
-        }
-      };
-
-
-      template <typename _Ty, typename ..._ArgTs> class marshaler<false, _Ty&, _ArgTs...> {
-      public:
-        static void marshal(payload_type& oPayload, const _Ty& value, _ArgTs...oArgs) {
-          marshaler_base<_Ty>::marshal(oPayload, value);
-          marshaler<false, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
-        }
-        static void unmarshal(payload_type& oPayload, _Ty& value, _ArgTs...oArgs) {
-          value = marshaler_base<_Ty>::unmarshal(oPayload);
-          marshaler<false, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
-        }
-      };
-
-      template <typename _Ty, typename ..._ArgTs> class marshaler<false, _Ty, _ArgTs...> {
-      public:
-        static void marshal(payload_type& oPayload, const _Ty& value, _ArgTs...oArgs) {
-          marshaler_base<_Ty>::marshal(oPayload, value);
-          marshaler<false, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
-        }
-        static void unmarshal(payload_type& oPayload, _Ty& value, _ArgTs...oArgs) {
-          value = marshaler_base<_Ty>::unmarshal(oPayload);
-          marshaler<false, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
-        }
-      };
-
-      class invoker_base {
-      public:
-        using pointer_type = std::shared_ptr<invoker_base>;
-        using vector_type = std::vector<pointer_type>;
-        virtual ~invoker_base() = default;
-        virtual void invoke(payload_type&) = 0;
-      };
-
-      template <int Index, typename _ReturnT, typename ... _ArgTs> class invoke_helper;
-
-      template <typename _ReturnT, typename ... _ArgTs>
-      class invoker : public invoker_base {
-      public:
-        virtual ~invoker() = default;
-        using handler_type = std::function<_ReturnT(_ArgTs...)>;
-        handler_type _Handler;
-        virtual void invoke(payload_type& oPayload) override {
-          invoke_helper<sizeof...(_ArgTs), _ReturnT, _ArgTs...>::invoke(oPayload, _Handler);
-        }
-      };
-
-      template <int Index, typename _ReturnT, typename _HeadT, typename ..._TailTs> 
-      class invoke_helper<Index, _ReturnT, _HeadT, _TailTs...> {
-      public:
-        template <typename _HandlerT, typename ... _ArgTs>
-        static void invoke(payload_type& oPayload, const _HandlerT& oHandler, _ArgTs&&...oArgs) {
-          auto oParam = marshaler_base<_HeadT>::unmarshal(oPayload);
-          invoke_helper<Index - 1, _ReturnT, _TailTs...>::invoke(oPayload, oHandler, std::forward<_ArgTs>(oArgs)..., oParam);
-          marshaler<true, _HeadT>::marshal(oPayload, oParam);
-        }
-      };
-
-      template <typename _ReturnT>
-      class invoke_helper<0, _ReturnT> {
-      public:
-        template <typename _HandlerT, typename ... _ArgTs>
-        static void invoke(payload_type& oPayload, const _HandlerT& oHandler, _ArgTs&&...oArgs) {
-          XTD_ASSERT(0 == oPayload.size());
-          _ReturnT oRet = oHandler(std::forward<_ArgTs>(oArgs)...);
-          marshaler_base<_ReturnT>::marshal(oPayload, oRet);
-        }
-      };
-
-      template <int _Counter, typename...> class IndexOfTypeID;
-
-      template <int _Counter> class IndexOfTypeID<_Counter> {
-      public:
-        static int Value(std::size_t) { return -1; }
-      };
-
-      template <int _Counter, typename _HeadT, typename ... _TailT> class IndexOfTypeID<_Counter, _HeadT, _TailT...> {
-      public:
-        static int Value(std::size_t iHash) { return (typeid(_HeadT).hash_code() == iHash) ? _Counter : IndexOfTypeID<1 + _Counter, _TailT...>::Value(iHash); }
-      };
-
-      template <typename ...> class InvokerVector;
-
-      template <> class InvokerVector<> {
-      public:
-        static void Create(invoker_base::vector_type&) {}
-      };
-
-      template <typename _HeadT, typename ... _TailT>
-      class InvokerVector<_HeadT, _TailT...> {
-      public:
-        static void Create(typename invoker_base::vector_type& oItems) {
-          oItems.emplace_back(typename invoker_base::pointer_type(new typename _HeadT::invoker_type));
-          InvokerVector<_TailT...>::Create(oItems);
-        }
-      };
-    }
-
-    template <typename _ReturnT, typename ... _ArgsT> 
-    class call<_ReturnT(_ArgsT...)> {
+///marshaler_base specialization of no type
+    template <> class marshaler_base<>{
     public:
+      static void marshal(payload&){}
+      static void unmarshal(payload&){}
+    };
+
+/** marshaler_base specialization of any type
+throws a static assertion if used with a non-pod type indicating that a specialization for the type is missing
+@tparam _Ty the type of value to marshal and unmarshal from the payload
+*/
+    template <typename _Ty>
+    class marshaler_base<_Ty>{
+    public:
+      static void marshal(payload& oPayload, const _Ty& val){
+        static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
+        oPayload.insert(oPayload.end(), reinterpret_cast<const uint8_t*>(&val), sizeof(_Ty) + reinterpret_cast<const uint8_t*>(&val));
+      }
+      static _Ty unmarshal(payload& oPayload){
+        static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
+        _Ty oRet(*reinterpret_cast<_Ty*>(&oPayload[0]));
+        oPayload.erase(oPayload.begin(), oPayload.begin() + sizeof(_Ty));
+        return oRet;
+      }
+    };
+
+/// marshaler_base specialization for static arrays
+    template <typename _Ty, size_t _Len>
+    class marshaler_base<_Ty(&)[_Len] >{
+    public:
+      static void marshal(payload& oPayload, const _Ty(&val)[_Len]){
+        marshaler_base<size_t>::marshal(oPayload, _Len);
+        for (const auto & oItem : val) marshaler_base<_Ty>::marshal(oPayload, oItem);
+      }
+    };
+
+
+/// marshaler_base specialization for std::vector
+    template <typename _Ty> class marshaler_base<std::vector < _Ty>> {
+      public:
+      static void marshal(payload& oPayload, const std::vector<_Ty>& val){
+        marshaler_base<size_t>::marshal(oPayload, val.size());
+        for (const auto & oItem : val) marshaler_base<_Ty>::marshal(oPayload, oItem);
+      }
+      static std::vector < _Ty> unmarshal(payload& oPayload){
+        std::vector < _Ty> oRet;
+        auto iSize = marshaler_base<std::size_t>::unmarshal(oPayload);
+        for (std::size_t i = 0; i < iSize; i++){
+          oRet.push_back(marshaler_base<_Ty>::unmarshal(oPayload));
+        }
+        return oRet;
+      }
+    };
+
+
+  /// marshaler_base specialization for std::string
+    template <>
+    class marshaler_base<std::string>{
+    public:
+      static void marshal(payload & oPayload, const std::string& val){
+        marshaler_base<std::size_t>::marshal(oPayload, val.size());
+        oPayload.insert(oPayload.end(), val.cbegin(), val.cend());
+      }
+      static std::string unmarshal(payload& oPayload){
+
+        auto iSize = marshaler_base<size_t>::unmarshal(oPayload);
+        std::string oRet(oPayload.begin(), oPayload.begin() + iSize);
+        oPayload.erase(oPayload.begin(), oPayload.begin() + iSize);
+        return oRet;
+      }
+    };
+
+  /** generic-form marshaler used by clients and servers
+  @tparam _SkipByVal permits selective marshaling and unmarshaling based on the type. For example, const values can be marshaled on the client side and unmarshaled on the server side but not unmarshaled on the client side
+  @tparam ... parameter pack of types to recursively marshal or unmarshal
+  */
+    template <bool _SkipByVal, typename ...> class marshaler;
+
+  /// marshaler specialization with no type
+    template <bool _SkipByVal> class marshaler<_SkipByVal>{
+    public:
+      static void marshal(payload&){}
+      static void unmarshal(payload&){}
+    };
+
+  /** marshaler specializaiton to skip marshaling/unmarshaling a constant type
+  This specialization is chosen by the compiler for constant reference types that should be skipped
+  */
+    template <typename _Ty, typename..._ArgTs> class marshaler<true, const _Ty&, _ArgTs...>{
+    public:
+      static void marshal(payload& oPayload, const _Ty&, _ArgTs...oArgs){
+        marshaler<true, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
+      }
+      static void unmarshal(payload& oPayload, const _Ty&, _ArgTs...oArgs){
+        marshaler<true, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+
+  /** marshaler specialization to skip marshaling/unmarshaling a by-value type
+  This specialization is chosen by the compiler for by-value types that should be skipped
+  */
+    template <typename _Ty, typename ..._ArgTs> class marshaler<true, _Ty, _ArgTs...>{
+    public:
+      static void marshal(payload& oPayload, const _Ty&, _ArgTs...oArgs){
+        marshaler<true, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
+      }
+      static void unmarshal(payload& oPayload, const _Ty&, _ArgTs...oArgs){
+        marshaler<true, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+
+  /** marshaler specialization to process marshaling/unmarshaling a non-const reference type
+  This specialization is chosen by the compiler for references types that should not be skipped
+  */
+    template <typename _Ty, typename ..._ArgTs> class marshaler<false, _Ty&, _ArgTs...>{
+    public:
+      static void marshal(payload& oPayload, const _Ty& value, _ArgTs...oArgs){
+        marshaler_base<_Ty>::marshal(oPayload, value);
+        marshaler<false, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
+      }
+      static void unmarshal(payload& oPayload, _Ty& value, _ArgTs...oArgs){
+        value = marshaler_base<_Ty>::unmarshal(oPayload);
+        marshaler<false, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+  /** marshaler specialization to process marshaling/unmarshaling a by-value type
+  This specialization is chosen by the compiler for by-value types that should not be skipped
+  */
+    template <typename _Ty, typename ..._ArgTs> class marshaler<false, _Ty, _ArgTs...>{
+    public:
+      static void marshal(payload& oPayload, const _Ty& value, _ArgTs...oArgs){
+        marshaler_base<_Ty>::marshal(oPayload, value);
+        marshaler<false, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
+      }
+      static void unmarshal(payload& oPayload, _Ty& value, _ArgTs...oArgs){
+        value = marshaler_base<_Ty>::unmarshal(oPayload);
+        marshaler<false, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+
+    template <typename _DeclT, typename _CallT> struct rpc_call;
+
+    template <typename _DeclT, typename _ReturnT, typename ... _ArgTs> struct rpc_call<_DeclT, _ReturnT(_ArgTs...)>{
       using return_type = _ReturnT;
-      using handler_type = std::function<_ReturnT(_ArgsT...)>;
-      using invoker_type = _::invoker<_ReturnT, _ArgsT...>;
+      using function_type = std::function<_ReturnT(_ArgTs...)>;
+      using upload_marshaler_type = marshaler<false, size_t, _ArgTs...>;
+      using download_marshaler_type = marshaler<true, _ArgTs..., _ReturnT&>;
     };
 
-    class disconnect : public call<int()> {};
 
-    class null_transport{
-    public:
-      using client_type = null_transport;
-      template <typename ... _ArgTs> null_transport(_ArgTs&&...oArgs){}
-      virtual ~null_transport() = default;
-      virtual void start_server(){}
-      virtual void stop_server(){}
-      virtual void handle_client(client_type&& oClient){}
-      virtual void connect(){}
-      template <typename _Ty>
-      void read(_Ty&){}
-      template <typename _Ty>
-      void write(const _Ty&){}
-    };
+  //transport should keep accepting and processing payloads until callback returns false
+    using server_payload_handler_callback_type = std::function<bool(payload&)>;
 
-    class ipv4_tcp_transport : public xtd::socket::ipv4_tcp_stream{
-    public:
-      using client_type = xtd::socket::ipv4_tcp_stream;
-      using _super_t = xtd::socket::ipv4_tcp_stream;
 
-      ipv4_tcp_transport(const char * sIP, uint16_t iPort) : _Address(sIP, iPort) {}
-      virtual ~ipv4_tcp_transport() = default;
+    struct tcp_transport{
+      void start_server(server_payload_handler_callback_type oCallback){
+  //start a processing loop in a dedicated thread to accept client connections and wait for incoming payloads
+  //forwarding payloads to oCallback and return the resulting payloads after the call to oCallback back to the client
+  //oCallback returns false to indicate the client session should be disconnected
 
-      virtual void start_server() {
-        _super_t::bind(_Address);
-        for (;;) {
-          _super_t::listen();
-          handle_client(std::move(_super_t::accept<_super_t>()));
-        }
       }
+      void stop_server(){
+        TODO("disconnect clients and stop the server thread")
+      }
+      void transact(payload& oPayload){
+        TODO("send the payload to the server and return the resulting payload")
+      }
+    };
 
-      virtual void stop_server() { _super_t::close(); }
+    struct null_transport{
+      void start_server(server_payload_handler_callback_type oCallback){
+  //start a processing loop in a dedicated thread to accept client connections and wait for incoming payloads
+  //forwarding payloads to oCallback and return the resulting payloads after the call to oCallback back to the client
+  //oCallback returns false to indicate the client session should be disconnected
 
-      virtual void handle_client(client_type&&) = 0;
+      }
+      void stop_server(){
+        TODO("disconnect clients and stop the server thread")
+      }
+      void transact(payload& oPayload){
+        TODO("send the payload to the server and return the resulting payload")
+      }
+    };
 
-      virtual void connect() { _super_t::connect(_Address); }
 
+    template <class _TransportT, class _DeclT, class ... _Calls> class server_impl;
+
+
+    template <class _TransportT, class _DeclT> class server_impl<_TransportT, _DeclT>{
     protected:
-      _super_t::address_type _Address;
+      _TransportT _Transport;
+      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _Transport(std::forward<_XportCtorTs>(oParams)...){
+        _Transport.start_server([this](payload& oPayload)->bool{ return static_cast<_DeclT*>(this)->invoke(oPayload); });
+      }
+
+      bool invoke(payload& oPayload){
+        TODO("empty out payload and return a marshaled 'invalid call' exception")
+        return false;
+      }
+
     };
 
 
-    template <typename _TransportT, bool _MarshalConst, bool _UnmarshalConst, typename ... _CallTs>
-    class server : private _TransportT {
-    public:
-      using transport_type = _TransportT;
-
-      template <typename ... _TransportArgs>
-      server(_TransportArgs&&...oArgs) : _TransportT(std::forward<_TransportArgs>(oArgs)...) {
-        _::InvokerVector<_CallTs...>::Create(_Invokers);
-      }
-      server() = delete;
-      server(const server&) = delete;
-      virtual ~server() = default;
-
-      template <typename _Ty, typename _ArgT> void Attach(_ArgT&& oArg) {
-        static const int index = xtd::tuple<_CallTs...>::template index_of<_Ty>::value;
-        auto pInvoker = static_cast<typename _Ty::invoker_type*>(_Invokers[index].get());
-        pInvoker->_Handler = typename _Ty::handler_type(std::forward<_ArgT>(oArg));
-      }
-
-      void start_server() override { _TransportT::start_server(); }
-
-      void stop_server() override { _TransportT::stop_server(); }
-
-      void handle_client(typename _TransportT::client_type&& oClient) override {
-        _::payload_type oPayload;
-        try{
-          for (;;) {
-            oClient.read(oPayload);
-            if (oPayload.size() < sizeof(std::size_t)) {
-              ERR("Invalid payload");
-              TODO("return error to client");
-              break;
-            }
-            auto iCallIndex = _::marshaler_base<std::size_t>::unmarshal(oPayload);
-            if ((std::size_t) - 1 == iCallIndex) {
-              ERR("Invalid call type");
-              TODO("return error to client");
-              break;
-            }
-            if (iCallIndex == xtd::tuple<_CallTs...>::template index_of<disconnect>::value) break;
-            auto & oInvoker = _Invokers[iCallIndex];
-            oInvoker->invoke(oPayload);
-            oPayload.insert(oPayload.begin(), reinterpret_cast<const uint8_t*>(&iCallIndex), reinterpret_cast<const uint8_t*>(&iCallIndex) + sizeof(iCallIndex));
-            oClient.write(oPayload);
-          }
-        }
-        catch (const xtd::socket::exception& ex){
-          ERR("A socket communication exception occurred: ", ex.what());
-        }
-      }
-
+    template <class _TransportT, class _DeclT, class _HeadT, class ... _TailT>
+    class server_impl<_TransportT, _DeclT, _HeadT, _TailT...>
+      : protected server_impl<_TransportT, _DeclT, _TailT...>{
     protected:
-      _::invoker_base::vector_type _Invokers;
+      using _super_t = server_impl<_TransportT, _DeclT, _TailT...>;
+      using function_type = typename _HeadT::function_type;
+      function_type _Function;
+
+      template <typename _CallT, typename _Param> void _attach(typename std::enable_if<std::is_same<_CallT, _HeadT>::value, _Param>::type oParam){
+        _Function = oParam;
+      }
+
+      template <typename _CallT, typename _ParamT> void _attach(_ParamT oCallImpl){ _super_t::template _attach<_CallT, _ParamT>(oCallImpl); }
+
+      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _super_t(std::forward<_XportCtorTs>(oParams)...){}
+
+
+
+    public:
+
+      bool invoke(payload& oPayload){
+        if (oPayload.peek<decltype(typeid(_HeadT).hash_code())>() != typeid(_HeadT).hash_code()){
+          return _super_t::invoke(oPayload);
+        }
+        TODO("unpack parameters and call _Function")
+        return false;
+      }
+
+
+      template <typename _CallT, typename _ParamT> void attach(_ParamT oCallImpl){ _attach<_CallT, _ParamT>(oCallImpl); }
+
     };
 
-    template <typename _TransportT, bool _MarshalConst, bool _UnmarshalConst, typename ... _CallTs>
-    class client : private _TransportT {
+    template <class _TransportT, class ... _Calls> class server : public server_impl<_TransportT, server<_TransportT, _Calls...>, _Calls...>{
+      using _super_t = server_impl<_TransportT, server<_TransportT, _Calls...>, _Calls...>;
     public:
-      using transport_type = _TransportT;
+      using client_type = client<_TransportT, _Calls...>;
+      template <typename ... _XportCtorTs> server(_XportCtorTs&&...oParams) : _super_t(std::forward<_XportCtorTs>(oParams)...){}
 
-      template <typename ... _TransportArgs>
-      client(_TransportArgs...oArgs) : _TransportT(oArgs...) {}
+    };
 
-      client() = delete;
-      client(const client&) = delete;
-      virtual ~client() = default;
 
-      template <typename _CallT, typename ... _CallArgsT>
-      typename _CallT::return_type call(_CallArgsT&&...oArgs) {
-        _::payload_type oPayload;
-        auto iCallIndex = IndexOf(typeid(_CallT), typeid(_CallTs)...);
-        _::marshaler<false,  size_t, _CallArgsT...>::marshal(oPayload, iCallIndex, std::forward<_CallArgsT>(oArgs)...);
-        _TransportT::write(oPayload);
-        oPayload.clear();
-        _TransportT::read(oPayload);
-        auto iCallID = _::marshaler_base<std::size_t>::unmarshal(oPayload);
-        if (iCallID != iCallIndex){
-          TODO("Handle error");
-        }
-        auto oRet = _::marshaler_base<typename _CallT::return_type>::unmarshal(oPayload);
-        _::marshaler<true, _CallArgsT...>::unmarshal(oPayload, std::forward<_CallArgsT>(oArgs)...);
+    template<typename _TransportT >
+    class client<_TransportT>{
+    protected:
+      _TransportT _Transport;
+
+
+    public:
+      using server_type = server<_TransportT>;
+      template<typename ... _XportCtorTs> explicit client(_XportCtorTs &&...oArgs) : _Transport(std::forward<_XportCtorTs>(oArgs)...){}
+    };
+
+
+    template<typename _TransportT, class _HeadT, class ..._TailT >
+    class client<_TransportT, _HeadT, _TailT...> : protected client<_TransportT, _TailT...>{
+    protected:
+      using _super_t = client<_TransportT, _TailT...>;
+
+
+
+      template <typename _CallT, typename ..._ParamTs>
+      typename _HeadT::return_type _call(typename std::enable_if<std::is_same<_CallT, _HeadT>::value, const std::type_info&>::type, _ParamTs&&... oParams) {
+        payload oPayload;
+        typename _HeadT::return_type oRet;
+        _HeadT::upload_marshaler_type::marshal(oPayload, typeid(_CallT).hash_code(), std::forward<_ParamTs>(oParams)...);
+        _super_t::_Transport.transact(oPayload);
+        _HeadT::download_marshaler_type::unmarshal(oPayload, std::forward<_ParamTs>(oParams)..., oRet);
         return oRet;
       }
 
-      void connect() override {
-        _TransportT::connect();
+      template <typename _CallT, typename ..._ParamTs>
+      typename _CallT::return_type _call(typename std::enable_if<!std::is_same<_CallT, _HeadT>::value, const std::type_info&>::type oType, _ParamTs&&... oParams) {
+        return _super_t::template _call<_CallT>(oType, std::forward<_ParamTs>(oParams)...);
       }
 
 
-    protected:
 
-      template <typename ... _TailT>
-      size_t IndexOf(const std::type_info& src, const std::type_info& head, _TailT&&...oTail) const {
-        if (src == head) return 0;
-        auto iRet = IndexOf(src, std::forward<_TailT>(oTail)...);
-        return ((std::size_t)-1 == iRet) ? -1 : 1 + iRet;
-      }
-
-      size_t IndexOf(const std::type_info&) const {
-        return -1;
-      }
-
-      void handle_client(typename transport_type::client_type&&) override {}
-    };
-
-    template <typename _TransportT, typename ... _CallTs> class contract {
     public:
-      using client_type = rpc::client<_TransportT, true, false, disconnect, _CallTs...>;
-      using server_type = rpc::server<_TransportT, false, true, disconnect, _CallTs...>;
+      using server_type = server<_TransportT, _HeadT, _TailT...>;
+      template<typename ... _XportCtorTs> explicit client(_XportCtorTs&&...oArgs) : client<_TransportT, _TailT...>(std::forward<_XportCtorTs>(oArgs)...){}
+
+      template <typename _Ty, typename ... _ParamTs>
+      typename _Ty::return_type call(_ParamTs&&...oParams) {
+        return _call<_Ty>(typeid(_Ty), std::forward<_ParamTs>(oParams)...);
+      }
     };
+
   }
 }
-
-
-#if !defined(__TEST_RPC_SERVER__)
-#define __TEST_RPC_SERVER__ 0
-#endif
-
-
-#if !defined(__TEST_RPC_CLIENT__)
-#define __TEST_RPC_CLIENT__ 0
-#endif
-
-#if __TEST_RPC_SERVER__ || __TEST_RPC_CLIENT__
-
-namespace rpctest {
-using namespace xtd::rpc;
-class Add : public call<int(int, int)> {};
-class Echo : public call<std::string(std::string)> {};
-class Average : public call<double(std::vector<double>)> {};
-
-using contract_type = contract<ipv4_tcp_transport, Add, Echo, Average>;
-using server_type = contract_type::server;
-using client_type = contract_type::client;
-
-}
-
-#endif
-
-#if 0
-
-int main() {
-using namespace rpctest;
-server_type oServer("127.0.0.1", 9494);
-
-oServer.Attach<Add>([](int a, int b) { return a+b; });
-oServer.Attach<Echo>([](const std::string& sval) -> std::string { return std::string(sval); });
-oServer.Attach<Average>([](const std::vector<double>& oVals) -> double {
-double dRet = 0;
-for (auto & oVal : oVals) { dRet += oVal; }
-dRet /= oVals.size();
-return dRet;
-});
-oServer.StartServer();
-}
-
-#endif
-
-#if 0
-int main(){
-using namespace rpctest;
-Sleep(2000);
-client_type oClient("127.0.0.1", 9494);
-oClient.Connect();
-for (int i=0 ; i<1000 ; ++i){
-RPC_DBG("Calling Echo ", xtd::cstring::Base<10>(i));
-std::string sParam = "Hello!";
-auto sRet = oClient.call<Echo>(sParam);
-XTD_ASSERT(sParam == sRet);
-}
-XTD_ASSERT(3 == oClient.call<Add>(1, 2));
-}
-#endif
