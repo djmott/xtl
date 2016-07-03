@@ -1,8 +1,8 @@
 eXtended Template Library
 =========================
 [![Open Hub project report](https://www.openhub.net/p/libxtl/widgets/project_thin_badge.gif)](https://www.openhub.net/p/libxtl)
-[![Travis](https://img.shields.io/travis/djmott/xtl.svg?style=plastic)](https://travis-ci.org/djmott/xtl.svg?branch=master)
-[![Coveralls branch](https://img.shields.io/coveralls/djmott/xtl.svg?style=plastic)](https://coveralls.io/repos/github/djmott/xtl/badge.svg?branch=master)
+[![Travis](https://img.shields.io/travis/djmott/xtl.svg?style=plastic)](https://travis-ci.org/djmott/xtl)
+[![Coveralls branch](https://img.shields.io/coveralls/djmott/xtl.svg?style=plastic)](https://coveralls.io/github/djmott/xtl)
 [![SonarQube Tech Debt](https://img.shields.io/sonar/https/sonarqube.com/xtl/tech_debt.svg)](https://sonarqube.com/overview?id=xtl)
 [![SonarQube Quality Gate](http://nemo.sonarqube.org/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl)
 [![Boost License](https://img.shields.io/badge/license-Boost_Version_1.0-green.svg?style=plastic)](http://www.boost.org/LICENSE_1_0.txt)
