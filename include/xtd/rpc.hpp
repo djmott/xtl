@@ -6,18 +6,22 @@ namespace xtd{
 
     template <typename _TransportT, class ... _Calls> class client;
 
-    struct protocol_exception : xtd::exception{
+    class protocol_exception : public xtd::exception{
+    public:
       template <typename ... _ArgTs> protocol_exception(_ArgTs...oArgs) : xtd::exception(std::forward<_ArgTs>(oArgs)...){}
     };
-    struct malformed_payload : protocol_exception{
+    class malformed_payload : public protocol_exception{
+    public:
       template <typename ... _ArgTs> malformed_payload(_ArgTs...oArgs) : protocol_exception(std::forward<_ArgTs>(oArgs)...){}
     };
-    struct bad_call : protocol_exception{
+    class bad_call : public protocol_exception{
+    public:
       template <typename ... _ArgTs> bad_call(_ArgTs...oArgs) : protocol_exception(std::forward<_ArgTs>(oArgs)...){}
     };
 
 
-    struct payload : std::vector<uint8_t>{
+    class payload : public std::vector<uint8_t>{
+    public:
       using _super_t = std::vector<uint8_t>;
       template <typename _Ty> const _Ty& peek() const{
         assert(_super_t::size() >= sizeof(_Ty));
@@ -36,8 +40,8 @@ Used to recursively marshal a parameter pack of data into a payload
 ///marshaler_base specialization of no type
     template <> class marshaler_base<>{
     public:
-      static void marshal(payload&){}
-      static void unmarshal(payload&){}
+      static void marshal(payload&){ /*this specialization is a recursion terminator so has no implementation*/}
+      static void unmarshal(payload&){/*this specialization is a recursion terminator so has no implementation*/}
     };
 
 /** marshaler_base specialization of any type
@@ -114,8 +118,8 @@ throws a static assertion if used with a non-pod type indicating that a speciali
   /// marshaler specialization with no type
     template <bool _SkipByVal> class marshaler<_SkipByVal>{
     public:
-      static void marshal(payload&){}
-      static void unmarshal(payload&){}
+      static void marshal(payload&){/*this specialization is a recursion terminator so has no implementation*/}
+      static void unmarshal(payload&){/*this specialization is a recursion terminator so has no implementation*/}
     };
 
   /** marshaler specializaiton to skip marshaling/unmarshaling a constant type
@@ -177,9 +181,10 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     };
 
 
-    template <typename _DeclT, typename _CallT> struct rpc_call;
+    template <typename _DeclT, typename _CallT> class rpc_call;
 
-    template <typename _DeclT, typename _ReturnT, typename ... _ArgTs> struct rpc_call<_DeclT, _ReturnT(_ArgTs...)>{
+    template <typename _DeclT, typename _ReturnT, typename ... _ArgTs> class rpc_call<_DeclT, _ReturnT(_ArgTs...)>{
+    public:
       using return_type = _ReturnT;
       using function_type = std::function<_ReturnT(_ArgTs...)>;
       using upload_marshaler_type = marshaler<false, size_t, _ArgTs...>;
@@ -191,7 +196,8 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     using server_payload_handler_callback_type = std::function<bool(payload&)>;
 
 
-    struct tcp_transport{
+    class tcp_transport{
+    public:
       void start_server(server_payload_handler_callback_type oCallback){
   //start a processing loop in a dedicated thread to accept client connections and wait for incoming payloads
   //forwarding payloads to oCallback and return the resulting payloads after the call to oCallback back to the client
@@ -199,14 +205,17 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
       }
       void stop_server(){
+        //TODO: disconnect clients and stop the server thread
         TODO("disconnect clients and stop the server thread")
       }
       void transact(payload& oPayload){
+        //TODO: send the payload to the server and return the resulting payload
         TODO("send the payload to the server and return the resulting payload")
       }
     };
 
-    struct null_transport{
+    class null_transport{
+    public:
       void start_server(server_payload_handler_callback_type oCallback){
   //start a processing loop in a dedicated thread to accept client connections and wait for incoming payloads
   //forwarding payloads to oCallback and return the resulting payloads after the call to oCallback back to the client
@@ -214,9 +223,11 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
       }
       void stop_server(){
+        //TODO: disconnect clients and stop the server thread
         TODO("disconnect clients and stop the server thread")
       }
       void transact(payload& oPayload){
+        //TODO: send the payload to the server and return the resulting payload
         TODO("send the payload to the server and return the resulting payload")
       }
     };
@@ -242,7 +253,7 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
     template <class _TransportT, class _DeclT, class _HeadT, class ... _TailT>
     class server_impl<_TransportT, _DeclT, _HeadT, _TailT...>
-      : protected server_impl<_TransportT, _DeclT, _TailT...>{
+      : public server_impl<_TransportT, _DeclT, _TailT...>{
     protected:
       using _super_t = server_impl<_TransportT, _DeclT, _TailT...>;
       using function_type = typename _HeadT::function_type;
@@ -295,7 +306,7 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
 
     template<typename _TransportT, class _HeadT, class ..._TailT >
-    class client<_TransportT, _HeadT, _TailT...> : protected client<_TransportT, _TailT...>{
+    class client<_TransportT, _HeadT, _TailT...> : public client<_TransportT, _TailT...>{
     protected:
       using _super_t = client<_TransportT, _TailT...>;
 

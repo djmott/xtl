@@ -375,12 +375,10 @@ namespace xtd{
           while (oCurr < end){
             if (*oCurr == _HeadCH){
               oCurr++;
-              continue;
+            }else if (parse_helper<whitespace<_TailCH...>, void, _IgnoreCase, void>::parse(oCurr, end)){
+            }else{
+              break;
             }
-            if (parse_helper<whitespace<_TailCH...>, void, _IgnoreCase, void>::parse(oCurr, end)){
-              continue;
-            }
-            break;
           }
           begin = oCurr;
           return false;

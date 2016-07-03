@@ -24,13 +24,13 @@ namespace xtd{
 
     template <typename _MethodT, _MethodT * _method> class method_invoker : public invoker{
     public:
-      virtual ~method_invoker() = default;
+      ~method_invoker() override = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { return (*_method)(std::forward<_Args>(oArgs)...); }
     };
 
     template <typename _LambdaT> class lamdba_invoker : public invoker{
     public:
-      virtual ~lamdba_invoker() = default;
+      ~lamdba_invoker() override = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { return _Lambda(std::forward<_Args>(oArgs)...); }
       explicit lamdba_invoker(_LambdaT oLambda) : _Lambda(oLambda){} //NOSONAR
       lamdba_invoker(lamdba_invoker&& src) : _Lambda(std::move(src._Lambda)){} //NOSONAR
@@ -47,7 +47,7 @@ namespace xtd{
 
     template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> class member_invoker : public invoker{
     public:
-      virtual ~member_invoker() = default;
+      ~member_invoker() override = default;
       member_invoker() = delete;
       member_invoker& operator=(const member_invoker&) = delete;
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}  //NOSONAR
@@ -111,13 +111,13 @@ namespace xtd{
 
     template <typename _MethodT, _MethodT * _method> class method_invoker : public invoker{
     public:
-      virtual ~method_invoker() = default;
+      ~method_invoker() override = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { (*_method)(std::forward<_Args>(oArgs)...); }
     };
 
     template <typename _LambdaT> class lamdba_invoker : public invoker{
     public:
-      virtual ~lamdba_invoker() = default;
+      ~lamdba_invoker() override = default;
       virtual _ReturnT invoke(_Args...oArgs) const override { _Lambda(std::forward<_Args>(oArgs)...); }
       explicit lamdba_invoker(_LambdaT oLambda) : _Lambda(oLambda){}
       lamdba_invoker(lamdba_invoker&& src) : _Lambda(std::move(src._Lambda)){}
@@ -134,7 +134,7 @@ namespace xtd{
 
     template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> class member_invoker : public invoker{
     public:
-      virtual ~member_invoker() = default;
+      ~member_invoker() override = default;
       member_invoker() = delete;
       member_invoker& operator=(const member_invoker&) = delete;
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}

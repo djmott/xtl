@@ -70,7 +70,7 @@ namespace xtd{
     public:
 
       syslog_target(){ openlog(nullptr, LOG_PID | LOG_NDELAY, 0); }
-      virtual ~syslog_target(){ closelog(); }
+      ~syslog_target() override { closelog(); }
       void operator()(const message::pointer_type& oMessage) override {
         int iFacility = LOG_MAKEPRI(LOG_USER, LOG_DEBUG);
         switch (oMessage->type){
@@ -110,7 +110,7 @@ namespace xtd{
 #if (XTD_LOG_TARGET_WINDBG)
     class win_dbg_target : public log_target{
     public:
-      virtual ~win_dbg_target(){}
+      ~win_dbg_target() override = default;
       void operator()(const message::pointer_type& oMessage) override {
         OutputDebugStringA(oMessage->_text.c_str());
       }
@@ -121,7 +121,7 @@ namespace xtd{
 #if (XTD_LOG_TARGET_COUT)
     class std_cout_target : public log_target{
     public:
-      virtual ~std_cout_target() = default;
+      ~std_cout_target() override = default;
       void operator()(const message::pointer_type& oMessage) override{
         std::cout << oMessage->_text << std::endl;
       }

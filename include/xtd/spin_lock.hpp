@@ -6,7 +6,7 @@
 
 namespace xtd {
 
-  class spin_lock : protected std::atomic < uint32_t > {
+  class spin_lock : private std::atomic < uint32_t > {
   public:
     using _super_t = std::atomic < uint32_t > ;
     static const uint32_t LockedValue = 0x80000000;
@@ -35,7 +35,7 @@ namespace xtd {
       spin_lock& _Lock;
     public:
       ~scope_lock() { _Lock.unlock(); }
-      scope_lock(spin_lock& oLock) : _Lock(oLock) { _Lock.lock(); }
+      explicit scope_lock(spin_lock& oLock) : _Lock(oLock) { _Lock.lock(); }
       scope_lock(const scope_lock&) = delete;
       scope_lock& operator=(const scope_lock&) = delete;
     };

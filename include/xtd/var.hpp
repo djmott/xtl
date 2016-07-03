@@ -61,7 +61,7 @@ namespace xtd {
 
     class empty : public inner_base{
     public:
-      virtual ~empty() = default;
+      ~empty() override = default;
       inner_base * clone() const override { return new empty; }
       const std::type_info& get_type() const override { return typeid(empty); }
       bool is_pod() const override { throw std::runtime_error("reference to uninitialized variable"); }
@@ -71,6 +71,7 @@ namespace xtd {
     template <typename _Ty> class inner : public inner_base {
     public:
       explicit inner(_Ty newval) : _value(newval) {}
+      ~inner() override = default;
       inner(const inner&)=delete;
       inner() = delete;
       inner& operator=(const inner&) = delete;
@@ -91,7 +92,8 @@ namespace xtd {
   class var::inner<xtd::xstring<_ChT>> : public var::inner_base {
   public:
     explicit inner(xtd::xstring<_ChT> newval) : _value(std::move(newval)) {}
-    inner(const inner&)=delete;
+    ~inner() override = default;
+    inner(const inner&) = delete;
     inner() = delete;
     inner& operator=(const inner&) = delete;
     inner_base * clone() const override { return new inner(_value); }
