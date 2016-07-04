@@ -3,15 +3,10 @@
     @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
  */
 
-#include <xtd.hpp>
-/*
-#include <xtd/callback.hpp>
-#include <iostream>
-*/
+#include <xtd/xtd.hpp>
 
 using callback_type = xtd::callback<void(int, int)>;
 callback_type oCallback2;
-
 
 
 void Add(int x, int y){ std::cout << x + y << std::endl; }

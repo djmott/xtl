@@ -3,10 +3,7 @@
 @example example_parse1.cpp
 */
 
-#include <xtd.hpp>
-
-/*#include <xtd/parse.hpp>
-#include <iostream>*/
+#include <xtd/xtd.hpp>
 
 namespace command_line {
   using namespace xtd::parse;
