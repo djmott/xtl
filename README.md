@@ -7,7 +7,20 @@ eXtended Template Library
 [![SonarQube Quality Gate](http://nemo.sonarqube.org/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl)
 [![Boost License](https://img.shields.io/badge/license-Boost_Version_1.0-green.svg?style=plastic)](http://www.boost.org/LICENSE_1_0.txt)
 
-XTL is a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. It supplements, extends and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard.
+XTL is a public release of portions from a much larger private set of libraries which I've maintained over the years and used in a number of projects. It's primarily a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. It supplements, extends and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard. A short list of some of the more notable headers:
+
+|Header              |Description|
+|--------------------|-----------|
+|callback.hpp        |single producer notifies multiple consumers of an event|
+|dynamic_library.hpp |load and invoke methods in a dynamic library|
+|parse.hpp           |text parsing and AST generation|
+|socket.hpp          |general purpose socket communication|
+|source_location.hpp |maintains info about locations within source code|
+|spin_lock.hpp       |simple user mode spin lock based on std::atomic|
+|string.hpp          |advanced and common string handling|
+|tuple.hpp           |manipulate and generate tuples|
+|unique_id.hpp       |global unique identifier / universal unique identifier data type|
+|var.hpp             |multi-type variant using type-erasure|
 
 ### Getting started
 
