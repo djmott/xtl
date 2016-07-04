@@ -116,7 +116,7 @@ endif()
 
 include_directories("${XTL_BINARY_DIR}" "${XTL_SOURCE_DIR}/include")
 
-configure_file("${XTL_SOURCE_DIR}/include/xtd/xtd.hpp.in" "${CMAKE_CURRENT_BINARY_DIR}/xtd.hpp")
+configure_file("${XTL_SOURCE_DIR}/include/xtd/xtd.hpp.in" "${XTL_SOURCE_DIR}/include/xtd/xtd.hpp")
 
 if(DOXYGEN_FOUND)
 
