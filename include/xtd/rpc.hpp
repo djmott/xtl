@@ -8,21 +8,29 @@ namespace xtd{
 
     class protocol_exception : public xtd::exception{
     public:
-      template <typename ... _ArgTs> protocol_exception(_ArgTs...oArgs) : xtd::exception(std::forward<_ArgTs>(oArgs)...){}
+      using _super_t = xtd::exception;
+
+      template <typename ... _ArgTs> protocol_exception(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
     class malformed_payload : public protocol_exception{
     public:
-      template <typename ... _ArgTs> malformed_payload(_ArgTs...oArgs) : protocol_exception(std::forward<_ArgTs>(oArgs)...){}
+      using _super_t = rpc::protocol_exception;
+      template <typename ... _ArgTs> malformed_payload(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
     class bad_call : public protocol_exception{
     public:
-      template <typename ... _ArgTs> bad_call(_ArgTs...oArgs) : protocol_exception(std::forward<_ArgTs>(oArgs)...){}
+      using _super_t = rpc::protocol_exception;
+      template <typename ... _ArgTs> bad_call(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
 
 
     class payload : public std::vector<uint8_t>{
     public:
+
       using _super_t = std::vector<uint8_t>;
+
+      template <typename ... _ArgTs> payload(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+
       template <typename _Ty> const _Ty& peek() const{
         assert(_super_t::size() >= sizeof(_Ty));
         if (_super_t::size() < sizeof(_Ty)){
@@ -197,29 +205,57 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
 
     class tcp_transport{
+      socket::ipv4address _Address;
+      xtd::socket::ipv4_tcp_stream _Socket;
+      std::thread _ServerThread;
+      std::atomic<bool> _ServerExit;
+
+      static void client_handler(socket::ipv4_tcp_stream&& oSocket, server_payload_handler_callback_type oCallback){
+        auto PayloadSize = oSocket.read<size_t>();
+        payload oPayload(PayloadSize, 0);
+        oSocket.read<typename payload::_super_t>(oPayload);
+        oCallback(oPayload);
+        oSocket.write(oPayload.size());
+        oSocket.write<typename payload::_super_t>(oPayload);
+      }
+
     public:
+      using pointer_type = std::shared_ptr<tcp_transport>;
+
+      tcp_transport(const socket::ipv4address& oAddress) : _Address(oAddress), _Socket(), _ServerThread(), _ServerExit(false){}
+
       void start_server(server_payload_handler_callback_type oCallback){
-  //start a processing loop in a dedicated thread to accept client connections and wait for incoming payloads
-  //forwarding payloads to oCallback and return the resulting payloads after the call to oCallback back to the client
-  //oCallback returns false to indicate the client session should be disconnected
+        _ServerThread = std::thread([&, this, oCallback](){
+          _Socket.bind(_Address);
+          while (!_ServerExit.load()){
+            _Socket.listen();
+            auto oClientSocket = _Socket.accept<socket::ipv4_tcp_stream>();
+            std::thread oClientThread(&tcp_transport::client_handler, std::move(oClientSocket), oCallback);
+            oClientThread.detach();
+          }
+        });
 
       }
       void stop_server(){
-        //TODO: disconnect clients and stop the server thread
-        TODO("disconnect clients and stop the server thread")
+        _ServerExit = true;
+        _ServerThread.join();
       }
       void transact(payload& oPayload){
-        //TODO: send the payload to the server and return the resulting payload
-        TODO("send the payload to the server and return the resulting payload")
+        payload oTmpPayload;
+        marshaler<false, size_t>::marshal(oTmpPayload, oPayload.size());
+        marshaler<false, typename payload::_super_t>::marshal(oTmpPayload, oPayload);
+        _Socket.write<typename payload::_super_t>(oTmpPayload);
+        _Socket.read<typename payload::_super_t>(oTmpPayload);
+
       }
+
     };
 
     class null_transport{
     public:
+      using pointer_type = std::shared_ptr<null_transport>;
+
       void start_server(server_payload_handler_callback_type oCallback){
-  //start a processing loop in a dedicated thread to accept client connections and wait for incoming payloads
-  //forwarding payloads to oCallback and return the resulting payloads after the call to oCallback back to the client
-  //oCallback returns false to indicate the client session should be disconnected
 
       }
       void stop_server(){
@@ -237,11 +273,20 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
 
     template <class _TransportT, class _DeclT> class server_impl<_TransportT, _DeclT>{
-    protected:
-      _TransportT _Transport;
-      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _Transport(std::forward<_XportCtorTs>(oParams)...){
-        _Transport.start_server([this](payload& oPayload)->bool{ return static_cast<_DeclT*>(this)->invoke(oPayload); });
+
+    public:
+
+      bool call_handler(payload&){
+        return true; 
       }
+
+      typename _TransportT::pointer_type _Transport;
+
+      server_impl(typename _TransportT::pointer_type& oTransport) : _Transport(oTransport){}
+
+      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _Transport(new _TransportT(std::forward<_XportCtorTs>(oParams)...)){}
+
+      void start_server(){ _Transport->start_server([this](payload& oPayload)->bool{ return static_cast<_DeclT*>(this)->call_handler(oPayload); }); }
 
       bool invoke(payload& oPayload){
         TODO("empty out payload and return a marshaled 'invalid call' exception")
@@ -267,9 +312,11 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
       template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _super_t(std::forward<_XportCtorTs>(oParams)...){}
 
-
-
     public:
+
+      bool call_handler(payload&){
+        return true;
+      }
 
       bool invoke(payload& oPayload){
         if (oPayload.peek<decltype(typeid(_HeadT).hash_code())>() != typeid(_HeadT).hash_code()){
@@ -298,10 +345,15 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     protected:
       _TransportT _Transport;
 
-
     public:
       using server_type = server<_TransportT>;
       template<typename ... _XportCtorTs> explicit client(_XportCtorTs &&...oArgs) : _Transport(std::forward<_XportCtorTs>(oArgs)...){}
+
+      _TransportT& transport(){ return _Transport; }
+      const _TransportT& transport() const { return _Transport; }
+
+      void connect(){ _Transport.connect(); }
+
     };
 
 
@@ -309,8 +361,6 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     class client<_TransportT, _HeadT, _TailT...> : public client<_TransportT, _TailT...>{
     protected:
       using _super_t = client<_TransportT, _TailT...>;
-
-
 
       template <typename _CallT, typename ..._ParamTs>
       typename _HeadT::return_type _call(typename std::enable_if<std::is_same<_CallT, _HeadT>::value, const std::type_info&>::type, _ParamTs&&... oParams) {
@@ -326,17 +376,19 @@ throws a static assertion if used with a non-pod type indicating that a speciali
       typename _CallT::return_type _call(typename std::enable_if<!std::is_same<_CallT, _HeadT>::value, const std::type_info&>::type oType, _ParamTs&&... oParams) {
         return _super_t::template _call<_CallT>(oType, std::forward<_ParamTs>(oParams)...);
       }
-
-
-
+      
     public:
       using server_type = server<_TransportT, _HeadT, _TailT...>;
       template<typename ... _XportCtorTs> explicit client(_XportCtorTs&&...oArgs) : client<_TransportT, _TailT...>(std::forward<_XportCtorTs>(oArgs)...){}
+
+
 
       template <typename _Ty, typename ... _ParamTs>
       typename _Ty::return_type call(_ParamTs&&...oParams) {
         return _call<_Ty>(typeid(_Ty), std::forward<_ParamTs>(oParams)...);
       }
+
+
     };
 
   }

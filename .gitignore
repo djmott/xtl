@@ -36,5 +36,5 @@ Doxyfile
 .build
 !.travis.yml
 .*
-
+include/xtd/xtd.hpp
 

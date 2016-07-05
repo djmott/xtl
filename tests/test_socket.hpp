@@ -7,6 +7,13 @@ TEST(test_socket, ipv4_initialization){
   ASSERT_NO_THROW(xtd::socket::ipv4_tcp_stream oSocket);
 }
 
+TEST(test_socket, socket_options){
+  xtd::socket::ipv4_tcp_stream oSocket;
+  bool bKeepAlive;
+  ASSERT_NO_THROW(bKeepAlive = oSocket.keep_alive());
+  ASSERT_NO_THROW(oSocket.keep_alive(!bKeepAlive));
+}
+
 TEST(test_socket, ipv4_bind_and_listen){
   xtd::socket::ipv4_tcp_stream oSocket;
   ASSERT_NO_THROW(oSocket.bind(xtd::socket::ipv4address("0.0.0.0", 12345)));

@@ -22,6 +22,9 @@ namespace xtd{
   Declarations and definitions of the socket library
   */
   namespace socket{
+
+
+
 ///   @defgroup Sockets
 
 #if ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
@@ -39,7 +42,46 @@ namespace xtd{
       exception(const source_location& loc, const xtd::string& swhat) : os_exception(loc, swhat){}
       exception(const exception& ex) : os_exception(ex){}
       explicit exception(exception&& ex) : os_exception(std::move(ex)){}
+
+      template <typename _ReturnT, typename _ExpressionT>
+      inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
+        if (exp(ret)){
+          throw exception(source, expstr);
+        }
+        return ret;
+      }
+
     };
+
+    namespace _{
+      template <typename _Ty, int level, int optname> struct socket_option{
+        using value_type = _Ty;
+        static value_type get(SOCKET s){
+          value_type iRet;
+          int iSize = sizeof(value_type);
+          socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (SOCKET_ERROR == i); });
+          return iRet;
+        }
+        static void set(SOCKET s, value_type newval){
+          socket::exception::throw_if(setsockopt(s, level, optname, reinterpret_cast<char*>(&newval), sizeof(newval)), [](int i){ return (SOCKET_ERROR == i); });
+        }
+      };
+      template <int level, int optname> struct socket_option<std::string, level, optname>{
+        using value_type = _Ty;
+        static value_type get(SOCKET s){
+          value_type iRet;
+          int iSize = sizeof(value_type);
+          socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (SOCKET_ERROR == i); });
+          return iRet;
+        }
+        static void set(SOCKET s, value_type newval){
+          socket::exception::throw_if(setsockopt(s, level, optname, reinterpret_cast<char*>(&newval), sizeof(newval)), [](int i){ return (SOCKET_ERROR == i); });
+        }
+      };
+
+
+    }
+
 
     ///IPv4 address wrapper around sockaddr_in
     class ipv4address : public sockaddr_in{
@@ -297,6 +339,10 @@ namespace xtd{
 
       template<typename ... _ArgTs>
       explicit ip_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+
+      bool keep_alive() const{ return _::socket_option<DWORD, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket); }
+      void keep_alive(bool newval){ _::socket_option<DWORD, SOL_SOCKET, SO_KEEPALIVE>::set(_SuperT::_Socket, newval); }
+
     };
 
     ///Async IO select behavior
