@@ -67,10 +67,10 @@ namespace xtd{
         }
       };
       template <int level, int optname> struct socket_option<std::string, level, optname>{
-        using value_type = _Ty;
+        using value_type = std::string;
         static value_type get(SOCKET s){
           value_type iRet;
-          int iSize = sizeof(value_type);
+          int iSize = 0;
           socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (SOCKET_ERROR == i); });
           return iRet;
         }
@@ -163,7 +163,7 @@ namespace xtd{
     template<typename _AddressT, socket_type _ST, socket_protocol _PR, template<class> class _HeadT, template<class> class ..._TailT>
     class socket_base<_AddressT, _ST, _PR, _HeadT, _TailT...> : public _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >{
     public:
-      template<typename ... _ArgsT> explicit socket_base(_ArgsT &&...oArgs) : _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >(std::forward<_ArgsT>(oArgs)...){}
+      template<typename ... _ArgsT> explicit socket_base(_ArgsT &&...oArgs) : _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >(std::forward<_ArgsT>(oArgs)...), _Socket(0){}
     };
 #endif
 
@@ -286,13 +286,12 @@ namespace xtd{
     template <typename _SuperT>
     class bindable_socket : public _SuperT{
     public:
-      using address_type = typename _SuperT::address_type;
 
       template<typename ... _ArgTs>
       explicit bindable_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      void bind(const address_type& addr){
-        exception::throw_if(::bind(_SuperT::_Socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(address_type)), [](int i){ return i < 0; });
+      void bind(const typename _SuperT::address_type& addr){
+        exception::throw_if(::bind(_SuperT::_Socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _SuperT::address_type)), [](int i){ return i < 0; });
       }
     };
 
@@ -301,13 +300,12 @@ namespace xtd{
     template <typename _SuperT>
     class connectable_socket : public _SuperT{
     public:
-      using address_type = typename _SuperT::address_type;
 
       template<typename ... _ArgTs>
       explicit connectable_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      void connect(const address_type& addr){
-        exception::throw_if(::connect(_SuperT::_Socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(address_type)), [](int i){ return i < 0; });
+      void connect(const typename _SuperT::address_type& addr){
+        exception::throw_if(::connect(_SuperT::_Socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _SuperT::address_type)), [](int i){ return i < 0; });
       }
     };
 
@@ -316,7 +314,6 @@ namespace xtd{
     template <typename _SuperT>
     class listening_socket : public _SuperT{
     public:
-      using address_type = typename _SuperT::address_type;
 
       template<typename ... _ArgTs>
       explicit listening_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
@@ -333,16 +330,52 @@ namespace xtd{
 
 
     template <typename _SuperT>
+    class socket_options : public _SuperT{
+    public:
+
+      template<typename ... _ArgTs>
+      explicit socket_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+
+      bool keep_alive() const{ return _::socket_option<DWORD, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket); }
+      void keep_alive(bool newval){ _::socket_option<DWORD, SOL_SOCKET, SO_KEEPALIVE>::set(_SuperT::_Socket, newval); }
+      TODO("Add more SOL_SOCKET options");
+    };
+
+    template <typename _SuperT>
     class ip_options : public _SuperT{
     public:
-      using address_type = typename _SuperT::address_type;
 
       template<typename ... _ArgTs>
       explicit ip_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      bool keep_alive() const{ return _::socket_option<DWORD, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket); }
-      void keep_alive(bool newval){ _::socket_option<DWORD, SOL_SOCKET, SO_KEEPALIVE>::set(_SuperT::_Socket, newval); }
+      bool dont_fragment() const{ return _::socket_option<DWORD, IPPROTO_IP, IP_DONTFRAGMENT>::get(_SuperT::_Socket); }
+      void dont_fragment(bool newval){ _::socket_option<DWORD, IPPROTO_IP, IP_DONTFRAGMENT>::set(_SuperT::_Socket, newval); }
+      TODO("Add more IPPROTO_IP options");
+    };
 
+    
+    template <typename _SuperT>
+    class tcp_options : public _SuperT{
+    public:
+
+      template<typename ... _ArgTs>
+      explicit tcp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+
+      bool no_delay() const{ return _::socket_option<DWORD, IPPROTO_TCP, TCP_NODELAY>::get(_SuperT::_Socket); }
+      void no_delay(bool newval){ _::socket_option<DWORD, IPPROTO_TCP, TCP_NODELAY>::set(_SuperT::_Socket, newval); }
+      TODO("Add more IPPROTO_TCP options");
+    };
+
+    template <typename _SuperT>
+    class udp_options : public _SuperT{
+    public:
+
+      template<typename ... _ArgTs>
+      explicit udp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+
+      bool no_checksum() const{ return _::socket_option<DWORD, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_SuperT::_Socket); }
+      void no_checksum(bool newval){ _::socket_option<DWORD, IPPROTO_UDP, UDP_NOCHECKSUM>::set(_SuperT::_Socket, newval); }
+      TODO("Add more IPPROTO_UDP options");
     };
 
     ///Async IO select behavior
@@ -456,8 +489,8 @@ namespace xtd{
     class serializer<std::vector<_Ty>> : public std::conditional<std::is_pod<_Ty>::value, POD_Vector_Serializer<_Ty>, NON_POD_Vector_Serializer<_Ty>>::type{};
 #endif
 
-    using ipv4_tcp_stream = socket_base<ipv4address, socket_type::stream, socket_protocol::tcp, ip_options, connectable_socket, bindable_socket, listening_socket, selectable_socket>;
-    using ipv4_udp_socket = socket_base<ipv4address, socket_type::datagram, socket_protocol::udp, ip_options>;
+    using ipv4_tcp_stream = socket_base<ipv4address, socket_type::stream, socket_protocol::tcp, socket_options, ip_options, tcp_options, connectable_socket, bindable_socket, listening_socket, selectable_socket>;
+    using ipv4_udp_socket = socket_base<ipv4address, socket_type::datagram, socket_protocol::udp, socket_options, ip_options, udp_options>;
 
   }
 

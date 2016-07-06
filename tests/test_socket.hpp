@@ -9,9 +9,30 @@ TEST(test_socket, ipv4_initialization){
 
 TEST(test_socket, socket_options){
   xtd::socket::ipv4_tcp_stream oSocket;
-  bool bKeepAlive;
-  ASSERT_NO_THROW(bKeepAlive = oSocket.keep_alive());
-  ASSERT_NO_THROW(oSocket.keep_alive(!bKeepAlive));
+  ASSERT_NO_THROW(oSocket.keep_alive());
+  ASSERT_NO_THROW(oSocket.keep_alive(true));
+  ASSERT_NO_THROW(oSocket.keep_alive(false));
+}
+
+TEST(test_socket, ip_options){
+  xtd::socket::ipv4_tcp_stream oSocket;
+  ASSERT_NO_THROW(oSocket.dont_fragment());
+  ASSERT_NO_THROW(oSocket.dont_fragment(true));
+  ASSERT_NO_THROW(oSocket.dont_fragment(false));
+}
+
+TEST(test_socket, tcp_options){
+  xtd::socket::ipv4_tcp_stream oSocket;
+  ASSERT_NO_THROW(oSocket.no_delay());
+  ASSERT_NO_THROW(oSocket.no_delay(true));
+  ASSERT_NO_THROW(oSocket.no_delay(false));
+}
+
+TEST(test_socket, udp_options){
+  xtd::socket::ipv4_udp_socket oSocket;
+  ASSERT_NO_THROW(oSocket.no_checksum());
+  ASSERT_NO_THROW(oSocket.no_checksum(true));
+  ASSERT_NO_THROW(oSocket.no_checksum(false));
 }
 
 TEST(test_socket, ipv4_bind_and_listen){

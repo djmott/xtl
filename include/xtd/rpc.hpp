@@ -209,6 +209,7 @@ throws a static assertion if used with a non-pod type indicating that a speciali
       xtd::socket::ipv4_tcp_stream _Socket;
       std::thread _ServerThread;
       std::atomic<bool> _ServerExit;
+      bool _ClientConnected;
 
       static void client_handler(socket::ipv4_tcp_stream&& oSocket, server_payload_handler_callback_type oCallback){
         auto PayloadSize = oSocket.read<size_t>();
@@ -222,7 +223,7 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     public:
       using pointer_type = std::shared_ptr<tcp_transport>;
 
-      tcp_transport(const socket::ipv4address& oAddress) : _Address(oAddress), _Socket(), _ServerThread(), _ServerExit(false){}
+      tcp_transport(const socket::ipv4address& oAddress) : _Address(oAddress), _Socket(), _ServerThread(), _ServerExit(false), _ClientConnected(false){}
 
       void start_server(server_payload_handler_callback_type oCallback){
         _ServerThread = std::thread([&, this, oCallback](){
@@ -244,6 +245,10 @@ throws a static assertion if used with a non-pod type indicating that a speciali
         payload oTmpPayload;
         marshaler<false, size_t>::marshal(oTmpPayload, oPayload.size());
         marshaler<false, typename payload::_super_t>::marshal(oTmpPayload, oPayload);
+        if (!_ClientConnected){
+          _Socket.connect(_Address);
+          _ClientConnected = true;
+        }
         _Socket.write<typename payload::_super_t>(oTmpPayload);
         _Socket.read<typename payload::_super_t>(oTmpPayload);
 

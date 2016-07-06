@@ -186,6 +186,7 @@ namespace xtd{
     #include <winsock2.h>
     #include <windows.h>
     #include <Ws2ipdef.h>
+    #include <ws2tcpip.h>
     #include <rpc.h>
 #endif
 
