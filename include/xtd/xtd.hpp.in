@@ -200,6 +200,7 @@ namespace xtd{
   #include <sys/ioctl.h>
   #include <netinet/in.h>
   #include <netinet/udp.h>
+  #include <netinet/tcp.h>
   #include <arpa/inet.h>
 #endif
 
