@@ -58,7 +58,8 @@ namespace xtd{
         using value_type = _Ty;
         static value_type get(SOCKET s){
           value_type iRet;
-          int iSize = sizeof(value_type);
+          //mingw & winsock the size parameter is int while it's unsigned int on linux
+          std::remove_pointer<typename get_parameter<4, decltype(getsockopt)>::type>::type iSize = sizeof(value_type);
           socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
           return iRet;
         }

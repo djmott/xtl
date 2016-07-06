@@ -9,11 +9,21 @@
 
 namespace xtd{
 
+  ///Determine if a type is specified in a list
   template <typename, typename...> struct is_a;
   template <typename _Ty> struct is_a<_Ty> : std::false_type {};
   template <typename _Ty, typename ... _TailT> struct is_a<_Ty, _Ty, _TailT...> : std::true_type {};
   template <typename _Ty, typename _HeadT, typename ... _TailT> struct is_a<_Ty, _HeadT, _TailT...> : is_a<_Ty, _TailT...> {};
 
+
+  ///Gets the type of a parameter in a method declaration
+  template <int _ParamNum, typename _Ty> struct get_parameter;
+  template <typename _ReturnT, typename _HeadT, typename ... _TailT> struct get_parameter<0, _ReturnT(_HeadT, _TailT...)>{
+    using type = _HeadT;
+  };
+  template <int _ParamNum, typename _ReturnT, typename _HeadT, typename ... _TailT> struct get_parameter<_ParamNum, _ReturnT(_HeadT, _TailT...)>{
+    using type = typename get_parameter<_ParamNum-1, _ReturnT(_TailT...)>::type;
+  };
 
   /**
    \struct nibble_hex_char
