@@ -347,9 +347,10 @@ namespace xtd{
 
       template<typename ... _ArgTs>
       explicit ip_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
-
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
       bool dont_fragment() const{ return _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::get(_SuperT::_Socket); }
       void dont_fragment(bool newval){ _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::set(_SuperT::_Socket, newval); }
+#endif
       TODO("Add more IPPROTO_IP options");
     };
 
@@ -366,7 +367,6 @@ namespace xtd{
       TODO("Add more IPPROTO_TCP options");
     };
 
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     template <typename _SuperT>
     class udp_options : public _SuperT{
     public:
@@ -374,19 +374,13 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit udp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
       bool no_checksum() const{ return _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_SuperT::_Socket); }
       void no_checksum(bool newval){ _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::set(_SuperT::_Socket, newval); }
+#endif
       TODO("Add more IPPROTO_UDP options");
     };
-#else
-    template <typename _SuperT>
-    class udp_options : public _SuperT{
-    public:
 
-      template<typename ... _ArgTs>
-      explicit udp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
-    };
-#endif
 
     ///Async IO select behavior
     template <typename _SuperT>
