@@ -28,12 +28,14 @@ TEST(test_socket, tcp_options){
   ASSERT_NO_THROW(oSocket.no_delay(false));
 }
 
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
 TEST(test_socket, udp_options){
   xtd::socket::ipv4_udp_socket oSocket;
   ASSERT_NO_THROW(oSocket.no_checksum());
   ASSERT_NO_THROW(oSocket.no_checksum(true));
   ASSERT_NO_THROW(oSocket.no_checksum(false));
 }
+#endif
 
 TEST(test_socket, ipv4_bind_and_listen){
   xtd::socket::ipv4_tcp_stream oSocket;

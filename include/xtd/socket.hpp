@@ -59,11 +59,11 @@ namespace xtd{
         static value_type get(SOCKET s){
           value_type iRet;
           int iSize = sizeof(value_type);
-          socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (SOCKET_ERROR == i); });
+          socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
           return iRet;
         }
         static void set(SOCKET s, value_type newval){
-          socket::exception::throw_if(setsockopt(s, level, optname, reinterpret_cast<char*>(&newval), sizeof(newval)), [](int i){ return (SOCKET_ERROR == i); });
+          socket::exception::throw_if(setsockopt(s, level, optname, reinterpret_cast<char*>(&newval), sizeof(newval)), [](int i){ return (i<0); });
         }
       };
       template <int level, int optname> struct socket_option<std::string, level, optname>{
@@ -71,11 +71,11 @@ namespace xtd{
         static value_type get(SOCKET s){
           value_type iRet;
           int iSize = 0;
-          socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (SOCKET_ERROR == i); });
+          socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
           return iRet;
         }
         static void set(SOCKET s, value_type newval){
-          socket::exception::throw_if(setsockopt(s, level, optname, reinterpret_cast<char*>(&newval), sizeof(newval)), [](int i){ return (SOCKET_ERROR == i); });
+          socket::exception::throw_if(setsockopt(s, level, optname, reinterpret_cast<char*>(&newval), sizeof(newval)), [](int i){ return (i<0); });
         }
       };
 
@@ -336,8 +336,8 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit socket_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      bool keep_alive() const{ return _::socket_option<DWORD, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket); }
-      void keep_alive(bool newval){ _::socket_option<DWORD, SOL_SOCKET, SO_KEEPALIVE>::set(_SuperT::_Socket, newval); }
+      bool keep_alive() const{ return _::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket); }
+      void keep_alive(bool newval){ _::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::set(_SuperT::_Socket, newval); }
       TODO("Add more SOL_SOCKET options");
     };
 
@@ -348,8 +348,8 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit ip_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      bool dont_fragment() const{ return _::socket_option<DWORD, IPPROTO_IP, IP_DONTFRAGMENT>::get(_SuperT::_Socket); }
-      void dont_fragment(bool newval){ _::socket_option<DWORD, IPPROTO_IP, IP_DONTFRAGMENT>::set(_SuperT::_Socket, newval); }
+      bool dont_fragment() const{ return _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::get(_SuperT::_Socket); }
+      void dont_fragment(bool newval){ _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::set(_SuperT::_Socket, newval); }
       TODO("Add more IPPROTO_IP options");
     };
 
@@ -361,11 +361,12 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit tcp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      bool no_delay() const{ return _::socket_option<DWORD, IPPROTO_TCP, TCP_NODELAY>::get(_SuperT::_Socket); }
-      void no_delay(bool newval){ _::socket_option<DWORD, IPPROTO_TCP, TCP_NODELAY>::set(_SuperT::_Socket, newval); }
+      bool no_delay() const{ return _::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::get(_SuperT::_Socket); }
+      void no_delay(bool newval){ _::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::set(_SuperT::_Socket, newval); }
       TODO("Add more IPPROTO_TCP options");
     };
 
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     template <typename _SuperT>
     class udp_options : public _SuperT{
     public:
@@ -373,10 +374,19 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit udp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      bool no_checksum() const{ return _::socket_option<DWORD, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_SuperT::_Socket); }
-      void no_checksum(bool newval){ _::socket_option<DWORD, IPPROTO_UDP, UDP_NOCHECKSUM>::set(_SuperT::_Socket, newval); }
+      bool no_checksum() const{ return _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_SuperT::_Socket); }
+      void no_checksum(bool newval){ _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::set(_SuperT::_Socket, newval); }
       TODO("Add more IPPROTO_UDP options");
     };
+#else
+    template <typename _SuperT>
+    class udp_options : public _SuperT{
+    public:
+
+      template<typename ... _ArgTs>
+      explicit udp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+    };
+#endif
 
     ///Async IO select behavior
     template <typename _SuperT>
