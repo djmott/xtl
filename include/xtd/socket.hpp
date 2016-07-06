@@ -163,7 +163,7 @@ namespace xtd{
     template<typename _AddressT, socket_type _ST, socket_protocol _PR, template<class> class _HeadT, template<class> class ..._TailT>
     class socket_base<_AddressT, _ST, _PR, _HeadT, _TailT...> : public _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >{
     public:
-      template<typename ... _ArgsT> explicit socket_base(_ArgsT &&...oArgs) : _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >(std::forward<_ArgsT>(oArgs)...), _Socket(0){}
+      template<typename ... _ArgsT> explicit socket_base(_ArgsT &&...oArgs) : _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >(std::forward<_ArgsT>(oArgs)...){}
     };
 #endif
 
