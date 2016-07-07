@@ -16,8 +16,7 @@ public:
   using server_pointer_type = std::shared_ptr<server_type>;
 
   static server_pointer_type& get_server(){
-    xtd::socket::ipv4address oServerAddress("0.0.0.0", Port);
-    static server_pointer_type oServer(new server_type(oServerAddress));
+    static server_pointer_type oServer(new server_type(xtd::socket::ipv4address("0.0.0.0", Port)));
     return oServer;
   }
 
