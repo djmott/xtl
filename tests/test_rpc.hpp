@@ -5,7 +5,7 @@
 
 class test_rpc : public ::testing::Test{
 public:
-  static const uint16_t Port = 876;
+  static const uint16_t Port = 8765;
   class Add : public xtd::rpc::rpc_call<Add, int(int, int)> {};
   class Echo : public xtd::rpc::rpc_call<Echo, std::string(std::string)> {};
   class Average : public xtd::rpc::rpc_call<Average, double(std::vector<double>)> {};
