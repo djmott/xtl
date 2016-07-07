@@ -231,15 +231,21 @@ throws a static assertion if used with a non-pod type indicating that a speciali
           while (!_ServerExit.load()){
             _Socket.listen();
             auto oClientSocket = _Socket.accept<socket::ipv4_tcp_stream>();
-            std::thread oClientThread(&tcp_transport::client_handler, std::move(oClientSocket), oCallback);
-            oClientThread.detach();
+            if (oClientSocket.is_valid()){
+              std::thread oClientThread(&tcp_transport::client_handler, std::move(oClientSocket), oCallback);
+              TODO("Might want to keep client threads around?")
+              oClientThread.detach();
+            }
           }
         });
 
       }
       void stop_server(){
-        _ServerExit = true;
-        _ServerThread.join();
+        if (_ServerThread.joinable()){
+          _ServerExit = true;
+          _Socket.close();
+          _ServerThread.join();
+        }
       }
       void transact(payload& oPayload){
         payload oTmpPayload;
@@ -278,8 +284,12 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
 
     template <class _TransportT, class _DeclT> class server_impl<_TransportT, _DeclT>{
-
+      bool _ServerRunning;
     public:
+
+      ~server_impl(){
+        stop_server();
+      }
 
       bool call_handler(payload&){
         return true; 
@@ -289,9 +299,23 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
       server_impl(typename _TransportT::pointer_type& oTransport) : _Transport(oTransport){}
 
-      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _Transport(new _TransportT(std::forward<_XportCtorTs>(oParams)...)){}
+      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _ServerRunning(false), _Transport(new _TransportT(std::forward<_XportCtorTs>(oParams)...)){}
 
-      void start_server(){ _Transport->start_server([this](payload& oPayload)->bool{ return static_cast<_DeclT*>(this)->call_handler(oPayload); }); }
+      void start_server(){ 
+        if (_ServerRunning){
+          return;
+        }
+        _Transport->start_server([this](payload& oPayload)->bool{ return static_cast<_DeclT*>(this)->call_handler(oPayload); }); 
+        _ServerRunning = true;
+      }
+
+      void stop_server(){ 
+        if (!_ServerRunning){
+          return;
+        }
+        _Transport->stop_server(); 
+        _ServerRunning = false;
+      }
 
       bool invoke(payload& oPayload){
         TODO("empty out payload and return a marshaled 'invalid call' exception")

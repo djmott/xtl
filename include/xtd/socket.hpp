@@ -229,7 +229,7 @@ namespace xtd{
           return;
         }
         ::closesocket(_Socket);
-        _Socket = 0;
+        _Socket = -1;
       }
 
       void set_blocking(bool blocking){
@@ -237,10 +237,10 @@ namespace xtd{
         xtd::os_exception::throw_if(ioctlsocket(_Socket, FIONBIO, &val), [](int i){ return i < 0; });
       }
 
+      bool is_valid() const{ return -1 != _Socket; }
+
     protected:
       SOCKET _Socket;
-
-      template <typename _ReturnT> _ReturnT get_option(int Option);
 
     };
 

@@ -34,7 +34,7 @@ public:
   }
 
   static void TearDownTestCase() {
-
+    get_server()->stop_server();
   }
 
 };
