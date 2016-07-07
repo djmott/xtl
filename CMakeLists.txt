@@ -1,5 +1,9 @@
 #https://cmake.org/cmake/help/v2.8.12/cmake.html
 #cmake config
+
+set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+set(CMAKE_CXX_STANDARD 11)
+
 cmake_minimum_required(VERSION 2.8.12)
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
@@ -7,9 +11,8 @@ endif()
 if(POLICY CMP0056)
   cmake_policy(SET CMP0056 NEW)
 endif()
-set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 11)
 
 project(XTL)
 
@@ -17,7 +20,6 @@ option(XTD_COLOR_MESSAGES "use color escape sequences in console compiler output
 
 find_package(Threads)
 find_package(Doxygen)
-find_package(GTest)
 
 include(CheckIncludeFileCXX)
 include(CheckLibraryExists)
@@ -127,7 +129,9 @@ endif()
 
 add_subdirectory(examples)
 
-if(GTEST_FOUND)
+option(BUILD_TESTS "Build tests" YES)
+
+if(BUILD_TESTS)
   add_subdirectory(tests)
 endif()
 
