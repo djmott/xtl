@@ -58,6 +58,10 @@
   #include "test_path.hpp"
 #endif
 
+#if (ON==TEST_READ_WRITE_LOCK)
+  #include "test_read_write_lock.hpp"
+#endif
+
 #if (ON==TEST_RPC)
   #include "test_rpc.hpp"
 #endif

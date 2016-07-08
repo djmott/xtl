@@ -11,7 +11,7 @@ namespace xtd{
   Callbacks are performed serially and the order is undefined when multiple receivers are attached
   @example example_callback.cpp
   */
-  template <typename> class callback;
+  template <typename _FnSig> class callback;
 
   template <typename _ReturnT, typename ... _Args> class callback < _ReturnT(_Args...) >{
     class invoker{
@@ -168,6 +168,10 @@ namespace xtd{
 
     template <_ReturnT(*method)(_Args...)>
     void connect(){ _Invokers.emplace_back(new method_invoker<void(_Args...), method>()); }
+
+    template <typename _Ty>
+    callback& operator += (_Ty&& addend){ connect(std::forward<_Ty>(addend)); return *this; }
+
 
   };
 }

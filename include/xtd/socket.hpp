@@ -390,7 +390,11 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit selectable_socket(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      void select(int WaitMS, std::function<void()> onRead, std::function<void()> onWrite, std::function<void()> onError){
+      xtd::callback<void()> onRead;
+      xtd::callback<void()> onWrite;
+      xtd::callback<void()> onError;
+
+      void select(int WaitMS){
         timeval tv;
         fd_set fdRead;
         fd_set fdWrite;

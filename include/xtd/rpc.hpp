@@ -3,8 +3,35 @@
 
 namespace xtd{
   namespace rpc{
-
+    template <typename _DeclT, typename _CallT> class rpc_call;
+    /** generic-form marshaler used by clients and servers
+    @tparam _SkipByVal permits selective marshaling and unmarshaling based on the type. For example, const values can be marshaled on the client side and unmarshaled on the server side but not unmarshaled on the client side
+    @tparam ... parameter pack of types to recursively marshal or unmarshal
+    */
+    template <bool _SkipByVal, typename ...> class marshaler;
+    /** generic-form marshaler_base
+    Used to recursively marshal a parameter pack of data into a payload
+    @tparam ... parameter pack of types to marshal or unmarshal
+    */
+    template <typename...> class marshaler_base;
+    template <class _TransportT, class _DeclT, class ... _Calls> class server_impl;
     template <typename _TransportT, class ... _Calls> class client;
+
+
+
+    class payload : public std::vector<uint8_t>{
+    public:
+
+      using _super_t = std::vector<uint8_t>;
+      using invoke_handler_type = std::function<bool(payload&)>;
+
+      template <typename ... _ArgTs> payload(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+
+
+    };
+
+
+    
 
     class protocol_exception : public xtd::exception{
     public:
@@ -22,28 +49,6 @@ namespace xtd{
       using _super_t = rpc::protocol_exception;
       template <typename ... _ArgTs> bad_call(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
-
-
-    class payload : public std::vector<uint8_t>{
-    public:
-
-      using _super_t = std::vector<uint8_t>;
-
-      template <typename ... _ArgTs> payload(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
-
-      template <typename _Ty> const _Ty& peek() const{
-        assert(_super_t::size() >= sizeof(_Ty));
-        if (_super_t::size() < sizeof(_Ty)){
-          throw malformed_payload(here(), "Invalid peek");
-        }
-        return *reinterpret_cast<const _Ty*>(&at(0));
-      }
-    };
-
-/** generic-form marshaler_base
-Used to recursively marshal a parameter pack of data into a payload
-*/
-    template <typename...> class marshaler_base;
 
 ///marshaler_base specialization of no type
     template <> class marshaler_base<>{
@@ -117,12 +122,6 @@ throws a static assertion if used with a non-pod type indicating that a speciali
       }
     };
 
-  /** generic-form marshaler used by clients and servers
-  @tparam _SkipByVal permits selective marshaling and unmarshaling based on the type. For example, const values can be marshaled on the client side and unmarshaled on the server side but not unmarshaled on the client side
-  @tparam ... parameter pack of types to recursively marshal or unmarshal
-  */
-    template <bool _SkipByVal, typename ...> class marshaler;
-
   /// marshaler specialization with no type
     template <bool _SkipByVal> class marshaler<_SkipByVal>{
     public:
@@ -189,7 +188,6 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     };
 
 
-    template <typename _DeclT, typename _CallT> class rpc_call;
 
     template <typename _DeclT, typename _ReturnT, typename ... _ArgTs> class rpc_call<_DeclT, _ReturnT(_ArgTs...)>{
     public:
@@ -200,18 +198,17 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     };
 
 
-  //transport should keep accepting and processing payloads until callback returns false
-    using server_payload_handler_callback_type = std::function<bool(payload&)>;
-
-
     class tcp_transport{
       socket::ipv4address _Address;
       xtd::socket::ipv4_tcp_stream _Socket;
-      std::thread _ServerThread;
+      std::unique_ptr<std::thread> _ServerThread;
+      std::promise<bool> _ServerThreadExit;
+      std::promise<bool> _ServerThreadStart;
       std::atomic<bool> _ServerExit;
+      std::map<std::thread::id, std::thread> _Clients;
       bool _ClientConnected;
 
-      static void client_handler(socket::ipv4_tcp_stream&& oSocket, server_payload_handler_callback_type oCallback){
+      static void client_handler(socket::ipv4_tcp_stream&& oSocket, payload::invoke_handler_type oCallback){
         auto PayloadSize = oSocket.read<size_t>();
         payload oPayload(PayloadSize, 0);
         oSocket.read<typename payload::_super_t>(oPayload);
@@ -225,26 +222,66 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
       tcp_transport(const socket::ipv4address& oAddress) : _Address(oAddress), _Socket(), _ServerThread(), _ServerExit(false), _ClientConnected(false){}
 
-      void start_server(server_payload_handler_callback_type oCallback){
-        _ServerThread = std::thread([&, this, oCallback](){
-          _Socket.bind(_Address);
-          while (!_ServerExit.load()){
-            _Socket.listen();
-            auto oClientSocket = _Socket.accept<socket::ipv4_tcp_stream>();
-            if (oClientSocket.is_valid()){
-              std::thread oClientThread(&tcp_transport::client_handler, std::move(oClientSocket), oCallback);
-              TODO("Might want to keep client threads around?")
-              oClientThread.detach();
-            }
-          }
-        });
+      void start_server(payload::invoke_handler_type oCallback){
+        if (!_ServerThread){
+          _ServerThread = std::unique_ptr<std::thread>(new std::thread([&, this, oCallback](){
+            _Socket.onError += [&, this](){ _ServerThreadExit.set_exception(std::make_exception_ptr(std::current_exception())); };
+            _Socket.onRead += [&, this](){
 
+            };
+            _ServerThreadStart.set_value(true);
+            try{
+              _Socket.bind(_Address);
+              while (!_ServerExit.load()){
+                _Socket.listen();
+                auto oClientSocket = _Socket.accept<socket::ipv4_tcp_stream>();
+                if (oClientSocket.is_valid()){
+                  std::thread oClientThread(&tcp_transport::client_handler, std::move(oClientSocket), oCallback);
+                  TODO("Might want to keep client threads around?");
+                  oClientThread.detach();
+                }
+              }
+              _ServerThreadExit.set_value(true);
+            }
+            catch (const std::exception& ex){
+              _ServerThreadExit.set_exception(std::make_exception_ptr(ex));
+            }
+          }));
+          _ServerThreadStart.get_future().get();
+        }
       }
+/*
+      void start_server(payload::invoke_handler_type oCallback){
+        if (!_ServerThread){
+          _ServerThread = std::unique_ptr<std::thread>(new std::thread([&, this, oCallback](){
+            _Socket.onError += [&, this](){ _ServerThreadExit.set_exception(std::make_exception_ptr(std::current_exception())); };
+            _ServerThreadStart.set_value(true);
+            try{
+              _Socket.bind(_Address);
+              while (!_ServerExit.load()){
+                _Socket.listen();
+                auto oClientSocket = _Socket.accept<socket::ipv4_tcp_stream>();
+                if (oClientSocket.is_valid()){
+                  std::thread oClientThread(&tcp_transport::client_handler, std::move(oClientSocket), oCallback);
+                  TODO("Might want to keep client threads around?");
+                  oClientThread.detach();
+                }
+              }
+              _ServerThreadExit.set_value(true);
+            }
+            catch (const std::exception& ex){
+              _ServerThreadExit.set_exception(std::make_exception_ptr(ex));
+            }
+          }));
+          _ServerThreadStart.get_future().get();
+        }
+      }*/
       void stop_server(){
-        if (_ServerThread.joinable()){
+        if (_ServerThread){
           _ServerExit = true;
           _Socket.close();
-          _ServerThread.join();
+          _ServerThreadExit.get_future().get();
+          _ServerThread = nullptr;
         }
       }
       void transact(payload& oPayload){
@@ -266,7 +303,7 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     public:
       using pointer_type = std::shared_ptr<null_transport>;
 
-      void start_server(server_payload_handler_callback_type oCallback){
+      void start_server(payload::invoke_handler_type oCallback){
 
       }
       void stop_server(){
@@ -280,11 +317,8 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     };
 
 
-    template <class _TransportT, class _DeclT, class ... _Calls> class server_impl;
-
 
     template <class _TransportT, class _DeclT> class server_impl<_TransportT, _DeclT>{
-      bool _ServerRunning;
     public:
 
       ~server_impl(){
@@ -299,22 +333,14 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
       server_impl(typename _TransportT::pointer_type& oTransport) : _Transport(oTransport){}
 
-      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _ServerRunning(false), _Transport(new _TransportT(std::forward<_XportCtorTs>(oParams)...)){}
+      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _Transport(new _TransportT(std::forward<_XportCtorTs>(oParams)...)){}
 
       void start_server(){ 
-        if (_ServerRunning){
-          return;
-        }
         _Transport->start_server([this](payload& oPayload)->bool{ return static_cast<_DeclT*>(this)->call_handler(oPayload); }); 
-        _ServerRunning = true;
       }
 
       void stop_server(){ 
-        if (!_ServerRunning){
-          return;
-        }
         _Transport->stop_server(); 
-        _ServerRunning = false;
       }
 
       bool invoke(payload& oPayload){
@@ -348,10 +374,7 @@ throws a static assertion if used with a non-pod type indicating that a speciali
       }
 
       bool invoke(payload& oPayload){
-        if (oPayload.peek<decltype(typeid(_HeadT).hash_code())>() != typeid(_HeadT).hash_code()){
-          return _super_t::invoke(oPayload);
-        }
-        TODO("unpack parameters and call _Function")
+       TODO("unpack parameters and call _Function")
         return false;
       }
 
