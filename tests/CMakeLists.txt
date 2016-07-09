@@ -19,6 +19,7 @@ function(build_option NAME DESC)
 endfunction()
 
 build_option(TEST_CALLBACK "test xtd::callback")
+build_option(TEST_CONCURRENT_HASH_MAP "test xtd::concurrent_hash_map")
 build_option(TEST_DATA_CONVERT "test data conversion")
 build_option(TEST_DYNAMIC_LIBRARY "test xtd::dynamic_library")
 build_option(TEST_EVENT_TRACE "test event trace")

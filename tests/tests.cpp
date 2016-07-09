@@ -22,6 +22,10 @@
   #include "test_callback.hpp"
 #endif
 
+#if (ON==TEST_CONCURRENT_HASH_MAP)
+  #include "test_hash_map.hpp"
+#endif
+
 #if (ON==TEST_DATA_CONVERT)
   #include "test_data_convert.hpp"
 #endif

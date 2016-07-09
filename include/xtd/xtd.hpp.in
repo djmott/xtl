@@ -257,6 +257,7 @@ TODO("Remove cassert when XTD implementation is finished")
 //XTL
 #include <xtd/debug.hpp>
 #include <xtd/callback.hpp>
+#include <xtd/concurrent_hash_map.hpp>
 #include <xtd/data_convert.hpp>
 #include <xtd/source_location.hpp>
 #include <xtd/exception.hpp>
