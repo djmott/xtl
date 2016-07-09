@@ -22,7 +22,7 @@ NOTE("OS : Bare Metal");
 #if (XTD_OS & XTD_OS_IOS)
 NOTE("OS : IOS");
 #endif
-#if (XTD_OS & XTD_OS_UNIX)
+#if (XTD_OS & XTD_OS_LINUX)
 NOTE("OS : Linux");
 #endif
 #if (XTD_OS & XTD_OS_WINDOWS)

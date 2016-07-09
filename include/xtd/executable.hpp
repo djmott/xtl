@@ -30,7 +30,7 @@ namespace xtd {
       sRet = sTemp;
       return sRet;
     }
-#elif ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
+#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
 
     static inline xtd::path get_path() {
       static xtd::path sRet = "";

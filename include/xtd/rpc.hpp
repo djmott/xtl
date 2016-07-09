@@ -201,88 +201,20 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     class tcp_transport{
       socket::ipv4address _Address;
       xtd::socket::ipv4_tcp_stream _Socket;
-      std::unique_ptr<std::thread> _ServerThread;
-      std::promise<bool> _ServerThreadExit;
-      std::promise<bool> _ServerThreadStart;
-      std::atomic<bool> _ServerExit;
-      std::map<std::thread::id, std::thread> _Clients;
-      bool _ClientConnected;
+      std::unique_ptr<std::thread> _ServerThread;    
 
-      static void client_handler(socket::ipv4_tcp_stream&& oSocket, payload::invoke_handler_type oCallback){
-        auto PayloadSize = oSocket.read<size_t>();
-        payload oPayload(PayloadSize, 0);
-        oSocket.read<typename payload::_super_t>(oPayload);
-        oCallback(oPayload);
-        oSocket.write(oPayload.size());
-        oSocket.write<typename payload::_super_t>(oPayload);
-      }
+      xtd::concurrent::hash_map<std::thread::id, std::thread> _Clients;
+      bool _ClientConnected;
 
     public:
       using pointer_type = std::shared_ptr<tcp_transport>;
 
-      tcp_transport(const socket::ipv4address& oAddress) : _Address(oAddress), _Socket(), _ServerThread(), _ServerExit(false), _ClientConnected(false){}
+      tcp_transport(const socket::ipv4address& oAddress) : _Address(oAddress), _Socket(), _ServerThread(), _ClientConnected(false){}
 
       void start_server(payload::invoke_handler_type oCallback){
-        if (!_ServerThread){
-          _ServerThread = std::unique_ptr<std::thread>(new std::thread([&, this, oCallback](){
-            _Socket.onError += [&, this](){ _ServerThreadExit.set_exception(std::make_exception_ptr(std::current_exception())); };
-            _Socket.onRead += [&, this](){
-
-            };
-            _ServerThreadStart.set_value(true);
-            try{
-              _Socket.bind(_Address);
-              while (!_ServerExit.load()){
-                _Socket.listen();
-                auto oClientSocket = _Socket.accept<socket::ipv4_tcp_stream>();
-                if (oClientSocket.is_valid()){
-                  std::thread oClientThread(&tcp_transport::client_handler, std::move(oClientSocket), oCallback);
-                  TODO("Might want to keep client threads around?");
-                  oClientThread.detach();
-                }
-              }
-              _ServerThreadExit.set_value(true);
-            }
-            catch (const std::exception& ex){
-              _ServerThreadExit.set_exception(std::make_exception_ptr(ex));
-            }
-          }));
-          _ServerThreadStart.get_future().get();
-        }
       }
-/*
-      void start_server(payload::invoke_handler_type oCallback){
-        if (!_ServerThread){
-          _ServerThread = std::unique_ptr<std::thread>(new std::thread([&, this, oCallback](){
-            _Socket.onError += [&, this](){ _ServerThreadExit.set_exception(std::make_exception_ptr(std::current_exception())); };
-            _ServerThreadStart.set_value(true);
-            try{
-              _Socket.bind(_Address);
-              while (!_ServerExit.load()){
-                _Socket.listen();
-                auto oClientSocket = _Socket.accept<socket::ipv4_tcp_stream>();
-                if (oClientSocket.is_valid()){
-                  std::thread oClientThread(&tcp_transport::client_handler, std::move(oClientSocket), oCallback);
-                  TODO("Might want to keep client threads around?");
-                  oClientThread.detach();
-                }
-              }
-              _ServerThreadExit.set_value(true);
-            }
-            catch (const std::exception& ex){
-              _ServerThreadExit.set_exception(std::make_exception_ptr(ex));
-            }
-          }));
-          _ServerThreadStart.get_future().get();
-        }
-      }*/
       void stop_server(){
-        if (_ServerThread){
-          _ServerExit = true;
-          _Socket.close();
-          _ServerThreadExit.get_future().get();
-          _ServerThread = nullptr;
-        }
+
       }
       void transact(payload& oPayload){
         payload oTmpPayload;

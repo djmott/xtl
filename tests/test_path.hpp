@@ -1,9 +1,10 @@
-/**
- * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
- */
+/** @file
+xtd::path system and unit tests
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+*/
 
 
-#if ((XTD_OS_MINGW | XTD_OS_UNIX) & XTD_OS)
+#if ((XTD_OS_MINGW | XTD_OS_LINUX) & XTD_OS)
 
 TEST(test_path, Initialization){
   ASSERT_NO_THROW(xtd::path oPath);

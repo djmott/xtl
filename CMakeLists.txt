@@ -33,7 +33,34 @@ set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -DNDEBUG")
 
 
 
-add_library(XTL STATIC  "${XTL_SOURCE_DIR}/src/xtl.cpp" "${XTL_SOURCE_DIR}/src/event_trace/event_trace.cpp")
+add_library(XTL STATIC  "${XTL_SOURCE_DIR}/src/xtl.cpp" 
+  "${XTL_SOURCE_DIR}/src/event_trace/event_trace.cpp"
+  "${XTL_SOURCE_DIR}/include/xtd/callback.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/concurrent_hash_map.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/concurrent_stack.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/data_convert.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/debug.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/dynamic_library.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/event_trace.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/exception.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/executable.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/log.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/meta.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/parse.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/path.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/process.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/read_write_lock.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/rpc.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/shared_mem_obj.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/socket.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/source_location.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/spin_lock.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/string.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/tuple.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/unique_id.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/var.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/xtd.hpp"
+)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   target_compile_options(XTL PUBLIC -std=c++11)
@@ -104,7 +131,7 @@ elseif(APPLE)
   set(XTD_OS XTD_OS_APPLE)
 elseif(UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-  set(XTD_OS XTD_OS_UNIX)
+  set(XTD_OS XTD_OS_LINUX)
   option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
   link_libraries(dl pthread stdc++)
 else()

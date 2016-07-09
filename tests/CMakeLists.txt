@@ -11,7 +11,29 @@ include_directories("${GTEST_INCLUDE_DIRS}")
 add_library(dummy SHARED "dummy_library.cpp")
 add_dependencies(dummy XTL)
 
-set(TEST_SOURCE "${XTL_SOURCE_DIR}/tests/tests.cpp")
+set(TEST_SOURCE "${XTL_SOURCE_DIR}/tests/tests.cpp"
+  "${XTL_SOURCE_DIR}/tests/test_callback.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_concurrent_stack.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_data_convert.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_dynamic_library.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_event_trace.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_exception.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_executable.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_hash_map.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_logging.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_meta.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_parse.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_path.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_read_write_lock.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_rpc.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_shared_mem_obj.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_socket.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_source_location.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_spin_lock.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_string.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_unique_id.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_var.hpp"
+)
 
 function(build_option NAME DESC)
   option(${NAME} "${DESC}" YES)
@@ -20,6 +42,7 @@ endfunction()
 
 build_option(TEST_CALLBACK "test xtd::callback")
 build_option(TEST_CONCURRENT_HASH_MAP "test xtd::concurrent_hash_map")
+build_option(TEST_CONCURRENT_STACK "test xtd::concurrent_stack")
 build_option(TEST_DATA_CONVERT "test data conversion")
 build_option(TEST_DYNAMIC_LIBRARY "test xtd::dynamic_library")
 build_option(TEST_EVENT_TRACE "test event trace")
@@ -31,6 +54,7 @@ build_option(TEST_PARSE "test xtd::parse")
 build_option(TEST_PATH "test xtd::path")
 build_option(TEST_READ_WRITE_LOCK "test xtd::read_write_lock")
 build_option(TEST_RPC "test xtd::rpc")
+build_option(TEST_SHARED_MEM_OBJ "test xtd::shared_mem_obj")
 build_option(TEST_SOCKET "test xtd::socket")
 build_option(TEST_SOURCE_LOCATION "test xtd::source_location")
 build_option(TEST_SPIN_LOCK "test xtd::spin_lock")

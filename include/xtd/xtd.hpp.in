@@ -42,7 +42,7 @@
 #define XTD_OS_ANDROID    1
 #define XTD_OS_BAREMETAL  2
 #define XTD_OS_IOS        4
-#define XTD_OS_UNIX       8
+#define XTD_OS_LINUX      8
 #define XTD_OS_WINDOWS    16
 #define XTD_OS_CYGWIN     32
 #define XTD_OS_MINGW      64
@@ -107,13 +107,13 @@
 #endif
     ///@}
 
-	
+  
 #cmakedefine01 XTD_LOG_TARGET_SYSLOG
 #cmakedefine01 XTD_LOG_TARGET_WINDBG
 #cmakedefine01 XTD_LOG_TARGET_CSV
 #cmakedefine01 XTD_LOG_TARGET_COUT
 #cmakedefine01 XTD_LOG_TARGET_XML
-	
+  
 /** @name Misc macros
     @{*/
 #if !defined(NOMINMAX)
@@ -164,10 +164,10 @@
   #endif
 #endif
     ///@}
-	
+  
 #if (XTD_OS_MINGW & XTD_OS)
-	TODO("Enabled sealed keyword when available in mingw");
-	#define sealed
+  TODO("Enabled sealed keyword when available in mingw");
+  #define sealed
 #endif
 
 /*! \namespace xtd
@@ -258,6 +258,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/debug.hpp>
 #include <xtd/callback.hpp>
 #include <xtd/concurrent_hash_map.hpp>
+#include <xtd/concurrent_stack.hpp>
 #include <xtd/data_convert.hpp>
 #include <xtd/source_location.hpp>
 #include <xtd/exception.hpp>

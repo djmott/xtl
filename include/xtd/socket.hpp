@@ -27,7 +27,7 @@ namespace xtd{
 
 ///   @defgroup Sockets
 
-#if ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
     using SOCKET = int;
   #define closesocket close
   #define ioctlsocket ioctl

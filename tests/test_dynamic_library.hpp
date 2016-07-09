@@ -1,11 +1,13 @@
-/**
- * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
- */
+/** @file
+xtd::dynamic_library system and unit tests
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+*/
+
 
 
 auto get_dummy_library = []() -> xtd::dynamic_library::ptr {
   auto sPath = xtd::this_executable::get_path();
-#if (XTD_OS_UNIX == XTD_OS)
+#if (XTD_OS_LINUX == XTD_OS)
   sPath.replace_filename("libdummy.so");
 #elif (XTD_OS_MINGW == XTD_OS)
   sPath.replace_filename("libdummy.dll");

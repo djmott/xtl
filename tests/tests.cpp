@@ -1,6 +1,7 @@
-/**
- * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
- */
+/** @file
+main system and unit test entry point 
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+*/
 
 #include <xtd/xtd.hpp>
 
@@ -24,6 +25,10 @@
 
 #if (ON==TEST_CONCURRENT_HASH_MAP)
   #include "test_hash_map.hpp"
+#endif
+
+#if (ON==TEST_CONCURRENT_STACK)
+  #include "test_concurrent_stack.hpp"
 #endif
 
 #if (ON==TEST_DATA_CONVERT)
@@ -68,6 +73,10 @@
 
 #if (ON==TEST_RPC)
   #include "test_rpc.hpp"
+#endif
+
+#if (ON==TEST_SHARED_MEM_OBJ)
+  #include "test_shared_mem_obj.hpp"
 #endif
 
 #if (ON==TEST_SOCKET)
