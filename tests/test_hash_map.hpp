@@ -3,9 +3,28 @@
 */
 
 
-using hash_map_type = xtd::concurrent_hash_map<int, std::string>;
+using hash_map_type = xtd::concurrent::hash_map<int, std::string>;
 
-TEST(test_hash_map, initialization){
+TEST(test_hash_map, initialization) {
+  hash_map_type oMap;
+}
+
+TEST(test_has_map, insert){
   hash_map_type oMap;
   ASSERT_TRUE(oMap.insert(123, "Hello!") );
+  ASSERT_TRUE(oMap.insert(456, "Hello!") );
+  ASSERT_TRUE(oMap.insert(789, "Hello!") );
+  ASSERT_FALSE(oMap.insert(123, "Hello!") );
+  ASSERT_FALSE(oMap.insert(456, "Hello!") );
+  ASSERT_FALSE(oMap.insert(789, "Hello!") );
+}
+
+TEST(test_has_map, remove) {
+  hash_map_type oMap;
+  ASSERT_TRUE(oMap.insert(123, "Hello!") );
+  ASSERT_TRUE(oMap.insert(456, "Hello!") );
+  ASSERT_TRUE(oMap.insert(789, "Hello!") );
+  ASSERT_TRUE(oMap.remove(123));
+  ASSERT_TRUE(oMap.remove(456) );
+  ASSERT_FALSE(oMap.remove(456) );
 }
