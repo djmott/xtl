@@ -191,7 +191,7 @@ namespace xtd{
     #include <rpc.h>
 #endif
 
-#if ((XTD_OS_UNIX | XTD_OS_CYGWIN) & XTD_OS)
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
   #include <unistd.h>
   #include <limits.h>
   #include <sys/types.h>
