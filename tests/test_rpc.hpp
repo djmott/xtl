@@ -47,7 +47,7 @@ TEST_F(test_rpc, payload){
 //  EXPECT_EQ(oPayload.peek<uint8_t>(), 123);
 }
 
-TEST_F(test_rpc, echo_test){
+TEST_F(test_rpc, DISABLED_echo_test){
   test_rpc::client_type oClient(xtd::socket::ipv4address("127.0.0.1", test_rpc::Port));
   oClient.call<test_rpc::Echo>("Hello?");
 }

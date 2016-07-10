@@ -24,7 +24,7 @@ set(TEST_SOURCE "${XTL_SOURCE_DIR}/tests/tests.cpp"
   "${XTL_SOURCE_DIR}/tests/test_meta.hpp"
   "${XTL_SOURCE_DIR}/tests/test_parse.hpp"
   "${XTL_SOURCE_DIR}/tests/test_path.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_read_write_lock.hpp"
+  "${XTL_SOURCE_DIR}/tests/test_rw_lock.hpp"
   "${XTL_SOURCE_DIR}/tests/test_rpc.hpp"
   "${XTL_SOURCE_DIR}/tests/test_shared_mem_obj.hpp"
   "${XTL_SOURCE_DIR}/tests/test_socket.hpp"
@@ -57,7 +57,7 @@ build_option(TEST_RPC "test xtd::rpc")
 build_option(TEST_SHARED_MEM_OBJ "test xtd::shared_mem_obj")
 build_option(TEST_SOCKET "test xtd::socket")
 build_option(TEST_SOURCE_LOCATION "test xtd::source_location")
-build_option(TEST_SPIN_LOCK "test xtd::spin_lock")
+build_option(TEST_SPIN_LOCK "test xtd::concurrent::spin_lock")
 build_option(TEST_STRING "test xtd::string")
 
 if(XTD_HAS_UUID)

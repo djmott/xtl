@@ -9,7 +9,7 @@ namespace xtd{
 
   /** @namespace xtd::parse
   Declarations and definitions of the parse library
-  @defgroup Parsing Text parsng library
+  @defgroup Parsing Text parsing library
   @{*/
   namespace parse{
 

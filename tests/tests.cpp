@@ -68,7 +68,7 @@ main system and unit test entry point
 #endif
 
 #if (ON==TEST_READ_WRITE_LOCK)
-  #include "test_read_write_lock.hpp"
+  #include "test_rw_lock.hpp"
 #endif
 
 #if (ON==TEST_RPC)

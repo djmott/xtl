@@ -36,6 +36,7 @@ set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -DNDEBUG")
 add_library(XTL STATIC  "${XTL_SOURCE_DIR}/src/xtl.cpp" 
   "${XTL_SOURCE_DIR}/src/event_trace/event_trace.cpp"
   "${XTL_SOURCE_DIR}/include/xtd/callback.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/concurrent.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/concurrent_hash_map.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/concurrent_stack.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/data_convert.hpp"
@@ -49,7 +50,7 @@ add_library(XTL STATIC  "${XTL_SOURCE_DIR}/src/xtl.cpp"
   "${XTL_SOURCE_DIR}/include/xtd/parse.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/path.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/process.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/read_write_lock.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/rw_lock.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/rpc.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/shared_mem_obj.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/socket.hpp"
@@ -60,6 +61,7 @@ add_library(XTL STATIC  "${XTL_SOURCE_DIR}/src/xtl.cpp"
   "${XTL_SOURCE_DIR}/include/xtd/unique_id.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/var.hpp"
   "${XTL_SOURCE_DIR}/include/xtd/xtd.hpp"
+  "${XTL_SOURCE_DIR}/include/xtd/xtd.hpp.in"
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -154,7 +156,12 @@ if(DOXYGEN_FOUND)
   )
 endif()
 
-add_subdirectory(examples)
+
+option(BUILD_EXAMPLES "Build examples" YES)
+
+if(BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
 
 option(BUILD_TESTS "Build tests" YES)
 

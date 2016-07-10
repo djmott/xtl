@@ -30,7 +30,7 @@ TEST(test_hash_map, remove) {
   ASSERT_FALSE(oMap.remove(456) );
 }
 
-TEST(test_hash_map, iterator){
+TEST(test_hash_map, DISABLED_iterator){
   hash_map_type oMap;
   ASSERT_TRUE(oMap.insert(123, "Hello!"));
   ASSERT_TRUE(oMap.insert(456, "Hello!"));

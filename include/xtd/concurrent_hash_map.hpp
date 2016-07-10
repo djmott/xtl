@@ -8,11 +8,13 @@ concurrently insert, query and delete items in an unordered hash map
 namespace xtd{
 
   namespace concurrent{
-
+  #if !defined(DOXY_INVOKED)
     namespace _{
       template <typename _HashMapT> struct hash_map_iterator_begin;
       template <typename _HashMapT> struct hash_map_iterator_end;
     }
+  #endif
+
 
     template <typename _HashMapT> class hash_map_iterator;
 
@@ -228,7 +230,8 @@ namespace xtd{
 
       static hash_map_iterator begin(const hash_map_type& oHashMap){
         hash_map_iterator oRet(oHashMap);
-        oRet._Ptr = _begin(oHashMap, oHashMap._Buckets, oRet._ItemIndexes);
+        TODO("implement " __FUNCTON__)
+        //oRet._Ptr = _begin(oHashMap, oHashMap._Buckets, oRet._ItemIndexes);
         return oRet;
       }
 
@@ -240,6 +243,6 @@ namespace xtd{
 
 
   }
-
+  ///@}
 }
 

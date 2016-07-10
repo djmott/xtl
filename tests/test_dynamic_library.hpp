@@ -23,7 +23,7 @@ TEST(test_dynamic_library, initialization) {
   ASSERT_NE(oLib->handle(), nullptr);
 }
 
-TEST(test_dynamic_library, Invocation){
+TEST(test_dynamic_library, DISABLED_invocation){
   auto oLib = get_dummy_library();
   ASSERT_NE(oLib->handle(), nullptr);
   auto Echo = oLib->get<const char *, const char *>("Echo");
