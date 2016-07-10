@@ -45,7 +45,8 @@ script:
   - if [ -e "$(ls *.xml)" ]; then cp *.xml $TRAVIS_BUILD_DIR/docs/reports/gtest; fi
   - for item in $( find -name '*.gcda' ); do gcov -l $item; done
   - for item in $( find -name '*.gcda' ); do gcovr -x -r .  > $TRAVIS_BUILD_DIR/docs/reports/gcov/$(basename $item).xml; done
-  - cd $TRAVIS_BUILD_DIR/assets
+  - cd $TRAVIS_BUILD_DIR/
+  - cp assets/sonar* .
   - sonar-scanner -e -X -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
 success:
   - cd $TRAVIS_BUILD_DIR/docs/html
