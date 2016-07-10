@@ -147,7 +147,7 @@ namespace xtd{
 
       using value_type = typename container_t::value_type;
 
-      for (;;){
+      forever{
         pos = find_first_of(delimiters, lastPos);
         if (pos == _my_t::npos){
           pos = _super_t::length();
@@ -210,7 +210,7 @@ namespace xtd{
     string sRet(srclen, 0);
     size_t retlen = srclen;
     iconv(oIconv, nullptr, nullptr, nullptr, &retlen);
-    for (;;){
+    forever{
       retlen = sRet.size();
       auto pSrc = reinterpret_cast<const char *>(src);
       auto iSrcLen = srclen * sizeof(wchar_t);
@@ -232,7 +232,7 @@ namespace xtd{
     wstring sRet(srclen, 0);
     size_t retlen = srclen;
     iconv(oIconv, nullptr, nullptr, nullptr, &retlen);
-    for (;;){
+    forever{
       retlen = sRet.size() * sizeof(wchar_t);
       auto pSrc = const_cast<char*>(src);
       auto iSrcLen = srclen;
@@ -251,7 +251,7 @@ namespace xtd{
   template <> template <> inline string string::from<wchar_t>(const wchar_t * src) {
     size_t srclen = wcslen(src);
     string sRet(srclen, 0);
-    for(;;){
+    forever{
       srclen = wcstombs(&sRet[0], src, sRet.size());
       if (static_cast<size_t>(-1) == srclen){
         throw std::runtime_error("A string conversion error occurred");
@@ -267,7 +267,7 @@ namespace xtd{
   template <> template <> inline wstring wstring::from<char>(const char * src){
     size_t srclen = strlen(src);
     wstring sRet(srclen, 0);
-    for(;;){
+    forever{
       srclen = mbstowcs(&sRet[0], src, sRet.size());
       if (static_cast<size_t>(-1) == srclen){
         throw std::runtime_error("A string conversion error occurred");

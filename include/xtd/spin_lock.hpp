@@ -17,7 +17,7 @@ namespace xtd {
     spin_lock(spin_lock&&) = delete;
 
     void lock() {
-      for (;;) {
+      forever {
         uint32_t compare = 0;
         if (compare_exchange_strong(compare, LockedValue)) break;
         std::this_thread::sleep_for(std::chrono::microseconds(1));

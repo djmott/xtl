@@ -18,7 +18,7 @@ namespace xtd {
         return sRet;
       }
       std::string sTemp(MAX_PATH, 0);
-      for(;;){
+      forever {
         auto iLen = xtd::os_exception::throw_if(GetModuleFileName(nullptr, &sTemp[0], static_cast<DWORD>(sTemp.size())), [](DWORD ret){ return (0==ret); });
         if (iLen >= sTemp.size()){
           sTemp.resize(sTemp.size() * 2);

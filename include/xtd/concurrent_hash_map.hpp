@@ -9,74 +9,22 @@ namespace xtd{
 
   namespace concurrent{
 
-    template <typename _KeyT, typename _ValueT> class hash_map_iterator{
-      using move_fn = std::function<_ValueT*(_KeyT&)>;
-      template <typename, typename, int> friend class hash_map;
-      _ValueT * _Ptr;
-      _KeyT _Key;
-      move_fn _Next;
-      move_fn _Prev;
-      hash_map_iterator(_ValueT* Ptr, _KeyT Key, move_fn Next, move_fn Prev) : _Ptr(Ptr), _Key(Key), _Next(Next), _Prev(Prev){}
-    public:
-      using value_type = _ValueT;
-      using pointer = _ValueT *;
-      using const_pointer = const _ValueT *;
-      using reference = _ValueT &;
-      using const_reference = const _ValueT &;
+    namespace _{
+      template <typename _HashMapT> struct hash_map_iterator_begin;
+      template <typename _HashMapT> struct hash_map_iterator_end;
+    }
 
-      hash_map_iterator(const hash_map_iterator& src) : _Ptr(src._Ptr), _Key(src._Key), _Next(src._Next), _Prev(src._Prev){}
-      hash_map_iterator& operator=(const hash_map_iterator& src){
-        if (this == &src) return *this;
-        _Ptr = src._Ptr;
-        _Key = src._Key;
-        _Prev = src._Prev;
-        _Next = src._Next;
-        return *this;
-      }
+    template <typename _HashMapT> class hash_map_iterator;
 
-      pointer get(){ return _Ptr; }
-      const_pointer get() const{ return _Ptr; }
-
-      pointer operator->(){ return _Ptr; }
-      const_pointer operator->() const{ return _Ptr; }
-
-      reference operator*(){ return *_Ptr; }
-      const_reference operator*() const{ return *_Ptr; }
-
-      hash_map_iterator& operator++(){
-        _Ptr = _Next(_Key);
-        return *this;
-      }
-      const hash_map_iterator operator++(int){
-        hash_map_iterator oRet(*this);
-        ++*this;
-        return oRet;
-      }
-      hash_map_iterator& operator--(){
-        _Ptr = _Prev(_Key);
-        return *this;
-      }
-      const hash_map_iterator operator--(int){
-        hash_map_iterator oRet(*this);
-        --*this;
-        return oRet;
-      }
-
-      bool operator==(const hash_map_iterator<_KeyT, _ValueT>& rhs) const{
-        return (_Ptr == rhs._Ptr && _Key == rhs._Key);
-      }
-
-      bool operator !=(const hash_map_iterator<_KeyT, _ValueT>& rhs) const{
-        return !(*this == rhs);
-      }
-    };
-
-    template <typename _KeyT, typename _ValueT, int _NibblePos = sizeof(_KeyT) * 2> class hash_map {
+    template <typename _KeyT, typename _ValueT, int _NibblePos = sizeof(_KeyT) * 2> class hash_map{
+      using _my_t = hash_map<_KeyT, _ValueT, _NibblePos>;
+      using child_bucket_type = hash_map<_KeyT, _ValueT, _NibblePos - 1>;
+      static const int nibble_pos = _NibblePos;
     public:
       using value_type = _ValueT;
       using key_type = _KeyT;
-      using child_bucket_type = hash_map<_KeyT, _ValueT, _NibblePos - 1>;
-      using iterator_type = hash_map_iterator<_KeyT, _ValueT>;
+      using iterator_type = hash_map_iterator<_my_t>;
+
 
       hash_map(){
         for (auto & oItem : _Buckets){
@@ -87,10 +35,10 @@ namespace xtd{
       bool insert(const key_type& Key, value_type&& Value){
         int Index = (Key & 0xf);
         auto pChild = _Buckets[Index].load();
-        if (!pChild) {
+        if (!pChild){
           pChild = new child_bucket_type;
           child_bucket_type * pNullBucket = nullptr;
-          if (!_Buckets[Index].compare_exchange_strong(pNullBucket, pChild)) {
+          if (!_Buckets[Index].compare_exchange_strong(pNullBucket, pChild)){
             delete pChild;
           }
         }
@@ -116,39 +64,24 @@ namespace xtd{
         return pChild->operator[](Key >> 4);
       }
 
-      iterator_type end() const { return iterator_type(nullptr, (_KeyT)-1, [](_KeyT&)->_ValueT*{ return nullptr; }, [](_KeyT&)->_ValueT*{ return nullptr; }); }
 
-
-      iterator_type begin() const{
-        return _begin(0);
-      }
-
+      iterator_type begin() const{ return hash_map_iterator<_my_t>::begin(*this); }
+      iterator_type end() const{ return hash_map_iterator<_my_t>::end(*this); }
     private:
+      template <typename> friend class hash_map_iterator;
       static const uint32_t nibble_count = 16;
       std::atomic<child_bucket_type*> _Buckets[nibble_count];
-
-      iterator_type _begin(key_type oKey) const{
-        child_bucket_type * pBucket;
-        for (int i = 0; i < nibble_count; ++i){
-          if (pBucket = _Buckets[i].load()){
-            return pBucket->_begin((oKey << 4) | i);
-          }
-        }
-        return end();
-      }
 
     };
 
 
-
     template <typename _KeyT, typename _ValueT> class hash_map<_KeyT, _ValueT, 1>{
-
     public:
+      using _my_t = hash_map<_KeyT, _ValueT, 1>;
       using value_type = _ValueT;
       using key_type = _KeyT;
-      using iterator_type = hash_map_iterator<_KeyT, _ValueT>;
 
-      
+
       hash_map(){
         for (auto & oItem : _Values){
           oItem.store(nullptr);
@@ -158,12 +91,12 @@ namespace xtd{
       bool insert(const key_type& Key, value_type&& Value){
         int Index = (Key & 0xf);
         auto pValue = _Values[Index].load();
-        if (pValue) {
+        if (pValue){
           return false;
         }
         pValue = new value_type(std::forward<value_type>(Value));
         value_type * pNullValue = nullptr;
-        if (!_Values[Index].compare_exchange_strong(pNullValue, pValue)) {
+        if (!_Values[Index].compare_exchange_strong(pNullValue, pValue)){
           delete pValue;
           return false;
         }
@@ -180,9 +113,10 @@ namespace xtd{
         }
         return false;
       }
+
       value_type & operator[](const key_type& Key){
         int Index = (Key & 0xf);
-        auto pRet = _Values[Index].load() ;
+        auto pRet = _Values[Index].load();
         if (!pRet){
           pRet = new value_type;
           value_type * pNull = nullptr;
@@ -196,25 +130,114 @@ namespace xtd{
       }
 
     private:
+      template <typename> friend class hash_map_iterator;
+      static const int nibble_pos = 1;
       static const uint32_t nibble_count = 16;
       std::atomic<value_type*> _Values[nibble_count];
 
-      iterator_type _begin(key_type oKey) const{
+    };
 
-        auto PrevFn = [&, this](_KeyT& oKey)->_ValueT*{
-        };
-        auto NextFn = [&, this](_KeyT& oKey)->_ValueT*{};
 
-        value_type * pValue;
-        for (int i = 0; i < nibble_count; ++i){
-          if (pValue = _Values[i].load()){
-            return iterator_type(pValue, (oKey << 4) | i, PrevFn, NextFn);
+    template <typename _HashMapT>
+    class hash_map_iterator{
+    public:
+
+      using hash_map_type = _HashMapT;
+      using value_type = typename hash_map_type::value_type;
+      using key_type = typename hash_map_type::key_type;
+
+      bool operator==(const hash_map_iterator& rhs) const{
+        if (_Ptr == rhs._Ptr) return true;
+        for (int i = 0; i < index_count; ++i){
+          if (_ItemIndexes[i] != rhs._ItemIndexes[i]){
+            return false;
           }
         }
-        return end();
+        return true;
       }
 
+      bool operator != (const hash_map_iterator& rhs) const{
+        return !(*this == rhs);
+      }
+
+      value_type * get(){ return _Ptr; }
+      const value_type * get() const{ return _Ptr; }
+
+      value_type * operator->(){ return _Ptr; }
+      const value_type * operator->() const{ return _Ptr; }
+
+      value_type& operator *(){ return *_Ptr; }
+      const value_type& operator *() const { return *_Ptr; }
+
+
+
+      hash_map_iterator& operator++(){
+        next();
+        return *this;
+      }
+
+      hash_map_iterator operator++(int){
+        hash_map_iterator oRet(*this);
+        next();
+        return oRet;
+      }
+
+      hash_map_iterator& operator--(){
+        prev();
+        return *this;
+      }
+
+      hash_map_iterator operator--(int){
+        hash_map_iterator oRet(*this);
+        prev();
+        return oRet;
+      }
+
+    protected:
+      template <typename, typename, int> friend class hash_map;
+      static const int index_count = sizeof(key_type) * 2;
+      static const int nibble_count = 16;
+      uint8_t _ItemIndexes[index_count];
+
+      const hash_map_type& _HashMap;
+      value_type * _Ptr;
+
+      hash_map_iterator(const hash_map_type& oHashMap) : _HashMap(oHashMap), _Ptr(nullptr){}
+
+      static value_type * _begin(const hash_map_type& oHashMap, const std::atomic<value_type*> * pValues, uint8_t * pItemIndexes){
+        value_type * pItem;
+        for (*pItemIndexes = 0; *pItemIndexes < nibble_count; ++*pItemIndexes){
+          if (pItem = pValues[*pItemIndexes].load()){
+            return pItem;
+          }
+        }
+        return nullptr;
+      }
+
+      template <typename _BucketT>
+      static value_type * _begin(const hash_map_type& oHashMap, typename std::enable_if<_BucketT::nibble_pos >=2, const _BucketT&>::type oBucket, uint8_t * pItemIndexes){
+        using child_bucket_type = typename _BucketT::child_bucket_type;
+        const child_bucket_type * pChildBucket;
+        for (*pItemIndexes = 0; *pItemIndexes < nibble_count; ++*pItemIndexes){
+          if (pChildBucket = oBucket._Buckets[*pItemIndexes].load()){
+            return _begin(oHashMap, pChildBucket, ++pItemIndexes);
+          }
+        }
+        return nullptr;
+      }
+
+      static hash_map_iterator begin(const hash_map_type& oHashMap){
+        hash_map_iterator oRet(oHashMap);
+        oRet._Ptr = _begin(oHashMap, oHashMap._Buckets, oRet._ItemIndexes);
+        return oRet;
+      }
+
+      static hash_map_iterator end(const hash_map_type& oHashMap){ return hash_map_iterator(oHashMap); }
+
+      void next(){}
+      void prev(){}
     };
+
 
   }
 
