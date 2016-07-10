@@ -7,7 +7,7 @@ eXtended Template Library
 [![SonarQube Quality Gate](http://nemo.sonarqube.org/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl)
 [![Boost License](https://img.shields.io/badge/license-Boost_Version_1.0-green.svg?style=plastic)](http://www.boost.org/LICENSE_1_0.txt)
 
-XTL is a public release of portions from a much larger private set of libraries which I've maintained over the years and used in a number of projects. It's primarily a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. It supplements, extends and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard. A short list of some of the more notable headers:
+XTL is a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. It supplements, extends and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard. A short list of some of the more notable headers:
 
 |Header              |Description|
 |--------------------|-----------|
@@ -51,7 +51,9 @@ cd build
 cmake ..
 ```
 The compilation step is not always necessary depending on the required components that will be used. The method used to compile the run-time code is platform, toolchain and CMake configuration specific. For Linux, Cygwin and MinGW make files just run `make`.
+
 ### Using
+
 Several configuration options are available during configuration with CMake. For most purposes the default configuration should work fine. Applications should add the `include` folder to the search path. The configuration with CMake detects the compiler toolchain and target operating system then produces the primary include file. For most applications just including the project header will go a long way:
 ```{.cpp}
  #include <xtd/xtd.hpp>
@@ -71,7 +73,7 @@ This will produce the binary `tests/coverage_tests` which is identical to the `t
 
 ### Documentation
 
-[Doxygen](http://www.doxygen.org) is used to generate source documentation. The code is fairly well marked up for doxygen generation. After the project has been configured with CMake build with documentation with:
+Online documentation is available at [https://djmott.github.io/xtl](https://djmott.github.io/xtl) and [Doxygen](http://www.doxygen.org) is used to generate offline documentation. The code is fairly well marked up for doxygen generation. After the project has been configured with CMake build with documentation with:
 
 ```
 make docs
