@@ -33,35 +33,35 @@ set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -DNDEBUG")
 
 
 
-add_library(XTL STATIC  "${XTL_SOURCE_DIR}/src/xtl.cpp" 
-  "${XTL_SOURCE_DIR}/src/event_trace/event_trace.cpp"
-  "${XTL_SOURCE_DIR}/include/xtd/callback.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/concurrent.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/concurrent_hash_map.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/concurrent_stack.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/data_convert.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/debug.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/dynamic_library.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/event_trace.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/exception.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/executable.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/log.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/meta.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/parse.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/path.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/process.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/rw_lock.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/rpc.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/shared_mem_obj.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/socket.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/source_location.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/spin_lock.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/string.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/tuple.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/unique_id.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/var.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/xtd.hpp"
-  "${XTL_SOURCE_DIR}/include/xtd/xtd.hpp.in"
+add_library(XTL STATIC src/xtl.cpp
+  src/event_trace/event_trace.cpp
+  include/xtd/callback.hpp
+  include/xtd/concurrent.hpp
+  include/xtd/concurrent_hash_map.hpp
+  include/xtd/concurrent_stack.hpp
+  include/xtd/data_convert.hpp
+  include/xtd/debug.hpp
+  include/xtd/dynamic_library.hpp
+  include/xtd/event_trace.hpp
+  include/xtd/exception.hpp
+  include/xtd/executable.hpp
+  include/xtd/log.hpp
+  include/xtd/meta.hpp
+  include/xtd/parse.hpp
+  include/xtd/path.hpp
+  include/xtd/process.hpp
+  include/xtd/rw_lock.hpp
+  include/xtd/rpc.hpp
+  include/xtd/shared_mem_obj.hpp
+  include/xtd/socket.hpp
+  include/xtd/source_location.hpp
+  include/xtd/spin_lock.hpp
+  include/xtd/string.hpp
+  include/xtd/tuple.hpp
+  include/xtd/unique_id.hpp
+  include/xtd/var.hpp
+  include/xtd/xtd.hpp
+  include/xtd/xtd.hpp.in
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -141,13 +141,13 @@ else()
 endif()
 
 
-include_directories("${XTL_BINARY_DIR}" "${XTL_SOURCE_DIR}/include")
+include_directories(${XTL_SOURCE_DIR}/include)
 
-configure_file("${XTL_SOURCE_DIR}/include/xtd/xtd.hpp.in" "${XTL_SOURCE_DIR}/include/xtd/xtd.hpp")
+configure_file(${XTL_SOURCE_DIR}/include/xtd/xtd.hpp.in ${XTL_SOURCE_DIR}/include/xtd/xtd.hpp)
 
 if(DOXYGEN_FOUND)
 
-  configure_file("${XTL_SOURCE_DIR}/docs/Doxyfile.in" "${XTL_SOURCE_DIR}/docs/Doxyfile")
+  configure_file(${XTL_SOURCE_DIR}/docs/Doxyfile.in ${XTL_SOURCE_DIR}/docs/Doxyfile)
 
   add_custom_target(
     docs COMMAND "${DOXYGEN_EXECUTABLE}" Doxyfile

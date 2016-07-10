@@ -1,3 +1,4 @@
+include(CTest)
 find_package(GTest)
 
 if (NOT GTEST_FOUND)
@@ -6,33 +7,33 @@ endif()
 
 enable_testing()
 
-include_directories("${GTEST_INCLUDE_DIRS}")
+include_directories(${GTEST_INCLUDE_DIRS})
 
-add_library(dummy SHARED "dummy_library.cpp")
+add_library(dummy SHARED dummy_library.cpp)
 add_dependencies(dummy XTL)
 
-set(TEST_SOURCE "${XTL_SOURCE_DIR}/tests/tests.cpp"
-  "${XTL_SOURCE_DIR}/tests/test_callback.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_concurrent_stack.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_data_convert.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_dynamic_library.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_event_trace.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_exception.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_executable.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_hash_map.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_logging.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_meta.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_parse.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_path.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_rw_lock.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_rpc.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_shared_mem_obj.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_socket.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_source_location.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_spin_lock.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_string.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_unique_id.hpp"
-  "${XTL_SOURCE_DIR}/tests/test_var.hpp"
+set(TEST_SOURCE tests.cpp
+  test_callback.hpp
+  test_concurrent_stack.hpp
+  test_data_convert.hpp
+  test_dynamic_library.hpp
+  test_event_trace.hpp
+  test_exception.hpp
+  test_executable.hpp
+  test_hash_map.hpp
+  test_logging.hpp
+  test_meta.hpp
+  test_parse.hpp
+  test_path.hpp
+  test_rw_lock.hpp
+  test_rpc.hpp
+  test_shared_mem_obj.hpp
+  test_socket.hpp
+  test_source_location.hpp
+  test_spin_lock.hpp
+  test_string.hpp
+  test_unique_id.hpp
+  test_var.hpp
 )
 
 function(build_option NAME DESC)
@@ -66,18 +67,19 @@ endif()
 
 build_option(TEST_VAR "test xtd::var")
 
-add_executable(unit_tests "${TEST_SOURCE}")
+add_executable(unit_tests ${TEST_SOURCE})
 add_dependencies(unit_tests dummy)
-target_link_libraries(unit_tests "${GTEST_BOTH_LIBRARIES}")
+target_link_libraries(unit_tests ${GTEST_BOTH_LIBRARIES})
 #add_test(NAME unit_tests COMMAND unit_tests)
-GTEST_ADD_TESTS(unit_tests "" "${TEST_SOURCE}")
+GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -coverage -Wall -fprofile-arcs -ftest-coverage")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 -coverage -Wall -W -fprofile-arcs -ftest-coverage")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov -coverage -fprofile-arcs -ftest-coverage")
+#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -coverage -Wall -fprofile-arcs -ftest-coverage")
+#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 -coverage -Wall -W -fprofile-arcs -ftest-coverage")
+#  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov -coverage -fprofile-arcs -ftest-coverage")
 
-  add_executable(coverage_tests "${TEST_SOURCE}")
+  add_executable(coverage_tests ${TEST_SOURCE})
+  target_compile_options(coverage_tests PRIVATE -coverage -fprofile-arcs -ftest-coverage)
   add_dependencies(coverage_tests dummy)
-  target_link_libraries(coverage_tests "${GTEST_BOTH_LIBRARIES}")
+  target_link_libraries(coverage_tests gcov ${GTEST_BOTH_LIBRARIES})
 endif()
