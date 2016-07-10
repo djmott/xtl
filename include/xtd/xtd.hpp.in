@@ -143,6 +143,7 @@
 //__SONAR_ON__
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
+  #define FORCEINLINE __forceinline
   #define NOVTABLE __declspec(novtable)
   #define NORETURN __declspec(noreturn)
   #define MULTIPLE __declspec(selectany)
@@ -150,6 +151,7 @@
   #define TODO( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : TODO : " x  ))
   #define NOTE( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : NOTE : " x  ))
 #elif (XTD_COMPILER_GCC & XTD_COMPILER)
+  #define FORCEINLINE __attribute__((always_inline))
   #define NOVTABLE
   #define NORETURN __attribute__((noreturn))
   #define MULTIPLE __attribute__ ((weak))

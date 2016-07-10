@@ -230,7 +230,7 @@ namespace xtd{
 
       static hash_map_iterator begin(const hash_map_type& oHashMap){
         hash_map_iterator oRet(oHashMap);
-        TODO("implement " __FUNCTON__)
+        TODO("implement me")
         //oRet._Ptr = _begin(oHashMap, oHashMap._Buckets, oRet._ItemIndexes);
         return oRet;
       }
