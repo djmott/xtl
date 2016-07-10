@@ -7,14 +7,13 @@ namespace xtd{
   namespace concurrent{
     /** A multiple reader/single writer spin lock
     supports 2^31 simultaneous readers
+    @tparam _WaitPolicyT behavior when spinning
     */
-    class rw_lock : std::atomic<uint32_t>{
-      using _super_t = std::atomic<uint32_t>;
-      static const uint32_t write_lock_bit = 0x80000000;
-      static const uint32_t read_bits_mask = ~write_lock_bit;
+    template <typename _WaitPolicyT = null_wait_policy>
+    class rw_lock_base : std::atomic<uint32_t>{
     public:
-
-      rw_lock() : _super_t(0){}
+      using wait_policy_type = _WaitPolicyT;
+      rw_lock_base(wait_policy_type oWait = wait_policy_type()) : _super_t(0), _WaitPolicy(oWait){}
       ///Returns the number of active read locks
       uint32_t readers() const{
         return _super_t::load() & read_bits_mask;
@@ -32,6 +31,7 @@ namespace xtd{
               break;
             }
           }
+          _WaitPolicy.spin();
         }
       }
       /// Acquires a shared read lock
@@ -41,6 +41,7 @@ namespace xtd{
           if (_super_t::compare_exchange_strong(iOriginal, 1 + iOriginal)){
             break;
           }
+          _WaitPolicy.spin();
         }
       }
       /** tries to acquire a shared read lock
@@ -54,7 +55,7 @@ namespace xtd{
       void lock_write(){
         uint32_t iOriginal = 0;
         while (!_super_t::compare_exchange_strong(iOriginal, write_lock_bit)){
-          std::this_thread::yield();
+          _WaitPolicy.spin();
         }
       }
       /** attempts to acquire a write lock for exclusive access
@@ -66,9 +67,9 @@ namespace xtd{
       }
       /// RAII pattern to acquire and release a read lock
       class scope_read{
-        rw_lock& _Lock;
+        rw_lock_base& _Lock;
       public:
-        scope_read(rw_lock& oLock) : _Lock(oLock){
+        scope_read(rw_lock_base& oLock) : _Lock(oLock){
           _Lock.lock_read();
         }
         ~scope_read(){
@@ -77,15 +78,22 @@ namespace xtd{
       };
       /// RAII pattern to acquire and release a write lock
       class scope_write{
-        rw_lock& _Lock;
+        rw_lock_base& _Lock;
       public:
-        scope_write(rw_lock& oLock) : _Lock(oLock){
+        scope_write(rw_lock_base& oLock) : _Lock(oLock){
           _Lock.lock_write();
         }
         ~scope_write(){
           _Lock.unlock();
         }
       };
+    private:
+      using _super_t = std::atomic<uint32_t>;
+      static const uint32_t write_lock_bit = 0x80000000;
+      static const uint32_t read_bits_mask = ~write_lock_bit;
+      wait_policy_type _WaitPolicy;
     };
+
+    using rw_lock = rw_lock_base<null_wait_policy>;
   }
 }
