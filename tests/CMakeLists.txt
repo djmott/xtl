@@ -1,4 +1,4 @@
-include(CTest)
+
 find_package(GTest)
 
 if (NOT GTEST_FOUND)
@@ -70,14 +70,10 @@ build_option(TEST_VAR "test xtd::var")
 add_executable(unit_tests ${TEST_SOURCE})
 add_dependencies(unit_tests dummy)
 target_link_libraries(unit_tests ${GTEST_BOTH_LIBRARIES})
-#add_test(NAME unit_tests COMMAND unit_tests)
-GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
+add_test(NAME unit_tests COMMAND unit_tests)
+#GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -coverage -Wall -fprofile-arcs -ftest-coverage")
-#  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 -coverage -Wall -W -fprofile-arcs -ftest-coverage")
-#  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov -coverage -fprofile-arcs -ftest-coverage")
-
   add_executable(coverage_tests ${TEST_SOURCE})
   target_compile_options(coverage_tests PRIVATE -coverage -fprofile-arcs -ftest-coverage)
   add_dependencies(coverage_tests dummy)

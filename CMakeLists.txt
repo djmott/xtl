@@ -141,30 +141,28 @@ else()
 endif()
 
 
-include_directories(${XTL_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-configure_file(${XTL_SOURCE_DIR}/include/xtd/xtd.hpp.in ${XTL_SOURCE_DIR}/include/xtd/xtd.hpp)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp)
+
 
 if(DOXYGEN_FOUND)
-
-  configure_file(${XTL_SOURCE_DIR}/docs/Doxyfile.in ${XTL_SOURCE_DIR}/docs/Doxyfile)
-
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
   add_custom_target(
     docs COMMAND "${DOXYGEN_EXECUTABLE}" Doxyfile
     COMMENT "Generating Doxygen API Documentation" VERBATIM
-    WORKING_DIRECTORY "${XTL_SOURCE_DIR}/docs"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs"
   )
 endif()
 
 
 option(BUILD_EXAMPLES "Build examples" YES)
-
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
-option(BUILD_TESTS "Build tests" YES)
 
+option(BUILD_TESTS "Build tests" YES)
 if(BUILD_TESTS)
   add_subdirectory(tests)
 endif()

@@ -38,8 +38,8 @@ script:
   - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/coverage_tests.memcheck.xml $TRAVIS_BUILD_DIR/build/tests/coverage_tests
   - for item in $(find src -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
   - for item in $(find include -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
-  - for item in $(find include -name *.hpp); do cppcheck --inline-suppr --suppressions-list=cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
-  - for item in $(find src -name *.cpp); do cppcheck --inline-suppr --suppressions-list=cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
+  - for item in $(find include -name *.hpp); do cppcheck --inline-suppr --suppressions-list=assets/cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
+  - for item in $(find src -name *.cpp); do cppcheck --inline-suppr --suppressions-list=assets/cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
   - rats --xml -w 3 src include > docs/reports/rats/rats.xml
   - cd $TRAVIS_BUILD_DIR/build/tests
   - if [ -e "$(ls *.xml)" ]; then cp *.xml $TRAVIS_BUILD_DIR/docs/reports/gtest; fi
