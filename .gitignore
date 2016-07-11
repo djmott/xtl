@@ -38,3 +38,4 @@ Doxyfile
 .*
 include/xtd/xtd.hpp
 
+doxygen_sqlite3.db
