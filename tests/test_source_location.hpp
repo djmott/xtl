@@ -21,11 +21,27 @@ TEST(test_source_location, assignment) {
   ASSERT_STREQ(a.file(), b.file());
 }
 
-TEST(test_source_location, comparison) {
+
+TEST(test_source_location, self_assignment) {
   auto a = here();
-  auto b = here();
-  ASSERT_FALSE(a == b);
-  ASSERT_TRUE( a < b);
+  auto &b = a;
   b = a;
-  ASSERT_TRUE(a == b);
+  ASSERT_EQ(a.line(), b.line());
+  ASSERT_STREQ(a.file(), b.file());
+}
+
+TEST(test_source_location, comparison) {
+  {
+    auto a = here();
+    auto b = here();
+    ASSERT_FALSE(a == b);
+    ASSERT_TRUE(a < b);
+    b = a;
+    ASSERT_TRUE(a == b);
+  }
+  {
+    xtd::source_location a("a", 123);
+    xtd::source_location b("b", 123);
+    ASSERT_TRUE(a < b);
+  }
 }
