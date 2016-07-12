@@ -1,0 +1,4 @@
+var classxtd_1_1parse_1_1___1_1parse__helper_3_01___decl_t_00_01character_3_01___ch_01_4_00_01true_00_01___whitespace_t_01_4 =
+[
+    [ "parse", "classxtd_1_1parse_1_1___1_1parse__helper_3_01___decl_t_00_01character_3_01___ch_01_4_00_01true_00_01___whitespace_t_01_4.html#ac598ed284c908789b02c3b4263c3bbd2", null ]
+];
