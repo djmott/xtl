@@ -1,18 +1,23 @@
 /** @file
-Single producer notifies multiple consumers of an event
+Single producer notifies multiple receivers of an event. Callbacks are performed serially and the order is undefined when multiple receivers are attached
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
-
+ @example example_callback.cpp
 */
 
 #pragma once
 
 namespace xtd{
-  /** notifies multiple receivers of an event
-  Callbacks are performed serially and the order is undefined when multiple receivers are attached
-  @example example_callback.cpp
+  /** @{
+  Generic callback declaration
+  @tparam _FnSig Function signature of the callback. Attached receivers must match the signature.
   */
   template <typename _FnSig> class callback;
 
+  /** Specialization for a callback that has a return value
+  This specialization should used with care when multiple receivers are attached because only a single return value is appropriate.
+  @tparam _ReturnT the return type
+  @tparam ... variadic list of arguments
+   */
   template <typename _ReturnT, typename ... _Args> class callback < _ReturnT(_Args...) >{
     class invoker{
     public:
@@ -97,6 +102,9 @@ namespace xtd{
 
   };
 
+  /** Specialziation for a callback with a void return value
+  @tparam ... variadic list of arguments
+  */
   template <typename ... _Args> class callback < void(_Args...) >{
 
     using _ReturnT = void;
@@ -174,4 +182,5 @@ namespace xtd{
 
 
   };
+  ///@}
 }

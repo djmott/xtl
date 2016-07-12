@@ -16,7 +16,7 @@ namespace xtd{
   using wstring = xstring<wchar_t>;
   using tstring = xstring<tchar>;
 
-#if !(DOXY_INVOKED)
+#if (!DOXY_INVOKED)
   namespace _{
     template <typename, typename > class xstring_tostring;
     template <typename, typename ...> class xstring_format;
@@ -190,7 +190,7 @@ namespace xtd{
 #endif
   };
 
-#if !(DOXY_INVOKED)
+#if (!DOXY_INVOKED)
 #if (XTD_STR_CONVERT_CODECVT & XTD_STR_CONVERT)
   template <> template <> inline string string::from<wchar_t>(const wchar_t* src){
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;

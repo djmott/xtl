@@ -177,9 +177,35 @@
 */
 namespace xtd{
     /// @internal
-    /// private namespace not for externl consumption
+    /// @namespace xtd::_
+    /// private namespace not for external consumption
     namespace _{}
     /// @endinternal
+
+    /** @defgroup Concurrent Concurrent algorithms library
+    @{
+    @namespace xtd::concurrent
+    Concurrent algorithms library
+    */
+    namespace concurrent{}
+    /// @}
+
+    /** @defgroup Parsing Text parsing and AST generation library
+    @{
+    @namespace xtd::parse
+    Text parsing and AST generation
+    */
+    namespace parse{}
+    /// @}
+
+    /** @defgroup Sockets General purpose socket communication
+    @{
+    @namespace xtd::socket
+    General purpose socket communication
+    */
+    namespace socket{}
+    /// @}
+
 }
 
 #define forever for(;;)

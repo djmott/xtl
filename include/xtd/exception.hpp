@@ -61,7 +61,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
       , _what(std::move(src._what)){}
 ///}@
 
-///explaination of the exception
+///explanation of the exception
     const char * what() const XTD_EXCEPTION_MEMBER_NOEXCEPT override { return _what.c_str(); }
 
 ///location in source that caused the exception
@@ -89,7 +89,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
       }
       _what += " : ";
 
-#if (XTD_COMPILER_IS_MSVC)
+#if (XTD_COMPILER_MSVC & XTD_COMPILER)
       _what.resize(_what.size() + 100);
       strerror_s(&_what[_what.size() - 100], 100, errno);
       _what.resize(strlen(_what.c_str()));

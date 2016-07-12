@@ -1,8 +1,6 @@
 /** @file
 general purpose socket communication
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
-@defgroup Sockets
-@{
 */
 
 #pragma once
@@ -18,15 +16,9 @@ general purpose socket communication
 
 namespace xtd{
 
-  /** @namespace xtd::socket
-  Declarations and definitions of the socket library
-  */
-  namespace socket{
-
-
-
-///   @defgroup Sockets
-
+    namespace socket{
+    /// @addtogroup Sockets
+    /// @{
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
     using SOCKET = int;
   #define closesocket close
@@ -53,6 +45,7 @@ namespace xtd{
 
     };
 
+#if (!DOXY_INVOKED)
     namespace _{
       template <typename _Ty, int level, int optname> struct socket_option{
         using value_type = _Ty;
@@ -82,7 +75,7 @@ namespace xtd{
 
 
     }
-
+#endif
 
     ///IPv4 address wrapper around sockaddr_in
     class ipv4address : public sockaddr_in{
@@ -102,27 +95,20 @@ namespace xtd{
       TODO("Implement proper ipv6 address");
     };
 
-    ///@enum socket_type socket communication styles
+    /// socket communication styles
     enum class socket_type{
-      ///@var stream reliable FIFO stream on a remote socket
-      stream = SOCK_STREAM,
-      ///@var datagram unreliable connectionless broadcast
-      datagram = SOCK_DGRAM,
-      ///@var raw interface level data
-      raw = SOCK_RAW,
+      stream = SOCK_STREAM, ///< stream reliable FIFO stream on a remote socket
+      datagram = SOCK_DGRAM, ///< datagram unreliable connectionless broadcast
+      raw = SOCK_RAW, ///< raw interface level data
     };
 
-    ///@enum socket_protocol IP based protocols
-    enum class socket_protocol{
-      ///@var ip Internet Protocol v4
-      ip = IPPROTO_IP,
-      ///@var icmp Internet Control Message Protocol
-      icmp = IPPROTO_ICMP,
-      ///@var tcp Transmission Control Protocol
-      tcp = IPPROTO_TCP,
-      ///@var udp User Datagram Protocol
-      udp = IPPROTO_UDP,
-      ///@var ipv6 Internet Protocol v6
+    /// IP based protocols
+    enum class socket_protocol{      
+      ip = IPPROTO_IP, ///< ip Internet Protocol v4      
+      icmp = IPPROTO_ICMP,///< icmp Internet Control Message Protocol      
+      tcp = IPPROTO_TCP,///< tcp Transmission Control Protocol     
+      udp = IPPROTO_UDP, ///< udp User Datagram Protocol
+      ipv6 = IPPROTO_IPV6, ///< ipv6 Internet Protocol v6
     };
     NOTE("add more socket protocols as needed defined in netinet/in.h")
 
@@ -329,7 +315,7 @@ namespace xtd{
       }
     };
 
-
+    /// Socket properties
     template <typename _SuperT>
     class socket_options : public _SuperT{
     public:
@@ -337,11 +323,12 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit socket_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      bool keep_alive() const{ return _::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket); }
+      bool keep_alive() const{ return (_::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket) ? true : false); }
       void keep_alive(bool newval){ _::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::set(_SuperT::_Socket, newval); }
       TODO("Add more SOL_SOCKET options");
     };
 
+    /// IP based socket properties
     template <typename _SuperT>
     class ip_options : public _SuperT{
     public:
@@ -349,13 +336,13 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit ip_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
-      bool dont_fragment() const{ return _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::get(_SuperT::_Socket); }
+      bool dont_fragment() const{ return (_::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::get(_SuperT::_Socket) ? true : false); }
       void dont_fragment(bool newval){ _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::set(_SuperT::_Socket, newval); }
 #endif
       TODO("Add more IPPROTO_IP options");
     };
 
-    
+    /// TCP based socket properties
     template <typename _SuperT>
     class tcp_options : public _SuperT{
     public:
@@ -363,11 +350,12 @@ namespace xtd{
       template<typename ... _ArgTs>
       explicit tcp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
-      bool no_delay() const{ return _::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::get(_SuperT::_Socket); }
+      bool no_delay() const{ return (_::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::get(_SuperT::_Socket) ? true : false); }
       void no_delay(bool newval){ _::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::set(_SuperT::_Socket, newval); }
       TODO("Add more IPPROTO_TCP options");
     };
 
+    /// UDP socket properties
     template <typename _SuperT>
     class udp_options : public _SuperT{
     public:
@@ -376,7 +364,7 @@ namespace xtd{
       explicit udp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
-      bool no_checksum() const{ return _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_SuperT::_Socket); }
+      bool no_checksum() const{ return (_::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_SuperT::_Socket) ? true : false); }
       void no_checksum(bool newval){ _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::set(_SuperT::_Socket, newval); }
 #endif
       TODO("Add more IPPROTO_UDP options");
@@ -497,9 +485,11 @@ namespace xtd{
     template <typename _Ty>
     class serializer<std::vector<_Ty>> : public std::conditional<std::is_pod<_Ty>::value, POD_Vector_Serializer<_Ty>, NON_POD_Vector_Serializer<_Ty>>::type{};
 #endif
-
+    /// General purpose IPV4 client and server socket type
     using ipv4_tcp_stream = socket_base<ipv4address, socket_type::stream, socket_protocol::tcp, socket_options, ip_options, tcp_options, connectable_socket, bindable_socket, listening_socket, selectable_socket>;
+    /// General purpose UDP socket type
     using ipv4_udp_socket = socket_base<ipv4address, socket_type::datagram, socket_protocol::udp, socket_options, ip_options, udp_options>;
+    ///@}
 
   }
 

@@ -1,5 +1,5 @@
 /** @file
-manipulate and generate tuples
+Tuple manipulation
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
@@ -7,9 +7,16 @@ manipulate and generate tuples
 
 namespace xtd {
 
+  /*
+  @defgroup Tuple
+  @{
+  @class template <typename...> struct tuple;
+  Generic tuple declaration
+  */
   template <typename...> struct tuple;
+  /// @}
 
-
+#if (!DOXY_INVOKED)
   namespace _ {
 //tuple_item
     template <typename _Ty, typename ...> struct tuple_item;
@@ -62,7 +69,15 @@ namespace xtd {
       static const int value = 1 + tuple_index_of<_Ty, _TailT...>::value;
     };
   }
+#endif
 
+  /*
+  @addtogroup Tuple
+  @{
+  @class template <typename...> struct tuple;
+  Generic tuple declaration
+  */
+  /// Tuple specialization with no elements
   template <> struct tuple<> {
     static const size_t Length = 0;
     tuple(){}
@@ -70,19 +85,25 @@ namespace xtd {
     tuple(tuple&&){}
   };
 
+  /// Tuple specialization with one or more elements
   template <typename _HeadT, typename ... _TailT> struct tuple<_HeadT, _TailT...> : tuple<_TailT...>{
     using _self_t = tuple<_HeadT, _TailT...>;
     using _super_t = tuple<_TailT...>;
     using value_type = _HeadT;
     static const size_t Length = 1 + _super_t::Length;
 
+    /** Gets an item from the tuple by type
+    @tparam _Ty the type to retrieve
+    @returns the first type of _Ty in the tuple
+    */
     template <typename _Ty> _Ty& Item() { return _::tuple_item<_Ty, _HeadT, _TailT...>::get(*this); }
-
+    /// Gets an item from the tuple by index
     template <int index> typename _::tuple_index<index, _HeadT, _TailT...>::value_type& Index() { return _::tuple_index<index, _HeadT, _TailT...>::get(*this); }
-
+    /// Appends a type to the tuple
     template <typename _Ty> using Append = typename _::tuple_append<_Ty, tuple<_HeadT, _TailT...>>::tuple_type;
+    /// Prepends a type to the tuple
     template <typename _Ty> using Prepend = typename _::tuple_prepend <_Ty, tuple<_HeadT, _TailT...>>::tuple_type;
-
+    /// Gets the index of a specified type
     template <typename _Ty> using index_of = _::tuple_index_of<_Ty, _HeadT, _TailT...>;
 
     tuple() : _super_t() {}
@@ -90,32 +111,8 @@ namespace xtd {
     tuple(const tuple& src) : _super_t(src), Value(src.Value) {}
 
     value_type Value;
-
   };
-
-
-}
-
-#if !defined(__TEST_TUPLE__)
-#define __TEST_TUPLE__ 0
-#endif
-
-#if __TEST_TUPLE__
-
-int main() {
-using t1 = xtd::tuple<int, short>;
-using t2 = t1::Append<char*>;
-DUMP(typeid(t2));
-XTD_ASSERT(typeid(t2) == typeid(xtd::tuple<int, short, char*>));
-using t3 = xtd::tuple<long, double>;
-using t4 = t3::Prepend<float>;
-DUMP(typeid(t4));
-XTD_ASSERT(typeid(t4) == typeid(xtd::tuple<float, long, double>));
-using t5 = t4::Append<t2>;
-DUMP(typeid(t5));
-XTD_ASSERT(typeid(t5) == typeid(xtd::tuple<float, long, double, int, short, char *>));
-
+///@}
 }
 
 
-#endif

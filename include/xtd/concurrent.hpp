@@ -7,11 +7,10 @@ shared declarations for the concurrent namespace
 
 namespace xtd{
 
-  /** @namespace xtd::concurrent
-  Declarations and definitions of the concurrent algorithms library
-  @defgroup Concurrent algorithms library
-  @{*/
+
   namespace concurrent{
+    /** @addtogroup Concurrent
+    @{*/
     ///Wait policy that does nothing. This is the default behavior.
     class null_wait_policy{
     public:
@@ -22,7 +21,7 @@ namespace xtd{
     public:
       FORCEINLINE void spin(){ std::this_thread::yield(); }
     };
-
+    ///@}
   }
-  ///@}
+  
 }

@@ -7,10 +7,8 @@ text parsing and AST generation
 
 namespace xtd{
 
-  /** @namespace xtd::parse
-  Declarations and definitions of the parse library
-  @defgroup Parsing Text parsing library
-  @{*/
+  /// @addtogroup Parsing
+  /// @{
   namespace parse{
 
 

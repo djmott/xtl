@@ -7,11 +7,9 @@ concurrently push and pop items in a FILO stack
 
 namespace xtd{
  
-  /** @namespace xtd::concurrent
-  Declarations and definitions of the concurrent algorithms library
-  @defgroup Concurrent algorithms library
-  @{*/
   namespace concurrent{
+    /** @addtogroup Concurrent
+    @{*/
     /** A lock-free LIFO stack
     multiple threads can push and pop items concurrently
     @tparam _ValueT type of value contained in the stack. Must be copy constructible.
@@ -51,6 +49,6 @@ namespace xtd{
       };
       std::atomic<node*> _Root;
     };
+    ///@}
   }
-  ///@}
 }
