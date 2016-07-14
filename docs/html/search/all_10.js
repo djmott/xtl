@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['sockets',['Sockets',['../md__src_github_xtl_docs_Sockets.html',1,'']]],
+  ['sockets',['Sockets',['../md__c_Dev_src_github_xtl_docs_Sockets.html',1,'']]],
   ['scope_5flock',['scope_lock',['../classxtd_1_1concurrent_1_1spin__lock__base_1_1scope__lock.html',1,'xtd::concurrent::spin_lock_base']]],
   ['scope_5fread',['scope_read',['../classxtd_1_1concurrent_1_1rw__lock__base_1_1scope__read.html',1,'xtd::concurrent::rw_lock_base']]],
   ['scope_5fwrite',['scope_write',['../classxtd_1_1concurrent_1_1rw__lock__base_1_1scope__write.html',1,'xtd::concurrent::rw_lock_base']]],
@@ -29,8 +29,8 @@ var searchData=
   ['split',['split',['../classxtd_1_1xstring.html#a786289874762957f2aff1e9b71e453d0',1,'xtd::xstring']]],
   ['stack',['stack',['../classxtd_1_1concurrent_1_1stack.html',1,'xtd::concurrent']]],
   ['stream',['stream',['../group___sockets.html#ggae915114a74e7914897fb179da82bd475af7b44cfafd5c52223d5498196c8a2e7b',1,'xtd::socket']]],
-  ['string',['string',['../group___parsing.html#classxtd_1_1parse_1_1string',1,'xtd::parse']]],
-  ['string',['STRING',['../group___parsing.html#ga6b587a2620e69f0a0168131a13f6c070',1,'parse.hpp']]],
+  ['string',['string',['../namespacextd_1_1parse.html#classxtd_1_1parse_1_1string',1,'xtd::parse']]],
+  ['string',['STRING',['../parse_8hpp.html#a6b587a2620e69f0a0168131a13f6c070',1,'parse.hpp']]],
   ['string_2ehpp',['string.hpp',['../string_8hpp.html',1,'']]],
-  ['string_5f',['STRING_',['../group___parsing.html#gaceb1bf67d55efcffb76fca49fd3b2a27',1,'parse.hpp']]]
+  ['string_5f',['STRING_',['../parse_8hpp.html#aceb1bf67d55efcffb76fca49fd3b2a27',1,'parse.hpp']]]
 ];

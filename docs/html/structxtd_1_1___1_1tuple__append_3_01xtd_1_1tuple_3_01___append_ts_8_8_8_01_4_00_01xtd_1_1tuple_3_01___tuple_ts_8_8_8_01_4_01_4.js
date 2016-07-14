@@ -1,4 +1,0 @@
-var structxtd_1_1___1_1tuple__append_3_01xtd_1_1tuple_3_01___append_ts_8_8_8_01_4_00_01xtd_1_1tuple_3_01___tuple_ts_8_8_8_01_4_01_4 =
-[
-    [ "tuple_type", "structxtd_1_1___1_1tuple__append_3_01xtd_1_1tuple_3_01___append_ts_8_8_8_01_4_00_01xtd_1_1tuple_3_01___tuple_ts_8_8_8_01_4_01_4.html#a41541e817d82070d0fe16f88deda5a88", null ]
-];

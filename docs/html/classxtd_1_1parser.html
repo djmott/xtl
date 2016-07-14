@@ -118,28 +118,94 @@ $(document).ready(function(){initNavTree('classxtd_1_1parser.html','');});
 <div class="title">xtd::parser&lt; _RuleT, _IgnoreCase, _WhitespaceT &gt; Class Template Reference<div class="ingroups"><a class="el" href="group___parsing.html">Text parsing and AST generation library</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Main parser class.  
+ <a href="classxtd_1_1parser.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::parser&lt; _RuleT, _IgnoreCase, _WhitespaceT &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classxtd_1_1parser__coll__graph.png" border="0" usemap="#xtd_1_1parser_3_01___rule_t_00_01___ignore_case_00_01___whitespace_t_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="xtd_1_1parser_3_01___rule_t_00_01___ignore_case_00_01___whitespace_t_01_4_coll__map" id="xtd_1_1parser_3_01___rule_t_00_01___ignore_case_00_01___whitespace_t_01_4_coll__map">
+</map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:gaf0a78e430f2a4fcbef82ed012366cdcf"><td class="memTemplParams" colspan="2">
-template&lt;typename _IteratorT &gt; </td></tr>
-<tr class="memitem:gaf0a78e430f2a4fcbef82ed012366cdcf"><td class="memTemplItemLeft" align="right" valign="top">static parse::rule_base::pointer_type&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse</b> (_IteratorT begin, _IteratorT end)</td></tr>
-<tr class="separator:gaf0a78e430f2a4fcbef82ed012366cdcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0a78e430f2a4fcbef82ed012366cdcf"><td class="memTemplParams" colspan="2">template&lt;typename _IteratorT &gt; </td></tr>
+<tr class="memitem:af0a78e430f2a4fcbef82ed012366cdcf"><td class="memTemplItemLeft" align="right" valign="top">static parse::rule_base::pointer_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1parser.html#af0a78e430f2a4fcbef82ed012366cdcf">parse</a> (_IteratorT begin, _IteratorT end)</td></tr>
+<tr class="memdesc:af0a78e430f2a4fcbef82ed012366cdcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses text.  <a href="#af0a78e430f2a4fcbef82ed012366cdcf">More...</a><br /></td></tr>
+<tr class="separator:af0a78e430f2a4fcbef82ed012366cdcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename _RuleT, bool _IgnoreCase = false, typename _WhitespaceT = xtd::parse::whitespace&lt;&gt;&gt;<br />
 class xtd::parser&lt; _RuleT, _IgnoreCase, _WhitespaceT &gt;</h3>
 
+<p>Main parser class. </p>
+<p>The <a class="el" href="classxtd_1_1parser.html" title="Main parser class. ">xtd::parser</a> is used to perform the parse and return a constructed AST if the parse succeeds </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">_RuleT</td><td>The start rule of the grammar </td></tr>
+    <tr><td class="paramname">_IgnoreCase</td><td>Specifies whether case should be ignored during the parse </td></tr>
+    <tr><td class="paramname">_WhitespaceT</td><td>A specialization of <a class="el" href="namespacextd_1_1parse.html#classxtd_1_1parse_1_1whitespace" title="list of whitespace characters to ignore in the input stream. ">xtd::parse::whitespace</a> that specifies the characters to ignore </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="parse_8hpp_source.html#l00515">515</a> of file <a class="el" href="parse_8hpp_source.html">parse.hpp</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p>Definition at line <a class="el" href="parse_8hpp_source.html#l00522">522</a> of file <a class="el" href="parse_8hpp_source.html">parse.hpp</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="af0a78e430f2a4fcbef82ed012366cdcf"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _RuleT , bool _IgnoreCase = false, typename _WhitespaceT  = xtd::parse::whitespace&lt;&gt;&gt; </div>
+<div class="memtemplate">
+template&lt;typename _IteratorT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static parse::rule_base::pointer_type <a class="el" href="classxtd_1_1parser.html">xtd::parser</a>&lt; _RuleT, _IgnoreCase, _WhitespaceT &gt;::parse </td>
+          <td>(</td>
+          <td class="paramtype">_IteratorT&#160;</td>
+          <td class="paramname"><em>begin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_IteratorT&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parses text. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">begin</td><td>the beginning iterator of the text to parse </td></tr>
+    <tr><td class="paramname">end</td><td>the end iterator of the text to parse </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a fully constructed AST of type _RuleT if the parse succeeds or a nullptr if failed </dd></dl>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_parse1_8cpp-example.html#a3">example_parse1.cpp</a>, and <a class="el" href="example_parse2_8cpp-example.html#a4">example_parse2.cpp</a>.</dd>
+</dl>
+<p>Definition at line <a class="el" href="parse_8hpp_source.html#l00530">530</a> of file <a class="el" href="parse_8hpp_source.html">parse.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="parse_8hpp_source.html">parse.hpp</a></li>
 </ul>
 </div><!-- contents -->
@@ -149,7 +215,7 @@ class xtd::parser&lt; _RuleT, _IgnoreCase, _WhitespaceT &gt;</h3>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><a class="el" href="classxtd_1_1parser.html">parser</a></li>
-    <li class="footer">Generated on Mon Jul 11 2016 23:06:06 for XTL by
+    <li class="footer">Generated on Thu Jul 14 2016 06:07:40 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

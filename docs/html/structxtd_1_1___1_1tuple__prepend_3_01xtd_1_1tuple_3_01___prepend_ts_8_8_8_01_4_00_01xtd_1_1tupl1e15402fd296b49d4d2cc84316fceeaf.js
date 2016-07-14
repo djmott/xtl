@@ -1,4 +1,0 @@
-var structxtd_1_1___1_1tuple__prepend_3_01xtd_1_1tuple_3_01___prepend_ts_8_8_8_01_4_00_01xtd_1_1tupl1e15402fd296b49d4d2cc84316fceeaf =
-[
-    [ "tuple_type", "structxtd_1_1___1_1tuple__prepend_3_01xtd_1_1tuple_3_01___prepend_ts_8_8_8_01_4_00_01xtd_1_1tupl1e15402fd296b49d4d2cc84316fceeaf.html#a22761206a73aa95fc5c6ba23e73b21cb", null ]
-];

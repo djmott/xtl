@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['template_20meta_2dprogramming',['Template Meta-Programming',['../md__src_github_xtl_docs_Template-Meta-Programming.html',1,'']]],
-  ['tmp_20techniques',['TMP Techniques',['../md__src_github_xtl_docs_TMP-Techniques.html',1,'']]],
+  ['template_20basics',['Template Basics',['../md__c_Dev_src_github_xtl_docs_Template-Basics.html',1,'']]],
+  ['tmp_20techniques',['TMP Techniques',['../md__c_Dev_src_github_xtl_docs_TMP-Techniques.html',1,'']]],
   ['text_20parsing_20and_20ast_20generation_20library',['Text parsing and AST generation library',['../group___parsing.html',1,'']]],
   ['tcp',['tcp',['../group___sockets.html#gga01b72313c52c174d6fd373b0d3498b47ae20bb202b1d5537b1415e3263a37ed78',1,'xtd::socket']]],
   ['tcp_5foptions',['tcp_options',['../classxtd_1_1socket_1_1tcp__options.html',1,'xtd::socket']]],
@@ -17,5 +17,5 @@ var searchData=
   ['tuple_3c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_20_3e',['tuple&lt; _HeadT, _TailT... &gt;',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html',1,'xtd']]],
   ['tuple_3c_20_5ftailt_2e_2e_2e_20_3e',['tuple&lt; _TailT... &gt;',['../namespacextd.html',1,'xtd']]],
   ['tuple_3c_3e',['tuple&lt;&gt;',['../classxtd_1_1tuple_3_4.html',1,'xtd']]],
-  ['type',['type',['../group___parsing.html#gae9fe51a7f8083be369f8e7e5f55e34ca',1,'xtd::parse::rule_base::type()'],['../group___parsing.html#ga2bd8cfec1966022c3b2e699f7e31ec23',1,'xtd::parse::rule::type()']]]
+  ['type',['type',['../classxtd_1_1parse_1_1rule__base.html#ae9fe51a7f8083be369f8e7e5f55e34ca',1,'xtd::parse::rule_base::type()'],['../classxtd_1_1parse_1_1rule.html#a2bd8cfec1966022c3b2e699f7e31ec23',1,'xtd::parse::rule::type()']]]
 ];

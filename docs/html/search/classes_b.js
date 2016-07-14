@@ -12,6 +12,5 @@ var searchData=
   ['marshaler_5fbase_3c_20_5fty_28_26_29_5b_5flen_5d_20_3e',['marshaler_base&lt; _Ty(&amp;)[_Len] &gt;',['../classxtd_1_1rpc_1_1marshaler__base_3_01___ty_07_6_08[___len]_01_4.html',1,'xtd::rpc']]],
   ['marshaler_5fbase_3c_20std_3a_3astring_20_3e',['marshaler_base&lt; std::string &gt;',['../classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1string_01_4.html',1,'xtd::rpc']]],
   ['marshaler_5fbase_3c_20std_3a_3avector_3c_20_5fty_20_3e_20_3e',['marshaler_base&lt; std::vector&lt; _Ty &gt; &gt;',['../classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1vector_3_01___ty_01_4_01_4.html',1,'xtd::rpc']]],
-  ['marshaler_5fbase_3c_3e',['marshaler_base&lt;&gt;',['../classxtd_1_1rpc_1_1marshaler__base_3_4.html',1,'xtd::rpc']]],
-  ['mask',['Mask',['../classxtd_1_1_mask.html',1,'xtd']]]
+  ['marshaler_5fbase_3c_3e',['marshaler_base&lt;&gt;',['../classxtd_1_1rpc_1_1marshaler__base_3_4.html',1,'xtd::rpc']]]
 ];

@@ -20,5 +20,5 @@ var searchData=
   ['source_5flocation',['source_location',['../classxtd_1_1source__location.html',1,'xtd']]],
   ['spin_5flock_5fbase',['spin_lock_base',['../classxtd_1_1concurrent_1_1spin__lock__base.html',1,'xtd::concurrent']]],
   ['stack',['stack',['../classxtd_1_1concurrent_1_1stack.html',1,'xtd::concurrent']]],
-  ['string',['string',['../group___parsing.html#classxtd_1_1parse_1_1string',1,'xtd::parse']]]
+  ['string',['string',['../namespacextd_1_1parse.html#classxtd_1_1parse_1_1string',1,'xtd::parse']]]
 ];

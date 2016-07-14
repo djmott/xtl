@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['parsing',['Parsing',['../md__src_github_xtl_docs_Parsing.html',1,'']]],
+  ['parsing',['Parsing',['../md__c_Dev_src_github_xtl_docs_Parsing.html',1,'']]],
+  ['parse',['parse',['../classxtd_1_1parser.html#af0a78e430f2a4fcbef82ed012366cdcf',1,'xtd::parser']]],
   ['parse_2ehpp',['parse.hpp',['../parse_8hpp.html',1,'']]],
   ['parser',['parser',['../classxtd_1_1parser.html',1,'xtd']]],
   ['path',['path',['../classxtd_1_1path.html',1,'xtd']]],

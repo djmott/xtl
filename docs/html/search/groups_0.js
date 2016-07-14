@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['concurrent_20algorithms_20library',['Concurrent algorithms library',['../group___concurrent.html',1,'']]]
+  ['annotation_20and_20documentation_20to_20clarify_20intent_20of_20code',['Annotation and documentation to clarify intent of code',['../group___annotation.html',1,'']]]
 ];

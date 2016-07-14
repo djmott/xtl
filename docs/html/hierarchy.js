@@ -11,7 +11,7 @@ var hierarchy =
       [ "xtd::socket::tcp_options< _SuperT >", "classxtd_1_1socket_1_1tcp__options.html", null ],
       [ "xtd::socket::udp_options< _SuperT >", "classxtd_1_1socket_1_1udp__options.html", null ]
     ] ],
-    [ "xtd::parse::and_<... >", "group___parsing.html#classxtd_1_1parse_1_1and__", null ],
+    [ "xtd::parse::and_<... >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1and__", null ],
     [ "atomic", null, [
       [ "xtd::concurrent::rw_lock_base< _WaitPolicyT >", "classxtd_1_1concurrent_1_1rw__lock__base.html", null ],
       [ "xtd::concurrent::spin_lock_base< _WaitPolicyT >", "classxtd_1_1concurrent_1_1spin__lock__base.html", null ]
@@ -23,12 +23,8 @@ var hierarchy =
       ] ],
       [ "xtd::xstring< _ChT >", "classxtd_1_1xstring.html", null ]
     ] ],
-    [ "xtd::BitsPer< _Ty >", "classxtd_1_1_bits_per.html", null ],
     [ "xtd::ByteToChar< _ChT, _val >", "classxtd_1_1_byte_to_char.html", null ],
-    [ "xtd::callback< _FnSig >", "namespacextd.html#classxtd_1_1callback", null ],
     [ "xtd::callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", null ],
-    [ "xtd::callback< void()>", "namespacextd.html#namespacextd", null ],
-    [ "xtd::callback< void(_Args...) >", "classxtd_1_1callback_3_01void_07___args_8_8_8_08_01_4.html", null ],
     [ "xtd::rpc::client< _TransportT, _Calls >", "classxtd_1_1rpc_1_1client.html", null ],
     [ "xtd::rpc::client< _TransportT >", "classxtd_1_1rpc_1_1client_3_01___transport_t_01_4.html", null ],
     [ "xtd::rpc::client< _TransportT, _TailT... >", "classxtd_1_1rpc_1_1client.html", [
@@ -84,15 +80,14 @@ var hierarchy =
     [ "xtd::rpc::marshaler_base< std::string >", "classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1string_01_4.html", null ],
     [ "xtd::rpc::marshaler_base< std::vector< _Ty > >", "classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1vector_3_01___ty_01_4_01_4.html", null ],
     [ "xtd::rpc::marshaler_base<>", "classxtd_1_1rpc_1_1marshaler__base_3_4.html", null ],
-    [ "xtd::Mask", "classxtd_1_1_mask.html", null ],
     [ "xtd::nibble_hex_char< _ChT, _ChT >", "namespacextd.html#classxtd_1_1nibble__hex__char", null ],
     [ "xtd::concurrent::stack< _ValueT >::node", "classxtd_1_1concurrent_1_1stack_1_1node.html", null ],
     [ "xtd::rpc::null_transport", "classxtd_1_1rpc_1_1null__transport.html", null ],
     [ "xtd::concurrent::null_wait_policy", "classxtd_1_1concurrent_1_1null__wait__policy.html", null ],
-    [ "xtd::parse::or_<... >", "group___parsing.html#classxtd_1_1parse_1_1or__", null ],
+    [ "xtd::parse::or_<... >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1or__", null ],
     [ "xtd::parser< _RuleT, _IgnoreCase, _WhitespaceT >", "classxtd_1_1parser.html", null ],
     [ "xtd::process", "namespacextd.html#classxtd_1_1process", null ],
-    [ "xtd::parse::regex< _Ty, >", "group___parsing.html#classxtd_1_1parse_1_1regex", null ],
+    [ "xtd::parse::regex< _Ty, >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1regex", null ],
     [ "xtd::rpc::rpc_call< _DeclT, _CallT >", "classxtd_1_1rpc_1_1rpc__call.html", null ],
     [ "xtd::rpc::rpc_call< _DeclT, _ReturnT(_ArgTs...)>", "classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4.html", null ],
     [ "xtd::parse::rule_base", "classxtd_1_1parse_1_1rule__base.html", [
@@ -133,7 +128,7 @@ var hierarchy =
     [ "xtd::socket::socket_base< _AddressT, _SocketT, _Protocol >", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html", null ],
     [ "xtd::source_location", "classxtd_1_1source__location.html", null ],
     [ "xtd::concurrent::stack< _ValueT >", "classxtd_1_1concurrent_1_1stack.html", null ],
-    [ "xtd::parse::string< _Ty, >", "group___parsing.html#classxtd_1_1parse_1_1string", null ],
+    [ "xtd::parse::string< _Ty, >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1string", null ],
     [ "xtd::rpc::tcp_transport", "classxtd_1_1rpc_1_1tcp__transport.html", null ],
     [ "true_type", null, [
       [ "xtd::is_a< _Ty, _Ty, _TailT... >", "classxtd_1_1is__a_3_01___ty_00_01___ty_00_01___tail_t_8_8_8_01_4.html", null ]
@@ -147,7 +142,7 @@ var hierarchy =
     [ "std::vector< T >", null, [
       [ "xtd::rpc::payload", "classxtd_1_1rpc_1_1payload.html", null ]
     ] ],
-    [ "xtd::parse::whitespace< _Ch >", "group___parsing.html#classxtd_1_1parse_1_1whitespace", null ],
+    [ "xtd::parse::whitespace< _Ch >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1whitespace", null ],
     [ "xtd::concurrent::yield_wait_policy", "classxtd_1_1concurrent_1_1yield__wait__policy.html", null ],
     [ "uint8_t", "classuint8__t.html", null ]
 ];

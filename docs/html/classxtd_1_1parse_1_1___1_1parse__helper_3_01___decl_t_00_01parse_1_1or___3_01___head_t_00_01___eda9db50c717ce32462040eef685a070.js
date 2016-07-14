@@ -1,4 +1,0 @@
-var classxtd_1_1parse_1_1___1_1parse__helper_3_01___decl_t_00_01parse_1_1or___3_01___head_t_00_01___eda9db50c717ce32462040eef685a070 =
-[
-    [ "parse", "classxtd_1_1parse_1_1___1_1parse__helper_3_01___decl_t_00_01parse_1_1or___3_01___head_t_00_01___eda9db50c717ce32462040eef685a070.html#a01e3252c8adad36e99dd37bcf403d74f", null ]
-];

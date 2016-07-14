@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['socket_5fprotocol',['socket_protocol',['../group___sockets.html#ga01b72313c52c174d6fd373b0d3498b47',1,'xtd::socket']]],
-  ['socket_5ftype',['socket_type',['../group___sockets.html#gae915114a74e7914897fb179da82bd475',1,'xtd::socket']]]
+  ['result_5fpolicy',['result_policy',['../classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#aa38858e82c55d05ceffbf363ac9fe4dc',1,'xtd::callback&lt; _ReturnT(_Args...) &gt;']]]
 ];

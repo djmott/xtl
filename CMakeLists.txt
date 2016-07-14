@@ -152,6 +152,7 @@ if(DOXYGEN_FOUND)
     COMMENT "Generating Doxygen API Documentation" VERBATIM
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs"
   )
+  file(REMOVE_RECURSE *.md5 *.map)
 endif()
 
 

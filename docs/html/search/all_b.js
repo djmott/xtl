@@ -13,6 +13,5 @@ var searchData=
   ['marshaler_5fbase_3c_20std_3a_3astring_20_3e',['marshaler_base&lt; std::string &gt;',['../classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1string_01_4.html',1,'xtd::rpc']]],
   ['marshaler_5fbase_3c_20std_3a_3avector_3c_20_5fty_20_3e_20_3e',['marshaler_base&lt; std::vector&lt; _Ty &gt; &gt;',['../classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1vector_3_01___ty_01_4_01_4.html',1,'xtd::rpc']]],
   ['marshaler_5fbase_3c_3e',['marshaler_base&lt;&gt;',['../classxtd_1_1rpc_1_1marshaler__base_3_4.html',1,'xtd::rpc']]],
-  ['mask',['Mask',['../classxtd_1_1_mask.html',1,'xtd']]],
   ['meta_2ehpp',['meta.hpp',['../meta_8hpp.html',1,'']]]
 ];

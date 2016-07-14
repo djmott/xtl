@@ -1,16 +1,13 @@
 var files =
 [
     [ "callback.hpp", "callback_8hpp.html", [
-      [ "callback", "namespacextd.html#classxtd_1_1callback", null ],
-      [ "callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ],
-      [ "callback< void(_Args...) >", "classxtd_1_1callback_3_01void_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01void_07___args_8_8_8_08_01_4" ]
+      [ "callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ]
     ] ],
     [ "concurrent.hpp", "concurrent_8hpp.html", null ],
     [ "concurrent_hash_map.hpp", "concurrent__hash__map_8hpp.html", null ],
     [ "concurrent_stack.hpp", "concurrent__stack_8hpp.html", [
       [ "node", "classxtd_1_1concurrent_1_1stack_1_1node.html", null ]
     ] ],
-    [ "data_convert.hpp", "data__convert_8hpp.html", "data__convert_8hpp" ],
     [ "debug.hpp", "debug_8hpp.html", "debug_8hpp" ],
     [ "dynamic_library.hpp", "dynamic__library_8hpp.html", [
       [ "dynamic_library", "classxtd_1_1dynamic__library.html", "classxtd_1_1dynamic__library" ],

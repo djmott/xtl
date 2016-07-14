@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['regex',['regex',['../group___parsing.html#classxtd_1_1parse_1_1regex',1,'xtd::parse']]],
+  ['regex',['regex',['../namespacextd_1_1parse.html#classxtd_1_1parse_1_1regex',1,'xtd::parse']]],
   ['rpc_5fcall',['rpc_call',['../classxtd_1_1rpc_1_1rpc__call.html',1,'xtd::rpc']]],
   ['rpc_5fcall_3c_20_5fdeclt_2c_20_5freturnt_28_5fargts_2e_2e_2e_29_3e',['rpc_call&lt; _DeclT, _ReturnT(_ArgTs...)&gt;',['../classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4.html',1,'xtd::rpc']]],
   ['rule',['rule',['../classxtd_1_1parse_1_1rule.html',1,'xtd::parse']]],

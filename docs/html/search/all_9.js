@@ -18,6 +18,6 @@ var searchData=
   ['is_5fa_3c_20_5fty_2c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_20_3e',['is_a&lt; _Ty, _HeadT, _TailT... &gt;',['../classxtd_1_1is__a_3_01___ty_00_01___head_t_00_01___tail_t_8_8_8_01_4.html',1,'xtd']]],
   ['is_5fa_3c_20_5fty_2c_20_5ftailt_2e_2e_2e_20_3e',['is_a&lt; _Ty, _TailT... &gt;',['../namespacextd.html',1,'xtd']]],
   ['is_5fa_3c_20_5fty_2c_20_5fty_2c_20_5ftailt_2e_2e_2e_20_3e',['is_a&lt; _Ty, _Ty, _TailT... &gt;',['../classxtd_1_1is__a_3_01___ty_00_01___ty_00_01___tail_t_8_8_8_01_4.html',1,'xtd']]],
-  ['isa',['isa',['../group___parsing.html#ga6ef80d7c5ffbe85ce0c1b7516ae6a150',1,'xtd::parse::rule_base::isa()'],['../group___parsing.html#gaa15f8e0d3d6bc55dc47c173486bca0e3',1,'xtd::parse::rule::isa()']]],
-  ['items',['items',['../group___parsing.html#gaa7700079852b8c54ffb87d4e35d2eacd',1,'xtd::parse::rule_base']]]
+  ['isa',['isa',['../classxtd_1_1parse_1_1rule__base.html#a6ef80d7c5ffbe85ce0c1b7516ae6a150',1,'xtd::parse::rule_base::isa()'],['../classxtd_1_1parse_1_1rule.html#aa15f8e0d3d6bc55dc47c173486bca0e3',1,'xtd::parse::rule::isa()']]],
+  ['items',['items',['../classxtd_1_1parse_1_1rule__base.html#aa7700079852b8c54ffb87d4e35d2eacd',1,'xtd::parse::rule_base']]]
 ];

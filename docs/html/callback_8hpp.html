@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('callback_8hpp.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Single producer notifies multiple receivers of an event.  
+<p>Single producer - multiple subscriber callback.  
 <a href="#details">More...</a></p>
 <div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
@@ -137,13 +137,8 @@ $(document).ready(function(){initNavTree('callback_8hpp.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:classxtd_1_1callback"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacextd.html#classxtd_1_1callback">xtd::callback&lt; _FnSig &gt;</a></td></tr>
-<tr class="separator:classxtd_1_1callback"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html">xtd::callback&lt; _ReturnT(_Args...) &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialization for a callback that has a return value This specialization should used with care when multiple receivers are attached because only a single return value is appropriate.  <a href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01void_07___args_8_8_8_08_01_4.html">xtd::callback&lt; void(_Args...) &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialziation for a callback with a void return value.  <a href="classxtd_1_1callback_3_01void_07___args_8_8_8_08_01_4.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies multiple targets of an event.  <a href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -153,60 +148,18 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Single producer notifies multiple receivers of an event. </p>
-<p>Callbacks are performed serially and the order is undefined when multiple receivers are attached </p><dl class="section copyright"><dt>Copyright</dt><dd>David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See <a class="el" href="_l_i_c_e_n_s_e_8md_source.html">LICENSE.md</a> or <a href="http://boost.org/LICENSE_1_0.txt">http://boost.org/LICENSE_1_0.txt</a> for details. </dd></dl>
+<div class="textblock"><p>Single producer - multiple subscriber callback. </p>
+<dl class="section copyright"><dt>Copyright</dt><dd>David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See <a class="el" href="_l_i_c_e_n_s_e_8md_source.html">LICENSE.md</a> or <a href="http://boost.org/LICENSE_1_0.txt">http://boost.org/LICENSE_1_0.txt</a> for details. </dd></dl>
 
 <p>Definition in file <a class="el" href="callback_8hpp_source.html">callback.hpp</a>.</p>
-</div><hr/><h2 class="groupheader">Data Structure Documentation</h2>
-<a name="classxtd_1_1callback" id="classxtd_1_1callback"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">class xtd::callback</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="textblock"><h3>template&lt;typename _FnSig&gt;<br />
-class xtd::callback&lt; _FnSig &gt;</h3>
-
-<p>Generic callback declaration </p><dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">_FnSig</td><td>Function signature of the callback. Attached receivers must match the signature. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_callback_8cpp-example.html#_a0">example_callback.cpp</a>.</dd>
-</dl>
-<p>Definition at line <a class="el" href="callback_8hpp_source.html#l00014">14</a> of file <a class="el" href="callback_8hpp_source.html">callback.hpp</a>.</p>
-</div><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Inheritance diagram for xtd::callback&lt; _FnSig &gt;:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classxtd_1_1callback__inherit__graph.png" border="0" usemap="#xtd_1_1callback_3_01___fn_sig_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="xtd_1_1callback_3_01___fn_sig_01_4_inherit__map" id="xtd_1_1callback_3_01___fn_sig_01_4_inherit__map">
-<area shape="rect" id="node2" href="namespacextd.html#namespacextd" title="{xtd::callback\&lt; void()\&gt;\n||}" alt="" coords="13,145,159,223"/>
-</map>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::callback&lt; _FnSig &gt;:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classxtd_1_1callback__coll__graph.png" border="0" usemap="#xtd_1_1callback_3_01___fn_sig_01_4_coll__map" alt="Collaboration graph"/></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.11-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="callback_8hpp.html">callback.hpp</a></li>
-    <li class="footer">Generated on Mon Jul 11 2016 23:06:04 for XTL by
+    <li class="footer">Generated on Thu Jul 14 2016 06:07:38 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>
