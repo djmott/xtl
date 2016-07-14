@@ -72,7 +72,6 @@ TEST(test_var, is_pod){
   struct s2 : s1{
     double d;
     s2() : s1(), d(0.0) {}
-    virtual void Snafoo(){ i *= c; }
   };
   s2 oS2;
   v1 = oS2;

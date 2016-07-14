@@ -64,7 +64,7 @@ add_library(XTL STATIC src/xtl.cpp
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(XTL PUBLIC -std=c++11)
+  target_compile_options(XTL PUBLIC -std=c++11 -Wall -Wextra)
 endif()
 
 link_libraries(XTL)
