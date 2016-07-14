@@ -22,7 +22,7 @@ namespace xtd{
     unique_id(const unique_id& src){
       uuid_copy(_uuid, src._uuid);
     }
-    unique_id(const uuid_t& src){
+    explicit unique_id(const uuid_t& src){
       uuid_copy(_uuid, src);
     }
     unique_id& operator=(const unique_id& src){

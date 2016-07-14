@@ -189,8 +189,8 @@ namespace xtd{
 
       value_type * _begin(int8_t * pKey) const{
         child_bucket_type* pChildBucket;
-        value_type * pRet;
         for (*pKey = 0; *pKey < nibble_count; ++*pKey){
+          value_type * pRet;
           if ((pChildBucket = _Buckets[*pKey].load()) && (pRet = pChildBucket->_begin(1 + pKey))){
             return pRet;
           }
@@ -199,8 +199,8 @@ namespace xtd{
       }
       value_type * _back(int8_t * pKey) const{
         child_bucket_type* pChildBucket;
-        value_type * pRet;
         for (*pKey = nibble_count-1; *pKey >= 0; --*pKey){
+          value_type * pRet;
           if ((pChildBucket = _Buckets[*pKey].load()) && (pRet = pChildBucket->_back(1 + pKey))){
             return pRet;
           }
@@ -209,11 +209,11 @@ namespace xtd{
       }
       value_type * _next(int8_t * pKey) const{
         child_bucket_type* pChildBucket;
-        value_type * pRet;
         if (*pKey < 0 || *pKey >= nibble_count){
           *pKey = 0;
         }
         for (; *pKey < nibble_count; ++*pKey){
+          value_type * pRet;
           if ((pChildBucket = _Buckets[*pKey].load()) && (pRet = pChildBucket->_next(1 + pKey))){
             return pRet;
           }
@@ -223,11 +223,11 @@ namespace xtd{
       }
       value_type * _prev(int8_t * pKey) const{
         child_bucket_type* pChildBucket;
-        value_type * pRet;
         if (*pKey < 0 || *pKey >= nibble_count){
           *pKey = nibble_count - 1;
         }
         for (; *pKey >= 0; --*pKey){
+          value_type * pRet;
           if ((pChildBucket = _Buckets[*pKey].load()) && (pRet = pChildBucket->_prev(1 + pKey))){
             return pRet;
           }
@@ -306,8 +306,8 @@ namespace xtd{
       std::atomic<value_type*> _Values[nibble_count];
 
       value_type * _begin(int8_t * pKey) const{
-        value_type * pRet;
         for (*pKey = 0; *pKey < nibble_count; ++*pKey){
+          value_type * pRet;
           if ((pRet = _Values[*pKey].load())){
             return pRet;
           }
@@ -315,8 +315,8 @@ namespace xtd{
         return nullptr;
       }
       value_type * _back(int8_t * pKey) const{
-        value_type * pRet;
         for (*pKey = nibble_count - 1; *pKey >= 0; --*pKey){
+          value_type * pRet;
           if ((pRet = _Values[*pKey].load())){
             return pRet;
           }
@@ -325,11 +325,11 @@ namespace xtd{
       }
 
       value_type * _next(int8_t * pKey) const{
-        value_type * pRet;
         if (*pKey < 0 || *pKey >= nibble_count){
           *pKey = 0;
         }
         for (; *pKey < nibble_count; ++*pKey){
+          value_type * pRet;
           if ((pRet = _Values[*pKey].load())){
             return pRet;
           }
@@ -339,11 +339,11 @@ namespace xtd{
       }
 
       value_type * _prev(int8_t * pKey) const{
-        value_type * pRet;
         if (*pKey < 0 || *pKey >= nibble_count){
           *pKey = nibble_count - 1;
         }
         for (; *pKey >= 0; --*pKey){
+          value_type * pRet;
           if ((pRet = _Values[*pKey].load())){
             return pRet;
           }

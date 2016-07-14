@@ -69,7 +69,7 @@ namespace xtd{
       class scope_read{
         rw_lock_base& _Lock;
       public:
-        scope_read(rw_lock_base& oLock) : _Lock(oLock){
+        explicit scope_read(rw_lock_base& oLock) : _Lock(oLock){
           _Lock.lock_read();
         }
         ~scope_read(){
@@ -80,7 +80,7 @@ namespace xtd{
       class scope_write{
         rw_lock_base& _Lock;
       public:
-        scope_write(rw_lock_base& oLock) : _Lock(oLock){
+        explicit scope_write(rw_lock_base& oLock) : _Lock(oLock){
           _Lock.lock_write();
         }
         ~scope_write(){

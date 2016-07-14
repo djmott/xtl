@@ -32,8 +32,6 @@ namespace xtd{
       }
       stack& operator=(stack&& src){
         if (&src == this) return *this;
-        node * pNull = nullptr;
-        node * pSrcRoot;
         std::swap(_Root, src._Root);
 
       }
