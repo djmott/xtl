@@ -99,3 +99,8 @@ the project, add some code and submit a [pull request](https://github.com/djmott
 ### License
 
 XTL is copyright by David Mott and licensed under the Boost Version 1.0 license agreement. See [LICENSE.md](LICENSE.md) or [http://www.boost.org/LICENSE_1_0.txt](http://www.boost.org/LICENSE_1_0.txt) for license details. 
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/djmott/xtl/badge.svg?style=beer-square)](https://beerpay.io/djmott/xtl)  [![Beerpay](https://beerpay.io/djmott/xtl/make-wish.svg?style=flat-square)](https://beerpay.io/djmott/xtl?focus=wish)
