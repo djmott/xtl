@@ -1,23 +1,25 @@
 /** @file
-Single producer notifies multiple receivers of an event. Callbacks are performed serially and the order is undefined when multiple receivers are attached
+Single producer - multiple subscriber callback
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
- @example example_callback.cpp
+@example example_callback.cpp
 */
 
 #pragma once
 
 namespace xtd{
-  /** @{
-  Generic callback declaration
-  @tparam _FnSig Function signature of the callback. Attached receivers must match the signature.
-  */
+#if (!DOXY_INVOKED)
   template <typename _FnSig> class callback;
+#endif 
+  /** Notifies multiple targets of an event
 
-  /** Specialization for a callback that has a return value
-  This specialization should used with care when multiple receivers are attached because only a single return value is appropriate.
-  @tparam _ReturnT the return type
-  @tparam ... variadic list of arguments
-   */
+  The callbacks are performed serially within the invoking thread. Receivers can be static functions, member functions or lambdas.
+  Callbacks with a return value can be invoked with a policy describing which receiver contains the return value of interest.
+  The template is parameterized with a function signature that defines the invocation and attached receivers must match the signature 
+  or all parameters must be implicitly convertible from the signature's parameters.
+
+  @tparam _ReturnT return type
+  @tparam ... parameters
+  */
   template <typename _ReturnT, typename ... _Args> class callback < _ReturnT(_Args...) >{
     class invoker{
     public:
@@ -65,46 +67,63 @@ namespace xtd{
     typename invoker::vector _Invokers;
 
   public:
-
+    /// behavior of invocation when multiple receivers are attached 
     enum result_policy{
-      return_first,
-      return_last
+      return_first, ///< return the result of the first attached target
+      return_last ///< return the result of the last attached target
     };
-
-    ~callback() = default;
+    ///{@
     callback() = default;
-    callback(const callback&) = delete;
     callback(callback&& src) : _Invokers(std::move(src._Invokers)){}
+    callback(const callback&) = delete;
+    ///@}
+    ~callback() = default;
     callback& operator=(const callback&) = delete;
-
+    /// Invokes all the attached targets and returns the result of the target as specified by the result policy
     _ReturnT operator()(result_policy result, _Args...oArgs) const{
       _ReturnT oRet;
       typename invoker::vector::size_type i = 0;
-      for (const auto & oInvoker : _Invokers) {
-        if ((result_policy::first == result && 0==i) || (result_policy::last == result && (_Invokers.size()-1) == i)) {
+      for (const auto & oInvoker : _Invokers){
+        if ((result_policy::first == result && 0 == i) || (result_policy::last == result && (_Invokers.size() - 1) == i)){
           oRet = oInvoker->invoke(std::forward<_Args>(oArgs)...);
-        }else{
+        } else{
           oInvoker->invoke(oArgs...);
         }
         ++i;
       }
       return oRet;
     }
+    //invokes all the attached targets and returns the result of the last target
+    _ReturnT operator()(_Args...oArgs) const{
+      _ReturnT oRet;
+      typename invoker::vector::size_type i = 0;
+      for (const auto & oInvoker : _Invokers){
+        oRet = oInvoker->invoke(oArgs...);
+      }
+      return oRet;
+    }
 
+    /// connect a class instance and member function
     template <typename _ClassT, _ReturnT(_ClassT::*_MemberT)(_Args...)>
     void connect(_ClassT *pClass){ _Invokers.emplace_back(new member_invoker<_ClassT, _MemberT>(pClass)); }
 
+    /// connect a lambda 
     template <typename method>
     void connect(method oMethod){ _Invokers.emplace_back(new lamdba_invoker< method >(oMethod)); }
 
+    /// connect a static method
     template <_ReturnT(*method)(_Args...)>
     void connect(){ _Invokers.emplace_back(new method_invoker<_ReturnT(_Args...), method>()); }
 
+    /// connect a static method or lambda 
+
+    template <typename _Ty>
+    callback& operator += (_Ty&& addend){ connect(std::forward<_Ty>(addend)); return *this; }
+
   };
 
-  /** Specialziation for a callback with a void return value
-  @tparam ... variadic list of arguments
-  */
+ 
+#if (!DOXY_INVOKED)
   template <typename ... _Args> class callback < void(_Args...) >{
 
     using _ReturnT = void;
@@ -182,5 +201,5 @@ namespace xtd{
 
 
   };
-  ///@}
+#endif
 }

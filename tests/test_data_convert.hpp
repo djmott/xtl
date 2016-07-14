@@ -7,7 +7,7 @@ data conversion functions and meta functions system and unit tests
 
 
 TEST(test_data_convert, lonibble){
-  ASSERT_EQ(0x1, xtd::lonibble(0x21));
+  ASSERT_EQ(0x1, xtd::mask<uint8_t>::lonibble(0x21));
 }
 TEST(test_data_convert, hinibble){
   ASSERT_EQ(0x2, xtd::hinibble(0x21));

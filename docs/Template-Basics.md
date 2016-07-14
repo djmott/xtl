@@ -1,5 +1,7 @@
-Template Meta-Programming
-=========================
+Template Basics
+===============
+Preface
+-------
 The progression of modern C++ can be described as evolving through two distinct paradigms. First from the legacy C to object-oriented C++ with classes. The modern paradigm can be described as a shift toward [Template Meta Programming](https://en.wikipedia.org/wiki/Template_metaprogramming).
 
 Meta-Programming differs from conventional programming in a number of ways.  A prominent distinction is that meta-programming is more accurately programming the compiler how and what to compile rather than programming a processor what to execute. Meta-programming closely interacts with the compiler typically before machine code is generated. It is close interaction with the compiler that makes meta-programming the preferential platform of generic library developers.
@@ -106,12 +108,13 @@ template <typename _Ty, size_t _Dims> struct StaticArray{
 Here the template engine performs the division and comparison at compile time and stores the result in the static constant. This consumes no clock cycles at run-time to calculate. Integral types can be calculated with ease by the template engine and leveraged in various ways to achieve significant run-time performance improvements. This is the name of the game with TMP: interacting with the compiler to generate, pre-compute and pre-compile as much as possible to reduce run-time overhead and reduce the volume of maintainable code. 
 Specialization
 --------------
-The generic form of a template is declared with the following convention:
+The generic form of a function template is declared with the following convention:
 
-|                 |keyword   |input params   |type       | name        |
-|----------------:|:--------:|:-------------:|:---------:|:-----------:|
-|function template|`template`|`<int _Factor>`|   `int`   |`fnTemplate` |
-|class template   |`template`|`<int _Factor>`|   `struct`|`CTemplate`  |
+[![Function Template Declaration](images/FunctionTemplateDeclaration.png)]
+
+A class template is almost identical:
+
+[![Class Template Declaration](images/ClassTemplateDeclaration.png)]
 
 
 The input parameters on the generic form appear on the left-hand-side of the template name.
@@ -122,28 +125,30 @@ template <int _Factor> int Factoral(){
   return _Factor * Factoral<_Factor - 1>();
 }
 ~~~
-This is a meta-function that calculates `value` at compile time by recursively multiplying the value of the `_Factor` parameter by `_Factor-1`. At first glance this may seem correct, however, there's at least two problems with it. First, at some point during the recursive calculation the value of _Factor will reach zero and invalidate the computation (anything multiplied by zero is zero). Next, there is no terminating condition for the recursive calls so the compile will fail at some point due to infinite recursion. For this meta-function to operate as expected a specialization is introduced that terminates the recursion and corrects the calculation:
+This is a function template that calculates `value` at compile time by recursively multiplying the value of the `_Factor` parameter by `_Factor-1`. At first glance this may seem correct, however, there's at least two problems with it. First, at some point during the recursive calculation the value of _Factor will reach zero and invalidate the computation (anything multiplied by zero is zero). Next, there is no terminating condition for the recursive calls so the compile will fail at some point due to infinite recursion. For this function to operate as expected a specialization is introduced that terminates the recursion and corrects the calculation:
 ~~~{.c}
 template <> int Factoral<1>(){
   return 1;
 }
 ~~~
-The fully specialized form of a template is declared with the following convention:
+The fully specialized form of a function template is declared with the following convention:
 
-|                 |keyword   |empty input params|type       | name       |output parameters|
-|----------------:|:--------:|:----------------:|:---------:|:----------:|:---------------:|
-|function template|`template`|`<>`              |   `int`   |`fnTemplate`|<0>              |
-|class template   |`template`|`<>`              |   `struct`|`CTemplate` |<5>              |
+[![Function Template Specialization](images/FunctionTemplateSpecialization.png)]
+
+And a class template is almost identical:
+
+[![Class Template Specialization](images/ClassTemplateSpecialization.png)]
+
 
 Notice the specialized values appear on the right-hand-side of the template name.  This distinguishes specialized templates from their generic form. Input parameters appear to the left of the name while output parameters appear to the right.
 
-During compilation, the compiler chooses the most specialized version of a template over a lesser specialized version whenever it's encountered. In this case, the specialized  `template <> struct Factoral<1>` is more specialized than the generic `template <size_t _Factor> struct Factoral` so the compiler chooses it while recursively calculating the value. Assume this function template is used as:
+During compilation, the compiler chooses the _most specialized_ version of a template over a lesser specialized version whenever multiple are encountered. In this case, the specialized  `template <> struct Factoral<1>` is more specialized than the generic `template <size_t _Factor> struct Factoral` so the compiler chooses it while recursively calculating the value. Assume this function template is used as:
 ~~~{.c}
 int main(){
   return Factoral<5>();
 }
 ~~~
->>The compiler generate 4 specializations before instantiating the explicit Factoral<1> specialization. Here is an excerpt of the listing file generated by MSVC14 with debugging enabled:
+The compiler generate 4 specializations before instantiating the explicit Factoral<1> specialization. Here is an excerpt of the listing file generated by MSVC14 with debugging enabled:
 ~~~{.asm}
 PUBLIC	??$Factoral@$04@@YAHXZ				; Factoral<5>
 PUBLIC	??$Factoral@$03@@YAHXZ				; Factoral<4>
@@ -159,6 +164,58 @@ PUBLIC	??$Factoral@$00@@YAHXZ				; Factoral<1>
 00E11005  ret  
 ~~~
 
+The only run-time code that is generated is to return the result of the compile-time calculation. None of the heavy lifting is done at run-time so we get excellent performance gains. Today's optimizers are very complex and to leverage their full potential, template meta-programs perform as much compile-time computation as possible.
+
+Partial Specialization
+----------------------
+When a template is fully specialized, all the output parameters are explicitly specified to fully qualify the generic form's input parameters. Partial specialization, as the name implies, specialize only a portion of the output parameters while others may be implicitly deducible by the compiler. This permits a specialized template to have a specific set of behaviors for a target group of instances while other instances may have different behaviors.
+
+Partial specializations have the following form:
+
+[![Class Template Specialization](images/ClassTemplateSpecialization.png)]
+
+The output parameters of specializations must match the order of inputs on the generic form but the input parameters don't have to.
+
+Here's an example of partial specialization:
+```{.cpp}
+struct Widget{
+  static const int Cost = 3;
+};
+struct Snafoo{
+  static const int Cost = 5;
+};
+struct Fizzbang{
+  static const int Cost = 7;
+};
+template <typename _Ty, int _Quantity> struct Order{
+  static const int Total = _Ty::Cost * _Quantity;
+};
+template <typename _Ty> struct Order<_Ty, 10>{
+  static const int Total = _Ty::Cost * 10 - 5;
+};
+int main(int argc, char * argv[]){
+  std::cout << "Order<Widget, 5>::Total : " << Order<Widget, 5>::Total << std::endl;
+  std::cout << "Order<Snafoo, 5>::Total : " << Order<Snafoo, 5>::Total << std::endl;
+  std::cout << "Order<Fizzbang, 5>::Total : " << Order<Fizzbang, 5>::Total << std::endl;
+  std::cout << "Order<Widget, 10>::Total : " << Order<Widget, 10>::Total << std::endl;
+  std::cout << "Order<Snafoo, 10>::Total : " << Order<Snafoo, 10>::Total << std::endl;
+  std::cout << "Order<Fizzbang, 10>::Total : " << Order<Fizzbang, 10>::Total << std::endl;
+  return oConfig.Total;
+}
+```
+This app calculates the total cost of an order. The partial specialization produces a $5 discount when 10 items are ordered. The first three outputs are:
+```
+Order<Widget, 5>::Total : 15
+Order<Snafoo, 5>::Total : 25
+Order<Fizzbang, 5>::Total : 35
+```
+The last three outputs are:
+```
+Order<Widget, 10>::Total : 25
+Order<Snafoo, 10>::Total : 45
+Order<Fizzbang, 10>::Total : 65
+```
+During the type deduction phase, the compiler chooses the _most specialized_ variation of a template to instantiate and expand. Order<Widget, 10>, Order<Snafoo, 10> and Order<Fizzbang, 10> match both form of the Order templates but the partial specialization is _more specialized_ than the generic form so the compiler chooses it to instantiate during type deduction.
 
 
 Suggested Reading

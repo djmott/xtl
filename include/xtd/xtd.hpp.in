@@ -172,6 +172,8 @@
   #define sealed
 #endif
 
+/// @defgroup Annotation Annotation and documentation to clarify intent of code
+
 /*! \namespace xtd
     The main namespace of the XTL library
 */
@@ -190,15 +192,24 @@ namespace xtd{
     namespace concurrent{}
     /// @}
 
+
     /** @defgroup Parsing Text parsing and AST generation library
+
+    Grammars are defined using classes and macros in the xtd::parse namespace.  The fully constructed AST from the start
+    rule is created and returned from xtd::parse<>::parse() if the parse succeeds.
+
     @{
     @namespace xtd::parse
-    Text parsing and AST generation
+    Grammar and AST declarations
+    @example example_parse1.cpp
+    @example example_parse2.cpp
     */
     namespace parse{}
     /// @}
 
+
     /** @defgroup Sockets General purpose socket communication
+
     @{
     @namespace xtd::socket
     General purpose socket communication
