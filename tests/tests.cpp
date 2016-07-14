@@ -31,10 +31,6 @@ main system and unit test entry point
   #include "test_concurrent_stack.hpp"
 #endif
 
-#if (ON==TEST_DATA_CONVERT)
-  #include "test_data_convert.hpp"
-#endif
-
 #if (ON==TEST_DYNAMIC_LIBRARY)
   #include "test_dynamic_library.hpp"
 #endif

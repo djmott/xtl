@@ -15,7 +15,6 @@ add_dependencies(dummy XTL)
 set(TEST_SOURCE tests.cpp
   test_callback.hpp
   test_concurrent_stack.hpp
-  test_data_convert.hpp
   test_dynamic_library.hpp
   test_event_trace.hpp
   test_exception.hpp
@@ -44,7 +43,6 @@ endfunction()
 build_option(TEST_CALLBACK "test xtd::callback")
 build_option(TEST_CONCURRENT_HASH_MAP "test xtd::concurrent_hash_map")
 build_option(TEST_CONCURRENT_STACK "test xtd::concurrent_stack")
-build_option(TEST_DATA_CONVERT "test data conversion")
 build_option(TEST_DYNAMIC_LIBRARY "test xtd::dynamic_library")
 build_option(TEST_EVENT_TRACE "test event trace")
 build_option(TEST_EXCEPTION "test xtd::exception")

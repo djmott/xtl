@@ -39,7 +39,6 @@ add_library(XTL STATIC src/xtl.cpp
   include/xtd/concurrent.hpp
   include/xtd/concurrent_hash_map.hpp
   include/xtd/concurrent_stack.hpp
-  include/xtd/data_convert.hpp
   include/xtd/debug.hpp
   include/xtd/dynamic_library.hpp
   include/xtd/event_trace.hpp
