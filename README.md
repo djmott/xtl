@@ -6,7 +6,7 @@ eXtended Template Library
 [![SonarQube Tech Debt](https://img.shields.io/sonar/https/sonarqube.com/xtl/tech_debt.svg)](https://sonarqube.com/overview?id=xtl)
 [![SonarQube Quality Gate](http://nemo.sonarqube.org/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl)
 [![Boost License](https://img.shields.io/badge/license-Boost_Version_1.0-green.svg?style=plastic)](http://www.boost.org/LICENSE_1_0.txt)
-
+[![Gratipay User](https://img.shields.io/gratipay/user/djmott.svg)](https://gratipay.com/xtl/)
 View the documentation online at [http://djmott.github.io/xtl](http://djmott.github.io/xtl)
 
 XTL is a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. It supplements, extends and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard. A short list of some of the more notable headers:
@@ -94,6 +94,7 @@ the project, add some code and submit a [pull request](https://github.com/djmott
 * Pass SonarQube quality gateway
 * Pass unit and system tests
 * Pass tests through ValGrind memcheck or some other dynamic analysis with no resource leaks or other significant issues
+
 
 ### License
 
