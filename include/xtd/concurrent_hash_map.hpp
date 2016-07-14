@@ -184,7 +184,7 @@ namespace xtd{
     private:
       template <typename> friend class hash_map_iterator;
       template <typename, typename, int> friend class hash_map;
-      static const uint32_t nibble_count = 16;
+      static const int8_t nibble_count = 16;
       std::atomic<child_bucket_type*> _Buckets[nibble_count];
 
       value_type * _begin(int8_t * pKey) const{
@@ -302,13 +302,13 @@ namespace xtd{
     private:
       template <typename, typename, int> friend class hash_map;
       static const int nibble_pos = 1;
-      static const uint32_t nibble_count = 16;
+      static const int8_t nibble_count = 16;
       std::atomic<value_type*> _Values[nibble_count];
 
       value_type * _begin(int8_t * pKey) const{
         value_type * pRet;
         for (*pKey = 0; *pKey < nibble_count; ++*pKey){
-          if (pRet = _Values[*pKey].load()){
+          if ((pRet = _Values[*pKey].load())){
             return pRet;
           }
         }
@@ -317,7 +317,7 @@ namespace xtd{
       value_type * _back(int8_t * pKey) const{
         value_type * pRet;
         for (*pKey = nibble_count - 1; *pKey >= 0; --*pKey){
-          if (pRet = _Values[*pKey].load()){
+          if ((pRet = _Values[*pKey].load())){
             return pRet;
           }
         }
@@ -330,7 +330,7 @@ namespace xtd{
           *pKey = 0;
         }
         for (; *pKey < nibble_count; ++*pKey){
-          if (pRet = _Values[*pKey].load()){
+          if ((pRet = _Values[*pKey].load())){
             return pRet;
           }
         }
@@ -344,7 +344,7 @@ namespace xtd{
           *pKey = nibble_count - 1;
         }
         for (; *pKey >= 0; --*pKey){
-          if (pRet = _Values[*pKey].load()){
+          if ((pRet = _Values[*pKey].load())){
             return pRet;
           }
         }

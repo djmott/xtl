@@ -431,7 +431,7 @@ namespace xtd{
       public:
 
         template <typename _IteratorT, typename ... _ChildRuleTs>
-        static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs ... oChildRules){
+        static rule_base::pointer_type parse(_IteratorT& , _IteratorT& , _ChildRuleTs ... oChildRules){
           return rule_base::pointer_type(new _DeclT(std::forward<_ChildRuleTs>(oChildRules)...));
         }
 
@@ -464,7 +464,7 @@ namespace xtd{
       public:
 
         template <typename _IteratorT, typename ... _ChildRuleTs>
-        static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs ... oChildRules){
+        static rule_base::pointer_type parse(_IteratorT& , _IteratorT& , _ChildRuleTs ... ){
           return rule_base::pointer_type(nullptr);
         }
 
