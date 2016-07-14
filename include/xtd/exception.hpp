@@ -6,11 +6,6 @@ generic and special purpose exceptions
 
 #pragma once
 
-#if (XTD_COMPILER_GCC & XTD_COMPILER)
-#define XTD_EXCEPTION_MEMBER_NOEXCEPT noexcept
-#else
-#define XTD_EXCEPTION_MEMBER_NOEXCEPT
-#endif
 
 /**
 @def throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
@@ -62,10 +57,22 @@ Throws exception if the test expression returns true. _throw_if methods are pres
 ///}@
 
 ///explanation of the exception
-    const char * what() const XTD_EXCEPTION_MEMBER_NOEXCEPT override { return _what.c_str(); }
+    const char * what() const 
+    #if (XTD_COMPILER_GCC & XTD_COMPILER)
+      noexcept
+    #endif
+      override{
+      return _what.c_str();
+    }
 
 ///location in source that caused the exception
-    virtual const source_location& location() const XTD_EXCEPTION_MEMBER_NOEXCEPT  { return _source; }
+    virtual const source_location& location() const 
+    #if (XTD_COMPILER_GCC & XTD_COMPILER)
+      noexcept
+    #endif
+    {
+      return _source;
+    }
 
   protected:
     const source_location& _source;

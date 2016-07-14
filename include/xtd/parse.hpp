@@ -1,7 +1,9 @@
 /** @file
 text parsing and AST generation
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
-*/
+@example example_parse1.cpp
+@example example_parse2.cpp
+ */
 
 #pragma once
 
@@ -508,13 +510,23 @@ namespace xtd{
 
       };
     }
-    ///@}
 #endif
   }
+  /** Main parser class
 
+  The xtd::parser is used to perform the parse and return a constructed AST if the parse succeeds
+  @tparam _RuleT The start rule of the grammar
+  @tparam _IgnoreCase Specifies whether case should be ignored during the parse
+  @tparam _WhitespaceT A specialization of xtd::parse::whitespace that specifies the characters to ignore
+  */
   template <typename _RuleT, bool _IgnoreCase = false, typename _WhitespaceT = xtd::parse::whitespace<>> class parser {
   public:
 
+    /** Parses text
+    @param begin the beginning iterator of the text to parse
+    @param end the end iterator of the text to parse
+    @returns a fully constructed AST of type _RuleT if the parse succeeds or a nullptr if failed
+    */
     template <typename _IteratorT> static parse::rule_base::pointer_type parse(_IteratorT begin, _IteratorT end) {
       _IteratorT oBegin = begin;
       _IteratorT oEnd = end;
@@ -522,6 +534,7 @@ namespace xtd{
     }
 
   };
+  ///@}
 
 }
 

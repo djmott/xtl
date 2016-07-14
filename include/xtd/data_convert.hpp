@@ -8,159 +8,62 @@ data conversion utilities
 
 namespace xtd{
 
-  struct Mask{
-    static const uint64_t lonibble = 0x0f;
-    static const uint64_t hinibble = 0xf0;
+  /** @addtogroup Annotation
+  @{*/
+  template <typename _Ty>
+  struct nibble_mask{
+    static const uint64_t lonibble_mask = 0x0f;
+    static const uint64_t hinibble_mask = 0xf0;
+    static constexpr uint8_t lonibble(typename std::enable_if<std::is_pod<_Ty>::value, const _Ty&>::type src){
+      return *reinterpret_cast<const uint8_t*>(&src) & lonibble_mask;
+    }
+    static constexpr uint8_t hinibble(typename std::enable_if<std::is_pod<_Ty>::value, const _Ty&>::type src){
+      return (*reinterpret_cast<const uint8_t*>(&src) & hinibble_mask) >> 4;
+    }
+  };
+  template <typename _Ty>
+  struct byte_mask : nibble_mask<_Ty>{
+    static const uint64_t lobyte_mask = 0xff;
+    static const uint64_t hibyte_mask = 0xff00;
+    static constexpr uint8_t lobyte(typename std::enable_if<std::is_pod<_Ty>::value, const _Ty&>::type src){
+      return reinterpret_cast<const uint8_t*>(&src)[0];
+    }
+    static constexpr uint8_t hibyte(typename std::enable_if<std::is_pod<_Ty>::value, const _Ty&>::type src){
+      return reinterpret_cast<const uint8_t*>(&src)[1];
+    }
+  };
+  template <typename _Ty>
+  struct word_mask : byte_mask<_Ty>{
+    static const uint64_t loword_mask = 0xffff;
+    static const uint64_t hiword_mask = 0xffff0000;
+    static constexpr uint8_t loword(typename std::enable_if<std::is_pod<_Ty>::value, const _Ty&>::type src){
+      return reinterpret_cast<const uint16_t*>(&src)[0];
+    }
+    static constexpr uint8_t hinibble(typename std::enable_if<std::is_pod<_Ty>::value, const _Ty&>::type src){
+      return reinterpret_cast<const uint16_t*>(&src)[1];
+    }
+  };
+  template <typename _Ty>
+  struct int_mask : word_mask<_Ty>{
+    static const uint64_t loint_mask = 0xffffffff;
+    static const uint64_t hiint_mask = 0xffffffff00000000;
+    static constexpr uint8_t loint(typename std::enable_if<std::is_pod<_Ty>::value, const _Ty&>::type src){
+      return reinterpret_cast<const uint32_t*>(&src)[0];
+    }
+    static constexpr uint8_t hiint(typename std::enable_if<std::is_pod<_Ty>::value, const _Ty&>::type src){
+      return reinterpret_cast<const uint32_t*>(&src)[1];
+    }
   };
 
-  /**
-   \fn  template <typename _Ty> static constexpr uint8_t lonibble(_Ty src)
-  
-   \brief lonibble returns the low order nibble of a POD variable
-  
- 
-   \tparam  _Ty type of the ty.
-   @param src Source for the.
-  
-   \return  The low order nibble of src
-   */
-
-  template <typename _Ty>
-  static constexpr uint8_t lonibble(_Ty src){
-    static_assert(std::is_pod<_Ty>::value, "invalid parameter");
-    return *reinterpret_cast<const uint8_t*>(&src) & Mask::lonibble;
-  }
-
-  /**
- \struct  BitsPer
-
- \brief The bits per.
-
- \tparam  _Ty type of the ty.
- */
+  template <typename _Ty> struct mask
+    : std::conditional< sizeof(_Ty) >= sizeof(int64_t), int_mask<_Ty>,
+      std::conditional<sizeof(_Ty) >= sizeof(uint32_t), word_mask<_Ty>,
+        std::conditional<sizeof(_Ty) >= sizeof(uint16_t), byte_mask<_Ty>, nibble_mask<_Ty>>>>::type
+  {
+  };
 
   template <typename _Ty> struct BitsPer{
-    /** \brief The value. */
     static const int value = sizeof(_Ty) * 8;
   };
-
-  /**
-   \fn  template <typename _Ty> static constexpr uint8_t hinibble(_Ty src)
-  
-   \brief hinibble returns the high order nibble of a POD variable
-
-   \tparam  _Ty type of the ty.
-   @param src Source for the.
-  
-   \return  An uint8_t.
-   */
-
-  template <typename _Ty>
-  static constexpr uint8_t hinibble(_Ty src){
-    static_assert(std::is_pod<_Ty>::value, "invalid parameter");
-    return (*reinterpret_cast<const uint8_t *>(&src) & Mask::hinibble) >> (BitsPer<char>::value/2);
-  }
-
-  /**
-   \fn  template <typename _Ty> static constexpr uint8_t lobyte(_Ty src)
-  
-   \brief Lobytes the given source.
-
-   \tparam  _Ty type of the ty.
-   @param src Source for the.
-  
-   \return  An uint8_t.
-   */
-
-  template <typename _Ty>
-  static constexpr uint8_t lobyte(_Ty src){
-    static_assert(std::is_pod<_Ty>::value, "invalid parameter");
-    return *reinterpret_cast<const uint8_t *>(&src);
-  }
-
-  template <typename _Ty>
-  static inline constexpr uint8_t hibyte(_Ty src){
-    static_assert(std::is_pod<_Ty>::value, "invalid parameter");
-    return reinterpret_cast<const uint8_t *>(&src)[1];
-  }
-
-  /**
-   \fn  template <typename _Ty> constexpr uint16_t loword(_Ty src)
-  
-   \brief Lowords the given source.
-  
-
-   \tparam  _Ty type of the ty.
-   @param src Source for the.
-  
-   \return  An uint16_t.
-   */
-
-  template <typename _Ty>
-  constexpr uint16_t loword(_Ty src){
-    static_assert(std::is_pod<_Ty>::value, "invalid parameter");
-    return reinterpret_cast<const uint16_t *>(&src)[0];
-  }
-
-  /**
-   \fn  template <typename _Ty> constexpr uint16_t hiword(_Ty src)
-  
-   \brief Hiwords the given source.
-  
-   \author  David
-   \date  6/11/2016
-  
-   \tparam  _Ty type of the ty.
-   @param src Source for the.
-  
-   \return  An uint16_t.
-   */
-
-  template <typename _Ty>
-  constexpr uint16_t hiword(_Ty src){
-    static_assert(std::is_pod<_Ty>::value, "invalid parameter");
-    return reinterpret_cast<const uint16_t *>(&src)[1];
-  }
-
-  /**
-   \fn  template <typename _Ty> constexpr uint32_t lodword(_Ty src)
-  
-   \brief Lodwords the given source.
-  
-   \author  David
-   \date  6/11/2016
-  
-   \tparam  _Ty type of the ty.
-   @param src Source for the.
-  
-   \return  An uint32_t.
-   */
-
-  template <typename _Ty>
-  constexpr uint32_t lodword(_Ty src){
-    static_assert(std::is_pod<_Ty>::value, "invalid parameter");
-    return reinterpret_cast<const uint32_t *>(&src)[0];
-  }
-
-  /**
-   \fn  template <typename _Ty> constexpr uint32_t hidword(const _Ty& src)
-  
-   \brief Hidwords the given source.
-  
-   \author  David
-   \date  6/11/2016
-  
-   \tparam  _Ty type of the ty.
-   @param src Source for the.
-  
-   \return  An uint32_t.
-   */
-
-  template <typename _Ty>
-  constexpr uint32_t hidword(const _Ty& src){
-    static_assert(std::is_pod<_Ty>::value, "invalid parameter");
-    return reinterpret_cast<const uint32_t *>(&src)[1];
-  }
-
-
+  ///@}
 }
