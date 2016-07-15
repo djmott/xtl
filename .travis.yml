@@ -5,12 +5,22 @@ matrix:
 include:
   - compiler: gcc
     addons:
+  coverity_scan:
+    project:
+      name: "djmott/xtl"
+      description: "Build submitted via Travis CI"
+    notification_email: mott.david.j@gmail.com
+    build_command_prepend: "cmake ."
+    build_command:   "make"
+    branch_pattern: master
       apt:
         sources:
           - ubuntu-toolchain-r-test
         packages:
           - g++-5
     env: COMPILER=g++-5
+       - secure: "r5Zw5rky1nV4QiqaHKMQJTwC+mSfkko7ouYI2F8ah1BIULXijU+PZTtbP4Q8pmoDR9H7p6wuGTevWg9YplY8xbiwc5Vo5UiSDmVnKXEY8ckA+gCJK3iJSFqFbbRbVgiBj2KdGy9LWzS0akROKC5EXT25D84GbDLKf9T8m1ot5VvxAH5zteEdvDsYzRKAET4E2q9+k0N1fFNRC1nT6IEt0+n7vR0tKOnYfv//DbmRXguUAPV7/U35SSW77q2kaXggp6TiXVA1V9/3piIuE24SqxYZFPLkq7M8umP+vANgPHJgfpMTlH5cxW4vbp+S1hvB0qenT5VQPhGXyQhwGdRtW2Fy645pVVRB7Fi0SVfdaUyGLSMG4Z5toC5nSpPnYPH0XjZarzyEXQR+jVkFBP6fcslRkT4IRfDGYWpnDPrIzYVR9Lqcy3U1qGU7gMCcCUU0HE7moyEZZtc3CW2jzZf12XEWBaAlaqtEFBRqgZG5m8pA9Faeb0Bm0NzpXKYNO2GisGUpZ1+KiSIXWcUXgN83lZgLqmXOve9di2MhVKuyCwLfrQJhz3HzxLn5VBCkVn+wilPg7lW/gOooOsdupAPtDQw3L1Xn1CiFZ5IR4iKjz+Kkjww46OjTU+embxH0WG28kEb6N2AY6SWBwy5vaSo1rD7+D6vnbbTg4uHwX4M8n7E="
+
 before_install:
   - mkdir -p      $TRAVIS_BUILD_DIR/docs/reports/cppcheck       $TRAVIS_BUILD_DIR/docs/reports/gcov        $TRAVIS_BUILD_DIR/docs/reports/gtest
   - mkdir -p      $TRAVIS_BUILD_DIR/docs/reports/make           $TRAVIS_BUILD_DIR/docs/reports/oclint      $TRAVIS_BUILD_DIR/docs/reports/rats
