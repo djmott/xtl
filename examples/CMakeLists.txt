@@ -18,3 +18,5 @@ build_example(logging)
 build_example(parse1)
 build_example(parse2)
 build_example(string)
+
+target_compile_options(example_event_trace PRIVATE -finstrument-functions)
