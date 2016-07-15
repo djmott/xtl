@@ -8,14 +8,28 @@
 
 #pragma once
 
-#define ON    1
-#define OFF   0
+#if !defined(ON)
+    #define ON    1
+#endif
 
-#define YES   1
-#define NO    0
+#if !defined(OFF)
+    #define OFF   0
+#endif
+
+#if !defined(YES)
+    #define YES   1
+#endif
+
+#if !defined(NO)
+    #define NO    0
+#endif
 
 #if !defined(DOXY_INVOKED)
     #define DOXY_INVOKED 0
+#endif
+
+#if !defined(XTD_HAS_FILESYSTEM)
+    #cmakedefine01 XTD_HAS_FILESYSTEM
 #endif
 
 /** @name XTD_COMPILER
@@ -39,13 +53,14 @@
 /** @name XTD_OS
     The build/target/host OS selected by cmake configure
     @{*/
-#define XTD_OS_ANDROID    1
-#define XTD_OS_BAREMETAL  2
-#define XTD_OS_IOS        4
-#define XTD_OS_LINUX      8
-#define XTD_OS_WINDOWS    16
-#define XTD_OS_CYGWIN     32
-#define XTD_OS_MINGW      64
+#define XTD_OS_ANDROID    0x01
+#define XTD_OS_BAREMETAL  0x02
+#define XTD_OS_IOS        0x04
+#define XTD_OS_LINUX      0x08
+#define XTD_OS_WINDOWS    0x10
+#define XTD_OS_CYGWIN     0x20
+#define XTD_OS_MINGW      0x40
+#define XTD_OS_MSYS       0x80
 
 #if !defined(XTD_OS)
   #define XTD_OS @XTD_OS@
@@ -107,7 +122,6 @@
 #endif
     ///@}
 
-  
 #cmakedefine01 XTD_LOG_TARGET_SYSLOG
 #cmakedefine01 XTD_LOG_TARGET_WINDBG
 #cmakedefine01 XTD_LOG_TARGET_CSV
@@ -230,7 +244,7 @@ namespace xtd{
     #include <rpc.h>
 #endif
 
-#if ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
   #include <sys/types.h>
   #include <sys/socket.h>
   #include <sys/ioctl.h>
@@ -242,9 +256,11 @@ namespace xtd{
   #include <limits.h>
   #include <poll.h>
   #include <dlfcn.h>
-  #include <link.h>
 #endif
 
+#if (XTD_OS_LINUX & XTD_OS)
+  #include <link.h>
+#endif
 
 //CRT
 #include <string.h>
@@ -305,7 +321,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/source_location.hpp>
 #include <xtd/exception.hpp>
 #include <xtd/string.hpp>
-#include <xtd/path.hpp>
+#include <xtd/filesystem.hpp>
 #include <xtd/dynamic_library.hpp>
 #include <xtd/event_trace.hpp>
 #include <xtd/executable.hpp>

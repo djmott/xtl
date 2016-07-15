@@ -19,7 +19,7 @@ namespace xtd{
     namespace socket{
     /// @addtogroup Sockets
     /// @{
-#if ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
     using SOCKET = int;
   #define closesocket close
   #define ioctlsocket ioctl

@@ -18,7 +18,7 @@ namespace xtd{
       if (exp(ret)){
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
           throw dynamic_library_exception(source, expstr);
-#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
+#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
           throw dynamic_library_exception(source, std::string(dlerror()) + " " + expstr);
 #endif
       }
@@ -35,7 +35,7 @@ namespace xtd{
   public:
   #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     using native_handle_type = HMODULE;
-  #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
+  #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
     using native_handle_type = void *;
   #endif
 
@@ -106,7 +106,7 @@ namespace xtd{
       auto fnptr =
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
           reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(GetProcAddress(_Handle, name), [](FARPROC p){ return nullptr == p; }));
-#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
+#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
           reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(dlsym(_Handle, name), [](void * p){ return nullptr == p; }));
 #endif
       return return_type(fnptr, shared_from_this());
@@ -116,7 +116,7 @@ namespace xtd{
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     explicit dynamic_library(const tchar * sPath) : _Handle(xtd::exception::throw_if(LoadLibrary(sPath), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
-#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
+#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
     explicit dynamic_library(const char * sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath, RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif
 

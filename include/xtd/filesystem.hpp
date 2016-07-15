@@ -65,7 +65,7 @@ namespace xtd{
     }
 
     path& make_preferred(){
-#if ((XTD_OS_CYGWIN|XTD_OS_LINUX) & XTD_OS)
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
         char non_preferred_seperator = '\\';
 #elif ((XTD_OS_WINDOWS|XTD_OS_MINGW) & XTD_OS)
       char non_preferred_seperator = '/';

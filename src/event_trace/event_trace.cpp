@@ -3,7 +3,7 @@
  */
 
 #include <xtd/xtd.hpp>
-#include <dlfcn.h>
+
 
 namespace{
   xtd::concurrent::hash_map<void*,std::string> _FunctionNames;
@@ -16,10 +16,10 @@ extern "C"{
     if (_InTrace){
       return;
     }
-    Dl_info oInfo;
+/*    Dl_info oInfo;
     if (!_FunctionNames.exists(pAddr) && dladdr(pAddr, &oInfo)){
       _FunctionNames.insert(pAddr, oInfo.dli_sname);
-    }
+    }*/
     _InTrace = true;
     _ThreadStack.push("");
     _InTrace = false;

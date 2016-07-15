@@ -7,6 +7,8 @@ eXtended Template Library
 [![SonarQube Quality Gate](http://nemo.sonarqube.org/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl)
 [![Boost License](https://img.shields.io/badge/license-Boost_Version_1.0-green.svg?style=plastic)](http://www.boost.org/LICENSE_1_0.txt)
 [![Gratipay User](https://img.shields.io/gratipay/user/djmott.svg)](https://gratipay.com/xtl/)
+[![Beerpay](https://beerpay.io/djmott/xtl/badge.svg)](https://beerpay.io/djmott/xtl)
+
 View the documentation online at [http://djmott.github.io/xtl](http://djmott.github.io/xtl)
 
 XTL is a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. It supplements, extends and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard. A short list of some of the more notable headers:
@@ -88,8 +90,10 @@ Submit a [ticket](https://github.com/djmott/xtl/issues) on GitHub if a bug is fo
 
 ### Contributing
 
-Contributions are appreciated. To contirube, <a class="github-button" href="https://github.com/djmott/xtl/fork" data-icon="octicon-repo-forked" data-style="mega" data-count-href="/djmott/xtl/network" data-count-api="/repos/djmott/xtl#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork djmott/xtl on GitHub">fork</a>
-the project, add some code and submit a [pull request](https://github.com/djmott/xtl/pulls). In general, contributions should:
+
+Contributions are appreciated. To contribute monitarilty, toss me some cash on [Beerpay](https://beerpay.io/djmott/xtl) or [Gratipay](https://gratipay.com/xtl/) To contirube code, <a class="github-button" href="https://github.com/djmott/xtl/fork" data-icon="octicon-repo-forked" data-style="mega" data-count-href="/djmott/xtl/network" data-count-api="/repos/djmott/xtl#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork djmott/xtl on GitHub">fork</a>
+the project, add some code and submit a [pull request](https://github.com/djmott/xtl/pulls).
+In general, contributions should:
 * Clear around %80 in code coverage tests
 * Pass SonarQube quality gateway
 * Pass unit and system tests

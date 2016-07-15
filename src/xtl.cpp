@@ -31,6 +31,9 @@ NOTE("OS : Windows");
 #if (XTD_OS & XTD_OS_CYGWIN)
 NOTE("OS : Cygwin");
 #endif
+#if (XTD_OS & XTD_OS_MSYS)
+NOTE("OS : MSYS")
+#endif
 #if (XTD_OS & XTD_OS_MINGW)
 NOTE("OS : MinGW");
 #endif
