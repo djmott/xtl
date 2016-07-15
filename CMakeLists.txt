@@ -17,6 +17,14 @@ enable_language(CXX)
 project(XTL)
 
 option(XTD_COLOR_MESSAGES "use color escape sequences in console compiler output" YES)
+option(XTD_LOG_TARGET_CSV "write log output to CSV file" YES)
+option(XTD_LOG_TARGET_COUT "write log output to std::cout" YES)
+option(XTD_LOG_TARGET_XML "write log output to XML file" NO)
+option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
+option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
+option(BUILD_EXAMPLES "Build examples" YES)
+option(BUILD_TESTS "Build tests" YES)
+
 
 find_package(Threads)
 find_package(Doxygen)
@@ -111,29 +119,22 @@ else()
 endif()
 
 
-option(XTD_LOG_TARGET_CSV "write log output to CSV file" YES)
-option(XTD_LOG_TARGET_COUT "write log output to std::cout" YES)
-option(XTD_LOG_TARGET_XML "write log output to XML file" YES)
 
 
 if(CYGWIN)
   set(XTD_OS XTD_OS_CYGWIN)
-  option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
   link_libraries(dl pthread stdc++)
 elseif(MINGW)
   set(XTD_OS XTD_OS_MINGW)
-  option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
   link_libraries(rpcrt4 ws2_32 pthread stdc++)
 elseif(WIN32)
   set(XTD_OS XTD_OS_WINDOWS)
-  option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
   link_libraries(rpcrt4)
 elseif(APPLE)
   set(XTD_OS XTD_OS_APPLE)
 elseif(UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
   set(XTD_OS XTD_OS_LINUX)
-  option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
   link_libraries(dl pthread stdc++)
 else()
   message(FATAL_ERROR "system not supported")
@@ -155,13 +156,11 @@ if(DOXYGEN_FOUND)
 endif()
 
 
-option(BUILD_EXAMPLES "Build examples" YES)
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
 
-option(BUILD_TESTS "Build tests" YES)
 if(BUILD_TESTS)
   add_subdirectory(tests)
 endif()

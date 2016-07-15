@@ -117,7 +117,8 @@ namespace xtd{
       @returns true if insert was successful
       */
       bool insert(const key_type& Key, value_type&& Value){
-        int Index = (Key & 0xf);
+        auto x = intrinsic_cast(Key);
+        int Index = (x & 0xf);
         auto pChild = _Buckets[Index].load();
         if (!pChild){
           pChild = new child_bucket_type;
@@ -126,7 +127,8 @@ namespace xtd{
             delete pChild;
           }
         }
-        return pChild->insert(Key >> 4, std::forward<value_type>(Value));
+        x >>= 4;
+        return pChild->insert(reinterpret_cast<key_type>(x), std::forward<value_type>(Value));
       }
 
       /** concurrently search for an existing key
@@ -134,9 +136,11 @@ namespace xtd{
       @returns true if the item exists in the map
       */
       bool exists(const key_type& Key) const {
-        int Index = (Key & 0xf);
+        auto x = intrinsic_cast(Key);
+        int Index = (x & 0xf);
         auto pChild = _Buckets[Index].load();
-        return (pChild ? pChild->exists(Key >> 4) : false);
+        x >>= 4;
+        return (pChild ? pChild->exists(reinterpret_cast<key_type>(x)) : false);
       }
 
       /** concurrently remove a value
@@ -144,10 +148,12 @@ namespace xtd{
       @returns true if the item was removed
       */
       bool remove(const key_type& Key){
-        int Index = (Key & 0xf);
+        auto x = intrinsic_cast(Key);
+        int Index = (x & 0xf);
         auto pChild = _Buckets[Index].load();
         if (pChild){
-          return pChild->remove(Key >> 4);
+          x >>= 4;
+          return pChild->remove(reinterpret_cast<key_type>(x));
         }
         return false;
       }
@@ -158,13 +164,15 @@ namespace xtd{
       @returns reference to the value
        */
       value_type & operator[](const key_type& Key){
-        int Index = (Key & 0xf);
+        auto x = intrinsic_cast(Key);
+        int Index = (x & 0xf);
         auto pChild = _Buckets[Index].load();
         if (!pChild){
           insert(Key, value_type());
           pChild = _Buckets[Index].load();
         }
-        return pChild->operator[](Key >> 4);
+        x >>= 4;
+        return pChild->operator[](reinterpret_cast<key_type>(x));
       }
 
       /// unsafe get an iterator to the first element
@@ -253,7 +261,8 @@ namespace xtd{
       }
 
       bool insert(const key_type& Key, value_type&& Value){
-        int Index = (Key & 0xf);
+        auto x = intrinsic_cast(Key);
+        int Index = (x & 0xf);
         auto pValue = _Values[Index].load();
         if (pValue){
           return false;
@@ -268,7 +277,8 @@ namespace xtd{
       }
 
       bool remove(const key_type& Key){
-        int Index = (Key & 0xf);
+        auto x = intrinsic_cast(Key);
+        int Index = (x & 0xf);
         auto pVal = _Values[Index].load();
         value_type * pNullValue = nullptr;
         if (pVal && _Values[Index].compare_exchange_strong(pVal, pNullValue)){
@@ -279,13 +289,15 @@ namespace xtd{
       }
 
       bool exists(const key_type& Key) const{
-        int Index = (Key & 0xf);
+        auto x = intrinsic_cast(Key);
+        int Index = (x & 0xf);
         auto pVal = _Values[Index].load();
         return (pVal ? true : false);
       }
 
       value_type & operator[](const key_type& Key){
-        int Index = (Key & 0xf);
+        auto x = intrinsic_cast(Key);
+        int Index = (x & 0xf);
         auto pRet = _Values[Index].load();
         if (!pRet){
           pRet = new value_type;

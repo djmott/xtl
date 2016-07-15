@@ -231,17 +231,18 @@ namespace xtd{
 #endif
 
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
-  #include <unistd.h>
-  #include <limits.h>
   #include <sys/types.h>
-  #include <dlfcn.h>
-  #include <poll.h>
   #include <sys/socket.h>
   #include <sys/ioctl.h>
   #include <netinet/in.h>
   #include <netinet/udp.h>
   #include <netinet/tcp.h>
   #include <arpa/inet.h>
+  #include <unistd.h>
+  #include <limits.h>
+  #include <poll.h>
+  #include <dlfcn.h>
+  #include <link.h>
 #endif
 
 
@@ -297,6 +298,7 @@ TODO("Remove cassert when XTD implementation is finished")
 //XTL
 #include <xtd/debug.hpp>
 #include <xtd/callback.hpp>
+#include <xtd/meta.hpp>
 #include <xtd/concurrent.hpp>
 #include <xtd/concurrent_hash_map.hpp>
 #include <xtd/concurrent_stack.hpp>
@@ -308,7 +310,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/event_trace.hpp>
 #include <xtd/executable.hpp>
 #include <xtd/log.hpp>
-#include <xtd/meta.hpp>
+
 #include <xtd/parse.hpp>
 #include <xtd/rw_lock.hpp>
 #include <xtd/socket.hpp>
