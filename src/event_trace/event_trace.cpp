@@ -4,17 +4,15 @@
 
 #include <xtd/xtd.hpp>
 
-#if (XTD_COMPILER_GCC & XTD_COMPILER)
-  #include "evt_gcc.inc"
-#endif
 
 namespace{
-  thread_local std::stack<const char *> _ThreadStack;
+  xtd::concurrent::hash_map<void*,std::string> _FunctionNames;
+  thread_local std::stack<std::string> _ThreadStack;
   thread_local bool _InTrace = false;
 }
 
 extern "C"{
-  void __xtd_EventEnter(const char * fn){
+  void __xtd_EventEnter(void *){
     if (_InTrace){
       return;
     }
@@ -23,16 +21,16 @@ extern "C"{
       _FunctionNames.insert(pAddr, oInfo.dli_sname);
     }*/
     _InTrace = true;
-    _ThreadStack.push("");
+  //  _ThreadStack.push("");
     _InTrace = false;
   }
 
-  void __xtd_EventLeave(){
+  void __xtd_EventLeave(void *){
     if (_InTrace){
       return;
     }
     _InTrace = true;
-    _ThreadStack.pop();
+  //  _ThreadStack.pop();
     _InTrace = false;
   }
 }

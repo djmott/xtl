@@ -114,11 +114,15 @@ namespace xtd{
 
   private:
 
+    friend class process;
+
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     explicit dynamic_library(const tchar * sPath) : _Handle(xtd::exception::throw_if(LoadLibrary(sPath), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
 #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
     explicit dynamic_library(const char * sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath, RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif
+
+    explicit dynamic_library(native_handle_type hHandle) : _Handle(hHandle){}
 
     native_handle_type _Handle;
   };

@@ -156,6 +156,7 @@
 #endif
 //__SONAR_ON__
 
+
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #define FORCEINLINE __forceinline
   #define NOVTABLE __declspec(novtable)
@@ -179,12 +180,24 @@
     #define NOTE( x ) PRAGMA_(message ("NOTE : " x ))
   #endif
 #endif
-    ///@}
-  
+
+#if !defined(XTD_VERBOSE_BUILD)
+    #cmakedefine01 XTD_VERBOSE_BUILD
+#endif
+
+#if (!XTD_VERBOSE_BUILD)
+    #undef TODO
+    #undef NOTE
+    #define TODO(...)
+    #define NOTE(...)
+#endif
+
 #if (XTD_OS_MINGW & XTD_OS)
   TODO("Enabled sealed keyword when available in mingw");
   #define sealed
 #endif
+
+    ///@}
 
 /// @defgroup Annotation Annotation and documentation to clarify intent of code
 
@@ -236,6 +249,12 @@ namespace xtd{
 #define forever for(;;)
 
 //System
+#if (XTD_OS_LINUX & XTD_OS)
+  #if !defined(_GNU_SOURCE)
+    #define _GNU_SOURCE
+  #endif
+#endif
+
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     #include <winsock2.h>
     #include <windows.h>
@@ -317,9 +336,13 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/debug.hpp>
 #include <xtd/callback.hpp>
 #include <xtd/meta.hpp>
+
 #include <xtd/concurrent.hpp>
 #include <xtd/concurrent_hash_map.hpp>
 #include <xtd/concurrent_stack.hpp>
+#include <xtd/concurrent_rw_lock.hpp>
+#include <xtd/concurrent_spin_lock.hpp>
+
 #include <xtd/source_location.hpp>
 #include <xtd/exception.hpp>
 #include <xtd/string.hpp>
@@ -330,9 +353,8 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/log.hpp>
 
 #include <xtd/parse.hpp>
-#include <xtd/rw_lock.hpp>
+#include <xtd/process.hpp>
 #include <xtd/socket.hpp>
-#include <xtd/spin_lock.hpp>
 #include <xtd/tuple.hpp>
 #include <xtd/unique_id.hpp>
 #include <xtd/rpc.hpp>

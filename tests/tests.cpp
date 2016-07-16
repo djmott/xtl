@@ -63,6 +63,10 @@ main system and unit test entry point
   #include "test_path.hpp"
 #endif
 
+#if (ON==TEST_PROCESS)
+  #include "test_process.hpp"
+#endif
+
 #if (ON==TEST_READ_WRITE_LOCK)
   #include "test_rw_lock.hpp"
 #endif
