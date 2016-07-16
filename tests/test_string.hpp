@@ -85,7 +85,7 @@ TEST(test_string, string_from_wchar_ptr){
   auto s = xtd::string::from(L"123456789");
   ASSERT_EQ(9, s.size());
   ::testing::StaticAssertTypeEq<decltype(s)::value_type, char>();
-  const wchar_t sw[] = { (wchar_t)-1, (wchar_t)-1, (wchar_t)-1, (wchar_t)-1, 0};
+  const wchar_t sw[] = { (wchar_t)-1, (wchar_t)-1, (wchar_t)-1, (wchar_t)-1, (wchar_t)-1, 0};
   EXPECT_ANY_THROW(s = xtd::string::from(sw));
 }
 

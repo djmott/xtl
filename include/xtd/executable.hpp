@@ -19,7 +19,7 @@ namespace xtd {
       }
       std::string sTemp(MAX_PATH, 0);
       forever {
-        auto iLen = xtd::os_exception::throw_if(GetModuleFileName(nullptr, &sTemp[0], static_cast<DWORD>(sTemp.size())), [](DWORD ret){ return (0==ret); });
+        auto iLen = xtd::crt_exception::throw_if(GetModuleFileName(nullptr, &sTemp[0], static_cast<DWORD>(sTemp.size())), [](DWORD ret){ return (0==ret); });
         if (iLen >= sTemp.size()){
           sTemp.resize(sTemp.size() * 2);
         }else{
@@ -38,7 +38,7 @@ namespace xtd {
         return sRet;
       }
       sRet.resize(PATH_MAX);
-      sRet.resize(xtd::os_exception::throw_if(::readlink("/proc/self/exe", &sRet[0], sRet.size()), [](int i) { return (-1 == i); }));
+      sRet.resize(xtd::crt_exception::throw_if(::readlink("/proc/self/exe", &sRet[0], sRet.size()), [](int i) { return (-1 == i); }));
       return sRet;
     }
 

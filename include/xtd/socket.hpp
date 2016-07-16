@@ -29,11 +29,11 @@ namespace xtd{
     using POLLFD = WSAPOLLFD;
 #endif
     ///Represents an socket error
-    class exception : public xtd::os_exception{
+    class exception : public xtd::crt_exception{
     public:
-      exception(const source_location& loc, const xtd::string& swhat) : os_exception(loc, swhat){}
-      exception(const exception& ex) : os_exception(ex){}
-      explicit exception(exception&& ex) : os_exception(std::move(ex)){}
+      exception(const source_location& loc, const xtd::string& swhat) : crt_exception(loc, swhat){}
+      exception(const exception& ex) : crt_exception(ex){}
+      explicit exception(exception&& ex) : crt_exception(std::move(ex)){}
 
       template <typename _ReturnT, typename _ExpressionT>
       inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
@@ -134,8 +134,8 @@ namespace xtd{
     private:
       winsock_initializer(){
         WSADATA oData;
-        os_exception::throw_if(WSAStartup(0x202, &oData), [](int err){ return 0 != err; });
-        if (oData.wVersion != 0x202) throw os_exception(here(), "Invalid winsock version");
+        crt_exception::throw_if(WSAStartup(0x202, &oData), [](int err){ return 0 != err; });
+        if (oData.wVersion != 0x202) throw crt_exception(here(), "Invalid winsock version");
       }
 
       ~winsock_initializer(){ WSACleanup(); }
@@ -174,7 +174,7 @@ namespace xtd{
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
         winsock_initializer::get();
 #endif
-        _Socket = xtd::os_exception::throw_if(::socket(address_type::address_family, (int)type, (int)protocol), [](SOCKET s){ return static_cast<SOCKET>(-1) == s; });
+        _Socket = xtd::crt_exception::throw_if(::socket(address_type::address_family, (int)type, (int)protocol), [](SOCKET s){ return static_cast<SOCKET>(-1) == s; });
       }
 
       explicit socket_base(socket_base&& src) : _Socket(src._Socket){
@@ -220,7 +220,7 @@ namespace xtd{
 
       void set_blocking(bool blocking){
         uint32_t val = (blocking ? 0 : 1);
-        xtd::os_exception::throw_if(ioctlsocket(_Socket, FIONBIO, &val), [](int i){ return i < 0; });
+        xtd::crt_exception::throw_if(ioctlsocket(_Socket, FIONBIO, &val), [](int i){ return i < 0; });
       }
 
       bool is_valid() const{ return -1 != _Socket; }
@@ -244,7 +244,7 @@ namespace xtd{
         oPoll.events = POLLIN | POLLOUT;
         oPoll.fd = _SuperT::_Socket;
         oPoll.revents = 0;
-        if (0 == xtd::os_exception::throw_if(::poll(&oPoll, 1, Timeout), [](int i){ return i < 0; })){
+        if (0 == xtd::crt_exception::throw_if(::poll(&oPoll, 1, Timeout), [](int i){ return i < 0; })){
           return;
         }
         if (oPoll.revents & POLLERR){
@@ -397,9 +397,9 @@ namespace xtd{
         WaitMS %= 1000;
         tv.tv_usec = WaitMS / 1000;
 #if (XTD_OS_MINGW & XTD_OS)
-        auto iRet = xtd::os_exception::throw_if(::select(1 + (SOCKET)*this, &fdRead, &fdWrite, &fdErr, reinterpret_cast<PTIMEVAL>(&tv)), [](int i){return i < 0; });
+        auto iRet = xtd::crt_exception::throw_if(::select(1 + (SOCKET)*this, &fdRead, &fdWrite, &fdErr, reinterpret_cast<PTIMEVAL>(&tv)), [](int i){return i < 0; });
 #else
-        auto iRet = xtd::os_exception::throw_if(::select(1 + (SOCKET)*this, &fdRead, &fdWrite, &fdErr, &tv), [](int i){return i < 0; });
+        auto iRet = xtd::crt_exception::throw_if(::select(1 + (SOCKET)*this, &fdRead, &fdWrite, &fdErr, &tv), [](int i){return i < 0; });
 #endif
         if (0 == iRet){
           return;

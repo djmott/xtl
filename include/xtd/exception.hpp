@@ -79,8 +79,8 @@ Throws exception if the test expression returns true. _throw_if methods are pres
     std::string _what;
   };
 
-/// Represents an exception of the kernel or core OS component
-  class os_exception : public xtd::exception{
+/// c++ wrapper around legacy errno based errors from the CRT
+  class crt_exception : public xtd::exception{
   public:
     template <typename _ReturnT, typename _ExpressionT>
     inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
@@ -90,7 +90,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
       return ret;
     }
 
-    os_exception(const source_location& Source, const std::string& What) : xtd::exception(Source, What){
+    crt_exception(const source_location& Source, const std::string& What) : xtd::exception(Source, What){
       if (!errno){
         return;
       }
@@ -104,7 +104,28 @@ Throws exception if the test expression returns true. _throw_if methods are pres
       _what += strerror(errno);
 #endif
     }
-    os_exception(const os_exception& ex) : xtd::exception(ex){}
-    os_exception(os_exception&& ex) : xtd::exception(std::move(ex)){}
+    crt_exception(const crt_exception& ex) : xtd::exception(ex){}
+    crt_exception(crt_exception&& ex) : xtd::exception(std::move(ex)){}
   };
+
+#if (XTD_OS_WINDOWS & XTD_OS)
+  namespace windows{
+    struct exception : xtd::exception{
+    public:
+      template <typename _ReturnT, typename _ExpressionT>
+      inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
+        if (exp(ret)){
+          throw exception(source, expstr);
+        }
+        return ret;
+      }
+
+      exception(const xtd::source_location& source, const char * expression);
+    private:
+      DWORD _last_error;
+    };
+  }
+#endif
+
+
 }

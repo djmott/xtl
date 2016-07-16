@@ -347,6 +347,15 @@ namespace xtd{
       }
     };
 
+    template <typename _ChT, typename ... _ArgsT>
+    class xstring_format<_ChT, const _ChT*&, _ArgsT...>{
+    public:
+      inline static void format(xstring<_ChT>& dest, const _ChT*&src, _ArgsT&&...oArgs){
+        dest.append(src);
+        xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+      }
+    };
+
     template <typename _ChT, int _Len, typename ... _ArgsT>
     class xstring_format<_ChT, const _ChT(&)[_Len], _ArgsT...>{
     public:
@@ -364,6 +373,28 @@ namespace xtd{
         xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
       }
     };
+
+  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+    //DWORD
+    template <typename ... _ArgsT>
+    class xstring_format<char, DWORD&, _ArgsT...>{
+    public:
+      inline static void format(xstring<char> &dest, const DWORD& newval, _ArgsT &&...oArgs){
+        dest.append(std::to_string(newval));
+        xstring_format<char, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+      }
+    };
+    template <typename ... _ArgsT>
+    class xstring_format<wchar_t, DWORD&, _ArgsT...>{
+    public:
+      inline static void format(xstring<wchar_t> &dest, const DWORD& newval, _ArgsT &&...oArgs){
+        dest.append(std::to_wstring(newval));
+        xstring_format<wchar_t, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+      }
+    };
+
+  #endif
+
   }
 #endif
 }

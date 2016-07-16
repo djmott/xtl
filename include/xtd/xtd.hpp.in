@@ -9,27 +9,31 @@
 #pragma once
 
 #if !defined(ON)
-    #define ON    1
+  #define ON    1
 #endif
 
 #if !defined(OFF)
-    #define OFF   0
+  #define OFF   0
 #endif
 
 #if !defined(YES)
-    #define YES   1
+  #define YES   1
 #endif
 
 #if !defined(NO)
-    #define NO    0
+  #define NO    0
 #endif
 
 #if !defined(DOXY_INVOKED)
-    #define DOXY_INVOKED 0
+  #define DOXY_INVOKED 0
 #endif
 
 #if !defined(XTD_HAS_FILESYSTEM)
-    #cmakedefine01 XTD_HAS_FILESYSTEM
+  #cmakedefine01 XTD_HAS_FILESYSTEM
+#endif
+
+#if !defined(XTD_USE_DBGHELP)
+  #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
 #endif
 
 /** @name XTD_COMPILER
@@ -261,6 +265,9 @@ namespace xtd{
     #include <Ws2ipdef.h>
     #include <ws2tcpip.h>
     #include <rpc.h>
+    #if XTD_USE_DBGHELP
+      #include <dbghelp.h>
+    #endif
 #endif
 
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
@@ -360,3 +367,8 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/rpc.hpp>
 #include <xtd/var.hpp>
 
+#if (XTD_OS_WINDOWS & XTD_OS)
+  #include <xtd/windows/dbghelp.hpp>
+#endif
+
+#include <xtd/exception.inl>

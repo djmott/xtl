@@ -41,6 +41,9 @@ namespace xtd{
   * @return
   */
   template <typename _Ty> constexpr typename processor_intrinsic<_Ty>::type intrinsic_cast(_Ty src){
+    return src;
+  } 
+  template <typename _Ty> constexpr typename processor_intrinsic<_Ty*>::type intrinsic_cast(const _Ty * src){
     return reinterpret_cast<typename processor_intrinsic<_Ty>::type>(src);
   }
 

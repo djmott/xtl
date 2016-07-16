@@ -1,4 +1,4 @@
-#cmake config
+### cmake config
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 set(CMAKE_CXX_STANDARD 11)
@@ -23,6 +23,23 @@ include(CheckLibraryExists)
 include(FeatureSummary)
 include(ExternalProject)
 
+
+check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
+check_include_file_cxx(codecvt XTD_HAS_CODECVT CACHE BOOLEAN FALSE)
+check_include_file_cxx(filesystem XTD_HAS_FILESYSTEM CACHE BOOLEAN FALSE)
+
+check_include_file_cxx(iconv.h XTD_HAS_ICONV_H CACHE BOOLEAN FALSE)
+check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
+
+check_include_file_cxx(dbghelp.h XTD_HAS_DBGHLP_H CACHE BOOLEAN FALSE)
+check_library_exists(dbghelp.lib SymInitialize "" XTD_HAS_DBGHELP_LIB)
+
+if (XTD_HAS_DBGHLP_H OR XTD_HAS_DBGHELP_LIB)
+  option(XTD_USE_DBGHELP "use dbghelp library" YES)
+else()
+  option(XTD_USE_DBGHELP "use dbghelp library" NO)
+endif()
+
 option(XTD_VERBOSE_BUILD "print detailed compile messages")
 option(XTD_COLOR_MESSAGES "use color escape sequences in console compiler output" NO)
 option(XTD_LOG_TARGET_CSV "write log output to CSV file" NO)
@@ -34,13 +51,7 @@ option(BUILD_EXAMPLES "Build examples" YES)
 option(BUILD_TESTS "Build tests" YES)
 
 
-check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
-check_include_file_cxx(codecvt XTD_HAS_CODECVT CACHE BOOLEAN FALSE)
-check_include_file_cxx(filesystem XTD_HAS_FILESYSTEM CACHE BOOLEAN FALSE)
-check_include_file_cxx(iconv.h XTD_HAS_ICONV_H CACHE BOOLEAN FALSE)
-check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
-
-#detect OS
+### detect OS
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
   set(XTD_OS XTD_OS_OSX)
 elseif(CMAKE_SYSTEM_NAME MATCHES "MSYS")
@@ -59,7 +70,7 @@ else()
   message(FATAL_ERROR "Platform not supported")
 endif()
 
-#detect compiler
+### detect compiler
 if(MSVC)
   set(XTD_COMPILER XTD_COMPILER_MSVC)
 elseif(BORLAND)
@@ -79,12 +90,14 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -DNDEBUG")
 
 
-#set event trace compiler backend
+### set event trace compiler backend
 if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
   set(EVT_TRACE_SRC src/event_trace/evt_gcc.cpp)
 elseif(XTD_COMPILER MATCHES "XTD_COMPILER_MSVC")
   if(CMAKE_CL_64)
+    enable_language(ASM_MASM)
     set(EVT_TRACE_SRC src/event_trace/evt_vc64.asm)
+    set_property(SOURCE src/event_trace/evt_vc64.asm PROPERTY LANGUAGE ASM_MASM)
   else()
     set(EVT_TRACE_SRC src/event_trace/evt_vc32.cpp)
   endif()
@@ -121,6 +134,8 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/var.hpp
   include/xtd/xtd.hpp
   include/xtd/xtd.hpp.in
+  include/xtd/windows/dbghelp.hpp
+  include/xtd/exception.inl
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -135,7 +150,7 @@ if(XTD_HAS_LIBUUID)
   link_libraries(uuid)
 endif()
 
-#set default character set and conversion
+### set default character set and conversion
 set(XTD_STR_CONVERT XTD_STR_CONVERT_GENERIC CACHE STRING "default string conversion backend")
 set_property(CACHE XTD_STR_CONVERT PROPERTY STRINGS XTD_STR_CONVERT_GENERIC XTD_STR_CONVERT_CODECVT XTD_STR_CONVERT_ICONV)
 
@@ -158,7 +173,7 @@ else()
 endif()
 
 
-#link libraries
+### link libraries
 if(XTD_OS MATCHES "XTD_OS_CYGWIN")
   link_libraries(dl pthread stdc++)
 elseif(XTD_OS MATCHES "XTD_OS_MINGW")
@@ -167,6 +182,12 @@ elseif(XTD_OS MATCHES "XTD_OS_LINUX")
   link_libraries(dl pthread stdc++)
 elseif(XTD_OS MATCHES "XTD_OS_WINDOWS")
   link_libraries(rpcrt4)
+endif()
+
+
+if(XTD_HAS_DBGHLP_H AND XTD_HAS_DBGHELP_LIB)
+  set(XTD_HAS_DBGHELP 1)
+  link_libraries(dbghelp)
 endif()
 
 

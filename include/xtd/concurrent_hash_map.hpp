@@ -17,7 +17,7 @@ namespace xtd{
     */
     template <typename _HashMapT>
     class hash_map_iterator{
-      template <typename, typename, int> friend struct hash_map;
+      template <typename, typename, int> friend class hash_map;
       static const int key_nibbles = sizeof(typename _HashMapT::key_type) * 2;
       const _HashMapT * _Map;
       typename _HashMapT::value_type * _Current;
@@ -128,7 +128,7 @@ namespace xtd{
           }
         }
         x >>= 4;
-        return pChild->insert(reinterpret_cast<key_type>(x), std::forward<value_type>(Value));
+        return pChild->insert(intrinsic_cast(x), std::forward<value_type>(Value));
       }
 
       /** concurrently search for an existing key
@@ -140,7 +140,7 @@ namespace xtd{
         int Index = (x & 0xf);
         auto pChild = _Buckets[Index].load();
         x >>= 4;
-        return (pChild ? pChild->exists(reinterpret_cast<key_type>(x)) : false);
+        return (pChild ? pChild->exists(intrinsic_cast(x)) : false);
       }
 
       /** concurrently remove a value
@@ -153,7 +153,7 @@ namespace xtd{
         auto pChild = _Buckets[Index].load();
         if (pChild){
           x >>= 4;
-          return pChild->remove(reinterpret_cast<key_type>(x));
+          return pChild->remove(intrinsic_cast(x));
         }
         return false;
       }
@@ -172,7 +172,7 @@ namespace xtd{
           pChild = _Buckets[Index].load();
         }
         x >>= 4;
-        return pChild->operator[](reinterpret_cast<key_type>(x));
+        return pChild->operator[](intrinsic_cast(x));
       }
 
       /// unsafe get an iterator to the first element
