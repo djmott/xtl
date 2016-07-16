@@ -42,10 +42,12 @@ namespace xtd{
 
     protected:
       struct node{
+        using pointer = node *;
+        using atomic_ptr = std::atomic<pointer>;
         node * _Next;
         value_type _Value;
       };
-      std::atomic<node*> _Root;
+      typename node::atomic_ptr _Root;
     };
     ///@}
   }

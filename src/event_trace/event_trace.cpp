@@ -12,7 +12,7 @@ namespace{
 }
 
 extern "C"{
-  void __xtd_EventEnter(void * pAddr){
+  void __xtd_EventEnter(void *){
     if (_InTrace){
       return;
     }
@@ -21,7 +21,7 @@ extern "C"{
       _FunctionNames.insert(pAddr, oInfo.dli_sname);
     }*/
     _InTrace = true;
-    _ThreadStack.push("");
+  //  _ThreadStack.push("");
     _InTrace = false;
   }
 
@@ -30,7 +30,7 @@ extern "C"{
       return;
     }
     _InTrace = true;
-    _ThreadStack.pop();
+  //  _ThreadStack.pop();
     _InTrace = false;
   }
 }

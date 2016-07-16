@@ -23,6 +23,7 @@ include(CheckLibraryExists)
 include(FeatureSummary)
 include(ExternalProject)
 
+option(XTD_VERBOSE_BUILD "print detailed compile messages")
 option(XTD_COLOR_MESSAGES "use color escape sequences in console compiler output" NO)
 option(XTD_LOG_TARGET_CSV "write log output to CSV file" NO)
 option(XTD_LOG_TARGET_COUT "write log output to std::cout" NO)
@@ -78,7 +79,21 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -DNDEBUG")
 
 
-add_library(XTL STATIC src/xtl.cpp
+#set event trace compiler backend
+if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
+  set(EVT_TRACE_SRC src/event_trace/evt_gcc.cpp)
+elseif(XTD_COMPILER MATCHES "XTD_COMPILER_MSVC")
+  if(CMAKE_CL_64)
+    set(EVT_TRACE_SRC src/event_trace/evt_vc64.asm)
+  else()
+    set(EVT_TRACE_SRC src/event_trace/evt_vc32.cpp)
+  endif()
+else()
+  message(FATAL_ERROR "event trace not supported for compiler")
+endif()
+
+add_library(XTL STATIC ${EVT_TRACE_SRC}
+  src/xtl.cpp
   src/event_trace/event_trace.cpp
   include/xtd/callback.hpp
   include/xtd/concurrent.hpp
@@ -94,12 +109,12 @@ add_library(XTL STATIC src/xtl.cpp
   include/xtd/meta.hpp
   include/xtd/parse.hpp
   include/xtd/process.hpp
-  include/xtd/rw_lock.hpp
+  include/xtd/concurrent_rw_lock.hpp
   include/xtd/rpc.hpp
   include/xtd/shared_mem_obj.hpp
   include/xtd/socket.hpp
   include/xtd/source_location.hpp
-  include/xtd/spin_lock.hpp
+  include/xtd/concurrent_spin_lock.hpp
   include/xtd/string.hpp
   include/xtd/tuple.hpp
   include/xtd/unique_id.hpp

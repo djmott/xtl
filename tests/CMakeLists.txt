@@ -24,6 +24,7 @@ set(TEST_SOURCE tests.cpp
   test_meta.hpp
   test_parse.hpp
   test_path.hpp
+  test_process.hpp
   test_rw_lock.hpp
   test_rpc.hpp
   test_shared_mem_obj.hpp
@@ -51,6 +52,7 @@ build_option(TEST_LOGGING "test xtd::log")
 build_option(TEST_META "test meta programming")
 build_option(TEST_PARSE "test xtd::parse")
 build_option(TEST_PATH "test xtd::path")
+build_option(TEST_PROCESS "test xtd::process")
 build_option(TEST_READ_WRITE_LOCK "test xtd::read_write_lock")
 build_option(TEST_RPC "test xtd::rpc")
 build_option(TEST_SHARED_MEM_OBJ "test xtd::shared_mem_obj")

@@ -129,7 +129,8 @@ namespace xtd{
 #endif
 
     void callback_thread(){
-      while ( !_Exit ){
+      _CallbackThreadStarted.set_value();
+      while ( !_CallbackThreadExit ){
         callback_type oCallback;
         {
           std::unique_lock<std::mutex> oLock(_CallbackLock);
@@ -145,6 +146,7 @@ namespace xtd{
           oCallback();
         }
       }
+      _CallbackThreadFinished.set_value();
     }
 
     log() : _Messages(), _Callbacks(), _CallbackThread(), _CallbackLock(), _CallbackCheck(), _LogTargets(){
@@ -158,17 +160,19 @@ namespace xtd{
       _LogTargets.emplace_back(new std_cout_target);
 #endif
       _CallbackThread = std::thread(&log::callback_thread, this);
+      _CallbackThreadStarted.get_future().get();
     }
 
     ~log(){
       {
         std::lock_guard<std::mutex> oLock(_CallbackLock);
         _Callbacks.push_back([this](){
-          _Exit = true;
+          _CallbackThreadExit = true;
         });
         _CallbackCheck.notify_one();
       }
       _CallbackThread.join();
+      _CallbackThreadFinished.get_future().get();
     }
 
     using callback_type = std::function<void()>;
@@ -180,7 +184,9 @@ namespace xtd{
     std::mutex _CallbackLock;
     std::condition_variable _CallbackCheck;
     log_target::vector_type _LogTargets;
-    bool _Exit = false;
+    std::promise<void> _CallbackThreadStarted;
+    std::promise<void> _CallbackThreadFinished;
+    bool _CallbackThreadExit = false;
 
     public:
 
