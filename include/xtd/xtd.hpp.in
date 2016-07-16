@@ -236,6 +236,10 @@ namespace xtd{
 #define forever for(;;)
 
 //System
+#if (XTD_OS_LINUX & XTD_OS)
+  #define _GNU_SOURCE
+#endif
+
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     #include <winsock2.h>
     #include <windows.h>
