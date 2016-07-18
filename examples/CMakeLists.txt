@@ -1,6 +1,11 @@
 
 add_custom_target(examples)
 
+add_library(dummy_library_example SHARED dummy_library.cpp)
+add_dependencies(dummy_library_example XTL)
+add_dependencies(examples dummy_library_example)
+
+
 function(build_example target)
   set(BUILD_${target}_EXAMPLE YES CACHE BOOLEAN "Build ${target}")
   if(BUILD_${target}_EXAMPLE)

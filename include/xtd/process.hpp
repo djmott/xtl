@@ -8,21 +8,24 @@
 
 namespace xtd{
 
-  class process{
+
+#if ((XTD_OS_LINUX | XTD_OS_MSYS) & XTD_OS)
+  class process {
   public:
 
-#if (XTD_OS_LINUX & XTD_OS)
     using pid_type = pid_t;
-    static process& this_process(){
+
+    static process &this_process() {
       static process _this_process(getpid());
       return _this_process;
     }
 
   private:
-    process(pid_type hPid) : _pid(hPid){
+    pid_type _pid;
+    process(pid_type hPid) : _pid(hPid) {
 
-      for (auto pMap = reinterpret_cast<const link_map*>(dlopen(0, RTLD_LAZY)); pMap; pMap = pMap->l_next){
-        if (pMap->l_name){
+      for (auto pMap = reinterpret_cast<const struct link_map *>(dlopen(0, RTLD_LAZY)); pMap; pMap = pMap->l_next) {
+        if (pMap->l_name) {
           std::cout << pMap->l_name << std::endl;
         }
       }
@@ -34,23 +37,96 @@ namespace xtd{
     auto pThis = reinterpret_cast<process*>(data);
     std::cout << pInfo->dlpi_name << std::endl;
     }*/
-
+  };
 #elif (XTD_OS_WINDOWS & XTD_OS)
+  class process{
+  public:
+
     using pid_type = DWORD;
+    using pointer = std::shared_ptr<process>;
+    using map = std::map<pid_type, pointer>;
 
 
     static process& this_process(){
       static process _this_process(GetCurrentProcessId());
       return _this_process;
     }
-    process(pid_type hPid) : _pid(hPid){}
+
+    static map system_processes(){
+      map oRet;
+      std::vector<DWORD> pids(10, 0);
+      DWORD dwNeeded;
+      BOOL bRet;
+      DWORD dwLastError;
+      forever{
+        bRet = EnumProcesses(&pids[0], pids.size() * sizeof(DWORD), &dwNeeded);
+        dwLastError = GetLastError();
+        if ((dwNeeded / sizeof(DWORD)) < pids.size()){
+          break;
+        }
+        pids.resize(pids.size() * 2);
+      }
+      pids.resize(dwNeeded / sizeof(DWORD));
+      for (auto pid : pids){
+        oRet[pid] = pointer(new process(pid));
+      }
+      return oRet;
+    }
+
+    process(pid_type hPid) : _pid(hPid), _hProcess(nullptr){}
+    ~process(){
+      if (_hProcess){
+        CloseHandle(_hProcess);
+      }
+    }
+
+    dynamic_library::map libraries(){
+      dynamic_library::map oRet;
+      std::vector<HMODULE> modules(10, 0);
+      DWORD dwNeeded;
+      BOOL bRet;
+      DWORD dwLastError;
+      forever{
+        bRet = EnumProcessModules(*this, &modules[0], modules.size() * sizeof(HMODULE), &dwNeeded);
+        dwLastError = GetLastError();
+        if ((dwNeeded / sizeof(HMODULE)) < modules.size()){
+          break;
+        }
+        modules.resize(modules.size() * 2);
+      }
+      modules.resize(dwNeeded / sizeof(HMODULE));
+      for (dynamic_library::native_handle_type module : modules){
+        xtd::path sPath(MAX_PATH, 0);
+        forever{
+          dwNeeded = GetModuleFileNameExA(*this, module, &sPath[0], sPath.size());
+          if (dwNeeded < sPath.size()){
+            break;
+          }
+          sPath.resize(dwNeeded);
+        }
+        oRet[sPath] = dynamic_library::pointer(new dynamic_library(module));
+      }
+      return oRet;
+    }
+
+
+
+  private:
+    pid_type _pid;
+    HANDLE _hProcess;
+    operator HANDLE(){
+      if (!_hProcess){
+        _hProcess = xtd::windows::exception::throw_if(OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, _pid), [](HANDLE h){ return NULL == h; });
+      }
+      return _hProcess;
+    }
+  };
+
 #else
   #error "Unsupported system for xtd::process"
 #endif
 
 
-    pid_type _pid;
-  };
 
 
 

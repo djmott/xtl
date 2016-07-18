@@ -39,10 +39,11 @@ namespace xtd{
     using native_handle_type = void *;
   #endif
 
-    using ptr = std::shared_ptr<dynamic_library>;
+    using pointer = std::shared_ptr<dynamic_library>;
+    using map = std::map<xtd::path, pointer>;
 
-    static inline ptr make(const char * spath){ return ptr(new dynamic_library(spath)); }
-    static inline ptr make(const xtd::path& spath){ return ptr(new dynamic_library(spath.string().c_str())); }
+    static inline pointer make(const char * spath){ return pointer(new dynamic_library(spath)); }
+    static inline pointer make(const xtd::path& spath){ return pointer(new dynamic_library(spath.string().c_str())); }
 
     native_handle_type handle() const{ return _Handle; }
 
@@ -68,9 +69,9 @@ namespace xtd{
       }
     private:
       friend class dynamic_library;
-      function(function_pointer_type fnptr, dynamic_library::ptr oLib) : _function_pointer(fnptr), _library(oLib){}
+      function(function_pointer_type fnptr, dynamic_library::pointer oLib) : _function_pointer(fnptr), _library(oLib){}
       function_pointer_type _function_pointer = nullptr;
-      dynamic_library::ptr _library;
+      dynamic_library::pointer _library;
     };
 
     dynamic_library() = delete;

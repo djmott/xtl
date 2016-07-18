@@ -177,11 +177,11 @@ endif()
 if(XTD_OS MATCHES "XTD_OS_CYGWIN")
   link_libraries(dl pthread stdc++)
 elseif(XTD_OS MATCHES "XTD_OS_MINGW")
-  link_libraries(rpcrt4 ws2_32 pthread stdc++)
+  link_libraries(rpcrt4 ws2_32 pthread stdc++ psapi)
 elseif(XTD_OS MATCHES "XTD_OS_LINUX")
   link_libraries(dl pthread stdc++)
 elseif(XTD_OS MATCHES "XTD_OS_WINDOWS")
-  link_libraries(rpcrt4)
+  link_libraries(rpcrt4 psapi)
 endif()
 
 

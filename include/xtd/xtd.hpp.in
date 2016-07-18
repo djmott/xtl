@@ -167,6 +167,7 @@
   #define NORETURN __declspec(noreturn)
   #define MULTIPLE __declspec(selectany)
   #define ALIGN(val) __declspec(align(val))
+  #define EXPORT __declspec(dllexport)
   #define TODO( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : TODO : " x  ))
   #define NOTE( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : NOTE : " x  ))
 #elif (XTD_COMPILER_GCC & XTD_COMPILER)
@@ -175,6 +176,7 @@
   #define NORETURN __attribute__((noreturn))
   #define MULTIPLE __attribute__ ((weak))
   #define ALIGN(val) __attribute__ ((aligned (val)))
+  #define EXPORT __attribute__ ((visibility ("default")))
   #define PRAGMA_(x) _Pragma( #x )
   #if XTD_COLOR_MESSAGES
     #define TODO( x ) PRAGMA_(message ("\e[31mTODO : " x "\e[0m" ))
@@ -265,6 +267,7 @@ namespace xtd{
     #include <Ws2ipdef.h>
     #include <ws2tcpip.h>
     #include <rpc.h>
+    #include <psapi.h>
     #if XTD_USE_DBGHELP
       #include <dbghelp.h>
     #endif

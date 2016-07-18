@@ -36,7 +36,7 @@ namespace xtd{
     explicit path(const path& src) : string_type(src){}
     explicit path(path&& src) : string_type(std::move(src)) {}
 
-    template <typename _Ty> path(const _Ty& src) : string_type(src){}
+    template <typename ... _Ty> path(_Ty&& ... src) : string_type(std::forward<_Ty>(src)...){}
 
     path& operator=(path&& src) {
       static_cast<string_type&>(*this) = std::move(src);

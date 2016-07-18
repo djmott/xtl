@@ -14,18 +14,18 @@ TEST(test_exception, copy_construct){
   xtd::exception ex2(ex1);
   ASSERT_EQ(ex1.location(), ex2.location());
   ASSERT_STREQ(ex1.what(), ex2.what());
-  xtd::crt_exception osex1(here(), "");
-  xtd::crt_exception osex2(osex1);
-  ASSERT_EQ(osex1.location(), osex2.location());
-  ASSERT_STREQ(osex1.what(), osex2.what());
+  xtd::crt_exception crtex1(here(), "");
+  xtd::crt_exception crtex2(crtex1);
+  ASSERT_EQ(crtex1.location(), crtex2.location());
+  ASSERT_STREQ(crtex1.what(), crtex2.what());
 
 }
 
 TEST(test_exception, move_construct){
   xtd::exception ex1(here(), "");
   xtd::exception ex2(std::move(ex1));
-  xtd::crt_exception osex1(here(), "");
-  xtd::crt_exception osex2(std::move(osex1));
+  xtd::crt_exception crtex1(here(), "");
+  xtd::crt_exception crtex2(std::move(crtex1));
 }
 
 

@@ -9,12 +9,13 @@ enable_testing()
 
 include_directories(${GTEST_INCLUDE_DIRS})
 
-add_library(dummy SHARED dummy_library.cpp)
-add_dependencies(dummy XTL)
+add_library(dummy_library_test SHARED dummy_library.cpp)
+add_dependencies(dummy_library_test XTL)
 
 set(TEST_SOURCE tests.cpp
   test_callback.hpp
   test_concurrent_stack.hpp
+  test_debug_help.hpp
   test_dynamic_library.hpp
   test_event_trace.hpp
   test_exception.hpp
@@ -44,6 +45,7 @@ endfunction()
 build_option(TEST_CALLBACK "test xtd::callback")
 build_option(TEST_CONCURRENT_HASH_MAP "test xtd::concurrent_hash_map")
 build_option(TEST_CONCURRENT_STACK "test xtd::concurrent_stack")
+build_option(TEST_DEBUG_HELP "test xtd::windows::debug_help")
 build_option(TEST_DYNAMIC_LIBRARY "test xtd::dynamic_library")
 build_option(TEST_EVENT_TRACE "test event trace")
 build_option(TEST_EXCEPTION "test xtd::exception")
@@ -68,7 +70,7 @@ endif()
 build_option(TEST_VAR "test xtd::var")
 
 add_executable(unit_tests ${TEST_SOURCE})
-add_dependencies(unit_tests dummy)
+add_dependencies(unit_tests dummy_library_test)
 target_link_libraries(unit_tests ${GTEST_BOTH_LIBRARIES})
 #add_test(NAME unit_tests COMMAND unit_tests)
 GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
@@ -76,6 +78,6 @@ GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   add_executable(coverage_tests ${TEST_SOURCE})
   target_compile_options(coverage_tests PRIVATE -coverage -fprofile-arcs -ftest-coverage)
-  add_dependencies(coverage_tests dummy)
+  add_dependencies(coverage_tests dummy_library_test)
   target_link_libraries(coverage_tests gcov ${GTEST_BOTH_LIBRARIES})
 endif()
