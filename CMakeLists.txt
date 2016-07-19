@@ -20,6 +20,7 @@ find_package(Doxygen)
 
 include(CheckIncludeFileCXX)
 include(CheckLibraryExists)
+include(CheckCXXSourceCompiles)
 include(FeatureSummary)
 include(ExternalProject)
 
@@ -27,12 +28,15 @@ include(ExternalProject)
 check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
 check_include_file_cxx(codecvt XTD_HAS_CODECVT CACHE BOOLEAN FALSE)
 check_include_file_cxx(filesystem XTD_HAS_FILESYSTEM CACHE BOOLEAN FALSE)
+#check_include_file_cxx(experimental/filesystem XTD_HAS_EXP_FILESYSTEM CACHE BOOLEAN FALSE)
+check_cxx_source_compiles("#include <experimental/filesystem>\nint main(){ return 0; }" XTD_HAS_EXP_FILESYSTEM)
 
 check_include_file_cxx(iconv.h XTD_HAS_ICONV_H CACHE BOOLEAN FALSE)
 check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
 
 check_include_file_cxx(dbghelp.h XTD_HAS_DBGHLP_H CACHE BOOLEAN FALSE)
 check_library_exists(dbghelp.lib SymInitialize "" XTD_HAS_DBGHELP_LIB)
+
 
 if (XTD_HAS_DBGHLP_H OR XTD_HAS_DBGHELP_LIB)
   option(XTD_USE_DBGHELP "use dbghelp library" YES)
@@ -111,6 +115,7 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/callback.hpp
   include/xtd/concurrent.hpp
   include/xtd/concurrent_hash_map.hpp
+  include/xtd/concurrent_queue.hpp
   include/xtd/concurrent_stack.hpp
   include/xtd/debug.hpp
   include/xtd/dynamic_library.hpp
@@ -132,7 +137,6 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/tuple.hpp
   include/xtd/unique_id.hpp
   include/xtd/var.hpp
-  include/xtd/xtd.hpp
   include/xtd/xtd.hpp.in
   include/xtd/windows/dbghelp.hpp
   include/xtd/exception.inl

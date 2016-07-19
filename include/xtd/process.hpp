@@ -14,8 +14,20 @@ namespace xtd{
   public:
 
     using pid_type = pid_t;
+    using pointer = std::shared_ptr<process>;
+    using map = std::map<pid_type, pointer>;
 
-    static process &this_process() {
+    static map system_processes() {
+      map oRet;
+      return oRet;
+    }
+
+    dynamic_library::map libraries() {
+      dynamic_library::map oRet;
+      return oRet;
+    }
+
+      static process &this_process() {
       static process _this_process(getpid());
       return _this_process;
     }

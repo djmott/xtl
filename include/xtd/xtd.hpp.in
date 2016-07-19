@@ -32,6 +32,10 @@
   #cmakedefine01 XTD_HAS_FILESYSTEM
 #endif
 
+#if !defined(XTD_HAS_EXP_FILESYSTEM)
+  #cmakedefine01 XTD_HAS_EXP_FILESYSTEM
+#endif
+
 #if !defined(XTD_USE_DBGHELP)
   #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
 #endif
@@ -274,7 +278,6 @@ namespace xtd{
 #endif
 
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
-  #define _GNU_SOURCE
   #include <sys/types.h>
   #include <sys/socket.h>
   #include <sys/ioctl.h>
@@ -328,6 +331,12 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <typeinfo>
 #include <type_traits>
 #include <vector>
+
+#if (XTD_HAS_FILESYSTEM)
+  #include <filesystem>
+#elif (XTD_HAS_EXP_FILESYSTEM)
+  #include <experimental/filesystem>
+#endif
 
 //3rd party
 #if (XTD_HAS_UUID)
