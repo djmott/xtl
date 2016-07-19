@@ -19,6 +19,15 @@ namespace xtd{
 
     static map system_processes() {
       map oRet;
+      std::regex oRE("[0-9]+");
+      _dir::ptr oDir(opendir("/proc"));
+      dirent * oEntry;
+      while ((oEntry = readdir(oDir.get()))){
+        if ((oEntry->d_type & DT_DIR) &&  std::regex_match(oEntry->d_name, oRE)) {
+          auto oPID = static_cast<pid_type>(atoi(oEntry->d_name));
+          oRet[oPID] = pointer(new process(oPID));
+        }
+      }
       return oRet;
     }
 
@@ -34,21 +43,19 @@ namespace xtd{
 
   private:
     pid_type _pid;
-    process(pid_type hPid) : _pid(hPid) {
 
+    struct _dir{
+      using ptr = std::unique_ptr<DIR, _dir>;
+      void operator()(DIR * d){ closedir(d); }
+    };
+
+    process(pid_type hPid) : _pid(hPid) {
       for (auto pMap = reinterpret_cast<const struct link_map *>(dlopen(0, RTLD_LAZY)); pMap; pMap = pMap->l_next) {
         if (pMap->l_name) {
           std::cout << pMap->l_name << std::endl;
         }
       }
-
-      //      dl_iterate_phdr(enum_libraries, this);
-
     }
-    /*    static int enum_libraries(dl_phdr_info * pInfo, size_t size, void * data){
-    auto pThis = reinterpret_cast<process*>(data);
-    std::cout << pInfo->dlpi_name << std::endl;
-    }*/
   };
 #elif (XTD_OS_WINDOWS & XTD_OS)
   class process{

@@ -290,6 +290,7 @@ namespace xtd{
   #include <poll.h>
   #include <dlfcn.h>
   #include <cxxabi.h>
+  #include <dirent.h>
 #endif
 
 #if (XTD_OS_LINUX & XTD_OS)
