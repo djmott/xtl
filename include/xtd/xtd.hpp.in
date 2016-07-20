@@ -28,6 +28,26 @@
   #define DOXY_INVOKED 0
 #endif
 
+#if !defined(XTD_HAS_UUID)
+  #cmakedefine01 XTD_HAS_UUID
+#endif
+
+#if !defined(XTD_COLOR_MESSAGES)
+  #cmakedefine01 XTD_COLOR_MESSAGES
+#endif
+
+#if !defined(XTD_HAS_CODECVT)
+  #cmakedefine01 XTD_HAS_CODECVT
+#endif
+
+#if !defined(XTD_HAS_EXP_CODECVT)
+  #cmakedefine01 XTD_HAS_EXP_CODECVT
+#endif
+
+#if !defined(XTD_HAS_ICONV)
+  #cmakedefine01 XTD_HAS_ICONV
+#endif
+
 #if !defined(XTD_HAS_FILESYSTEM)
   #cmakedefine01 XTD_HAS_FILESYSTEM
 #endif
@@ -94,17 +114,8 @@
 #endif
     ///@}
 
-#define XTD_STR_CONVERT_CODECVT 1
-#define XTD_STR_CONVERT_ICONV 2
-#define XTD_STR_CONVERT_GENERIC 4
-
-#if !defined(XTD_STR_CONVERT)
-    #define XTD_STR_CONVERT @XTD_STR_CONVERT@
-#endif
 
 
-#cmakedefine01 XTD_HAS_UUID
-#cmakedefine01 XTD_COLOR_MESSAGES
 
 
 /** @name XTD_CONFIG
@@ -158,9 +169,6 @@
   #if !defined(_WIN32_WINNT)
     #define _WIN32_WINNT 0x600
   #endif
-  #define EXPORT __declspec(dllexport)
-#else
-  #define EXPORT __attribute__ ((visibility ("default")))
 #endif
 //__SONAR_ON__
 
@@ -302,9 +310,7 @@ namespace xtd{
 
 
 //STL
-#if (XTD_STR_CONVERT_CODECVT & XTD_STR_CONVERT)
-  #include <codecvt>
-#endif
+
 
 #include <algorithm>
 #include <chrono>
@@ -344,9 +350,14 @@ TODO("Remove cassert when XTD implementation is finished")
     #include <uuid/uuid.h>
 #endif
 
-#if (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
+#if (XTD_HAS_CODECVT)
+  #include <codecvt>
+#elif (XTD_HAS_EXP_CODECVT)
+  #include <experimental/codecvt>
+#elif (XTD_HAS_ICONV)
   #include <iconv.h>
 #endif
+
 
 #if (XTD_LOG_TARGET_SYSLOG)
     #include <syslog.h>

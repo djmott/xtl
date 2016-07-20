@@ -19,7 +19,7 @@ namespace xtd{
 
     static map system_processes() {
       map oRet;
-      std::regex oRE("[0-9]+");
+      std::regex oRE("([0-9]+)");
       _dir::ptr oDir(opendir("/proc"));
       dirent * oEntry;
       while ((oEntry = readdir(oDir.get()))){

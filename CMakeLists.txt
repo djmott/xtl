@@ -26,17 +26,42 @@ include(ExternalProject)
 
 
 check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
-check_include_file_cxx(codecvt XTD_HAS_CODECVT CACHE BOOLEAN FALSE)
-check_include_file_cxx(filesystem XTD_HAS_FILESYSTEM CACHE BOOLEAN FALSE)
-#check_include_file_cxx(experimental/filesystem XTD_HAS_EXP_FILESYSTEM CACHE BOOLEAN FALSE)
-check_cxx_source_compiles("#include <experimental/filesystem>\nint main(){ return 0; }" XTD_HAS_EXP_FILESYSTEM)
 
-check_include_file_cxx(iconv.h XTD_HAS_ICONV_H CACHE BOOLEAN FALSE)
+check_cxx_source_compiles("
+  #include <codecvt>
+  int main(){return 0;}
+  " XTD_HAS_CODECVT)
+
+check_cxx_source_compiles("
+  #include <experimental/codecvt>
+  int main(){return 0;}
+  " XTD_HAS_EXP_CODECVT)
+
+check_cxx_source_compiles("
+  #include <filesystem>
+  int main(){ return 0; }
+  " XTD_HAS_FILESYSTEM)
+
+check_cxx_source_compiles("
+  #include <experimental/filesystem>
+  int main(){ return 0; }
+  " XTD_HAS_EXP_FILESYSTEM)
+
+
+check_cxx_source_compiles("
+  #include <iconv.h>
+  int main(){ return 0; }
+  " XTD_HAS_ICONV_H)
 check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
 
 check_include_file_cxx(dbghelp.h XTD_HAS_DBGHLP_H CACHE BOOLEAN FALSE)
 check_library_exists(dbghelp.lib SymInitialize "" XTD_HAS_DBGHELP_LIB)
 
+if(XTD_HAS_ICONV_LIB AND XTD_HAS_ICONV_H)
+  set(XTD_HAS_ICONV 1)
+else()
+  set(XTD_HAS_ICONV 0)
+endif()
 
 if (XTD_HAS_DBGHLP_H OR XTD_HAS_DBGHELP_LIB)
   option(XTD_USE_DBGHELP "use dbghelp library" YES)
@@ -158,13 +183,9 @@ endif()
 set(XTD_STR_CONVERT XTD_STR_CONVERT_GENERIC CACHE STRING "default string conversion backend")
 set_property(CACHE XTD_STR_CONVERT PROPERTY STRINGS XTD_STR_CONVERT_GENERIC XTD_STR_CONVERT_CODECVT XTD_STR_CONVERT_ICONV)
 
-if(XTD_HAS_CODECVT)
-  set(XTD_STR_CONVERT XTD_STR_CONVERT_CODECVT)
-elseif(XTD_HAS_ICONV_H AND XTD_HAS_ICONV_LIB)
-  set(XTD_STR_CONVERT XTD_STR_CONVERT_ICONV)
+if(XTD_HAS_CODECVT OR XTD_HAS_EXP_CODECVT)
+elseif(XTD_HAS_ICONV)
   link_libraries(iconv)
-else()
-  set(XTD_STR_CONVERT XTD_STR_CONVERT_GENERIC)
 endif()
 
 set(XTD_CHARSET "XTD_CHARSET_MBCS" CACHE STRING "default character set")

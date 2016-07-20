@@ -168,7 +168,7 @@ namespace xtd{
     template <typename _Ty> inline static xstring<_ChT> from(const _Ty& src);
     template <typename _Ty> inline static xstring<_ChT> from(const _Ty* src);
 
-#if (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
+#if (!(XTD_HAS_CODECVT | XTD_HAS_EXP_CODECVT)) && (XTD_HAS_ICONV)
 
     ///iconv handle wrapper
     class iconv_helper{
@@ -191,7 +191,7 @@ namespace xtd{
   };
 
 #if (!DOXY_INVOKED)
-#if (XTD_STR_CONVERT_CODECVT & XTD_STR_CONVERT)
+#if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)
   template <> template <> inline string string::from<wchar_t>(const wchar_t* src){
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
     return oConv.to_bytes(src);
@@ -202,7 +202,7 @@ namespace xtd{
     return oConv.from_bytes(src);
   }
 
-#elif (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
+#elif (XTD_HAS_ICONV)
 
   template <> template <> inline string string::from<wchar_t>(const wchar_t * src){
     static iconv_helper oIconv("UTF-8", "WCHAR_T");
