@@ -1,15 +1,24 @@
 /** @file
-  handle necessary filesystem and path functionality until C++17 is finalized
-  @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
-
+handle necessary filesystem and path functionality until C++17 is finalized
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
 
 #pragma once
 
+#if (XTD_HAS_FILESYSTEM)
+
+namespace xtd{
+  using path = std::experimental::filesystem::v1::path;
+}
+
+#elif (XTD_HAS_EXP_FILESYSTEM)
+
+#else
+
 namespace xtd{
 
-  namespace socket{
+  namespace _{
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     using path_value_type = tchar;
 #else
@@ -17,9 +26,9 @@ namespace xtd{
 #endif
   }
   
-  class path : public xtd::xstring<socket::path_value_type >{
+  class path : public xtd::xstring<_::path_value_type >{
   public:
-    using string_type = xtd::xstring<socket::path_value_type >;
+    using string_type = xtd::xstring<_::path_value_type >;
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     static const value_type seperator = __('\\');
 #else
@@ -82,3 +91,5 @@ namespace xtd{
   };
 
 }
+
+#endif

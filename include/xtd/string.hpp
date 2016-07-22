@@ -374,6 +374,27 @@ namespace xtd{
       }
     };
 
+    //void*
+    template <typename _ChT, typename ... _ArgsT>
+    class xstring_format<_ChT, void*, _ArgsT...>{
+    public:
+      inline static void format(xstring<_ChT> &dest, const void * oArg, _ArgsT &&...oArgs){
+        dest.append(std::to_string(reinterpret_cast<size_t>(oArg)));
+        xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+      }
+    };
+
+    //int
+    template <typename _ChT, typename ... _ArgsT>
+    class xstring_format<_ChT, int&, _ArgsT...>{
+    public:
+      inline static void format(xstring<_ChT> &dest, int &oArg, _ArgsT &&...oArgs){
+        dest.append(std::to_string(oArg));
+        xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+      }
+    };
+
+
   #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     //DWORD
     template <typename ... _ArgsT>

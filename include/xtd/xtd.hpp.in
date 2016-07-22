@@ -364,7 +364,6 @@ TODO("Remove cassert when XTD implementation is finished")
 #endif
 
 //XTL
-#include <xtd/debug.hpp>
 #include <xtd/callback.hpp>
 #include <xtd/meta.hpp>
 
@@ -375,6 +374,8 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/concurrent_spin_lock.hpp>
 
 #include <xtd/source_location.hpp>
+#include <xtd/debug.hpp>
+
 #include <xtd/exception.hpp>
 #include <xtd/string.hpp>
 #include <xtd/filesystem.hpp>

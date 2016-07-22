@@ -128,6 +128,14 @@ namespace xtd{
     };
 #endif
 
+#if (XTD_LOG_TARGET_CSV)
+    class csv_target : public log_target{
+    public:
+      void operator()(const message::pointer_type& oMessage) override{
+      }
+    };
+#endif
+
     void callback_thread(){
       _CallbackThreadStarted.set_value();
       while ( !_CallbackThreadExit ){
@@ -150,15 +158,23 @@ namespace xtd{
     }
 
     log() : _Messages(), _Callbacks(), _CallbackThread(), _CallbackLock(), _CallbackCheck(), _LogTargets(){
+
 #if (XTD_LOG_TARGET_SYSLOG)
       _LogTargets.emplace_back(new syslog_target);
 #endif
+
 #if (XTD_LOG_TARGET_WINDBG)
       _LogTargets.emplace_back(new win_dbg_target);
 #endif
+
 #if (XTD_LOG_TARGET_COUT)
       _LogTargets.emplace_back(new std_cout_target);
 #endif
+
+#if (XTD_LOG_TARGET_CSV)
+      _LogTargets.emplace_back(new csv_target);
+#endif
+
       _CallbackThread = std::thread(&log::callback_thread, this);
       _CallbackThreadStarted.get_future().get();
     }
