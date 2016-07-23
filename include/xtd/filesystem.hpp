@@ -142,7 +142,8 @@ namespace xtd{
         std::string sTemp = std::getenv("HOMEPATH");
         if (0 == sTemp.c_str()){
           PWSTR pStr = nullptr;
-          SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &pStr);
+          xtd::windows::exception::throw_if(SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &pStr), [](HRESULT hr){return S_OK != hr; });
+          return xtd::string::format(static_cast<const wchar_t*>(pStr));
           RAII(CoTaskMemFree(pStr));
         }
         return sTemp;

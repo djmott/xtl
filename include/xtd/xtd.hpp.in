@@ -164,9 +164,9 @@
 #define DEFINE(x) x
 
 #if defined(__COUNTER__)
-  #define UNIQUE_NAME(_prefix) CONCAT(_prefix, __COUNTER__)
+  #define UNIQUE_IDENTIFIER(_prefix) CONCAT(_prefix, __COUNTER__)
 #else
-  #define UNIQUE_NAME(_prefix) CONCAT(_prefix, __LINE__)
+  #define UNIQUE_IDENTIFIER(_prefix) CONCAT(_prefix, __LINE__)
 #endif
 
 
