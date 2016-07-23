@@ -16,8 +16,8 @@ namespace xtd {
     executable(const xtd::filesystem::path& oPath) : _Path(oPath){}
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-    static inline xtd::path get_path(){
-      static xtd::path sRet="";
+    static inline xtd::filesystem::path get_path(){
+      static xtd::filesystem::path sRet="";
       if (0 != sRet.string().size()){
         return sRet;
       }

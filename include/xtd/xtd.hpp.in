@@ -163,6 +163,12 @@
 
 #define DEFINE(x) x
 
+#if defined(__COUNTER__)
+  #define UNIQUE_NAME(_prefix) CONCAT(_prefix, __COUNTER__)
+#else
+  #define UNIQUE_NAME(_prefix) CONCAT(_prefix, __LINE__)
+#endif
+
 
 //__SONAR_OFF__
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
@@ -283,6 +289,7 @@ namespace xtd{
     #if XTD_USE_DBGHELP
       #include <dbghelp.h>
     #endif
+    #include <shlobj.h>
 #endif
 
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)

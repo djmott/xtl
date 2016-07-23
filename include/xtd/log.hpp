@@ -149,7 +149,7 @@ namespace xtd{
       csv_target(){
         _LogPath = xtd::filesystem::path::home_directory();
         _LogPath /= xtd::executable::this_executable().path().filename();
-        _LogPath /= xtd::string::format(xtd::process::this_process().id());
+        _LogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()));
       }
     };
 #endif

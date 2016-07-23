@@ -7,7 +7,17 @@
 
 #pragma once
 
+#define RAII(...) xtd::_::_RAII UNIQUE_IDENTIFIER(raii_object)([&](){ __VA_ARGS__ ; });
+
 namespace xtd{
+  namespace _{
+    struct _RAII{
+      template <typename _Ty>
+      _RAII(_Ty newval) : _fn(newval){}
+      ~_RAII(){ _fn(); }
+      std::function<void()> _fn;
+    };
+  }
 
   /** meta-function to get the intrinsic of a specified size
   @tparam _Size size
@@ -50,8 +60,8 @@ namespace xtd{
   /// Determine if a type is specified in a list
   template <typename, typename...> struct is_a;
   template <typename _Ty> struct is_a<_Ty> : std::false_type {};
-  template <typename _Ty, typename ... _TailT> struct is_a<_Ty, _Ty, _TailT...> : std::true_type {};
-  template <typename _Ty, typename _HeadT, typename ... _TailT> struct is_a<_Ty, _HeadT, _TailT...> : is_a<_Ty, _TailT...> {};
+  template <typename _Ty, typename ... _TailT> struct is_a<_Ty, _Ty, _TailT...> : std::true_type{ using type = _Ty; };
+  template <typename _Ty, typename _HeadT, typename ... _TailT> struct is_a<_Ty, _HeadT, _TailT...> : is_a<_Ty, _TailT...>{ using type = _Ty; };
 
 
   /// Gets the type of a parameter in a method declaration

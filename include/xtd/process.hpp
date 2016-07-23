@@ -105,6 +105,8 @@ namespace xtd{
       }
     }
 
+    pid_type id() const{ return _pid; }
+
     dynamic_library::map libraries(){
       dynamic_library::map oRet;
       std::vector<HMODULE> modules(10, 0);

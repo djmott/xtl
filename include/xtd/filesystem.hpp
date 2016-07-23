@@ -18,6 +18,12 @@ namespace xtd{
 #endif
   }
 
+#if (XTD_HAS_FILESYSTEM)
+  namespace filesystem{
+    using path_base = std::experimental::filesystem::path;
+  }
+#endif
+
 #if (!XTD_HAS_EXP_FILESYSTEM && !XTD_HAS_FILESYSTEM)
 
   namespace filesystem {
@@ -27,12 +33,14 @@ namespace xtd{
 
     class path_base : public xtd::xstring<_::path_value_type> {
     public:
-      using string_type = xtd::xstring<_::path_value_type>;
+
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
       static const value_type seperator = __('\\');
 #else
       static const value_type seperator = '/';
 #endif
+
+      using string_type = xtd::xstring<_::path_value_type>;
 
       inline operator string_type() const { return *this; }
 
@@ -103,26 +111,42 @@ namespace xtd{
     class path : public path_base {
       using _super_t = path_base;
     public:
+
+    #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+      static const value_type seperator = __('\\');
+    #else
+      static const value_type seperator = '/';
+    #endif
+
       template<typename ... _ArgTs>
       path(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...) {}
 
       path filename() const {
-        std::string sRet = "";
-        auto iPos = _super_t::find_last_of( xtd::filesystem::path::seperator );
-        if (xtd::string::npos != iPos && iPos < (_super_t::size() - 1)){
-          sRet = _super_t::substr(1+iPos);
+        std::string sRet = _super_t::string();
+        auto iPos = sRet.find_last_of( seperator );
+        if (xtd::string::npos != iPos && iPos < (sRet.size() - 1)){
+          sRet.substr(1+iPos);
         }
         return sRet;
       }
 
-#if (XTD_OS_LINUX & XTD_OS)
+#if ((XTD_OS_LINUX | XTD_OS_MSYS | XTD_OS_CYGWIN) & XTD_OS)
 
       /** returns the user's home directory
       */
       inline static path home_directory() {
         return path(std::getenv("HOME"));
       }
-
+#elif ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+      inline static path home_directory(){
+        std::string sTemp = std::getenv("HOMEPATH");
+        if (0 == sTemp.c_str()){
+          PWSTR pStr = nullptr;
+          SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &pStr);
+          RAII(CoTaskMemFree(pStr));
+        }
+        return sTemp;
+      }
 #endif
 
       /** returns the application data directory
