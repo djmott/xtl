@@ -6,7 +6,7 @@ xtd::dynamic_library system and unit tests
 
 
 auto get_dummy_library = []() -> xtd::dynamic_library::pointer {
-  auto sPath = xtd::this_executable::get_path();
+  auto sPath = xtd::executable::this_executable().path();
 #if (XTD_OS_LINUX == XTD_OS)
   sPath.replace_filename("libdummy_library_test.so");
 #elif (XTD_OS_MSYS == XTD_OS)

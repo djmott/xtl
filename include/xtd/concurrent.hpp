@@ -21,6 +21,21 @@ namespace xtd{
     public:
       FORCEINLINE void spin(){ std::this_thread::yield(); }
     };
+
+    ///RAII pattern to automatically acquire and release the spin lock
+    template <typename _Ty>
+    class scope_locker{
+    public:
+      using spin_lock_type = _Ty;
+      ~scope_locker(){ _Lock.unlock(); }
+      explicit scope_locker(scope_locker& oLock) : _Lock(oLock){ _Lock.lock(); }
+      scope_locker(const scope_locker&) = delete;
+      scope_locker& operator=(const scope_locker&) = delete;
+
+    private:
+      spin_lock_type& _Lock;
+    };
+
     ///@}
   }
   

@@ -5,10 +5,13 @@ xtd::executable and xtd::this_executable system and unit tests
 
 
 
-TEST(test_executable, get_path){
-  xtd::path oPath;
-  ASSERT_NO_THROW(oPath = xtd::this_executable::get_path());
-  ASSERT_STRNE("", oPath.string().c_str());
+TEST(test_executable, initialization) {
+  ASSERT_NO_THROW(auto & oExec = xtd::executable::this_executable());
+}
+
+TEST(test_executable, path) {
+  auto & oExec = xtd::executable::this_executable();
+  ASSERT_STRNE("", oExec.path().string().c_str());
 }
 
 

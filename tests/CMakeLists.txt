@@ -1,10 +1,4 @@
 
-find_package(GTest)
-
-if (NOT GTEST_FOUND)
-  message(FATAL_ERROR "Google test framework not found")
-endif()
-
 enable_testing()
 
 include_directories(${GTEST_INCLUDE_DIRS})
@@ -27,6 +21,7 @@ set(TEST_SOURCE tests.cpp
   test_path.hpp
   test_process.hpp
   test_rw_lock.hpp
+  test_recursive_spin_lock.hpp
   test_rpc.hpp
   test_shared_mem_obj.hpp
   test_socket.hpp
@@ -43,8 +38,8 @@ function(build_option NAME DESC)
 endfunction()
 
 build_option(TEST_CALLBACK "test xtd::callback")
-build_option(TEST_CONCURRENT_HASH_MAP "test xtd::concurrent_hash_map")
-build_option(TEST_CONCURRENT_STACK "test xtd::concurrent_stack")
+build_option(TEST_CONCURRENT_HASH_MAP "test xtd::concurrent::hash_map")
+build_option(TEST_CONCURRENT_STACK "test xtd::concurrent::stack")
 build_option(TEST_DEBUG_HELP "test xtd::windows::debug_help")
 build_option(TEST_DYNAMIC_LIBRARY "test xtd::dynamic_library")
 build_option(TEST_EVENT_TRACE "test event trace")
@@ -55,7 +50,8 @@ build_option(TEST_META "test meta programming")
 build_option(TEST_PARSE "test xtd::parse")
 build_option(TEST_PATH "test xtd::path")
 build_option(TEST_PROCESS "test xtd::process")
-build_option(TEST_READ_WRITE_LOCK "test xtd::read_write_lock")
+build_option(TEST_READ_WRITE_LOCK "test xtd::concurrent::rw_lock")
+build_option(TEST_RECURSIVE_SPIN_LOCK "test xtd::concurrent::recursive_spin_lock")
 build_option(TEST_RPC "test xtd::rpc")
 build_option(TEST_SHARED_MEM_OBJ "test xtd::shared_mem_obj")
 build_option(TEST_SOCKET "test xtd::socket")

@@ -17,6 +17,7 @@ project(XTL)
 
 find_package(Threads)
 find_package(Doxygen)
+find_package(GTest)
 
 include(CheckIncludeFileCXX)
 include(CheckLibraryExists)
@@ -220,6 +221,39 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp)
 
 
+
+if (NOT GTEST_FOUND)
+  message("Google test framework will be downloaded")
+
+  # Download and unpack googletest at configure time
+  configure_file(CMakeLists.txt.gtest ${CMAKE_CURRENT_SOURCE_DIR}/src/gtest/CMakeLists.txt)
+  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -D "BUILD_GTEST:BOOLEAN=ON" . WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/gtest/src )
+  execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/gtest/src )
+
+  # Prevent GoogleTest from overriding our compiler/linker options
+  # when building with Visual Studio
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+  # Add googletest directly to our build. This adds
+  # the following targets: gtest, gtest_main, gmock
+  # and gmock_main
+  #add_subdirectory(${CMAKE_BINARY_DIR}/gtest/src ${CMAKE_BINARY_DIR}/gtest/build)
+
+  # The gtest/gmock targets carry header search path
+  # dependencies automatically when using CMake 2.8.11 or
+  # later. Otherwise we have to add them here ourselves.
+  #if (CMAKE_VERSION VERSION_LESS 2.8.11)
+  #  include_directories("${gtest_SOURCE_DIR}/include" "${gmock_SOURCE_DIR}/include")
+  #endif()
+
+  # Now simply link your own targets against gtest, gmock,
+  # etc. as appropriate
+
+endif()
+
+add_subdirectory(tests)
+
+
 if(DOXYGEN_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
   add_custom_target(
@@ -234,9 +268,5 @@ if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
-
-if(BUILD_TESTS)
-  add_subdirectory(tests)
-endif()
 
 

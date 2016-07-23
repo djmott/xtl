@@ -18,9 +18,7 @@ namespace xtd{
 
 #if (!DOXY_INVOKED)
   namespace _{
-    template <typename, typename > class xstring_tostring;
     template <typename, typename ...> class xstring_format;
-
   }
 #endif
 
@@ -44,9 +42,7 @@ namespace xtd{
      */
     template <typename ... _ArgsT>
     static xstring format(_ArgsT&&...oArgs){
-      xstring sRet;
-      _::xstring_format<_ChT, _ArgsT...>::format(sRet, std::forward<_ArgsT>(oArgs)...);
-      return  sRet;
+      return _::xstring_format<_ChT, _ArgsT...>::format(std::forward<_ArgsT>(oArgs)...);
     }
 
     /**
@@ -164,9 +160,11 @@ namespace xtd{
       return oRet;
     }
 
+/*
     ///Convert data to a string
     template <typename _Ty> inline static xstring<_ChT> from(const _Ty& src);
     template <typename _Ty> inline static xstring<_ChT> from(const _Ty* src);
+*/
 
 #if (!(XTD_HAS_CODECVT | XTD_HAS_EXP_CODECVT)) && (XTD_HAS_ICONV)
 
@@ -190,8 +188,88 @@ namespace xtd{
 #endif
   };
 
+
+  namespace _{
+    template <typename _ChT> class xstring_format<_ChT>{
+    public:
+      template <typename ... _ArgTs> static xstring<_ChT> format(_ArgTs...){ return xstring<_ChT>(); }
+    };
+
+
+    template <typename _ChT, typename _HeadT, typename ... _ArgTs> class xstring_format<_ChT, _HeadT, _ArgTs...>{
+    public:
+      static xstring<_ChT> format(_HeadT value, _ArgTs...oArgs) {
+        auto sRet = std::to_string(value);
+        sRet += xstring_format<_ChT, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+        return sRet;
+      }
+    };
+
+
+    template <typename _ChT, int _Len, typename ... _ArgTs>
+    class xstring_format<_ChT, const _ChT(&)[_Len], _ArgTs...>{
+    public:
+      inline static xstring<_ChT> format(const _ChT(&src)[_Len], _ArgTs&&...oArgs){
+        xstring<_ChT> sRet(src);
+        sRet = xstring_format<_ChT, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+        return sRet;
+      }
+    };
+
+    template <typename _ChT, typename ... _ArgTs>
+    class xstring_format<_ChT, const _ChT*&, _ArgTs...>{
+    public:
+      inline static xstring<_ChT> format(const _ChT*&src, _ArgTs&&...oArgs){
+        xstring<_ChT> sRet(src);
+        sRet = xstring_format<_ChT, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+        return sRet;
+      }
+    };
+
+    template <typename _ChT, typename ... _ArgTs>
+    class xstring_format<_ChT, const _ChT*, _ArgTs...>{
+    public:
+      inline static xstring<_ChT> format(const _ChT*src, _ArgTs&&...oArgs){
+        xstring<_ChT> sRet(src);
+        sRet = xstring_format<_ChT, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+        return sRet;
+      }
+    };
+
+
+    template <typename _ChT, typename ... _TailT> class xstring_format<_ChT, const void *, _TailT...>{
+    public:
+      static xstring<_ChT> format(const void * val, _TailT...oArgs){
+        _ChT chars[] = { (_ChT)'0', (_ChT)'1', (_ChT)'2', (_ChT)'3', (_ChT)'4', (_ChT)'5', (_ChT)'6', (_ChT)'7',
+                         (_ChT)'8', (_ChT)'9', (_ChT)'a', (_ChT)'b', (_ChT)'c', (_ChT)'d', (_ChT)'e', (_ChT)'f' };
+        std::basic_string<_ChT> sTemp = "";
+        auto value = reinterpret_cast<size_t>(val);
+        for (uint8_t i=0 ; i<(sizeof(value) * 2) ; ++i, value <<= 4){
+          auto ch = (0xf0000000 & value) >> 28;
+          if (!ch && !sTemp.size()) continue;
+          sTemp += chars[ch];
+        }
+        std::basic_string<_ChT> sRet = "0x";
+        sRet += _::xstring_format<_ChT, _TailT...>::format(std::forward<_TailT>(oArgs)...);
+        return sRet;
+      }
+    };
+
+/*
+    template <typename _ChT, typename _HeadT, typename ... _TailT> class xstring_format<_ChT, _HeadT, _TailT...>{
+    public:
+      static void format(xtd::xstring<_ChT>& oRet, _HeadT oHead, _TailT...oTail){
+        oRet += xstring<_ChT>::from(oHead);
+        xstring_format<_ChT, _TailT...>::format(oRet, std::forward<_TailT>(oTail)...);
+      }
+    };*/
+
+  }
+
+
 #if (!DOXY_INVOKED)
 #if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)
+  /*
   template <> template <> inline string string::from<wchar_t>(const wchar_t* src){
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
     return oConv.to_bytes(src);
@@ -200,10 +278,10 @@ namespace xtd{
   template <> template <> inline wstring wstring::from<char>(const char * src){
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
     return oConv.from_bytes(src);
-  }
+  }*/
 
 #elif (XTD_HAS_ICONV)
-
+/*
   template <> template <> inline string string::from<wchar_t>(const wchar_t * src){
     static iconv_helper oIconv("UTF-8", "WCHAR_T");
     size_t srclen = wcslen(src);
@@ -246,8 +324,9 @@ namespace xtd{
       }
       sRet.resize(sRet.size() * 2);
     }
-  }
+  }*/
 #else
+/*
   template <> template <> inline string string::from<wchar_t>(const wchar_t * src) {
     size_t srclen = wcslen(src);
     string sRet(srclen, 0);
@@ -280,15 +359,31 @@ namespace xtd{
     sRet.resize(srclen);
     return sRet;
   }
+*/
 #endif
+/*
 
 
-  template <> template <> inline wstring wstring::from<string>(const string& src){ return from<char>(src.c_str()); }
   template <> template <> inline string string::from<wstring>(const wstring& src){ return from<wchar_t>(src.c_str()); }
+  template <> template <> inline wstring wstring::from<string>(const string& src){ return from<char>(src.c_str()); }
 
   template <> template <> inline string string::from<string>(const string& src){ return string(src); }
   template <> template <> inline wstring wstring::from<wstring>(const wstring& src){ return wstring(src); }
 
+  template <> template <> inline string string::from<char>(const char * src){ return string(src); }
+  template <> template <> inline wstring wstring::from<wchar_t>(const wchar_t * src){ return string(src); }
+
+
+
+  template <> template <int _len> inline string string::from<char (&)[_len]>(const char (&str)[_len]){}
+
+  //int
+  template <> template <> inline string string::from<int>(const int& src){ return std::to_string(src); }
+  template <> template <> inline wstring wstring::from<int>(const int& src){ return std::to_wstring(src); }
+*/
+
+
+#if 0
   namespace _{
 
 
@@ -417,5 +512,6 @@ namespace xtd{
   #endif
 
   }
+#endif
 #endif
 }

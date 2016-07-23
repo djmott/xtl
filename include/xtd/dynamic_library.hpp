@@ -40,10 +40,10 @@ namespace xtd{
   #endif
 
     using pointer = std::shared_ptr<dynamic_library>;
-    using map = std::map<xtd::path, pointer>;
+    using map = std::map<xtd::filesystem::path, pointer>;
 
     static inline pointer make(const char * spath){ return pointer(new dynamic_library(spath)); }
-    static inline pointer make(const xtd::path& spath){ return pointer(new dynamic_library(spath.string().c_str())); }
+    static inline pointer make(const xtd::filesystem::path& spath){ return pointer(new dynamic_library(spath.string().c_str())); }
 
     native_handle_type handle() const{ return _Handle; }
 

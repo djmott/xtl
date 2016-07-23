@@ -75,6 +75,10 @@ main system and unit test entry point
   #include "test_rw_lock.hpp"
 #endif
 
+#if (ON==TEST_RECURSIVE_SPIN_LOCK)
+  #include "test_recursive_spin_lock.hpp"
+#endif
+
 #if (ON==TEST_RPC)
   #include "test_rpc.hpp"
 #endif

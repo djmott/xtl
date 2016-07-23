@@ -36,7 +36,9 @@ namespace xtd{
       return oRet;
     }
 
-      static process &this_process() {
+    pid_type id() const { return _pid; }
+
+    static process &this_process() {
       static process _this_process(getpid());
       return _this_process;
     }

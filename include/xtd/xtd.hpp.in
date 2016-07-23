@@ -322,6 +322,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <cwctype>
 #include <deque>
 #include <exception>
+#include <fstream>
 #include <functional>
 #include <future>
 #include <iostream>
@@ -369,20 +370,20 @@ TODO("Remove cassert when XTD implementation is finished")
 
 #include <xtd/concurrent.hpp>
 #include <xtd/concurrent_hash_map.hpp>
-#include <xtd/concurrent_stack.hpp>
+#include <xtd/concurrent_recursive_spin_lock.hpp>
 #include <xtd/concurrent_rw_lock.hpp>
 #include <xtd/concurrent_spin_lock.hpp>
+#include <xtd/concurrent_stack.hpp>
 
 #include <xtd/source_location.hpp>
-#include <xtd/debug.hpp>
-
 #include <xtd/exception.hpp>
 #include <xtd/string.hpp>
 #include <xtd/filesystem.hpp>
+#include <xtd/executable.hpp>
 #include <xtd/dynamic_library.hpp>
 #include <xtd/event_trace.hpp>
-#include <xtd/executable.hpp>
 #include <xtd/log.hpp>
+#include <xtd/debug.hpp>
 
 #include <xtd/parse.hpp>
 #include <xtd/process.hpp>

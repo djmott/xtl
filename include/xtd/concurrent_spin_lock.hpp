@@ -13,6 +13,7 @@ namespace xtd{
       using _super_t = std::atomic < uint32_t >;
       using wait_policy_type = _WaitPolicyT;
       static const uint32_t LockedValue = 0x80000000;
+      using scope_locker = xtd::concurrent::scope_locker<spin_lock_base<_WaitPolicyT>>;
 
       ~spin_lock_base() = default;
       spin_lock_base(wait_policy_type oWait = wait_policy_type()) : _super_t(0), _WaitPolicy(oWait){};
@@ -40,15 +41,6 @@ namespace xtd{
         return (compare_exchange_strong(compare, LockedValue));
       }
 
-      ///RAII pattern to automatically acquire and release the spin lock
-      class scope_lock{
-        spin_lock_base& _Lock;
-      public:
-        ~scope_lock(){ _Lock.unlock(); }
-        explicit scope_lock(spin_lock_base& oLock) : _Lock(oLock){ _Lock.lock(); }
-        scope_lock(const scope_lock&) = delete;
-        scope_lock& operator=(const scope_lock&) = delete;
-      };
     private:
       wait_policy_type _WaitPolicy;
     };

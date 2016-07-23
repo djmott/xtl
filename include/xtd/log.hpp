@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "process.hpp"
+
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
 #define WARNING(...)  xtd::log::get().write(xtd::log::type::warning, here(), __VA_ARGS__)
@@ -130,8 +132,24 @@ namespace xtd{
 
 #if (XTD_LOG_TARGET_CSV)
     class csv_target : public log_target{
+
+      static std::ofstream& File(){
+        static thread_local std::ofstream _File;
+        return _File;
+      }
+
+      xtd::filesystem::path _LogPath;
     public:
-      void operator()(const message::pointer_type& oMessage) override{
+      void operator()(const message::pointer_type&) override{
+        auto & oFile = File();
+        if (!oFile.is_open()){
+
+        }
+      }
+      csv_target(){
+        _LogPath = xtd::filesystem::path::home_directory();
+        _LogPath /= xtd::executable::this_executable().path().filename();
+        _LogPath /= xtd::string::format(xtd::process::this_process().id());
       }
     };
 #endif
