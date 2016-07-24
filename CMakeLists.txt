@@ -1,9 +1,10 @@
 ### cmake config
 
+cmake_minimum_required(VERSION 2.8.12)
+
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 set(CMAKE_CXX_STANDARD 11)
 
-cmake_minimum_required(VERSION 2.8.12)
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
 endif()
@@ -224,11 +225,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURREN
 
 if (NOT GTEST_FOUND)
   message("Google test framework will be downloaded")
-
+  # lifted from https://crascit.com/2015/07/25/cmake-gtest/
   # Download and unpack googletest at configure time
-  configure_file(CMakeLists.txt.gtest ${CMAKE_CURRENT_SOURCE_DIR}/src/gtest/CMakeLists.txt)
-  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -D "BUILD_GTEST:BOOLEAN=ON" . WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/gtest/src )
-  execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/gtest/src )
+  configure_file(CMakeLists.txt.gtest googletest-download/CMakeLists.txt)
+  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+  execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
 
   # Prevent GoogleTest from overriding our compiler/linker options
   # when building with Visual Studio
@@ -237,18 +238,7 @@ if (NOT GTEST_FOUND)
   # Add googletest directly to our build. This adds
   # the following targets: gtest, gtest_main, gmock
   # and gmock_main
-  #add_subdirectory(${CMAKE_BINARY_DIR}/gtest/src ${CMAKE_BINARY_DIR}/gtest/build)
-
-  # The gtest/gmock targets carry header search path
-  # dependencies automatically when using CMake 2.8.11 or
-  # later. Otherwise we have to add them here ourselves.
-  #if (CMAKE_VERSION VERSION_LESS 2.8.11)
-  #  include_directories("${gtest_SOURCE_DIR}/include" "${gmock_SOURCE_DIR}/include")
-  #endif()
-
-  # Now simply link your own targets against gtest, gmock,
-  # etc. as appropriate
-
+  add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src ${CMAKE_BINARY_DIR}/googletest-build)
 endif()
 
 add_subdirectory(tests)

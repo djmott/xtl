@@ -1,7 +1,7 @@
 
 enable_testing()
 
-include_directories(${GTEST_INCLUDE_DIRS})
+include_directories(${gtest_SOURCE_DIR}/include)
 
 add_library(dummy_library_test SHARED dummy_library.cpp)
 add_dependencies(dummy_library_test XTL)
@@ -67,7 +67,8 @@ build_option(TEST_VAR "test xtd::var")
 
 add_executable(unit_tests ${TEST_SOURCE})
 add_dependencies(unit_tests dummy_library_test)
-target_link_libraries(unit_tests ${GTEST_BOTH_LIBRARIES})
+target_link_libraries(unit_tests gtest)
+target_link_libraries(unit_tests gtest_main)
 #add_test(NAME unit_tests COMMAND unit_tests)
 GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
 
