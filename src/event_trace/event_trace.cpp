@@ -12,7 +12,7 @@ namespace{
 }
 
 extern "C"{
-  void __xtd_EventEnter(void *){
+  void __xtd_EventEnter(void * addr){
     if (_InTrace){
       return;
     }
@@ -25,7 +25,7 @@ extern "C"{
     _InTrace = false;
   }
 
-  void __xtd_EventLeave(void *){
+  void __xtd_EventLeave(void * addr){
     if (_InTrace){
       return;
     }
