@@ -13,11 +13,11 @@ include:
         build_command_prepend: "cmake ."
         build_command:   "make"
         branch_pattern: master
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-        packages:
-          - g++-5
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      packages:
+        - g++-5
     env:  COMPILER=g++-5
 
 before_install:
@@ -55,8 +55,6 @@ script:
   - for item in $( find -name '*.gcda' ); do gcov -l $item; done
   - for item in $( find -name '*.gcda' ); do gcovr -x -r .  > $TRAVIS_BUILD_DIR/docs/reports/gcov/$(basename $item).xml; done
   - cd $TRAVIS_BUILD_DIR/
-#  - cp assets/sonar* .
-#  - sonar-scanner -e -X -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
 success:
   - cd $TRAVIS_BUILD_DIR/docs/html
   - git init
