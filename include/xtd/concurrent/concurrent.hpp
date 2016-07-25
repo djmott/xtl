@@ -40,3 +40,10 @@ namespace xtd{
   }
   
 }
+
+#include "hash_map.hpp"
+#include "queue.hpp"
+#include "stack.hpp"
+#include "spin_lock.hpp"
+#include "rw_lock.hpp"
+#include "recursive_spin_lock.hpp"

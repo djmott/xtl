@@ -8,8 +8,8 @@ Recursive spin lock
 namespace xtd{
   namespace concurrent{
     template <typename _WaitPolicyT = null_wait_policy>
-    class recursive_spin_lock_base : private std::atomic<std::thread::id>{
-      using _super_t = std::atomic < std::thread::id >;
+    class recursive_spin_lock_base : private std::atomic< std::thread::native_handle_type>{
+      using _super_t = std::atomic < std::thread::native_handle_type >;
       using wait_policy_type = _WaitPolicyT;
       uint32_t _lock_count;
       wait_policy_type _WaitPolicy;
@@ -19,9 +19,9 @@ namespace xtd{
       recursive_spin_lock_base(wait_policy_type oWait = wait_policy_type()) : _super_t(), _WaitPolicy(oWait){};
       recursive_spin_lock_base(const recursive_spin_lock_base&) = delete;
       recursive_spin_lock_base(recursive_spin_lock_base&&) = delete;
-      void try_lock(){
-        std::thread::id nullid = 0;
-        std::thread::id thisid = std::this_thread::get_id();
+      bool try_lock(){
+        auto nullid = reinterpret_cast<std::thread::native_handle_type>(nullptr);
+        auto thisid = std::this_thread::get_id().native_handle();
         if (!(compare_exchange_strong(&nullid, thisid)) && !(compare_exchange_strong(&thisid, thisid))){
           return false;
         }
@@ -35,7 +35,7 @@ namespace xtd{
       }
       void unlock(){
         if (0==--_lock_count){
-          _super_t::operator=(0);
+          _super_t::operator=(nullptr);
         }
       }
     };
