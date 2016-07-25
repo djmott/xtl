@@ -3,6 +3,8 @@ concurrently push and pop items from a FIFO queue
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 
 */
+
+#if 0
 #pragma once
 
 namespace xtd{
@@ -49,7 +51,7 @@ namespace xtd{
         using pointer = node *;
         using atomic_ptr = std::atomic<pointer>;
         value_type _value;
-        note * _next;
+        node * _next;
         node(const value_type& data) : _data(data), _next(nullptr){}
         node(value_type&& data) : _data(std::move(data)), _next(nullptr){}
       };
@@ -68,3 +70,5 @@ namespace xtd{
     };
   }
 }
+
+#endif

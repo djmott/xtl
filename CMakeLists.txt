@@ -140,10 +140,13 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   src/xtl.cpp
   src/event_trace/event_trace.cpp
   include/xtd/callback.hpp
-  include/xtd/concurrent.hpp
-  include/xtd/concurrent_hash_map.hpp
-  include/xtd/concurrent_queue.hpp
-  include/xtd/concurrent_stack.hpp
+  include/xtd/concurrent/concurrent.hpp
+  include/xtd/concurrent/hash_map.hpp
+  include/xtd/concurrent/queue.hpp
+  include/xtd/concurrent/stack.hpp
+  include/xtd/concurrent/rw_lock.hpp
+  include/xtd/concurrent/spin_lock.hpp
+  include/xtd/concurrent/recursive_spin_lock.hpp
   include/xtd/debug.hpp
   include/xtd/dynamic_library.hpp
   include/xtd/event_trace.hpp
@@ -154,12 +157,10 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/meta.hpp
   include/xtd/parse.hpp
   include/xtd/process.hpp
-  include/xtd/concurrent_rw_lock.hpp
   include/xtd/rpc.hpp
   include/xtd/shared_mem_obj.hpp
   include/xtd/socket.hpp
   include/xtd/source_location.hpp
-  include/xtd/concurrent_spin_lock.hpp
   include/xtd/string.hpp
   include/xtd/tuple.hpp
   include/xtd/unique_id.hpp

@@ -9,7 +9,7 @@ namespace xtd{
     supports 2^31 simultaneous readers
     @tparam _WaitPolicyT behavior when spinning
     */
-    template <typename _WaitPolicyT = null_wait_policy>
+    template <typename _WaitPolicyT>
     class rw_lock_base : std::atomic<uint32_t>{
     public:
       using wait_policy_type = _WaitPolicyT;
