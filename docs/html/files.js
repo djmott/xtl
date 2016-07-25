@@ -4,9 +4,9 @@ var files =
       [ "callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ]
     ] ],
     [ "concurrent.hpp", "concurrent_8hpp.html", null ],
-    [ "concurrent_hash_map.hpp", "concurrent__hash__map_8hpp.html", null ],
-    [ "concurrent_stack.hpp", "concurrent__stack_8hpp.html", [
-      [ "node", "classxtd_1_1concurrent_1_1stack_1_1node.html", null ]
+    [ "dbghelp.hpp", "dbghelp_8hpp.html", [
+      [ "debug_help", "classxtd_1_1windows_1_1debug__help.html", "classxtd_1_1windows_1_1debug__help" ],
+      [ "debug_symbol", "classxtd_1_1windows_1_1debug__symbol.html", "classxtd_1_1windows_1_1debug__symbol" ]
     ] ],
     [ "debug.hpp", "debug_8hpp.html", "debug_8hpp" ],
     [ "dynamic_library.hpp", "dynamic__library_8hpp.html", [
@@ -19,28 +19,18 @@ var files =
     [ "evt_gcc.cpp", "evt__gcc_8cpp.html", "evt__gcc_8cpp" ],
     [ "evt_vc32.cpp", "evt__vc32_8cpp.html", "evt__vc32_8cpp" ],
     [ "exception.hpp", "exception_8hpp.html", "exception_8hpp" ],
-    [ "executable.hpp", "executable_8hpp.html", null ],
+    [ "executable.hpp", "executable_8hpp.html", [
+      [ "executable", "classxtd_1_1executable.html", "classxtd_1_1executable" ]
+    ] ],
+    [ "filesystem.hpp", "filesystem_8hpp.html", "filesystem_8hpp" ],
+    [ "hash_map.hpp", "hash__map_8hpp.html", null ],
     [ "log.hpp", "log_8hpp.html", "log_8hpp" ],
-    [ "meta.hpp", "meta_8hpp.html", [
-      [ "ByteToChar", "classxtd_1_1_byte_to_char.html", null ],
-      [ "get_parameter", "namespacextd.html#classxtd_1_1get__parameter", null ],
-      [ "get_parameter< 0, _ReturnT(_HeadT, _TailT...)>", "classxtd_1_1get__parameter_3_010_00_01___return_t_07___head_t_00_01___tail_t_8_8_8_08_4.html", null ],
-      [ "get_parameter< _ParamNum, _ReturnT(_HeadT, _TailT...)>", "classxtd_1_1get__parameter_3_01___param_num_00_01___return_t_07___head_t_00_01___tail_t_8_8_8_08_4.html", null ],
-      [ "IntToChar", "classxtd_1_1_int_to_char.html", null ],
-      [ "is_a", "namespacextd.html#classxtd_1_1is__a", null ],
-      [ "is_a< _Ty >", "classxtd_1_1is__a_3_01___ty_01_4.html", null ],
-      [ "is_a< _Ty, _HeadT, _TailT... >", "classxtd_1_1is__a_3_01___ty_00_01___head_t_00_01___tail_t_8_8_8_01_4.html", null ],
-      [ "is_a< _Ty, _Ty, _TailT... >", "classxtd_1_1is__a_3_01___ty_00_01___ty_00_01___tail_t_8_8_8_01_4.html", null ],
-      [ "LongLongToChar", "classxtd_1_1_long_long_to_char.html", null ],
-      [ "lower_case", "classxtd_1_1lower__case.html", null ],
-      [ "nibble_hex_char", "namespacextd.html#classxtd_1_1nibble__hex__char", null ],
-      [ "ShortToChar", "classxtd_1_1_short_to_char.html", null ]
-    ] ],
+    [ "meta.hpp", "meta_8hpp.html", "meta_8hpp" ],
+    [ "nlp.hpp", "nlp_8hpp.html", null ],
     [ "parse.hpp", "parse_8hpp.html", "parse_8hpp" ],
-    [ "path.hpp", "path_8hpp.html", "path_8hpp" ],
-    [ "process.hpp", "process_8hpp.html", [
-      [ "process", "namespacextd.html#classxtd_1_1process", null ]
-    ] ],
+    [ "process.hpp", "process_8hpp.html", null ],
+    [ "queue.hpp", "queue_8hpp.html", null ],
+    [ "recursive_spin_lock.hpp", "recursive__spin__lock_8hpp.html", "recursive__spin__lock_8hpp" ],
     [ "rpc.hpp", "rpc_8hpp.html", [
       [ "bad_call", "classxtd_1_1rpc_1_1bad__call.html", "classxtd_1_1rpc_1_1bad__call" ],
       [ "client", "classxtd_1_1rpc_1_1client.html", null ],
@@ -77,6 +67,9 @@ var files =
     [ "socket.hpp", "socket_8hpp.html", "socket_8hpp" ],
     [ "source_location.hpp", "source__location_8hpp.html", "source__location_8hpp" ],
     [ "spin_lock.hpp", "spin__lock_8hpp.html", "spin__lock_8hpp" ],
+    [ "stack.hpp", "stack_8hpp.html", [
+      [ "node", "classxtd_1_1concurrent_1_1stack_1_1node.html", null ]
+    ] ],
     [ "string.hpp", "string_8hpp.html", "string_8hpp" ],
     [ "tuple.hpp", "tuple_8hpp.html", [
       [ "tuple", "namespacextd.html#classxtd_1_1tuple", null ],
@@ -92,5 +85,5 @@ var files =
       [ "var", "classxtd_1_1var.html", "classxtd_1_1var" ]
     ] ],
     [ "xtd.hpp", "xtd_8hpp.html", "xtd_8hpp" ],
-    [ "xtl.cpp", "xtl_8cpp.html", "xtl_8cpp" ]
+    [ "xtl.cpp", "xtl_8cpp.html", null ]
 ];

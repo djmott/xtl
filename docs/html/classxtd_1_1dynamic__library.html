@@ -116,7 +116,8 @@ $(document).ready(function(){initNavTree('classxtd_1_1dynamic__library.html','')
 <a href="#nested-classes">Data Structures</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">xtd::dynamic_library Class Reference</div>  </div>
 </div><!--header-->
@@ -147,9 +148,12 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a96fe5066960fabe4fac51abbc5d62223"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a96fe5066960fabe4fac51abbc5d62223"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ptr</b> = std::shared_ptr&lt; <a class="el" href="classxtd_1_1dynamic__library.html">dynamic_library</a> &gt;</td></tr>
-<tr class="separator:a96fe5066960fabe4fac51abbc5d62223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1153b89905a9f1a7c4cc4b4a6e169f9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1153b89905a9f1a7c4cc4b4a6e169f9"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>map</b> = std::map&lt; <a class="el" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a>, pointer &gt;</td></tr>
+<tr class="separator:ac1153b89905a9f1a7c4cc4b4a6e169f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab393be514a06f12896f0a48a3c4aabb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab393be514a06f12896f0a48a3c4aabb"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = std::shared_ptr&lt; <a class="el" href="classxtd_1_1dynamic__library.html">dynamic_library</a> &gt;</td></tr>
+<tr class="separator:aab393be514a06f12896f0a48a3c4aabb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -175,12 +179,18 @@ native_handle_type&#160;</td><td class="memItemRight" valign="bottom"><b>handle<
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ab965839149c64dc57e04f6319844352f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab965839149c64dc57e04f6319844352f"></a>
-static ptr&#160;</td><td class="memItemRight" valign="bottom"><b>make</b> (const char *spath)</td></tr>
-<tr class="separator:ab965839149c64dc57e04f6319844352f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa221a598e95e11d40860a51f6dca7755"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa221a598e95e11d40860a51f6dca7755"></a>
-static ptr&#160;</td><td class="memItemRight" valign="bottom"><b>make</b> (const <a class="el" href="classxtd_1_1path.html">xtd::path</a> &amp;spath)</td></tr>
-<tr class="separator:aa221a598e95e11d40860a51f6dca7755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa067b5fd5bbeb5447e6904467de6733d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa067b5fd5bbeb5447e6904467de6733d"></a>
+static pointer&#160;</td><td class="memItemRight" valign="bottom"><b>make</b> (const char *spath)</td></tr>
+<tr class="separator:aa067b5fd5bbeb5447e6904467de6733d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b96263c93c0a6bce1c7ec90c4221906"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b96263c93c0a6bce1c7ec90c4221906"></a>
+static pointer&#160;</td><td class="memItemRight" valign="bottom"><b>make</b> (const <a class="el" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a> &amp;spath)</td></tr>
+<tr class="separator:a4b96263c93c0a6bce1c7ec90c4221906"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a45826c4d3572efe010737f69d31d0a7c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45826c4d3572efe010737f69d31d0a7c"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>process</b></td></tr>
+<tr class="separator:a45826c4d3572efe010737f69d31d0a7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -195,7 +205,7 @@ static ptr&#160;</td><td class="memItemRight" valign="bottom"><b>make</b> (const
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><a class="el" href="classxtd_1_1dynamic__library.html">dynamic_library</a></li>
-    <li class="footer">Generated on Thu Jul 14 2016 06:07:40 for XTL by
+    <li class="footer">Generated on Mon Jul 25 2016 06:03:04 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

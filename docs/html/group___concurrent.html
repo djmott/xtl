@@ -120,14 +120,11 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1hash__map.html">xtd::concurrent::hash_map&lt; _KeyT, _ValueT, _NibblePos &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">thread-safe key-value pair container insertion and removal from multiple threads is safe but invalidates iterators.  <a href="classxtd_1_1concurrent_1_1hash__map.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1hash__map__iterator.html">xtd::concurrent::hash_map_iterator&lt; _HashMapT &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unsafe iterator iterating should be done on a constant <a class="el" href="classxtd_1_1concurrent_1_1hash__map.html" title="thread-safe key-value pair container insertion and removal from multiple threads is safe but invalida...">hash_map</a> since it's not thread-safe to use with insertion/deletion.  <a href="classxtd_1_1concurrent_1_1hash__map__iterator.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1null__wait__policy.html">xtd::concurrent::null_wait_policy</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait policy that does nothing. This is the default behavior.  <a href="classxtd_1_1concurrent_1_1null__wait__policy.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker&lt; _Ty &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">RAII pattern to automatically acquire and release the spin lock.  <a href="classxtd_1_1concurrent_1_1scope__locker.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1stack.html">xtd::concurrent::stack&lt; _ValueT &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A lock-free LIFO stack multiple threads can push and pop items concurrently.  <a href="classxtd_1_1concurrent_1_1stack.html#details">More...</a><br /></td></tr>
@@ -143,7 +140,7 @@ Data Structures</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Jul 14 2016 06:07:39 for XTL by
+    <li class="footer">Generated on Mon Jul 25 2016 06:03:03 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

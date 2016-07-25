@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['_5fraii',['_RAII',['../classxtd_1_1___1_1___r_a_i_i.html',1,'xtd::_']]],
   ['_5fsource',['_source',['../classxtd_1_1exception.html#aead4e6fdbe0c5624e93b59798fcdb5e3',1,'xtd::exception']]],
   ['_5fsupert',['_SuperT',['../class___super_t.html',1,'']]],
   ['_5fthrow_5fif',['_throw_if',['../classxtd_1_1exception.html#a04f02f8e4f65891b621ed3a0e28cf451',1,'xtd::exception']]],

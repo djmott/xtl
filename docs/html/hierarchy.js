@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "xtd::_::_RAII", "classxtd_1_1___1_1___r_a_i_i.html", null ],
     [ "_SuperT", "class___super_t.html", [
       [ "xtd::socket::bindable_socket< _SuperT >", "classxtd_1_1socket_1_1bindable__socket.html", null ],
       [ "xtd::socket::connectable_socket< _SuperT >", "classxtd_1_1socket_1_1connectable__socket.html", null ],
@@ -13,14 +14,17 @@ var hierarchy =
     ] ],
     [ "xtd::parse::and_<... >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1and__", null ],
     [ "atomic", null, [
+      [ "xtd::concurrent::_::recursive_spin_lock_base< _WaitPolicyT >", "classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html", null ],
       [ "xtd::concurrent::rw_lock_base< _WaitPolicyT >", "classxtd_1_1concurrent_1_1rw__lock__base.html", null ],
       [ "xtd::concurrent::spin_lock_base< _WaitPolicyT >", "classxtd_1_1concurrent_1_1spin__lock__base.html", null ]
     ] ],
     [ "std::basic_string< Char >", null, [
-      [ "xtd::xstring< char >", "classxtd_1_1xstring.html", null ],
-      [ "xtd::xstring< socket::path_value_type >", "classxtd_1_1xstring.html", [
-        [ "xtd::path", "classxtd_1_1path.html", null ]
+      [ "xtd::xstring< _::path_value_type >", "classxtd_1_1xstring.html", [
+        [ "xtd::filesystem::path_base", "classxtd_1_1filesystem_1_1path__base.html", [
+          [ "xtd::filesystem::path", "classxtd_1_1filesystem_1_1path.html", null ]
+        ] ]
       ] ],
+      [ "xtd::xstring< char >", "classxtd_1_1xstring.html", null ],
       [ "xtd::xstring< _ChT >", "classxtd_1_1xstring.html", null ]
     ] ],
     [ "xtd::ByteToChar< _ChT, _val >", "classxtd_1_1_byte_to_char.html", null ],
@@ -30,21 +34,26 @@ var hierarchy =
     [ "xtd::rpc::client< _TransportT, _TailT... >", "classxtd_1_1rpc_1_1client.html", [
       [ "xtd::rpc::client< _TransportT, _HeadT, _TailT... >", "classxtd_1_1rpc_1_1client_3_01___transport_t_00_01___head_t_00_01___tail_t_8_8_8_01_4.html", null ]
     ] ],
+    [ "xtd::Debug", "classxtd_1_1_debug.html", null ],
+    [ "xtd::windows::debug_help", "classxtd_1_1windows_1_1debug__help.html", null ],
+    [ "xtd::windows::debug_symbol", "classxtd_1_1windows_1_1debug__symbol.html", null ],
+    [ "xtd::_::DebugDump< _Ty >", "classxtd_1_1___1_1_debug_dump.html", null ],
     [ "enable_shared_from_this", null, [
       [ "xtd::dynamic_library", "classxtd_1_1dynamic__library.html", null ]
     ] ],
     [ "std::exception", null, [
       [ "xtd::exception", "classxtd_1_1exception.html", [
-        [ "xtd::dynamic_library_exception", "classxtd_1_1dynamic__library__exception.html", null ],
-        [ "xtd::os_exception", "classxtd_1_1os__exception.html", [
+        [ "xtd::crt_exception", "classxtd_1_1crt__exception.html", [
           [ "xtd::socket::exception", "classxtd_1_1socket_1_1exception.html", null ]
         ] ],
+        [ "xtd::dynamic_library_exception", "classxtd_1_1dynamic__library__exception.html", null ],
         [ "xtd::rpc::protocol_exception", "classxtd_1_1rpc_1_1protocol__exception.html", [
           [ "xtd::rpc::bad_call", "classxtd_1_1rpc_1_1bad__call.html", null ],
           [ "xtd::rpc::malformed_payload", "classxtd_1_1rpc_1_1malformed__payload.html", null ]
         ] ]
       ] ]
     ] ],
+    [ "xtd::executable", "classxtd_1_1executable.html", null ],
     [ "false_type", null, [
       [ "xtd::is_a< _Ty >", "classxtd_1_1is__a_3_01___ty_01_4.html", null ]
     ] ],
@@ -52,14 +61,12 @@ var hierarchy =
     [ "xtd::get_parameter< _ParamNum, _Ty >", "namespacextd.html#classxtd_1_1get__parameter", null ],
     [ "xtd::get_parameter< 0, _ReturnT(_HeadT, _TailT...)>", "classxtd_1_1get__parameter_3_010_00_01___return_t_07___head_t_00_01___tail_t_8_8_8_08_4.html", null ],
     [ "xtd::get_parameter< _ParamNum, _ReturnT(_HeadT, _TailT...)>", "classxtd_1_1get__parameter_3_01___param_num_00_01___return_t_07___head_t_00_01___tail_t_8_8_8_08_4.html", null ],
-    [ "xtd::concurrent::hash_map< _KeyT, _ValueT, _NibblePos >", "classxtd_1_1concurrent_1_1hash__map.html", null ],
-    [ "xtd::concurrent::hash_map< std::thread::id, std::thread >", "classxtd_1_1concurrent_1_1hash__map.html", null ],
-    [ "xtd::concurrent::hash_map_iterator< _HashMapT >", "classxtd_1_1concurrent_1_1hash__map__iterator.html", null ],
     [ "xtd::var::inner_base", "classxtd_1_1var_1_1inner__base.html", [
       [ "xtd::var::empty", "classxtd_1_1var_1_1empty.html", null ],
       [ "xtd::var::inner< _Ty >", "classxtd_1_1var_1_1inner.html", null ],
       [ "xtd::var::inner< xtd::xstring< _ChT > >", "classxtd_1_1var_1_1inner_3_01xtd_1_1xstring_3_01___ch_t_01_4_01_4.html", null ]
     ] ],
+    [ "xtd::intrinsic_of_size< _Size >", "namespacextd.html#classxtd_1_1intrinsic__of__size", null ],
     [ "xtd::IntToChar< _ChT, _val >", "classxtd_1_1_int_to_char.html", null ],
     [ "xtd::is_a< typename,... >", "namespacextd.html#classxtd_1_1is__a", null ],
     [ "xtd::is_a< _Ty, _TailT... >", "namespacextd.html", [
@@ -86,7 +93,7 @@ var hierarchy =
     [ "xtd::concurrent::null_wait_policy", "classxtd_1_1concurrent_1_1null__wait__policy.html", null ],
     [ "xtd::parse::or_<... >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1or__", null ],
     [ "xtd::parser< _RuleT, _IgnoreCase, _WhitespaceT >", "classxtd_1_1parser.html", null ],
-    [ "xtd::process", "namespacextd.html#classxtd_1_1process", null ],
+    [ "xtd::processor_intrinsic< _Ty >", "classxtd_1_1processor__intrinsic.html", null ],
     [ "xtd::parse::regex< _Ty, >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1regex", null ],
     [ "xtd::rpc::rpc_call< _DeclT, _CallT >", "classxtd_1_1rpc_1_1rpc__call.html", null ],
     [ "xtd::rpc::rpc_call< _DeclT, _ReturnT(_ArgTs...)>", "classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4.html", null ],
@@ -105,7 +112,7 @@ var hierarchy =
       ] ],
       [ "xtd::parse::rule< _DeclT, _ImplT >", "classxtd_1_1parse_1_1rule.html", null ]
     ] ],
-    [ "xtd::concurrent::spin_lock_base< _WaitPolicyT >::scope_lock", "classxtd_1_1concurrent_1_1spin__lock__base_1_1scope__lock.html", null ],
+    [ "xtd::concurrent::scope_locker< _Ty >", "classxtd_1_1concurrent_1_1scope__locker.html", null ],
     [ "xtd::concurrent::rw_lock_base< _WaitPolicyT >::scope_read", "classxtd_1_1concurrent_1_1rw__lock__base_1_1scope__read.html", null ],
     [ "xtd::concurrent::rw_lock_base< _WaitPolicyT >::scope_write", "classxtd_1_1concurrent_1_1rw__lock__base_1_1scope__write.html", null ],
     [ "xtd::socket::serializer< typename >", "group___sockets.html#classxtd_1_1socket_1_1serializer", null ],
@@ -143,6 +150,34 @@ var hierarchy =
       [ "xtd::rpc::payload", "classxtd_1_1rpc_1_1payload.html", null ]
     ] ],
     [ "xtd::parse::whitespace< _Ch >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1whitespace", null ],
+    [ "xtd::_::xstring_format< _ChT >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_01_4.html", null ],
+    [ "xtd::_::xstring_format< _ChT, const _ChT *&, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< _ChT, const _ChT *, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< _ChT, const _ChT(&)[_Len], _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_07_6_08[___len]_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< _ChT, const void *, _TailT... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01void_01_5_00_01___tail_t_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< _ChT, const xstring< _ChT > &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01xstring_3_01___ch_t_01_4_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, const wchar_t *, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01wchar__t_01_5_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, const wchar_t(&)[_Len], _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01wchar__t_07_6_08[___len]_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, int, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01int_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, int16_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01int16__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, int32_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01int32__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, int8_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01int8__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, uint16_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01uint16__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, uint32_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01uint32__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, uint8_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01uint8__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, unsigned int, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01unsigned_01int_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< char, xstring< wchar_t > &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01xstring_3_01wchar__t_01_4_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, const char *, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01const_01char_01_5_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, const char(&)[_Len], _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01const_01char_07_6_08[___len]_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, int, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01int_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, int16_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01int16__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, int32_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01int32__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, int8_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01int8__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, uint16_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01uint16__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, uint32_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01uint32__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, uint8_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01uint8__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, unsigned int, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01unsigned_01int_00_01___arg_ts_8_8_8_01_4.html", null ],
+    [ "xtd::_::xstring_format< wchar_t, xstring< char > &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01xstring_3_01char_01_4_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
     [ "xtd::concurrent::yield_wait_policy", "classxtd_1_1concurrent_1_1yield__wait__policy.html", null ],
     [ "uint8_t", "classuint8__t.html", null ]
 ];

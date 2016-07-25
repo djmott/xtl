@@ -123,17 +123,14 @@ $(document).ready(function(){initNavTree('namespacextd_1_1concurrent.html','');}
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1hash__map.html">hash_map</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">thread-safe key-value pair container insertion and removal from multiple threads is safe but invalidates iterators.  <a href="classxtd_1_1concurrent_1_1hash__map.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1hash__map__iterator.html">hash_map_iterator</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unsafe iterator iterating should be done on a constant <a class="el" href="classxtd_1_1concurrent_1_1hash__map.html" title="thread-safe key-value pair container insertion and removal from multiple threads is safe but invalida...">hash_map</a> since it's not thread-safe to use with insertion/deletion.  <a href="classxtd_1_1concurrent_1_1hash__map__iterator.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1null__wait__policy.html">null_wait_policy</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait policy that does nothing. This is the default behavior.  <a href="classxtd_1_1concurrent_1_1null__wait__policy.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1rw__lock__base.html">rw_lock_base</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A multiple reader/single writer spin lock supports 2^31 simultaneous readers.  <a href="classxtd_1_1concurrent_1_1rw__lock__base.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1scope__locker.html">scope_locker</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">RAII pattern to automatically acquire and release the spin lock.  <a href="classxtd_1_1concurrent_1_1scope__locker.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A single owner spinning lock.  <a href="classxtd_1_1concurrent_1_1spin__lock__base.html#details">More...</a><br /></td></tr>
@@ -147,6 +144,9 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a7ef9f20b756c8d068303f9e8151a1bf6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ef9f20b756c8d068303f9e8151a1bf6"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>recursive_spin_lock</b> = <a class="el" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">_::recursive_spin_lock_base</a>&lt; <a class="el" href="classxtd_1_1concurrent_1_1null__wait__policy.html">null_wait_policy</a> &gt;</td></tr>
+<tr class="separator:a7ef9f20b756c8d068303f9e8151a1bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a667162f54efbe247df107b988de97403"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a667162f54efbe247df107b988de97403"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>rw_lock</b> = <a class="el" href="classxtd_1_1concurrent_1_1rw__lock__base.html">rw_lock_base</a>&lt; <a class="el" href="classxtd_1_1concurrent_1_1null__wait__policy.html">null_wait_policy</a> &gt;</td></tr>
 <tr class="separator:a667162f54efbe247df107b988de97403"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,7 +163,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>spin_lock</b> = <a c
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><a class="el" href="namespacextd_1_1concurrent.html">concurrent</a></li>
-    <li class="footer">Generated on Thu Jul 14 2016 06:07:41 for XTL by
+    <li class="footer">Generated on Mon Jul 25 2016 06:03:07 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

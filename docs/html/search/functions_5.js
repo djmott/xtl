@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['insert',['insert',['../classxtd_1_1concurrent_1_1hash__map.html#ae863a91024bb485aa1a2e5598acbe0f5',1,'xtd::concurrent::hash_map']]],
-  ['isa',['isa',['../classxtd_1_1parse_1_1rule__base.html#a6ef80d7c5ffbe85ce0c1b7516ae6a150',1,'xtd::parse::rule_base::isa()'],['../classxtd_1_1parse_1_1rule.html#aa15f8e0d3d6bc55dc47c173486bca0e3',1,'xtd::parse::rule::isa()']]],
-  ['items',['items',['../classxtd_1_1parse_1_1rule__base.html#aa7700079852b8c54ffb87d4e35d2eacd',1,'xtd::parse::rule_base']]]
+  ['location',['location',['../classxtd_1_1exception.html#a3432bbc92ffb6066df51bf836bb54c8d',1,'xtd::exception']]],
+  ['lock',['lock',['../classxtd_1_1concurrent_1_1spin__lock__base.html#a5a05c4bace41d2d173c572de66ef2604',1,'xtd::concurrent::spin_lock_base']]],
+  ['lock_5fread',['lock_read',['../classxtd_1_1concurrent_1_1rw__lock__base.html#aac56a4ddb2c62456951f58949b26f22e',1,'xtd::concurrent::rw_lock_base']]],
+  ['lock_5fwrite',['lock_write',['../classxtd_1_1concurrent_1_1rw__lock__base.html#a9109bb0a99f8f11714dde0afbadc29bb',1,'xtd::concurrent::rw_lock_base']]],
+  ['ltrim',['ltrim',['../classxtd_1_1xstring.html#a1f624f3c983badbc084f0d35e3b2ec18',1,'xtd::xstring']]]
 ];

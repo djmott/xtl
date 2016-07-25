@@ -5,8 +5,6 @@ var classxtd_1_1xstring =
     [ "xstring", "classxtd_1_1xstring.html#abc7eca290c0ac91fc2054b876ac70699", null ],
     [ "find_first_of", "classxtd_1_1xstring.html#a09891c3bdd62f5cf303ff9e8be2de341", null ],
     [ "format", "classxtd_1_1xstring.html#ab559a0d9aad75a6e15e8e5c18386aad8", null ],
-    [ "from", "classxtd_1_1xstring.html#a2a3280860a5c0daea7836a3625c9ab5e", null ],
-    [ "from", "classxtd_1_1xstring.html#a62cb7e913a75600c09024cae71a10fa6", null ],
     [ "ltrim", "classxtd_1_1xstring.html#a1f624f3c983badbc084f0d35e3b2ec18", null ],
     [ "replace", "classxtd_1_1xstring.html#aa31b9a99f707379ef0044ac06ddef2d2", null ],
     [ "rtrim", "classxtd_1_1xstring.html#ac8eae3dd624952760b78fb34fb380fcd", null ],

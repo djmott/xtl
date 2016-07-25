@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['yield_5fwait_5fpolicy',['yield_wait_policy',['../classxtd_1_1concurrent_1_1yield__wait__policy.html',1,'xtd::concurrent']]]
+  ['zero_5for_5fmore_5f',['zero_or_more_',['../classxtd_1_1parse_1_1zero__or__more__.html',1,'xtd::parse']]],
+  ['zero_5for_5fone_5f',['zero_or_one_',['../classxtd_1_1parse_1_1zero__or__one__.html',1,'xtd::parse']]]
 ];

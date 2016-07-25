@@ -1,6 +1,10 @@
 var searchData=
 [
-  ['one_5for_5fmore_5f',['one_or_more_',['../classxtd_1_1parse_1_1one__or__more__.html',1,'xtd::parse']]],
-  ['or_5f',['or_',['../namespacextd_1_1parse.html#classxtd_1_1parse_1_1or__',1,'xtd::parse']]],
-  ['os_5fexception',['os_exception',['../classxtd_1_1os__exception.html',1,'xtd']]]
+  ['parser',['parser',['../classxtd_1_1parser.html',1,'xtd']]],
+  ['path',['path',['../classxtd_1_1filesystem_1_1path.html',1,'xtd::filesystem']]],
+  ['path_5fbase',['path_base',['../classxtd_1_1filesystem_1_1path__base.html',1,'xtd::filesystem']]],
+  ['payload',['payload',['../classxtd_1_1rpc_1_1payload.html',1,'xtd::rpc']]],
+  ['polling_5fsocket',['polling_socket',['../classxtd_1_1socket_1_1polling__socket.html',1,'xtd::socket']]],
+  ['processor_5fintrinsic',['processor_intrinsic',['../classxtd_1_1processor__intrinsic.html',1,'xtd']]],
+  ['protocol_5fexception',['protocol_exception',['../classxtd_1_1rpc_1_1protocol__exception.html',1,'xtd::rpc']]]
 ];

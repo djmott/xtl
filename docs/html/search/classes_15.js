@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['xstring',['xstring',['../classxtd_1_1xstring.html',1,'xtd']]],
-  ['xstring_3c_20char_20_3e',['xstring&lt; char &gt;',['../classxtd_1_1xstring.html',1,'xtd']]],
-  ['xstring_3c_20socket_3a_3apath_5fvalue_5ftype_20_3e',['xstring&lt; socket::path_value_type &gt;',['../classxtd_1_1xstring.html',1,'xtd']]]
+  ['yield_5fwait_5fpolicy',['yield_wait_policy',['../classxtd_1_1concurrent_1_1yield__wait__policy.html',1,'xtd::concurrent']]]
 ];

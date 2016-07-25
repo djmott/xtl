@@ -121,10 +121,25 @@ $(document).ready(function(){initNavTree('concurrent_8hpp.html','');});
 <p>shared declarations for the concurrent namespace  
 <a href="#details">More...</a></p>
 <div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for concurrent.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="concurrent_8hpp__incl.png" border="0" usemap="#concurrent_8hpp" alt=""/></div>
+<map name="concurrent_8hpp" id="concurrent_8hpp">
+<area shape="rect" id="node2" href="hash__map_8hpp.html" title="concurrently insert, query and delete items in an unordered hash map " alt="" coords="5,80,112,107"/>
+<area shape="rect" id="node3" href="queue_8hpp.html" title="concurrently push and pop items from a FIFO queue " alt="" coords="136,80,219,107"/>
+<area shape="rect" id="node4" href="stack_8hpp.html" title="concurrently push and pop items in a FILO stack " alt="" coords="243,80,322,107"/>
+<area shape="rect" id="node5" href="spin__lock_8hpp.html" title="simple user mode spin lock based on std::atomic " alt="" coords="346,80,449,107"/>
+<area shape="rect" id="node6" href="rw__lock_8hpp.html" title="Simple multi reader/single writer spin lock. " alt="" coords="473,80,564,107"/>
+<area shape="rect" id="node7" href="recursive__spin__lock_8hpp.html" title="Recursive spin lock. " alt="" coords="588,80,748,107"/>
+</map>
+</div>
+</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="concurrent_8hpp__dep__incl.png" border="0" usemap="#concurrent_8hppdep" alt=""/></div>
 <map name="concurrent_8hppdep" id="concurrent_8hppdep">
 <area shape="rect" id="node2" href="xtd_8hpp.html" title="host, target and build configurations and settings Various components are purpose built for specific ..." alt="" coords="85,80,151,107"/>
@@ -139,6 +154,9 @@ $(document).ready(function(){initNavTree('concurrent_8hpp.html','');});
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1null__wait__policy.html">xtd::concurrent::null_wait_policy</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait policy that does nothing. This is the default behavior.  <a href="classxtd_1_1concurrent_1_1null__wait__policy.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker&lt; _Ty &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">RAII pattern to automatically acquire and release the spin lock.  <a href="classxtd_1_1concurrent_1_1scope__locker.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1concurrent_1_1yield__wait__policy.html">xtd::concurrent::yield_wait_policy</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait policy that yields the current thread.  <a href="classxtd_1_1concurrent_1_1yield__wait__policy.html#details">More...</a><br /></td></tr>
@@ -164,8 +182,8 @@ Namespaces</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="concurrent_8hpp.html">concurrent.hpp</a></li>
-    <li class="footer">Generated on Thu Jul 14 2016 06:07:38 for XTL by
+    <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="dir_4c1587fcaffef46e390d6a8bd47e9e0a.html">concurrent</a></li><li class="navelem"><a class="el" href="concurrent_8hpp.html">concurrent.hpp</a></li>
+    <li class="footer">Generated on Mon Jul 25 2016 06:03:02 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

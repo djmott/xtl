@@ -8,5 +8,5 @@ var classxtd_1_1concurrent_1_1stack =
     [ "stack", "classxtd_1_1concurrent_1_1stack.html#a61071ab388785b6ddefaf2fb19f7504e", null ],
     [ "operator=", "classxtd_1_1concurrent_1_1stack.html#a66247538c17be8aa20fa252a0144cb13", null ],
     [ "operator=", "classxtd_1_1concurrent_1_1stack.html#a436bb8e09ce907f9bbaa4e635c9fec67", null ],
-    [ "_Root", "classxtd_1_1concurrent_1_1stack.html#a3a904f4792e1d1ade3c63f7732992100", null ]
+    [ "_Root", "classxtd_1_1concurrent_1_1stack.html#ac87757b502ca1b34493cfc636f9e8e8e", null ]
 ];

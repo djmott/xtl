@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['nibble_5fhex_5fchar',['nibble_hex_char',['../namespacextd.html#classxtd_1_1nibble__hex__char',1,'xtd']]],
-  ['node',['node',['../classxtd_1_1concurrent_1_1stack_1_1node.html',1,'xtd::concurrent::stack']]],
-  ['null_5ftransport',['null_transport',['../classxtd_1_1rpc_1_1null__transport.html',1,'xtd::rpc']]],
-  ['null_5fwait_5fpolicy',['null_wait_policy',['../classxtd_1_1concurrent_1_1null__wait__policy.html',1,'xtd::concurrent']]]
+  ['one_5for_5fmore_5f',['one_or_more_',['../classxtd_1_1parse_1_1one__or__more__.html',1,'xtd::parse']]],
+  ['or_5f',['or_',['../namespacextd_1_1parse.html#classxtd_1_1parse_1_1or__',1,'xtd::parse']]]
 ];
