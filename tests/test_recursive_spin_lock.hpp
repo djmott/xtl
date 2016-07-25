@@ -2,11 +2,11 @@
 
 #include <xtd/concurrent/recursive_spin_lock.hpp>
 
-TEST(recursive_spin_lock, initialize){
+TEST(test_recursive_spin_lock, initialize){
   EXPECT_NO_THROW(xtd::concurrent::recursive_spin_lock oLock);
 }
 
-TEST(recursive_spin_lock, lock_unlock){
+TEST(test_recursive_spin_lock, lock_unlock){
   xtd::concurrent::recursive_spin_lock oLock;
   EXPECT_NO_THROW(oLock.try_lock());
   auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
@@ -16,7 +16,7 @@ TEST(recursive_spin_lock, lock_unlock){
   EXPECT_TRUE(fn2.get());
 }
 
-TEST(recursive_spin_lock, nested_locking){
+TEST(test_recursive_spin_lock, nested_locking){
   using sl = xtd::concurrent::recursive_spin_lock;
   sl oLock;
   {
