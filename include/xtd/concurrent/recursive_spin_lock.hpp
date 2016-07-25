@@ -21,7 +21,7 @@ namespace xtd{
 
         ~recursive_spin_lock_base() = default;
 
-        recursive_spin_lock_base(wait_policy_type oWait = wait_policy_type()) : _super_t(-1), _WaitPolicy(oWait) {};
+        recursive_spin_lock_base(wait_policy_type oWait = wait_policy_type()) : _super_t(-1), _lock_count(0), _WaitPolicy(oWait) {};
 
         recursive_spin_lock_base(const recursive_spin_lock_base &) = delete;
 
