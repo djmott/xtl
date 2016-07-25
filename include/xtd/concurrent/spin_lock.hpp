@@ -26,7 +26,7 @@ namespace xtd{
           if (compare_exchange_strong(compare, LockedValue)){
             break;
           }
-          _WaitPolicy.spin();
+          _WaitPolicy();
         }
       }
       /// Releases the lock

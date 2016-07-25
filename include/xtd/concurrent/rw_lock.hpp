@@ -31,7 +31,7 @@ namespace xtd{
               break;
             }
           }
-          _WaitPolicy.spin();
+          _WaitPolicy();
         }
       }
       /// Acquires a shared read lock
@@ -41,7 +41,7 @@ namespace xtd{
           if (_super_t::compare_exchange_strong(iOriginal, 1 + iOriginal)){
             break;
           }
-          _WaitPolicy.spin();
+          _WaitPolicy();
         }
       }
       /** tries to acquire a shared read lock
@@ -55,7 +55,7 @@ namespace xtd{
       void lock_write(){
         uint32_t iOriginal = 0;
         while (!_super_t::compare_exchange_strong(iOriginal, write_lock_bit)){
-          _WaitPolicy.spin();
+          _WaitPolicy();
         }
       }
       /** attempts to acquire a write lock for exclusive access

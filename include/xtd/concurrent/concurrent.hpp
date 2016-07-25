@@ -14,12 +14,12 @@ namespace xtd{
     ///Wait policy that does nothing. This is the default behavior.
     class null_wait_policy{
     public:
-      FORCEINLINE void spin(){/*nothing*/}
+      FORCEINLINE void operator ()(){/*nothing*/}
     };
     ///Wait policy that yields the current thread.
     class yield_wait_policy{
     public:
-      FORCEINLINE void spin(){ std::this_thread::yield(); }
+      FORCEINLINE void operator ()(){ std::this_thread::yield(); }
     };
 
     ///RAII pattern to automatically acquire and release the spin lock
@@ -28,7 +28,7 @@ namespace xtd{
     public:
       using spin_lock_type = _Ty;
       ~scope_locker(){ _Lock.unlock(); }
-      explicit scope_locker(scope_locker& oLock) : _Lock(oLock){ _Lock.lock(); }
+      explicit scope_locker(spin_lock_type& oLock) : _Lock(oLock){ _Lock.lock(); }
       scope_locker(const scope_locker&) = delete;
       scope_locker& operator=(const scope_locker&) = delete;
 
