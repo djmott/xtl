@@ -229,7 +229,7 @@ if (NOT GTEST_FOUND)
   # lifted from https://crascit.com/2015/07/25/cmake-gtest/
   # Download and unpack googletest at configure time
   configure_file(CMakeLists.txt.gtest googletest-download/CMakeLists.txt)
-  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DBUILD_GTEST:BOOLEAN=ON . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
   execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
 
   # Prevent GoogleTest from overriding our compiler/linker options
