@@ -20,7 +20,12 @@ namespace xtd{
 
 #if (XTD_HAS_FILESYSTEM)
   namespace filesystem{
-    using path_base = std::experimental::filesystem::path;
+    class path_base : public std::experimental::filesystem::path{
+      using _super_t = std::experimental::filesystem::path;
+      static const value_type seperator = '/';
+    public:
+      template <typename ... _ArgTs> path_base(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+    };
   }
 #endif
 

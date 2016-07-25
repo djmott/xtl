@@ -1,8 +1,12 @@
 eXtended Template Library
 =========================
 [![Open Hub project report](https://www.openhub.net/p/libxtl/widgets/project_thin_badge.gif)](https://www.openhub.net/p/libxtl)
-[![Travis](https://img.shields.io/travis/djmott/xtl.svg?style=plastic)](https://travis-ci.org/djmott/xtl)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/0vqrarmqy9kjbnql?svg=true)](https://ci.appveyor.com/project/djmott/xtl)
+|Linux|
+|---|
+|[![Travis](https://img.shields.io/travis/djmott/xtl.svg?style=plastic)](https://travis-ci.org/djmott/xtl)|
+|Windows|
+|---|
+|[![AppVeyor](https://ci.appveyor.com/api/projects/status/0vqrarmqy9kjbnql?svg=true)](https://ci.appveyor.com/project/djmott/xtl)|
 [![Coveralls branch](https://img.shields.io/coveralls/djmott/xtl.svg?style=plastic)](https://coveralls.io/github/djmott/xtl)
 [![SonarQube Tech Debt](https://img.shields.io/sonar/https/sonarqube.com/xtl/tech_debt.svg)](https://sonarqube.com/overview?id=xtl)
 [![SonarQube Quality Gate](http://nemo.sonarqube.org/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl)
@@ -11,6 +15,8 @@ eXtended Template Library
 [![Beerpay](https://beerpay.io/djmott/xtl/badge.svg)](https://beerpay.io/djmott/xtl)
 
 View the documentation online at [http://djmott.github.io/xtl](http://djmott.github.io/xtl)
+
+View the project on github at [https://github.com/djmott/xtl](https://github.com/djmott/xtl)
 
 XTL is a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. It supplements, extends and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard. A short list of some of the more notable headers:
 
