@@ -13,7 +13,7 @@ namespace xtd {
   class executable{
     xtd::filesystem::path _Path;
 
-    executable(const xtd::filesystem::path& oPath) : _Path(oPath){}
+    explicit executable(const xtd::filesystem::path& oPath) : _Path(oPath){}
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     static inline xtd::filesystem::path get_path(){

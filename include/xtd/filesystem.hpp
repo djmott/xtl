@@ -112,12 +112,6 @@ namespace xtd{
       using _super_t = path_base;
     public:
 
-    #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-      static const value_type seperator = __('\\');
-    #else
-      static const value_type seperator = '/';
-    #endif
-
       template<typename ... _ArgTs>
       path(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...) {}
 

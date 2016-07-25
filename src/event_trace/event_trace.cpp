@@ -12,25 +12,19 @@ namespace{
 }
 
 extern "C"{
-  void __xtd_EventEnter(void * addr){
+  void __xtd_EventEnter(void * ){
     if (_InTrace){
       return;
     }
-/*    Dl_info oInfo;
-    if (!_FunctionNames.exists(pAddr) && dladdr(pAddr, &oInfo)){
-      _FunctionNames.insert(pAddr, oInfo.dli_sname);
-    }*/
     _InTrace = true;
-  //  _ThreadStack.push("");
     _InTrace = false;
   }
 
-  void __xtd_EventLeave(void * addr){
+  void __xtd_EventLeave(void * ){
     if (_InTrace){
       return;
     }
     _InTrace = true;
-  //  _ThreadStack.pop();
     _InTrace = false;
   }
 }

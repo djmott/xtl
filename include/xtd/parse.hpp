@@ -376,6 +376,7 @@ namespace xtd{
             if (*oCurr == _HeadCH){
               oCurr++;
             }else if (parse_helper<whitespace<_TailCH...>, void, _IgnoreCase, void>::parse(oCurr, end)){
+              //do nothing
             }else{
               break;
             }

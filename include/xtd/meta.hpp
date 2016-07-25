@@ -11,12 +11,15 @@
 
 namespace xtd{
   namespace _{
-    struct _RAII{
+
+    class _RAII{
+    public:
       template <typename _Ty>
       _RAII(_Ty newval) : _fn(newval){}
       ~_RAII(){ _fn(); }
       std::function<void()> _fn;
     };
+
   }
 
   /** meta-function to get the intrinsic of a specified size

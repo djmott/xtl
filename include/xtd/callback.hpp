@@ -96,7 +96,6 @@ namespace xtd{
     //invokes all the attached targets and returns the result of the last target
     _ReturnT operator()(_Args...oArgs) const{
       _ReturnT oRet;
-      typename invoker::vector::size_type i = 0;
       for (const auto & oInvoker : _Invokers){
         oRet = oInvoker->invoke(oArgs...);
       }

@@ -10,24 +10,28 @@ namespace xtd{
     @tparam _WaitPolicyT behavior when spinning
     */
     template <typename _WaitPolicyT>
-    class rw_lock_base : std::atomic<uint32_t>{
+    class rw_lock_base{
+      std::atomic<uint32_t> _lock;
+      static const uint32_t write_lock_bit = 0x80000000;
+      static const uint32_t read_bits_mask = ~write_lock_bit;
+      _WaitPolicyT _WaitPolicy;
     public:
       using wait_policy_type = _WaitPolicyT;
-      rw_lock_base(wait_policy_type oWait = wait_policy_type()) : _super_t(0), _WaitPolicy(oWait){}
+      rw_lock_base(wait_policy_type oWait = wait_policy_type()) : _lock(0), _WaitPolicy(oWait){}
       ///Returns the number of active read locks
       uint32_t readers() const{
-        return _super_t::load() & read_bits_mask;
+        return _lock.load() & read_bits_mask;
       }
 
       ///Frees the write lock or decrements the reader count
       void unlock(){
         forever{
-          auto iOriginal = _super_t::load();
+          auto iOriginal = _lock.load();
           if (write_lock_bit == iOriginal){
-            _super_t::store(0);
+            _lock.store(0);
             break;
           } else{
-            if (_super_t::compare_exchange_strong(iOriginal, iOriginal - 1)){
+            if (_lock.compare_exchange_strong(iOriginal, iOriginal - 1)){
               break;
             }
           }
@@ -37,8 +41,8 @@ namespace xtd{
       /// Acquires a shared read lock
       void lock_read(){
         forever{
-          auto iOriginal = _super_t::load() & read_bits_mask;
-          if (_super_t::compare_exchange_strong(iOriginal, 1 + iOriginal)){
+          auto iOriginal = _lock.load() & read_bits_mask;
+          if (_lock.compare_exchange_strong(iOriginal, 1 + iOriginal)){
             break;
           }
           _WaitPolicy();
@@ -48,13 +52,13 @@ namespace xtd{
       @return true if the lock was acquired
       */
       bool try_lock_read(){
-        auto iOriginal = _super_t::load() & read_bits_mask;
-        return _super_t::compare_exchange_strong(iOriginal, 1 + iOriginal);
+        auto iOriginal = _lock.load() & read_bits_mask;
+        return _lock.compare_exchange_strong(iOriginal, 1 + iOriginal);
       }
       ///acquires a write lock for exclusive access
       void lock_write(){
         uint32_t iOriginal = 0;
-        while (!_super_t::compare_exchange_strong(iOriginal, write_lock_bit)){
+        while (!_lock.compare_exchange_strong(iOriginal, write_lock_bit)){
           _WaitPolicy();
         }
       }
@@ -63,7 +67,7 @@ namespace xtd{
       */
       bool try_lock_write(){
         uint32_t iOriginal = 0;
-        return _super_t::compare_exchange_strong(iOriginal, write_lock_bit);
+        return _lock.compare_exchange_strong(iOriginal, write_lock_bit);
       }
       /// RAII pattern to acquire and release a read lock
       class scope_read{
@@ -87,11 +91,6 @@ namespace xtd{
           _Lock.unlock();
         }
       };
-    private:
-      using _super_t = std::atomic<uint32_t>;
-      static const uint32_t write_lock_bit = 0x80000000;
-      static const uint32_t read_bits_mask = ~write_lock_bit;
-      wait_policy_type _WaitPolicy;
     };
 
     using rw_lock = rw_lock_base<null_wait_policy>;
