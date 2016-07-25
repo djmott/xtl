@@ -22,8 +22,8 @@ namespace xtd{
   namespace filesystem{
     class path_base : public std::experimental::filesystem::path{
       using _super_t = std::experimental::filesystem::path;
-      static const value_type seperator = '/';
     public:
+      static const value_type seperator = '/';
       template <typename ... _ArgTs> path_base(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
   }
