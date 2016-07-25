@@ -4,23 +4,28 @@ xtd::path system and unit tests
 */
 
 
-#if ((XTD_OS_MINGW | XTD_OS_LINUX) & XTD_OS)
-
 TEST(test_path, Initialization){
-  ASSERT_NO_THROW(xtd::path oPath);
-  ASSERT_NO_THROW(xtd::path oPath = "/a");
-  ASSERT_NO_THROW(xtd::path oPath = "/a/b");
+  ASSERT_NO_THROW(xtd::filesystem::path oPath);
+  ASSERT_NO_THROW(xtd::filesystem::path oPath = "/a");
+  ASSERT_NO_THROW(xtd::filesystem::path oPath = "/a/b");
 }
 
 TEST(test_path, append){
-  xtd::path oPath = "/a";
+  xtd::filesystem::path oPath = "/a";
   ASSERT_NO_THROW(oPath.append("b"));
-  ASSERT_STREQ(oPath.make_preferred().string().c_str(), xtd::path("/a/b").make_preferred().string().c_str());
+  ASSERT_STREQ(oPath.make_preferred().string().c_str(), xtd::filesystem::path("/a/b").make_preferred().string().c_str());
   oPath /= "c";
-  ASSERT_STREQ(oPath.make_preferred().string().c_str(), xtd::path("/a/b/c").make_preferred().string().c_str());
+  ASSERT_STREQ(oPath.make_preferred().string().c_str(), xtd::filesystem::path("/a/b/c").make_preferred().string().c_str());
   oPath /= "d";
-  ASSERT_STREQ(oPath.make_preferred().string().c_str(), xtd::path("/a/b/c/d").make_preferred().string().c_str());
+  ASSERT_STREQ(oPath.make_preferred().string().c_str(), xtd::filesystem::path("/a/b/c/d").make_preferred().string().c_str());
+
 }
 
-#endif
+TEST(test_path, DISABLED_append_fail){
+  xtd::filesystem::path p1 = "/a/";
+  ASSERT_NO_THROW(p1 += "/b/");
+  ASSERT_STREQ(p1.make_preferred().string().c_str(), xtd::filesystem::path("/a/b/").make_preferred().string().c_str());
+
+}
+
 

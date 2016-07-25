@@ -18,8 +18,7 @@ namespace xtd{
 
 #if (!DOXY_INVOKED)
   namespace _{
-    template <typename, typename > class xstring_tostring;
-    template <typename, typename ...> class xstring_format;
+    template <typename, typename ...> struct xstring_format;
 
   }
 #endif
@@ -42,11 +41,10 @@ namespace xtd{
     Appends each item in the parameter list together performing type-safe verification and printing
     @param _ArgsT variable elements appended together
      */
+
     template <typename ... _ArgsT>
     static xstring format(_ArgsT&&...oArgs){
-      xstring sRet;
-      _::xstring_format<_ChT, _ArgsT...>::format(sRet, std::forward<_ArgsT>(oArgs)...);
-      return  sRet;
+      return _::xstring_format<_ChT, _ArgsT...>::format(std::forward<_ArgsT>(oArgs)...);
     }
 
     /**
@@ -164,11 +162,7 @@ namespace xtd{
       return oRet;
     }
 
-    ///Convert data to a string
-    template <typename _Ty> inline static xstring<_ChT> from(const _Ty& src);
-    template <typename _Ty> inline static xstring<_ChT> from(const _Ty* src);
-
-#if (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
+#if (!(XTD_HAS_CODECVT | XTD_HAS_EXP_CODECVT)) && (XTD_HAS_ICONV)
 
     ///iconv handle wrapper
     class iconv_helper{
@@ -184,186 +178,306 @@ namespace xtd{
         iconv_close(_iconv);
       }
       operator iconv_t(){ return _iconv; }
-      /** \brief The iconv. */
       iconv_t _iconv;
     };
 #endif
   };
 
-#if (!DOXY_INVOKED)
-#if (XTD_STR_CONVERT_CODECVT & XTD_STR_CONVERT)
-  template <> template <> inline string string::from<wchar_t>(const wchar_t* src){
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
-    return oConv.to_bytes(src);
-  }
-
-  template <> template <> inline wstring wstring::from<char>(const char * src){
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
-    return oConv.from_bytes(src);
-  }
-
-#elif (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
-
-  template <> template <> inline string string::from<wchar_t>(const wchar_t * src){
-    static iconv_helper oIconv("UTF-8", "WCHAR_T");
-    size_t srclen = wcslen(src);
-    string sRet(srclen, 0);
-    size_t retlen = srclen;
-    iconv(oIconv, nullptr, nullptr, nullptr, &retlen);
-    forever{
-      retlen = sRet.size();
-      auto pSrc = reinterpret_cast<const char *>(src);
-      auto iSrcLen = srclen * sizeof(wchar_t);
-      auto sRetPtr = &sRet[0];
-      auto iRet = iconv(oIconv, const_cast<char**>(&pSrc), &iSrcLen, &sRetPtr, &retlen);
-      if (static_cast<size_t>(-1) != iRet){
-       return sRet;
-      }
-      if (errno != E2BIG){
-       throw std::runtime_error("A string conversion error occurred");
-      }
-      sRet.resize(sRet.size() * 2);
-    }
-  }
-
-  template <> template <> inline wstring wstring::from<char>(const char * src){
-    static iconv_helper oIconv("WCHAR_T", "UTF-8");
-    size_t srclen = strlen(src);
-    wstring sRet(srclen, 0);
-    size_t retlen = srclen;
-    iconv(oIconv, nullptr, nullptr, nullptr, &retlen);
-    forever{
-      retlen = sRet.size() * sizeof(wchar_t);
-      auto pSrc = const_cast<char*>(src);
-      auto iSrcLen = srclen;
-      auto sRetPtr = reinterpret_cast<char*>(&sRet[0]);
-      auto iRet = iconv(oIconv, &pSrc, &iSrcLen, &sRetPtr, &retlen);
-      if (static_cast<size_t>(-1) != iRet) {
-        return sRet;
-      }
-      if (errno != E2BIG){
-        throw std::runtime_error("A string conversion error occurred");
-      }
-      sRet.resize(sRet.size() * 2);
-    }
-  }
-#else
-  template <> template <> inline string string::from<wchar_t>(const wchar_t * src) {
-    size_t srclen = wcslen(src);
-    string sRet(srclen, 0);
-    forever{
-      srclen = wcstombs(&sRet[0], src, sRet.size());
-      if (static_cast<size_t>(-1) == srclen){
-        throw std::runtime_error("A string conversion error occurred");
-      }
-      if (srclen < sRet.size()){
-        break;
-      }
-      sRet.resize(srclen * 2);
-    }
-    sRet.resize(srclen);
-    return sRet;
-  }
-  template <> template <> inline wstring wstring::from<char>(const char * src){
-    size_t srclen = strlen(src);
-    wstring sRet(srclen, 0);
-    forever{
-      srclen = mbstowcs(&sRet[0], src, sRet.size());
-      if (static_cast<size_t>(-1) == srclen){
-        throw std::runtime_error("A string conversion error occurred");
-      }
-      if (srclen < sRet.size()){
-        break;
-      }
-      sRet.resize(srclen * 2);
-    }
-    sRet.resize(srclen);
-    return sRet;
-  }
-#endif
-
-
-  template <> template <> inline wstring wstring::from<string>(const string& src){ return from<char>(src.c_str()); }
-  template <> template <> inline string string::from<wstring>(const wstring& src){ return from<wchar_t>(src.c_str()); }
-
-  template <> template <> inline string string::from<string>(const string& src){ return string(src); }
-  template <> template <> inline wstring wstring::from<wstring>(const wstring& src){ return wstring(src); }
 
   namespace _{
 
-
-    template <typename _ChT> class xstring_format<_ChT>{
-    public:
-      inline static void format(const xstring<_ChT>&){
-        //specialization terminates 'recursive' calls to xstring_format::format() chains
-      }
-    };
-
-    template <typename _ChT, typename ... _ArgsT>
-    class xstring_format<_ChT, const _ChT*const&, _ArgsT...>{
-    public:
-      inline static void format(xstring<_ChT>& dest, const _ChT*const& oArg, _ArgsT&&...oArgs){
-        xstring_format<_ChT, const _ChT*, _ArgsT...>::format(dest, oArg, std::forward<_ArgsT>(oArgs)...);
-      }
+    //empty
+    template <typename _ChT> struct xstring_format<_ChT>{
+      template <typename ... _ArgTs> static xstring<_ChT> format(_ArgTs...){ return xstring<_ChT>(); }
     };
 
 
-    template <typename ... _ArgsT>
-    class xstring_format<wchar_t, const wchar_t *, _ArgsT...>{
-    public:
-      inline static void format(wstring& dest, const wchar_t * src, _ArgsT&&...oArgs){
-        dest += src;
-        xstring_format<wchar_t, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+#if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)
+
+    template <typename ... _ArgTs> struct xstring_format<char, const wchar_t *, _ArgTs...>{
+      static inline string format(const wchar_t * src, _ArgTs...oArgs){
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
+        return oConv.to_bytes(src) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
       }
     };
 
-
-    template <typename ... _ArgsT>
-    class xstring_format<wchar_t, const char *, _ArgsT...>{
-    public:
-      inline static void format(wstring& dest, const char * src, _ArgsT&&...oArgs){
-        dest += wstring::from(src);
-        xstring_format<wchar_t, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, const char *, _ArgTs...>{
+      static inline wstring format(const char * src, _ArgTs...oArgs){
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
+        return oConv.from_bytes(src) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
       }
     };
 
+#elif (XTD_HAS_ICONV)
 
-    template <typename ... _ArgsT>
-    class xstring_format<char, const char *, _ArgsT...>{
-    public:
-      inline static void format(string& dest, const char * src, _ArgsT&&...oArgs){
-        dest += src;
-        xstring_format<char, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+    template <typename ... _ArgTs> struct xstring_format<char, const wchar_t *, _ArgTs...>{
+      static string format(const wchar_t * src, _ArgTs...oArgs){
+        static iconv_helper oIconv("UTF-8", "WCHAR_T");
+        size_t srclen = wcslen(src);
+        string sRet(srclen, 0);
+        size_t retlen = srclen;
+        iconv(oIconv, nullptr, nullptr, nullptr, &retlen);
+        forever{
+          retlen = sRet.size();
+          auto pSrc = reinterpret_cast<const char *>(src);
+          auto iSrcLen = srclen * sizeof(wchar_t);
+          auto sRetPtr = &sRet[0];
+          auto iRet = iconv(oIconv, const_cast<char**>(&pSrc), &iSrcLen, &sRetPtr, &retlen);
+          if (static_cast<size_t>(-1) != iRet){
+           return sRet;
+          }
+          if (errno != E2BIG){
+           throw std::runtime_error("A string conversion error occurred");
+          }
+          sRet.resize(sRet.size() * 2);
+        }
       }
     };
 
-
-    template <typename ... _ArgsT>
-    class xstring_format<char, const wchar_t *, _ArgsT...>{
-    public:
-      inline static void format(string& dest, const wchar_t * src, _ArgsT&&...oArgs){
-        dest += string::from(src);
-        xstring_format<char, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, const char *, _ArgTs...>{
+      static inline wstring format(const char * src, _ArgTs...oArgs){
+        static iconv_helper oIconv("WCHAR_T", "UTF-8");
+        size_t srclen = strlen(src);
+        wstring sRet(srclen, 0);
+        size_t retlen = srclen;
+        iconv(oIconv, nullptr, nullptr, nullptr, &retlen);
+        forever{
+          retlen = sRet.size() * sizeof(wchar_t);
+          auto pSrc = const_cast<char*>(src);
+          auto iSrcLen = srclen;
+          auto sRetPtr = reinterpret_cast<char*>(&sRet[0]);
+          auto iRet = iconv(oIconv, &pSrc, &iSrcLen, &sRetPtr, &retlen);
+          if (static_cast<size_t>(-1) != iRet) {
+            return sRet;
+          }
+          if (errno != E2BIG){
+            throw std::runtime_error("A string conversion error occurred");
+          }
+          sRet.resize(sRet.size() * 2);
+        }
       }
     };
 
-    template <typename _ChT, int _Len, typename ... _ArgsT>
-    class xstring_format<_ChT, const _ChT(&)[_Len], _ArgsT...>{
-    public:
-      inline static void format(xstring<_ChT>& dest, const _ChT(&src)[_Len], _ArgsT&&...oArgs){
-        dest.append(&src[0], &src[_Len - 1]);
-        xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+#else
+
+    template <typename ... _ArgTs> struct xstring_format<char, const wchar_t *, _ArgTs...> {
+      static string format(const wchar_t *src, _ArgTs...oArgs) {
+        size_t srclen = wcslen(src);
+        string sRet(srclen, 0);
+        forever {
+          srclen = wcstombs(&sRet[0], src, sRet.size());
+          if (static_cast<size_t>(-1) == srclen) {
+            throw std::runtime_error("A string conversion error occurred");
+          }
+          if (srclen < sRet.size()) {
+            break;
+          }
+          sRet.resize(srclen * 2);
+        }
+        sRet.resize(srclen);
+        return sRet;
       }
     };
 
-    template <typename _ChT, typename ... _ArgsT>
-    class xstring_format<_ChT, const xstring<_ChT>&, _ArgsT...>{
-    public:
-      inline static void format(xstring<_ChT> &dest, const xstring<_ChT> &oArg, _ArgsT &&...oArgs){
-        dest.append(oArg);
-        xstring_format<_ChT, _ArgsT...>::format(dest, std::forward<_ArgsT>(oArgs)...);
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, const char *, _ArgTs...> {
+
+      static inline wstring format(const char *src, _ArgTs...oArgs) {
+        size_t srclen = strlen(src);
+        wstring sRet(srclen, 0);
+        forever {
+          srclen = mbstowcs(&sRet[0], src, sRet.size());
+          if (static_cast<size_t>(-1) == srclen) {
+            throw std::runtime_error("A string conversion error occurred");
+          }
+          if (srclen < sRet.size()) {
+            break;
+          }
+          sRet.resize(srclen * 2);
+        }
+        sRet.resize(srclen);
+        return sRet;
       }
     };
-  }
+
 #endif
+
+
+    template <typename ... _ArgTs> struct xstring_format<char, int8_t&, _ArgTs...>{
+      inline static string format(const int8_t &value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, int8_t&, _ArgTs...>{
+      inline static wstring format(const int8_t &value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<char, uint8_t&, _ArgTs...>{
+      inline static string format(const uint8_t &value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, uint8_t&, _ArgTs...>{
+      inline static wstring format(const uint8_t &value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<char, int16_t&, _ArgTs...>{
+      inline static string format(const int16_t &value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, int16_t&, _ArgTs...>{
+      inline static wstring format(const int16_t &value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<char, uint16_t&, _ArgTs...>{
+      inline static string format(const uint16_t &value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, uint16_t&, _ArgTs...>{
+      inline static wstring format(const uint16_t &value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<char, int32_t&, _ArgTs...>{
+      inline static string format(const int32_t &value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, int32_t&, _ArgTs...>{
+      inline static wstring format(const int32_t &value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<char, uint32_t&, _ArgTs...>{
+      inline static string format(const uint32_t &value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, uint32_t&, _ArgTs...>{
+      inline static wstring format(const uint32_t &value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<char, int, _ArgTs...>{
+      inline static string format(int value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, int, _ArgTs...>{
+      inline static wstring format(int value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<char, unsigned int, _ArgTs...>{
+      inline static string format(unsigned int value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, unsigned int, _ArgTs...>{
+      inline static wstring format(unsigned int value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+    template <typename ... _ArgTs> struct xstring_format<char, DWORD&, _ArgTs...>{
+      inline static string format(DWORD& value, _ArgTs&&...oArgs){
+        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, DWORD&, _ArgTs...>{
+      inline static wstring format(DWORD& value, _ArgTs&&...oArgs){
+        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+  #endif
+
+    template <int _Len, typename ... _ArgTs> struct xstring_format<char, const wchar_t(&)[_Len], _ArgTs...>{
+      inline static string format(const wchar_t(&src)[_Len], _ArgTs&&...oArgs){
+        return xstring_format<char, const wchar_t*, _ArgTs...>::format(static_cast<const wchar_t*>(src), std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+
+    template <typename ... _ArgTs> struct xstring_format<char, xstring<wchar_t>&, _ArgTs...>{
+      inline static string format(const xstring<wchar_t>&src, _ArgTs&&...oArgs){
+        return xstring_format<char, const wchar_t*, _ArgTs...>::format(src.c_str(), std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <int _Len, typename ... _ArgTs> struct xstring_format<wchar_t, const char(&)[_Len], _ArgTs...>{
+      inline static wstring format(const char(&src)[_Len], _ArgTs&&...oArgs){
+        return xstring_format<wchar_t, const char*, _ArgTs...>::format(static_cast<const char*>(src), std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename ... _ArgTs> struct xstring_format<wchar_t, xstring<char>&, _ArgTs...>{
+      inline static wstring format(const xstring<char>&src, _ArgTs&&...oArgs){
+        return xstring_format<wchar_t, const char*, _ArgTs...>::format(src.c_str(), std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename _ChT, int _Len, typename ... _ArgTs> struct xstring_format<_ChT, const _ChT(&)[_Len], _ArgTs...>{
+      inline static xstring<_ChT> format(const _ChT(&src)[_Len], _ArgTs&&...oArgs){
+        return xstring_format<_ChT, const _ChT *, _ArgTs...>::format(static_cast<const _ChT*>(src), std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename _ChT, typename ... _ArgTs> struct xstring_format<_ChT, const xstring<_ChT>&, _ArgTs...>{
+      inline static xstring<_ChT> format(const xstring<_ChT>& src, _ArgTs&&...oArgs){
+        return src + xstring_format<_ChT, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+
+    template <typename _ChT, typename ... _ArgTs> struct xstring_format<_ChT, const _ChT*&, _ArgTs...>{
+      inline static xstring<_ChT> format(const _ChT*&src, _ArgTs&&...oArgs){
+        return xstring<_ChT>(src) + xstring_format<_ChT, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+    template <typename _ChT, typename ... _ArgTs> struct xstring_format<_ChT, const _ChT*, _ArgTs...>{
+      inline static xstring<_ChT> format(const _ChT*src, _ArgTs&&...oArgs){
+        return xstring<_ChT>(src) + xstring_format<_ChT, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+      }
+    };
+
+
+    template <typename _ChT, typename ... _TailT> struct xstring_format<_ChT, const void *, _TailT...>{
+      static xstring<_ChT> format(const void * val, _TailT...oArgs){
+        _ChT chars[] = { (_ChT)'0', (_ChT)'1', (_ChT)'2', (_ChT)'3', (_ChT)'4', (_ChT)'5', (_ChT)'6', (_ChT)'7',
+                         (_ChT)'8', (_ChT)'9', (_ChT)'a', (_ChT)'b', (_ChT)'c', (_ChT)'d', (_ChT)'e', (_ChT)'f' };
+        std::basic_string<_ChT> sTemp = "";
+        auto value = reinterpret_cast<size_t>(val);
+        for (uint8_t i=0 ; i<(sizeof(value) * 2) ; ++i, value <<= 4){
+          auto ch = (0xf0000000 & value) >> 28;
+          if (!ch && !sTemp.size()) continue;
+          sTemp += chars[ch];
+        }
+        std::basic_string<_ChT> sRet = "0x";
+        sRet += _::xstring_format<_ChT, _TailT...>::format(std::forward<_TailT>(oArgs)...);
+        return sRet;
+      }
+    };
+
+  }
 }

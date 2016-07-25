@@ -7,9 +7,11 @@
 
 #if (XTD_COMPILER & XTD_COMPILER_GCC)
 NOTE("Compiler : GCC");
+NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
 #endif
 #if (XTD_COMPILER & XTD_COMPILER_MSVC)
 NOTE("Compiler : MSVC");
+NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
 #endif
 
 
@@ -30,6 +32,9 @@ NOTE("OS : Windows");
 #endif
 #if (XTD_OS & XTD_OS_CYGWIN)
 NOTE("OS : Cygwin");
+#endif
+#if (XTD_OS & XTD_OS_MSYS)
+NOTE("OS : MSYS")
 #endif
 #if (XTD_OS & XTD_OS_MINGW)
 NOTE("OS : MinGW");

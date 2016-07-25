@@ -2,10 +2,13 @@ eXtended Template Library
 =========================
 [![Open Hub project report](https://www.openhub.net/p/libxtl/widgets/project_thin_badge.gif)](https://www.openhub.net/p/libxtl)
 [![Travis](https://img.shields.io/travis/djmott/xtl.svg?style=plastic)](https://travis-ci.org/djmott/xtl)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/0vqrarmqy9kjbnql?svg=true)](https://ci.appveyor.com/project/djmott/xtl)
 [![Coveralls branch](https://img.shields.io/coveralls/djmott/xtl.svg?style=plastic)](https://coveralls.io/github/djmott/xtl)
 [![SonarQube Tech Debt](https://img.shields.io/sonar/https/sonarqube.com/xtl/tech_debt.svg)](https://sonarqube.com/overview?id=xtl)
 [![SonarQube Quality Gate](http://nemo.sonarqube.org/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl)
 [![Boost License](https://img.shields.io/badge/license-Boost_Version_1.0-green.svg?style=plastic)](http://www.boost.org/LICENSE_1_0.txt)
+[![Gratipay User](https://img.shields.io/gratipay/user/djmott.svg)](https://gratipay.com/xtl/)
+[![Beerpay](https://beerpay.io/djmott/xtl/badge.svg)](https://beerpay.io/djmott/xtl)
 
 View the documentation online at [http://djmott.github.io/xtl](http://djmott.github.io/xtl)
 
@@ -88,13 +91,21 @@ Submit a [ticket](https://github.com/djmott/xtl/issues) on GitHub if a bug is fo
 
 ### Contributing
 
-Contributions are appreciated. To contirube, <a class="github-button" href="https://github.com/djmott/xtl/fork" data-icon="octicon-repo-forked" data-style="mega" data-count-href="/djmott/xtl/network" data-count-api="/repos/djmott/xtl#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork djmott/xtl on GitHub">fork</a>
-the project, add some code and submit a [pull request](https://github.com/djmott/xtl/pulls). In general, contributions should:
+
+Contributions are appreciated. To contribute monitarilty, toss me some cash on [Beerpay](https://beerpay.io/djmott/xtl) or [Gratipay](https://gratipay.com/xtl/) To contirube code, <a class="github-button" href="https://github.com/djmott/xtl/fork" data-icon="octicon-repo-forked" data-style="mega" data-count-href="/djmott/xtl/network" data-count-api="/repos/djmott/xtl#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork djmott/xtl on GitHub">fork</a>
+the project, add some code and submit a [pull request](https://github.com/djmott/xtl/pulls).
+In general, contributions should:
 * Clear around %80 in code coverage tests
 * Pass SonarQube quality gateway
 * Pass unit and system tests
 * Pass tests through ValGrind memcheck or some other dynamic analysis with no resource leaks or other significant issues
 
+
 ### License
 
 XTL is copyright by David Mott and licensed under the Boost Version 1.0 license agreement. See [LICENSE.md](LICENSE.md) or [http://www.boost.org/LICENSE_1_0.txt](http://www.boost.org/LICENSE_1_0.txt) for license details. 
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/djmott/xtl/badge.svg?style=beer-square)](https://beerpay.io/djmott/xtl)  [![Beerpay](https://beerpay.io/djmott/xtl/make-wish.svg?style=flat-square)](https://beerpay.io/djmott/xtl?focus=wish)

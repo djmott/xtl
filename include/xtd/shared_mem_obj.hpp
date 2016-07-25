@@ -14,11 +14,7 @@ namespace xtd{
     shared_mem_obj() = delete;
     shared_mem_obj(const shared_mem_obj&) = delete;
     shared_mem_obj& operator=(const shared_mem_obj&) = delete;
-    void * operator new(const char * name, size_t len){
-    #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
-    #elif ((XTD_OS_CYGWIN | XTD_OS_LINUX) & XTD_OS)
-    #endif
-    }
+    void * operator new(const char * name, size_t len);
     void operator delete(void* addr);
     virtual void initialize() = 0;
     virtual void destroy() = 0;

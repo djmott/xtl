@@ -9,7 +9,7 @@ namespace xtd{
     supports 2^31 simultaneous readers
     @tparam _WaitPolicyT behavior when spinning
     */
-    template <typename _WaitPolicyT = null_wait_policy>
+    template <typename _WaitPolicyT>
     class rw_lock_base : std::atomic<uint32_t>{
     public:
       using wait_policy_type = _WaitPolicyT;
@@ -31,7 +31,7 @@ namespace xtd{
               break;
             }
           }
-          _WaitPolicy.spin();
+          _WaitPolicy();
         }
       }
       /// Acquires a shared read lock
@@ -41,7 +41,7 @@ namespace xtd{
           if (_super_t::compare_exchange_strong(iOriginal, 1 + iOriginal)){
             break;
           }
-          _WaitPolicy.spin();
+          _WaitPolicy();
         }
       }
       /** tries to acquire a shared read lock
@@ -55,7 +55,7 @@ namespace xtd{
       void lock_write(){
         uint32_t iOriginal = 0;
         while (!_super_t::compare_exchange_strong(iOriginal, write_lock_bit)){
-          _WaitPolicy.spin();
+          _WaitPolicy();
         }
       }
       /** attempts to acquire a write lock for exclusive access
@@ -69,7 +69,7 @@ namespace xtd{
       class scope_read{
         rw_lock_base& _Lock;
       public:
-        scope_read(rw_lock_base& oLock) : _Lock(oLock){
+        explicit scope_read(rw_lock_base& oLock) : _Lock(oLock){
           _Lock.lock_read();
         }
         ~scope_read(){
@@ -80,7 +80,7 @@ namespace xtd{
       class scope_write{
         rw_lock_base& _Lock;
       public:
-        scope_write(rw_lock_base& oLock) : _Lock(oLock){
+        explicit scope_write(rw_lock_base& oLock) : _Lock(oLock){
           _Lock.lock_write();
         }
         ~scope_write(){

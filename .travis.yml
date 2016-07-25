@@ -10,7 +10,8 @@ include:
           - ubuntu-toolchain-r-test
         packages:
           - g++-5
-    env: COMPILER=g++-5
+    env:  COMPILER=g++-5
+
 before_install:
   - mkdir -p      $TRAVIS_BUILD_DIR/docs/reports/cppcheck       $TRAVIS_BUILD_DIR/docs/reports/gcov        $TRAVIS_BUILD_DIR/docs/reports/gtest
   - mkdir -p      $TRAVIS_BUILD_DIR/docs/reports/make           $TRAVIS_BUILD_DIR/docs/reports/oclint      $TRAVIS_BUILD_DIR/docs/reports/rats
@@ -46,8 +47,8 @@ script:
   - for item in $( find -name '*.gcda' ); do gcov -l $item; done
   - for item in $( find -name '*.gcda' ); do gcovr -x -r .  > $TRAVIS_BUILD_DIR/docs/reports/gcov/$(basename $item).xml; done
   - cd $TRAVIS_BUILD_DIR/
-  - cp assets/sonar* .
-  - sonar-scanner -e -X -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
+#  - cp assets/sonar* .
+#  - sonar-scanner -e -X -Dsonar.host.url=https://nemo.sonarqube.org -Dsonar.login=$SONAR_TOKEN
 success:
   - cd $TRAVIS_BUILD_DIR/docs/html
   - git init

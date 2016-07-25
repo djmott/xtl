@@ -82,28 +82,26 @@ TEST(test_string, split){
 }
 
 TEST(test_string, string_from_wchar_ptr){
-  auto s = xtd::string::from(L"123456789");
+  auto s = xtd::string::format(L"123456789");
   ASSERT_EQ(9, s.size());
   ::testing::StaticAssertTypeEq<decltype(s)::value_type, char>();
-  const wchar_t sw[] = { (wchar_t)-1, (wchar_t)-1, (wchar_t)-1, (wchar_t)-1, 0};
-  EXPECT_ANY_THROW(s = xtd::string::from(sw));
 }
 
 TEST(test_string, wstring_from_char_ptr){
-  auto s = xtd::wstring::from("123456789");
+  auto s = xtd::wstring::format("123456789");
   ASSERT_EQ(9, s.size());
   ::testing::StaticAssertTypeEq<decltype(s)::value_type, wchar_t>();
 }
 
 TEST(test_string, wstring_from_string){
   xtd::string s = "12345";
-  auto ws = xtd::wstring::from(s);
+  auto ws = xtd::wstring::format(s);
   ASSERT_EQ(ws.size(), s.size());
 }
 
 TEST(test_string, string_from_wstring){
   xtd::wstring ws(L"123456789");
-  auto s = xtd::string::from(ws);
+  auto s = xtd::string::format(ws);
   ASSERT_EQ(ws.size(), s.size());
 }
 

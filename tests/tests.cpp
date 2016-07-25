@@ -31,6 +31,10 @@ main system and unit test entry point
   #include "test_concurrent_stack.hpp"
 #endif
 
+#if (ON==TEST_DEBUG_HELP && ((XTD_OS_WINDOWS | XTD_OS_MNGW) & XTD_OS))
+  #include "test_debug_help.hpp"
+#endif
+
 #if (ON==TEST_DYNAMIC_LIBRARY)
   #include "test_dynamic_library.hpp"
 #endif
@@ -63,8 +67,16 @@ main system and unit test entry point
   #include "test_path.hpp"
 #endif
 
+#if (ON==TEST_PROCESS)
+  #include "test_process.hpp"
+#endif
+
 #if (ON==TEST_READ_WRITE_LOCK)
   #include "test_rw_lock.hpp"
+#endif
+
+#if (ON==TEST_RECURSIVE_SPIN_LOCK)
+  #include "test_recursive_spin_lock.hpp"
 #endif
 
 #if (ON==TEST_RPC)

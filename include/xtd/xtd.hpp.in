@@ -8,14 +8,56 @@
 
 #pragma once
 
-#define ON    1
-#define OFF   0
+#if !defined(ON)
+  #define ON    1
+#endif
 
-#define YES   1
-#define NO    0
+#if !defined(OFF)
+  #define OFF   0
+#endif
+
+#if !defined(YES)
+  #define YES   1
+#endif
+
+#if !defined(NO)
+  #define NO    0
+#endif
 
 #if !defined(DOXY_INVOKED)
-    #define DOXY_INVOKED 0
+  #define DOXY_INVOKED 0
+#endif
+
+#if !defined(XTD_HAS_UUID)
+  #cmakedefine01 XTD_HAS_UUID
+#endif
+
+#if !defined(XTD_COLOR_MESSAGES)
+  #cmakedefine01 XTD_COLOR_MESSAGES
+#endif
+
+#if !defined(XTD_HAS_CODECVT)
+  #cmakedefine01 XTD_HAS_CODECVT
+#endif
+
+#if !defined(XTD_HAS_EXP_CODECVT)
+  #cmakedefine01 XTD_HAS_EXP_CODECVT
+#endif
+
+#if !defined(XTD_HAS_ICONV)
+  #cmakedefine01 XTD_HAS_ICONV
+#endif
+
+#if !defined(XTD_HAS_FILESYSTEM)
+  #cmakedefine01 XTD_HAS_FILESYSTEM
+#endif
+
+#if !defined(XTD_HAS_EXP_FILESYSTEM)
+  #cmakedefine01 XTD_HAS_EXP_FILESYSTEM
+#endif
+
+#if !defined(XTD_USE_DBGHELP)
+  #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
 #endif
 
 /** @name XTD_COMPILER
@@ -39,13 +81,14 @@
 /** @name XTD_OS
     The build/target/host OS selected by cmake configure
     @{*/
-#define XTD_OS_ANDROID    1
-#define XTD_OS_BAREMETAL  2
-#define XTD_OS_IOS        4
-#define XTD_OS_LINUX      8
-#define XTD_OS_WINDOWS    16
-#define XTD_OS_CYGWIN     32
-#define XTD_OS_MINGW      64
+#define XTD_OS_ANDROID    0x01
+#define XTD_OS_BAREMETAL  0x02
+#define XTD_OS_IOS        0x04
+#define XTD_OS_LINUX      0x08
+#define XTD_OS_WINDOWS    0x10
+#define XTD_OS_CYGWIN     0x20
+#define XTD_OS_MINGW      0x40
+#define XTD_OS_MSYS       0x80
 
 #if !defined(XTD_OS)
   #define XTD_OS @XTD_OS@
@@ -71,17 +114,8 @@
 #endif
     ///@}
 
-#define XTD_STR_CONVERT_CODECVT 1
-#define XTD_STR_CONVERT_ICONV 2
-#define XTD_STR_CONVERT_GENERIC 4
-
-#if !defined(XTD_STR_CONVERT)
-    #define XTD_STR_CONVERT @XTD_STR_CONVERT@
-#endif
 
 
-#cmakedefine01 XTD_HAS_UUID
-#cmakedefine01 XTD_COLOR_MESSAGES
 
 
 /** @name XTD_CONFIG
@@ -107,7 +141,6 @@
 #endif
     ///@}
 
-  
 #cmakedefine01 XTD_LOG_TARGET_SYSLOG
 #cmakedefine01 XTD_LOG_TARGET_WINDBG
 #cmakedefine01 XTD_LOG_TARGET_CSV
@@ -130,17 +163,21 @@
 
 #define DEFINE(x) x
 
+#if defined(__COUNTER__)
+  #define UNIQUE_IDENTIFIER(_prefix) CONCAT(_prefix, __COUNTER__)
+#else
+  #define UNIQUE_IDENTIFIER(_prefix) CONCAT(_prefix, __LINE__)
+#endif
+
 
 //__SONAR_OFF__
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
   #if !defined(_WIN32_WINNT)
     #define _WIN32_WINNT 0x600
   #endif
-  #define EXPORT __declspec(dllexport)
-#else
-  #define EXPORT __attribute__ ((visibility ("default")))
 #endif
 //__SONAR_ON__
+
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #define FORCEINLINE __forceinline
@@ -148,6 +185,7 @@
   #define NORETURN __declspec(noreturn)
   #define MULTIPLE __declspec(selectany)
   #define ALIGN(val) __declspec(align(val))
+  #define EXPORT __declspec(dllexport)
   #define TODO( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : TODO : " x  ))
   #define NOTE( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : NOTE : " x  ))
 #elif (XTD_COMPILER_GCC & XTD_COMPILER)
@@ -156,6 +194,7 @@
   #define NORETURN __attribute__((noreturn))
   #define MULTIPLE __attribute__ ((weak))
   #define ALIGN(val) __attribute__ ((aligned (val)))
+  #define EXPORT __attribute__ ((visibility ("default")))
   #define PRAGMA_(x) _Pragma( #x )
   #if XTD_COLOR_MESSAGES
     #define TODO( x ) PRAGMA_(message ("\e[31mTODO : " x "\e[0m" ))
@@ -165,12 +204,24 @@
     #define NOTE( x ) PRAGMA_(message ("NOTE : " x ))
   #endif
 #endif
-    ///@}
-  
+
+#if !defined(XTD_VERBOSE_BUILD)
+    #cmakedefine01 XTD_VERBOSE_BUILD
+#endif
+
+#if (!XTD_VERBOSE_BUILD)
+    #undef TODO
+    #undef NOTE
+    #define TODO(...)
+    #define NOTE(...)
+#endif
+
 #if (XTD_OS_MINGW & XTD_OS)
   TODO("Enabled sealed keyword when available in mingw");
   #define sealed
 #endif
+
+    ///@}
 
 /// @defgroup Annotation Annotation and documentation to clarify intent of code
 
@@ -222,37 +273,51 @@ namespace xtd{
 #define forever for(;;)
 
 //System
+#if (XTD_OS_LINUX & XTD_OS)
+  #if !defined(_GNU_SOURCE)
+    #define _GNU_SOURCE
+  #endif
+#endif
+
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     #include <winsock2.h>
     #include <windows.h>
     #include <Ws2ipdef.h>
     #include <ws2tcpip.h>
     #include <rpc.h>
+    #include <psapi.h>
+    #if XTD_USE_DBGHELP
+      #include <dbghelp.h>
+    #endif
+    #include <shlobj.h>
 #endif
 
-#if ((XTD_OS_LINUX | XTD_OS_CYGWIN) & XTD_OS)
-  #include <unistd.h>
-  #include <limits.h>
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
   #include <sys/types.h>
-  #include <dlfcn.h>
-  #include <poll.h>
   #include <sys/socket.h>
   #include <sys/ioctl.h>
   #include <netinet/in.h>
   #include <netinet/udp.h>
   #include <netinet/tcp.h>
   #include <arpa/inet.h>
+  #include <unistd.h>
+  #include <limits.h>
+  #include <poll.h>
+  #include <dlfcn.h>
+  #include <cxxabi.h>
+  #include <dirent.h>
 #endif
 
+#if (XTD_OS_LINUX & XTD_OS)
+  #include <link.h>
+#endif
 
 //CRT
 #include <string.h>
 
 
 //STL
-#if (XTD_STR_CONVERT_CODECVT & XTD_STR_CONVERT)
-  #include <codecvt>
-#endif
+
 
 #include <algorithm>
 #include <chrono>
@@ -264,6 +329,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <cwctype>
 #include <deque>
 #include <exception>
+#include <fstream>
 #include <functional>
 #include <future>
 #include <iostream>
@@ -281,40 +347,56 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <type_traits>
 #include <vector>
 
+#if (XTD_HAS_FILESYSTEM)
+  #include <filesystem>
+#elif (XTD_HAS_EXP_FILESYSTEM)
+  #include <experimental/filesystem>
+#endif
+
 //3rd party
 #if (XTD_HAS_UUID)
     #include <uuid/uuid.h>
 #endif
 
-#if (XTD_STR_CONVERT_ICONV & XTD_STR_CONVERT)
+#if (XTD_HAS_CODECVT)
+  #include <codecvt>
+#elif (XTD_HAS_EXP_CODECVT)
+  #include <experimental/codecvt>
+#elif (XTD_HAS_ICONV)
   #include <iconv.h>
 #endif
+
 
 #if (XTD_LOG_TARGET_SYSLOG)
     #include <syslog.h>
 #endif
 
 //XTL
-#include <xtd/debug.hpp>
 #include <xtd/callback.hpp>
-#include <xtd/concurrent.hpp>
-#include <xtd/concurrent_hash_map.hpp>
-#include <xtd/concurrent_stack.hpp>
+#include <xtd/meta.hpp>
+
+#include <xtd/concurrent/concurrent.hpp>
+
 #include <xtd/source_location.hpp>
 #include <xtd/exception.hpp>
 #include <xtd/string.hpp>
-#include <xtd/path.hpp>
+#include <xtd/filesystem.hpp>
+#include <xtd/executable.hpp>
 #include <xtd/dynamic_library.hpp>
 #include <xtd/event_trace.hpp>
-#include <xtd/executable.hpp>
 #include <xtd/log.hpp>
-#include <xtd/meta.hpp>
+#include <xtd/debug.hpp>
+
 #include <xtd/parse.hpp>
-#include <xtd/rw_lock.hpp>
+#include <xtd/process.hpp>
 #include <xtd/socket.hpp>
-#include <xtd/spin_lock.hpp>
 #include <xtd/tuple.hpp>
 #include <xtd/unique_id.hpp>
 #include <xtd/rpc.hpp>
 #include <xtd/var.hpp>
 
+#if (XTD_OS_WINDOWS & XTD_OS)
+  #include <xtd/windows/dbghelp.hpp>
+#endif
+
+#include <xtd/exception.inl>

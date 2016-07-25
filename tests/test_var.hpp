@@ -35,7 +35,6 @@ TEST(test_var, assignments){
   ASSERT_EQ(v1.get_type(), typeid(double));
   ASSERT_EQ(v1.as<double>(), 3.14);
   v1 = "abc123";
-  v2=v1;
   ASSERT_EQ(v1.get_type(), typeid(const char *));
   ASSERT_STREQ(v1.as<const char *>(), "abc123");
   v1 = L"xyz";

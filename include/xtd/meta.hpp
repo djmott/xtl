@@ -7,16 +7,64 @@
 
 #pragma once
 
-namespace xtd{
+#define RAII(...) xtd::_::_RAII UNIQUE_IDENTIFIER(raii_object)([&](){ __VA_ARGS__ ; });
 
-  ///Determine if a type is specified in a list
+namespace xtd{
+  namespace _{
+    struct _RAII{
+      template <typename _Ty>
+      _RAII(_Ty newval) : _fn(newval){}
+      ~_RAII(){ _fn(); }
+      std::function<void()> _fn;
+    };
+  }
+
+  /** meta-function to get the intrinsic of a specified size
+  @tparam _Size size
+  @return intrinsic of specified size
+  */
+  template <int _Size> struct intrinsic_of_size;
+#if (!DOXY_INVOKED)
+  template <> struct intrinsic_of_size<1>{ using type = uint8_t; };
+  template <> struct intrinsic_of_size<2>{ using type = uint16_t; };
+  template <> struct intrinsic_of_size<4>{ using type = uint32_t; };
+  template <> struct intrinsic_of_size<8>{ using type = uint64_t; };
+
+
+#endif
+
+  /** meta-function to get the processor intrinsic storage for a type. should work with 8, 16, 32 and 64 bit processors
+  @tparam _Ty type
+  @return intrinsic storage
+  */
+  template <typename _Ty> struct processor_intrinsic{
+    /// processor intrinsic of pointer type
+    using type = typename intrinsic_of_size<sizeof(_Ty)>::type;
+  };
+#if (!DOXY_INVOKED)
+  template <typename _Ty> struct processor_intrinsic<_Ty*>{
+    using type = typename intrinsic_of_size<sizeof(_Ty*)>::type;
+  };
+#endif
+  /** casts a pointer to the processor intrinsic storage type
+  * @param src
+  * @return
+  */
+  template <typename _Ty> constexpr typename processor_intrinsic<_Ty>::type intrinsic_cast(_Ty src){
+    return src;
+  } 
+  template <typename _Ty> constexpr typename processor_intrinsic<_Ty*>::type intrinsic_cast(const _Ty * src){
+    return reinterpret_cast<typename processor_intrinsic<_Ty>::type>(src);
+  }
+
+  /// Determine if a type is specified in a list
   template <typename, typename...> struct is_a;
   template <typename _Ty> struct is_a<_Ty> : std::false_type {};
-  template <typename _Ty, typename ... _TailT> struct is_a<_Ty, _Ty, _TailT...> : std::true_type {};
-  template <typename _Ty, typename _HeadT, typename ... _TailT> struct is_a<_Ty, _HeadT, _TailT...> : is_a<_Ty, _TailT...> {};
+  template <typename _Ty, typename ... _TailT> struct is_a<_Ty, _Ty, _TailT...> : std::true_type{ using type = _Ty; };
+  template <typename _Ty, typename _HeadT, typename ... _TailT> struct is_a<_Ty, _HeadT, _TailT...> : is_a<_Ty, _TailT...>{ using type = _Ty; };
 
 
-  ///Gets the type of a parameter in a method declaration
+  /// Gets the type of a parameter in a method declaration
   template <int _ParamNum, typename _Ty> struct get_parameter;
   template <typename _ReturnT, typename _HeadT, typename ... _TailT> struct get_parameter<0, _ReturnT(_HeadT, _TailT...)>{
     using type = _HeadT;

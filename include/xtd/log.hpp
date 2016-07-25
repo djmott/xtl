@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "process.hpp"
+
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
 #define WARNING(...)  xtd::log::get().write(xtd::log::type::warning, here(), __VA_ARGS__)
@@ -128,8 +130,33 @@ namespace xtd{
     };
 #endif
 
+#if (XTD_LOG_TARGET_CSV)
+    class csv_target : public log_target{
+
+      static std::ofstream& File(){
+        static thread_local std::ofstream _File;
+        return _File;
+      }
+
+      xtd::filesystem::path _LogPath;
+    public:
+      void operator()(const message::pointer_type&) override{
+        auto & oFile = File();
+        if (!oFile.is_open()){
+
+        }
+      }
+      csv_target(){
+        _LogPath = xtd::filesystem::path::home_directory();
+        _LogPath /= xtd::executable::this_executable().path().filename();
+        _LogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()));
+      }
+    };
+#endif
+
     void callback_thread(){
-      while ( !_Exit ){
+      _CallbackThreadStarted.set_value();
+      while ( !_CallbackThreadExit ){
         callback_type oCallback;
         {
           std::unique_lock<std::mutex> oLock(_CallbackLock);
@@ -145,30 +172,41 @@ namespace xtd{
           oCallback();
         }
       }
+      _CallbackThreadFinished.set_value();
     }
 
     log() : _Messages(), _Callbacks(), _CallbackThread(), _CallbackLock(), _CallbackCheck(), _LogTargets(){
+
 #if (XTD_LOG_TARGET_SYSLOG)
       _LogTargets.emplace_back(new syslog_target);
 #endif
+
 #if (XTD_LOG_TARGET_WINDBG)
       _LogTargets.emplace_back(new win_dbg_target);
 #endif
+
 #if (XTD_LOG_TARGET_COUT)
       _LogTargets.emplace_back(new std_cout_target);
 #endif
+
+#if (XTD_LOG_TARGET_CSV)
+      _LogTargets.emplace_back(new csv_target);
+#endif
+
       _CallbackThread = std::thread(&log::callback_thread, this);
+      _CallbackThreadStarted.get_future().get();
     }
 
     ~log(){
       {
         std::lock_guard<std::mutex> oLock(_CallbackLock);
         _Callbacks.push_back([this](){
-          _Exit = true;
+          _CallbackThreadExit = true;
         });
         _CallbackCheck.notify_one();
       }
       _CallbackThread.join();
+      _CallbackThreadFinished.get_future().get();
     }
 
     using callback_type = std::function<void()>;
@@ -180,7 +218,9 @@ namespace xtd{
     std::mutex _CallbackLock;
     std::condition_variable _CallbackCheck;
     log_target::vector_type _LogTargets;
-    bool _Exit = false;
+    std::promise<void> _CallbackThreadStarted;
+    std::promise<void> _CallbackThreadFinished;
+    bool _CallbackThreadExit = false;
 
     public:
 

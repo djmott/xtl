@@ -4,27 +4,33 @@
 
 #include <xtd/xtd.hpp>
 
+
 namespace{
+  xtd::concurrent::hash_map<void*,std::string> _FunctionNames;
   thread_local std::stack<std::string> _ThreadStack;
   thread_local bool _InTrace = false;
 }
 
 extern "C"{
-  void __xtd_EventEnter(void *){
+  void __xtd_EventEnter(void * addr){
     if (_InTrace){
       return;
     }
+/*    Dl_info oInfo;
+    if (!_FunctionNames.exists(pAddr) && dladdr(pAddr, &oInfo)){
+      _FunctionNames.insert(pAddr, oInfo.dli_sname);
+    }*/
     _InTrace = true;
-    _ThreadStack.push("");
+  //  _ThreadStack.push("");
     _InTrace = false;
   }
 
-  void __xtd_EventLeave(void *){
+  void __xtd_EventLeave(void * addr){
     if (_InTrace){
       return;
     }
     _InTrace = true;
-    _ThreadStack.pop();
+  //  _ThreadStack.pop();
     _InTrace = false;
   }
 }
