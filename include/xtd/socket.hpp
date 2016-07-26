@@ -47,7 +47,8 @@ namespace xtd{
 
 #if (!DOXY_INVOKED)
     namespace _{
-      template <typename _Ty, int level, int optname> struct socket_option{
+      template <typename _Ty, int level, int optname> class socket_option{
+      public:
         using value_type = _Ty;
         static value_type get(SOCKET s){
           value_type iRet;
@@ -60,7 +61,8 @@ namespace xtd{
           socket::exception::throw_if(setsockopt(s, level, optname, reinterpret_cast<char*>(&newval), sizeof(newval)), [](int i){ return (i<0); });
         }
       };
-      template <int level, int optname> struct socket_option<std::string, level, optname>{
+      template <int level, int optname> class socket_option<std::string, level, optname>{
+      public:
         using value_type = std::string;
         static value_type get(SOCKET s){
           value_type iRet;

@@ -386,6 +386,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/event_trace.hpp>
 #include <xtd/log.hpp>
 #include <xtd/debug.hpp>
+#include <xtd/btree.hpp>
 
 #include <xtd/parse.hpp>
 #include <xtd/process.hpp>
@@ -398,5 +399,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #if (XTD_OS_WINDOWS & XTD_OS)
   #include <xtd/windows/dbghelp.hpp>
 #endif
+
+#include <xtd/nlp/nlp.hpp>
 
 #include <xtd/exception.inl>

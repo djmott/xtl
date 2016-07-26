@@ -1,16 +1,21 @@
 eXtended Template Library
 =========================
-[![Open Hub project report](https://www.openhub.net/p/libxtl/widgets/project_thin_badge.gif)](https://www.openhub.net/p/libxtl)
-[![Travis](https://img.shields.io/travis/djmott/xtl.svg?style=plastic)](https://travis-ci.org/djmott/xtl)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/0vqrarmqy9kjbnql?svg=true)](https://ci.appveyor.com/project/djmott/xtl)
-[![Coveralls branch](https://img.shields.io/coveralls/djmott/xtl.svg?style=plastic)](https://coveralls.io/github/djmott/xtl)
-[![SonarQube Tech Debt](https://img.shields.io/sonar/https/sonarqube.com/xtl/tech_debt.svg)](https://sonarqube.com/overview?id=xtl)
-[![SonarQube Quality Gate](http://nemo.sonarqube.org/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl)
-[![Boost License](https://img.shields.io/badge/license-Boost_Version_1.0-green.svg?style=plastic)](http://www.boost.org/LICENSE_1_0.txt)
-[![Gratipay User](https://img.shields.io/gratipay/user/djmott.svg)](https://gratipay.com/xtl/)
-[![Beerpay](https://beerpay.io/djmott/xtl/badge.svg)](https://beerpay.io/djmott/xtl)
+
+|       |       |
+| ----: | :---- |
+| Open Hub | [![Open Hub project report](https://www.openhub.net/p/libxtl/widgets/project_thin_badge.gif)](https://www.openhub.net/p/libxtl) |
+| Linux | [![Travis](https://img.shields.io/travis/djmott/xtl.svg)](https://travis-ci.org/djmott/xtl) |
+| Windows | [![AppVeyor](https://ci.appveyor.com/api/projects/status/0vqrarmqy9kjbnql?svg=true)](https://ci.appveyor.com/project/djmott/xtl) |
+| Coverage | [![Coveralls](https://img.shields.io/coveralls/djmott/xtl.svg)](https://coveralls.io/github/djmott/xtl) |
+| Technical Debt | [![SonarQube Tech Debt](https://img.shields.io/sonar/https/sonarqube.com/xtl/tech_debt.svg)](https://sonarqube.com/overview?id=xtl) |
+| Code Quality | [![SonarQube Quality Gate](https://sonarqube.com/api/badges/gate?key=xtl&blinking=true)](https://sonarqube.com/overview?id=xtl) |
+| License | [![Boost License](https://img.shields.io/badge/license-Boost_Version_1.0-green.svg)](http://www.boost.org/LICENSE_1_0.txt) |
+| Contribute with Gratipay | [![Gratipay User](https://img.shields.io/gratipay/user/djmott.svg)](https://gratipay.com/xtl/) |
+| Contribute with Beerpay| [![Beerpay](https://beerpay.io/djmott/xtl/badge.svg)](https://beerpay.io/djmott/xtl) |
 
 View the documentation online at [http://djmott.github.io/xtl](http://djmott.github.io/xtl)
+
+View the github project at [https://github.com/djmott/xtl](https://github.com/djmott/xtl)
 
 XTL is a series of C++ template metaprogramming patterns, idioms, algorithms and libraries that solve a variety of programming tasks. It supplements, extends and cooperates with the STL by providing some frequently used components that are otherwise absent from the standard. A short list of some of the more notable headers:
 

@@ -217,9 +217,12 @@ throws a static assertion if used with a non-pod type indicating that a speciali
       tcp_transport(const socket::ipv4address& oAddress) : _Address(oAddress), _Socket(), _ServerThread(), _ClientConnected(false){}
 
       void start_server(payload::invoke_handler_type ){
+        //TODO: implement start_server
+        TODO("implement start_server")
       }
       void stop_server(){
-
+        //TODO: implement stop_server
+        TODO("implement stop_server")
       }
       void transact(payload& oPayload){
         payload oTmpPayload;
@@ -241,7 +244,8 @@ throws a static assertion if used with a non-pod type indicating that a speciali
       using pointer_type = std::shared_ptr<null_transport>;
 
       void start_server(payload::invoke_handler_type ){
-
+        //TODO: implement start_server
+        TODO("implement start_server")
       }
       void stop_server(){
         //TODO: disconnect clients and stop the server thread

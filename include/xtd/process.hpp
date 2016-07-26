@@ -54,12 +54,13 @@ namespace xtd{
   private:
     pid_type _pid;
 
-    struct _dir{
+    class _dir{
+    public:
       using ptr = std::unique_ptr<DIR, _dir>;
       void operator()(DIR * d){ closedir(d); }
     };
 
-    process(pid_type hPid) : _pid(hPid) {
+    explicit process(pid_type hPid) : _pid(hPid) {
 
     }
   };
@@ -98,7 +99,7 @@ namespace xtd{
       return oRet;
     }
 
-    process(pid_type hPid) : _pid(hPid), _hProcess(nullptr){}
+    explicit process(pid_type hPid) : _pid(hPid), _hProcess(nullptr){}
     ~process(){
       if (_hProcess){
         CloseHandle(_hProcess);

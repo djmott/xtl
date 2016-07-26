@@ -10,62 +10,69 @@ namespace xtd {
   /*
   @defgroup Tuple
   @{
-  @class template <typename...> struct tuple;
   Generic tuple declaration
   */
-  template <typename...> struct tuple;
+  template <typename...> class tuple;
   /// @}
 
 #if (!DOXY_INVOKED)
   namespace _ {
 //tuple_item
-    template <typename _Ty, typename ...> struct tuple_item;
-    template <typename _Ty> struct tuple_item<_Ty>{
-// 			static _Ty& get(tuple<>&);
-    };
+    template <typename _Ty, typename ...> class tuple_item;
+    template <typename _Ty> class tuple_item<_Ty>{};
 
-    template <typename _Ty, typename ... _Ts> struct tuple_item<_Ty, _Ty, _Ts...> {
+    template <typename _Ty, typename ... _Ts> class tuple_item<_Ty, _Ty, _Ts...> {
+    public:
       static _Ty& get(tuple<_Ty, _Ts...>& oTuple) { return oTuple.Value; }
     };
-    template <typename _Ty, typename _HeadT, typename ... _TailT> struct tuple_item<_Ty, _HeadT, _TailT...> {
+    template <typename _Ty, typename _HeadT, typename ... _TailT> class tuple_item<_Ty, _HeadT, _TailT...> {
+    public:
       static _Ty& get(tuple<_HeadT, _TailT...>& oTuple) { return tuple_item<_Ty, _TailT...>::get(static_cast<tuple<_TailT...>&>(oTuple)); }
     };
 
 //tuple_index
-    template <int, typename ...> struct tuple_index;
-    template <typename _HeadT, typename..._TailT> struct tuple_index<0, _HeadT, _TailT...> {
+    template <int, typename ...> class tuple_index;
+    template <typename _HeadT, typename..._TailT> class tuple_index<0, _HeadT, _TailT...> {
+    public:
       using value_type = _HeadT;
       static value_type& get(tuple<_HeadT, _TailT...>& oTuple) { return oTuple.Value; }
     };
-    template <int index, typename _HeadT, typename..._TailT> struct tuple_index<index, _HeadT, _TailT...> {
+    template <int index, typename _HeadT, typename..._TailT> class tuple_index<index, _HeadT, _TailT...> {
+    public:
       using value_type = typename tuple_index<index-1, _TailT...>::value_type;
       static value_type& get(tuple<_HeadT, _TailT...>& oTuple) { return tuple_index<index - 1, _TailT...>::get(static_cast<tuple<_TailT...>&>(oTuple)); }
     };
 
 //tuple_append
-    template <typename, typename> struct tuple_append;
-    template <typename _Ty, typename ... _TupleTs> struct tuple_append<_Ty, xtd::tuple<_TupleTs...>> {
+    template <typename, typename> class tuple_append;
+    template <typename _Ty, typename ... _TupleTs> class tuple_append<_Ty, xtd::tuple<_TupleTs...>> {
+    public:
       using tuple_type = xtd::tuple<_TupleTs..., _Ty>;
     };
-    template <typename ... _AppendTs, typename ... _TupleTs> struct tuple_append<xtd::tuple<_AppendTs...>, xtd::tuple<_TupleTs...>> {
+    template <typename ... _AppendTs, typename ... _TupleTs> class tuple_append<xtd::tuple<_AppendTs...>, xtd::tuple<_TupleTs...>> {
+    public:
       using tuple_type = xtd::tuple<_TupleTs..., _AppendTs...>;
     };
 
 //tuple_prepend
-    template <typename, typename> struct tuple_prepend;
-    template <typename _Ty, typename ... _TupleTs> struct tuple_prepend<_Ty, xtd::tuple<_TupleTs...>> {
+    template <typename, typename> class tuple_prepend;
+    template <typename _Ty, typename ... _TupleTs> class tuple_prepend<_Ty, xtd::tuple<_TupleTs...>> {
+    public:
       using tuple_type = xtd::tuple<_Ty, _TupleTs...>;
     };
-    template <typename ... _PrependTs, typename ... _TupleTs> struct tuple_prepend<xtd::tuple<_PrependTs...>, xtd::tuple<_TupleTs...>> {
+    template <typename ... _PrependTs, typename ... _TupleTs> class tuple_prepend<xtd::tuple<_PrependTs...>, xtd::tuple<_TupleTs...>> {
+    public:
       using tuple_type = xtd::tuple<_PrependTs..., _TupleTs...>;
     };
 
 //tuple_index_of
-    template <typename, typename...> struct tuple_index_of;
-    template <typename _Ty, typename..._TailT> struct tuple_index_of<_Ty, _Ty, _TailT...> {
+    template <typename, typename...> class tuple_index_of;
+    template <typename _Ty, typename..._TailT> class tuple_index_of<_Ty, _Ty, _TailT...> {
+    public:
       static const int value = 0;
     };
-    template <typename _Ty, typename _HeadT, typename..._TailT> struct tuple_index_of<_Ty, _HeadT, _TailT...> {
+    template <typename _Ty, typename _HeadT, typename..._TailT> class tuple_index_of<_Ty, _HeadT, _TailT...> {
+    public:
       static const int value = 1 + tuple_index_of<_Ty, _TailT...>::value;
     };
   }
@@ -74,11 +81,11 @@ namespace xtd {
   /*
   @addtogroup Tuple
   @{
-  @class template <typename...> struct tuple;
   Generic tuple declaration
   */
   /// Tuple specialization with no elements
-  template <> struct tuple<> {
+  template <> class tuple<> {
+  public:
     static const size_t Length = 0;
     tuple(){}
     tuple(const tuple&){}
@@ -86,7 +93,8 @@ namespace xtd {
   };
 
   /// Tuple specialization with one or more elements
-  template <typename _HeadT, typename ... _TailT> struct tuple<_HeadT, _TailT...> : tuple<_TailT...>{
+  template <typename _HeadT, typename ... _TailT> class tuple<_HeadT, _TailT...> : public tuple<_TailT...>{
+  public:
     using _self_t = tuple<_HeadT, _TailT...>;
     using _super_t = tuple<_TailT...>;
     using value_type = _HeadT;
