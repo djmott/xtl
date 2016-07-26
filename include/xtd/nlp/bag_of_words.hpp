@@ -9,7 +9,7 @@ namespace xtd{
     class bag_of_words : std::map<std::string, uint32_t>{
     public:
       explicit bag_of_words(const xtd::string& src){
-        auto sWords = src.split();
+
       }
     };
   }

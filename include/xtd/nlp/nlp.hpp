@@ -8,3 +8,5 @@ namespace xtd{
 
   }
 }
+
+#include "bag_of_words.hpp"
