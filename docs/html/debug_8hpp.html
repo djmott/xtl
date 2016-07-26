@@ -119,7 +119,7 @@ $(document).ready(function(){initNavTree('debug_8hpp.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>data conversion utilities  
+<p>Debugging.  
 <a href="#details">More...</a></p>
 <div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
@@ -128,9 +128,9 @@ $(document).ready(function(){initNavTree('debug_8hpp.html','');});
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="debug_8hpp__dep__incl.png" border="0" usemap="#debug_8hppdep" alt=""/></div>
 <map name="debug_8hppdep" id="debug_8hppdep">
-<area shape="rect" id="node2" href="xtd_8hpp.html" title="host, target and build configurations and settings Various components are purpose built for specific ..." alt="" coords="85,80,151,107"/>
-<area shape="rect" id="node3" href="event__trace_8cpp.html" title="event_trace.cpp" alt="" coords="5,155,119,181"/>
-<area shape="rect" id="node4" href="xtl_8cpp.html" title="xtl.cpp" alt="" coords="143,155,205,181"/>
+<area shape="rect" id="node2" href="xtd_8hpp.html" title="host, target and build configurations and settings Various components are purpose built for specific ..." alt="" coords="86,80,151,107"/>
+<area shape="rect" id="node3" href="event__trace_8cpp.html" title="event_trace.cpp" alt="" coords="5,155,120,181"/>
+<area shape="rect" id="node4" href="xtl_8cpp.html" title="xtl.cpp" alt="" coords="144,155,205,181"/>
 </map>
 </div>
 </div>
@@ -139,8 +139,7 @@ $(document).ready(function(){initNavTree('debug_8hpp.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1_debug.html">xtd::Debug</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1___1_1_debug_dump.html">xtd::_::DebugDump&lt; _Ty &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages debug info about processes.  <a href="classxtd_1_1_debug.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -152,14 +151,14 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:ad9d2d06d2ccbb5a16f3dc386ef7d9c11"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9d2d06d2ccbb5a16f3dc386ef7d9c11"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>DUMP</b>(x)&#160;&#160;&#160;xtd::Debug::Dump(x, #x, here());</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DUMP</b>(x)&#160;&#160;&#160;<a class="el" href="classxtd_1_1_debug.html#a805995de3ae1b3e384f08dc3949d6321">xtd::Debug::Dump</a>(x, #x, here());</td></tr>
 <tr class="separator:ad9d2d06d2ccbb5a16f3dc386ef7d9c11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83ab28f81e1109989c19d34eaf7b710b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83ab28f81e1109989c19d34eaf7b710b"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>XTD_ASSERT</b>(_exp, ...)&#160;&#160;&#160;assert(_exp)</td></tr>
-<tr class="separator:a83ab28f81e1109989c19d34eaf7b710b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8552f8ab73fd83ef52b60aa59953aee0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8552f8ab73fd83ef52b60aa59953aee0"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>XTD_ASSERT</b>(...)</td></tr>
+<tr class="separator:a8552f8ab73fd83ef52b60aa59953aee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>data conversion utilities </p>
+<div class="textblock"><p>Debugging. </p>
 <dl class="section copyright"><dt>Copyright</dt><dd>David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See <a class="el" href="_l_i_c_e_n_s_e_8md_source.html">LICENSE.md</a> or <a href="http://boost.org/LICENSE_1_0.txt">http://boost.org/LICENSE_1_0.txt</a> for details. </dd></dl>
 
 <p>Definition in file <a class="el" href="debug_8hpp_source.html">debug.hpp</a>.</p>
@@ -170,7 +169,7 @@ Macros</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="debug_8hpp.html">debug.hpp</a></li>
-    <li class="footer">Generated on Mon Jul 25 2016 06:03:02 for XTL by
+    <li class="footer">Generated on Tue Jul 26 2016 11:34:47 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

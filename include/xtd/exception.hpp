@@ -22,6 +22,7 @@ namespace xtd{
 /// Base exception for XTL
   class exception : public std::exception{
   public:
+    /// shortcut typedef of the super class
     using _super_t = std::exception;
 
 /** Helper function template to test for an expression and throw an exception
@@ -57,7 +58,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
       , _what(std::move(src._what)){}
 ///}@
 
-///explanation of the exception
+    ///explanation of the exception
     const char * what() const
     #if (XTD_COMPILER_GCC & XTD_COMPILER)
       noexcept

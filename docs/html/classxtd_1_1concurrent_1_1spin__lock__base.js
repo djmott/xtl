@@ -1,6 +1,5 @@
 var classxtd_1_1concurrent_1_1spin__lock__base =
 [
-    [ "_super_t", "classxtd_1_1concurrent_1_1spin__lock__base.html#a8b5bc576d5d4336fc617d6756b7f2347", null ],
     [ "scope_locker", "classxtd_1_1concurrent_1_1spin__lock__base.html#afee1755a74859c9674f45f36e182e66d", null ],
     [ "wait_policy_type", "classxtd_1_1concurrent_1_1spin__lock__base.html#a8b72353df7127af7edc69883a137e6d6", null ],
     [ "~spin_lock_base", "classxtd_1_1concurrent_1_1spin__lock__base.html#aac56764cb050750b7c5ff909f7685b38", null ],

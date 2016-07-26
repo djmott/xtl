@@ -1,5 +1,11 @@
 var files =
 [
+    [ "bag_of_words.hpp", "bag__of__words_8hpp.html", [
+      [ "bag_of_words", "classxtd_1_1nlp_1_1bag__of__words.html", "classxtd_1_1nlp_1_1bag__of__words" ]
+    ] ],
+    [ "btree.hpp", "btree_8hpp.html", [
+      [ "btree", "classxtd_1_1btree.html", "classxtd_1_1btree" ]
+    ] ],
     [ "callback.hpp", "callback_8hpp.html", [
       [ "callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ]
     ] ],
@@ -73,8 +79,8 @@ var files =
     [ "string.hpp", "string_8hpp.html", "string_8hpp" ],
     [ "tuple.hpp", "tuple_8hpp.html", [
       [ "tuple", "namespacextd.html#classxtd_1_1tuple", null ],
-      [ "tuple< _HeadT, _TailT... >", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html", null ],
-      [ "tuple<>", "classxtd_1_1tuple_3_4.html", null ]
+      [ "tuple< _HeadT, _TailT... >", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4" ],
+      [ "tuple<>", "classxtd_1_1tuple_3_4.html", "classxtd_1_1tuple_3_4" ]
     ] ],
     [ "unique_id.hpp", "unique__id_8hpp.html", null ],
     [ "var.hpp", "var_8hpp.html", [

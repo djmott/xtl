@@ -183,7 +183,7 @@ namespace xtd{
 #endif
   };
 
-
+#if (!DOXY_INVOKED)
   namespace _{
 
     //empty
@@ -514,4 +514,5 @@ namespace xtd{
     };
 
   }
+#endif
 }

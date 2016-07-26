@@ -1,9 +1,12 @@
 var searchData=
 [
   ['icmp',['icmp',['../group___sockets.html#gga01b72313c52c174d6fd373b0d3498b47a1249ce19ef6180e143506b5287be8a7a',1,'xtd::socket']]],
+  ['index',['Index',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html#afc34a5e9ae5ff2d1d62434a1e0e5ee9d',1,'xtd::tuple&lt; _HeadT, _TailT... &gt;']]],
+  ['index_5fof',['index_of',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html#ab1a0436b98e69eae2659d91538b1d0ed',1,'xtd::tuple&lt; _HeadT, _TailT... &gt;']]],
   ['inner',['inner',['../classxtd_1_1var_1_1inner.html',1,'xtd::var']]],
   ['inner_3c_20xtd_3a_3axstring_3c_20_5fcht_20_3e_20_3e',['inner&lt; xtd::xstring&lt; _ChT &gt; &gt;',['../classxtd_1_1var_1_1inner_3_01xtd_1_1xstring_3_01___ch_t_01_4_01_4.html',1,'xtd::var']]],
   ['inner_5fbase',['inner_base',['../classxtd_1_1var_1_1inner__base.html',1,'xtd::var']]],
+  ['insert',['insert',['../classxtd_1_1btree.html#a023651d728fc22f56e75ca0f2ddc8cb9',1,'xtd::btree']]],
   ['intrinsic_5fcast',['intrinsic_cast',['../namespacextd.html#ae7cfddbf2d39f8b39f5e49d7a82dfefc',1,'xtd']]],
   ['intrinsic_5fof_5fsize',['intrinsic_of_size',['../namespacextd.html#classxtd_1_1intrinsic__of__size',1,'xtd']]],
   ['inttochar',['IntToChar',['../classxtd_1_1_int_to_char.html',1,'xtd']]],
@@ -19,6 +22,7 @@ var searchData=
   ['is_5fa_3c_20_5fty_2c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_20_3e',['is_a&lt; _Ty, _HeadT, _TailT... &gt;',['../classxtd_1_1is__a_3_01___ty_00_01___head_t_00_01___tail_t_8_8_8_01_4.html',1,'xtd']]],
   ['is_5fa_3c_20_5fty_2c_20_5ftailt_2e_2e_2e_20_3e',['is_a&lt; _Ty, _TailT... &gt;',['../namespacextd.html',1,'xtd']]],
   ['is_5fa_3c_20_5fty_2c_20_5fty_2c_20_5ftailt_2e_2e_2e_20_3e',['is_a&lt; _Ty, _Ty, _TailT... &gt;',['../classxtd_1_1is__a_3_01___ty_00_01___ty_00_01___tail_t_8_8_8_01_4.html',1,'xtd']]],
-  ['isa',['isa',['../classxtd_1_1parse_1_1rule__base.html#a6ef80d7c5ffbe85ce0c1b7516ae6a150',1,'xtd::parse::rule_base::isa()'],['../classxtd_1_1parse_1_1rule.html#aa15f8e0d3d6bc55dc47c173486bca0e3',1,'xtd::parse::rule::isa()']]],
+  ['isa',['isa',['../classxtd_1_1parse_1_1rule__base.html#a982ea7fbdf86e151c958125aa3a43de8',1,'xtd::parse::rule_base::isa()'],['../classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6',1,'xtd::parse::rule::isa()']]],
+  ['item',['Item',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html#a5353fe5499b5bfb19435d39acc7e6fd1',1,'xtd::tuple&lt; _HeadT, _TailT... &gt;']]],
   ['items',['items',['../classxtd_1_1parse_1_1rule__base.html#aa7700079852b8c54ffb87d4e35d2eacd',1,'xtd::parse::rule_base']]]
 ];

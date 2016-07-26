@@ -10,6 +10,9 @@
 
 namespace xtd {
 
+  /** Represents an executable binary
+  Provides access to the executable binary file structure
+   */
   class executable{
     xtd::filesystem::path _Path;
 
@@ -49,6 +52,7 @@ namespace xtd {
 
   public:
 
+    ///
     const xtd::filesystem::path& path() const { return _Path; }
 
     static executable& this_executable(){

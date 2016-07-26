@@ -1,41 +1,15 @@
 var namespacextd =
 [
     [ "_", null, [
-      [ "_RAII", "classxtd_1_1___1_1___r_a_i_i.html", null ],
-      [ "DebugDump", "classxtd_1_1___1_1_debug_dump.html", "classxtd_1_1___1_1_debug_dump" ],
-      [ "xstring_format< _ChT >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_01_4.html", null ],
-      [ "xstring_format< _ChT, const _ChT *&, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< _ChT, const _ChT *, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< _ChT, const _ChT(&)[_Len], _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_07_6_08[___len]_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< _ChT, const void *, _TailT... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01void_01_5_00_01___tail_t_8_8_8_01_4.html", null ],
-      [ "xstring_format< _ChT, const xstring< _ChT > &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01xstring_3_01___ch_t_01_4_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, const wchar_t *, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01wchar__t_01_5_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, const wchar_t(&)[_Len], _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01wchar__t_07_6_08[___len]_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, int, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01int_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, int16_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01int16__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, int32_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01int32__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, int8_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01int8__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, uint16_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01uint16__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, uint32_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01uint32__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, uint8_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01uint8__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, unsigned int, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01unsigned_01int_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< char, xstring< wchar_t > &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01char_00_01xstring_3_01wchar__t_01_4_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, const char *, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01const_01char_01_5_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, const char(&)[_Len], _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01const_01char_07_6_08[___len]_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, int, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01int_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, int16_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01int16__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, int32_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01int32__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, int8_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01int8__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, uint16_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01uint16__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, uint32_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01uint32__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, uint8_t &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01uint8__t_01_6_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, unsigned int, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01unsigned_01int_00_01___arg_ts_8_8_8_01_4.html", null ],
-      [ "xstring_format< wchar_t, xstring< char > &, _ArgTs... >", "classxtd_1_1___1_1xstring__format_3_01wchar__t_00_01xstring_3_01char_01_4_01_6_00_01___arg_ts_8_8_8_01_4.html", null ]
+      [ "_RAII", "classxtd_1_1___1_1___r_a_i_i.html", "classxtd_1_1___1_1___r_a_i_i" ]
     ] ],
     [ "concurrent", "namespacextd_1_1concurrent.html", "namespacextd_1_1concurrent" ],
     [ "filesystem", null, [
       [ "path", "classxtd_1_1filesystem_1_1path.html", "classxtd_1_1filesystem_1_1path" ],
       [ "path_base", "classxtd_1_1filesystem_1_1path__base.html", "classxtd_1_1filesystem_1_1path__base" ]
+    ] ],
+    [ "nlp", null, [
+      [ "bag_of_words", "classxtd_1_1nlp_1_1bag__of__words.html", "classxtd_1_1nlp_1_1bag__of__words" ]
     ] ],
     [ "parse", "namespacextd_1_1parse.html", "namespacextd_1_1parse" ],
     [ "rpc", null, [
@@ -72,6 +46,7 @@ var namespacextd =
       [ "debug_help", "classxtd_1_1windows_1_1debug__help.html", "classxtd_1_1windows_1_1debug__help" ],
       [ "debug_symbol", "classxtd_1_1windows_1_1debug__symbol.html", "classxtd_1_1windows_1_1debug__symbol" ]
     ] ],
+    [ "btree", "classxtd_1_1btree.html", "classxtd_1_1btree" ],
     [ "ByteToChar", "classxtd_1_1_byte_to_char.html", null ],
     [ "callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ],
     [ "crt_exception", "classxtd_1_1crt__exception.html", "classxtd_1_1crt__exception" ],
@@ -99,8 +74,8 @@ var namespacextd =
     [ "ShortToChar", "classxtd_1_1_short_to_char.html", null ],
     [ "source_location", "classxtd_1_1source__location.html", "classxtd_1_1source__location" ],
     [ "tuple", "namespacextd.html#classxtd_1_1tuple", null ],
-    [ "tuple< _HeadT, _TailT... >", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html", null ],
-    [ "tuple<>", "classxtd_1_1tuple_3_4.html", null ],
+    [ "tuple< _HeadT, _TailT... >", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4" ],
+    [ "tuple<>", "classxtd_1_1tuple_3_4.html", "classxtd_1_1tuple_3_4" ],
     [ "var", "classxtd_1_1var.html", "classxtd_1_1var" ],
     [ "xstring", "classxtd_1_1xstring.html", "classxtd_1_1xstring" ]
 ];

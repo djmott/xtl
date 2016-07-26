@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xstring',['xstring',['../classxtd_1_1xstring.html#abc7eca290c0ac91fc2054b876ac70699',1,'xtd::xstring']]]
+  ['what',['what',['../classxtd_1_1exception.html#a6bdf3889d84de602af13b15534a67843',1,'xtd::exception']]]
 ];

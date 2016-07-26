@@ -7,11 +7,15 @@
 
 #pragma once
 
+/// @def RAII general purpose Resource Acquisition Is Initialization idiom to perform exception safe cleanup by executing arbitrary code when a scope exits
 #define RAII(...) xtd::_::_RAII UNIQUE_IDENTIFIER(raii_object)([&](){ __VA_ARGS__ ; });
 
 namespace xtd{
   namespace _{
 
+    /** helper class for general purpose RAII
+     * rarely created directly. instead use the RAII macro
+     */
     class _RAII{
     public:
       template <typename _Ty>

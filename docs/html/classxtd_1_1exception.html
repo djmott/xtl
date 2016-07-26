@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('classxtd_1_1exception.html','');});
 <map name="xtd_1_1exception_inherit__map" id="xtd_1_1exception_inherit__map">
 <area shape="rect" id="node3" href="classxtd_1_1crt__exception.html" title="c++ wrapper around legacy errno based errors from the CRT " alt="" coords="17,366,144,487"/>
 <area shape="rect" id="node5" href="classxtd_1_1dynamic__library__exception.html" title="{xtd::dynamic_library\l_exception\n||+ dynamic_library_exception()\l+ dynamic_library_exception()\l+ dynamic_library_exception()\l+ _throw_if()\l}" alt="" coords="168,359,364,495"/>
-<area shape="rect" id="node6" href="classxtd_1_1rpc_1_1protocol__exception.html" title="{xtd::rpc::protocol\l_exception\n||+ protocol_exception()\l}" alt="" coords="388,381,539,473"/>
+<area shape="rect" id="node6" href="classxtd_1_1rpc_1_1protocol__exception.html" title="represents an exception with the RPC protocol typically occurs as the result of failing to parse payl..." alt="" coords="388,381,539,473"/>
 <area shape="rect" id="node2" title="STL class. " alt="" coords="214,5,318,83"/>
 <area shape="rect" id="node4" href="classxtd_1_1socket_1_1exception.html" title="Represents an socket error. " alt="" coords="5,543,156,664"/>
 <area shape="rect" id="node7" href="classxtd_1_1rpc_1_1bad__call.html" title="{xtd::rpc::bad_call\n||+ bad_call()\l}" alt="" coords="321,565,443,642"/>
@@ -155,7 +155,8 @@ $(document).ready(function(){initNavTree('classxtd_1_1exception.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:acab17fe130d56e14708b0d177686cc5f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acab17fe130d56e14708b0d177686cc5f"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>_super_t</b> = std::exception</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1exception.html#acab17fe130d56e14708b0d177686cc5f">_super_t</a> = std::exception</td></tr>
+<tr class="memdesc:acab17fe130d56e14708b0d177686cc5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">shortcut typedef of the super class <br /></td></tr>
 <tr class="separator:acab17fe130d56e14708b0d177686cc5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
@@ -184,9 +185,9 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1exception.html#a13c560ca3f82179f67fa947e9b51599a">exception</a> (<a class="el" href="classxtd_1_1exception.html">exception</a> &amp;&amp;src)</td></tr>
 <tr class="memdesc:a13c560ca3f82179f67fa947e9b51599a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructors. <br /></td></tr>
 <tr class="separator:a13c560ca3f82179f67fa947e9b51599a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19a57e0e9d0fc9fb55059f6a27f0f67b"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1exception.html#a19a57e0e9d0fc9fb55059f6a27f0f67b">what</a> () const  override</td></tr>
-<tr class="memdesc:a19a57e0e9d0fc9fb55059f6a27f0f67b"><td class="mdescLeft">&#160;</td><td class="mdescRight">}@  <a href="#a19a57e0e9d0fc9fb55059f6a27f0f67b">More...</a><br /></td></tr>
-<tr class="separator:a19a57e0e9d0fc9fb55059f6a27f0f67b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bdf3889d84de602af13b15534a67843"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1exception.html#a6bdf3889d84de602af13b15534a67843">what</a> () const override</td></tr>
+<tr class="memdesc:a6bdf3889d84de602af13b15534a67843"><td class="mdescLeft">&#160;</td><td class="mdescRight">}@  <a href="#a6bdf3889d84de602af13b15534a67843">More...</a><br /></td></tr>
+<tr class="separator:a6bdf3889d84de602af13b15534a67843"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3432bbc92ffb6066df51bf836bb54c8d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3432bbc92ffb6066df51bf836bb54c8d"></a>
 virtual const <a class="el" href="classxtd_1_1source__location.html">source_location</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1exception.html#a3432bbc92ffb6066df51bf836bb54c8d">location</a> () const </td></tr>
 <tr class="memdesc:a3432bbc92ffb6066df51bf836bb54c8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">location in source that caused the exception <br /></td></tr>
@@ -255,15 +256,16 @@ template&lt;typename _ReturnT , typename _ExpressionT &gt; </div>
   <table class="params">
     <tr><td class="paramname">source</td><td>The location in source code where called. </td></tr>
     <tr><td class="paramname">ret</td><td>The return value of _throw_if and parameter to exp used to test for success or failure </td></tr>
+    <tr><td class="paramname">exp</td><td>Expression used to evaluate ret. Expression is in the form of: bool (_ReturnT). The exception is thrown if this expression evaluates to true. </td></tr>
     <tr><td class="paramname">expstr</td><td>String value passed to the exceptions constructor when thrown </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ret if no exception is thrown </dd></dl>
 
-<p>Definition at line <a class="el" href="exception_8hpp_source.html#l00037">37</a> of file <a class="el" href="exception_8hpp_source.html">exception.hpp</a>.</p>
+<p>Definition at line <a class="el" href="exception_8hpp_source.html#l00039">39</a> of file <a class="el" href="exception_8hpp_source.html">exception.hpp</a>.</p>
 
-<p>References <a class="el" href="exception_8hpp_source.html#l00045">exception()</a>.</p>
+<p>References <a class="el" href="exception_8hpp_source.html#l00047">exception()</a>, and <a class="el" href="exception_8hpp_source.html#l00071">location()</a>.</p>
 
 <p><div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
@@ -272,14 +274,15 @@ template&lt;typename _ReturnT , typename _ExpressionT &gt; </div>
 <div id="dynsection-2-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classxtd_1_1exception_a04f02f8e4f65891b621ed3a0e28cf451_cgraph.png" border="0" usemap="#classxtd_1_1exception_a04f02f8e4f65891b621ed3a0e28cf451_cgraph" alt=""/></div>
 <map name="classxtd_1_1exception_a04f02f8e4f65891b621ed3a0e28cf451_cgraph" id="classxtd_1_1exception_a04f02f8e4f65891b621ed3a0e28cf451_cgraph">
-<area shape="rect" id="node2" href="classxtd_1_1exception.html#a69be96d4b7c70ae1c1813f233bc39e0f" title="Constructors. " alt="" coords="216,5,384,32"/>
+<area shape="rect" id="node2" href="classxtd_1_1exception.html#a69be96d4b7c70ae1c1813f233bc39e0f" title="Constructors. " alt="" coords="219,29,387,56"/>
+<area shape="rect" id="node3" href="classxtd_1_1exception.html#a3432bbc92ffb6066df51bf836bb54c8d" title="location in source that caused the exception " alt="" coords="224,104,381,131"/>
 </map>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="a19a57e0e9d0fc9fb55059f6a27f0f67b"></a>
+<a class="anchor" id="a6bdf3889d84de602af13b15534a67843"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -303,9 +306,21 @@ template&lt;typename _ReturnT , typename _ExpressionT &gt; </div>
 <p>}@ </p>
 <p>explanation of the exception </p>
 
-<p>Definition at line <a class="el" href="exception_8hpp_source.html#l00060">60</a> of file <a class="el" href="exception_8hpp_source.html">exception.hpp</a>.</p>
+<p>Definition at line <a class="el" href="exception_8hpp_source.html#l00062">62</a> of file <a class="el" href="exception_8hpp_source.html">exception.hpp</a>.</p>
 
-<p>References <a class="el" href="exception_8hpp_source.html#l00079">_what</a>.</p>
+<p>References <a class="el" href="exception_8hpp_source.html#l00071">location()</a>.</p>
+
+<p><div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="classxtd_1_1exception_a6bdf3889d84de602af13b15534a67843_cgraph.png" border="0" usemap="#classxtd_1_1exception_a6bdf3889d84de602af13b15534a67843_cgraph" alt=""/></div>
+<map name="classxtd_1_1exception_a6bdf3889d84de602af13b15534a67843_cgraph" id="classxtd_1_1exception_a6bdf3889d84de602af13b15534a67843_cgraph">
+<area shape="rect" id="node2" href="classxtd_1_1exception.html#a3432bbc92ffb6066df51bf836bb54c8d" title="location in source that caused the exception " alt="" coords="193,29,351,56"/>
+</map>
+</div>
+</p>
 
 </div>
 </div>
@@ -319,7 +334,7 @@ template&lt;typename _ReturnT , typename _ExpressionT &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><a class="el" href="classxtd_1_1exception.html">exception</a></li>
-    <li class="footer">Generated on Mon Jul 25 2016 06:03:04 for XTL by
+    <li class="footer">Generated on Tue Jul 26 2016 11:34:47 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

@@ -1,0 +1,4 @@
+var classxtd_1_1___1_1xstring__format_3_01char_00_01xstring_3_01wchar__t_01_4_01_6_00_01___arg_ts_8_8_8_01_4 =
+[
+    [ "format", "classxtd_1_1___1_1xstring__format_3_01char_00_01xstring_3_01wchar__t_01_4_01_6_00_01___arg_ts_8_8_8_01_4.html#a5827ab31d43f3cfd91e8c74281a93e04", null ]
+];

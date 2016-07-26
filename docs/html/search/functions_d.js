@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['what',['what',['../classxtd_1_1exception.html#a19a57e0e9d0fc9fb55059f6a27f0f67b',1,'xtd::exception']]]
+  ['var',['var',['../classxtd_1_1var.html#a866c2ae1babbf8d25a593745ccaaff94',1,'xtd::var']]]
 ];

@@ -37,7 +37,9 @@ namespace xtd{
 
 
     
-
+    /** represents an exception with the RPC protocol
+     * typically occurs as the result of failing to parse payloads
+    */
     class protocol_exception : public xtd::exception{
     public:
       using _super_t = xtd::exception;
@@ -239,6 +241,8 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
     };
 
+    /** Dummy transport used for debugging
+    */
     class null_transport{
     public:
       using pointer_type = std::shared_ptr<null_transport>;

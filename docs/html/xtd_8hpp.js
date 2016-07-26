@@ -1,6 +1,7 @@
 var xtd_8hpp =
 [
     [ "__", "xtd_8hpp.html#a6604f17d32e6e066f93321882e5460d1", null ],
+    [ "_GNU_SOURCE", "xtd_8hpp.html#a369266c24eacffb87046522897a570d5", null ],
     [ "ALIGN", "xtd_8hpp.html#ac95b371840fd3eafe861b15ada5dcc15", null ],
     [ "CONCAT", "xtd_8hpp.html#a2f18db18bca26cafa95e9719de4a41ef", null ],
     [ "CONCAT2_", "xtd_8hpp.html#a4daf8534757f0ebb4ec896fd017e4a3f", null ],

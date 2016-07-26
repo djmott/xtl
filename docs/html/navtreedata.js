@@ -3,7 +3,7 @@ var NAVTREE =
   [ "XTL", "index.html", [
     [ "eXtended Template Library", "index.html", null ],
     [ "Header-Only Apps", "md__src_github_xtl_docs_Header-Only-Apps.html", null ],
-    [ "Hierarchy-Generation", "md__src_github_xtl_docs_Hierarchy-Generation.html", null ],
+    [ "Hierarchy Generation", "md__src_github_xtl_docs_Hierarchy-Generation.html", null ],
     [ "Parsing", "md__src_github_xtl_docs_Parsing.html", null ],
     [ "Sockets", "md__src_github_xtl_docs_Sockets.html", null ],
     [ "Spin Locks", "md__src_github_xtl_docs_SpinLock.html", null ],
@@ -28,6 +28,7 @@ var NAVTREE =
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
+        [ "Typedefs", "functions_type.html", null ],
         [ "Enumerations", "functions_enum.html", null ],
         [ "Enumerator", "functions_eval.html", null ]
       ] ]
@@ -46,8 +47,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classxtd_1_1rpc_1_1malformed__payload.html",
-"debug_8hpp_source.html"
+"classxtd_1_1rpc_1_1marshaler_3_01true_00_01const_01___ty_01_6_00_01___arg_ts_8_8_8_01_4.html#abc49877b1d169c040c56257fa35977aa",
+"dynamic__library_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

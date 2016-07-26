@@ -17,5 +17,5 @@ var searchData=
   ['tuple_3c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_20_3e',['tuple&lt; _HeadT, _TailT... &gt;',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_01_4.html',1,'xtd']]],
   ['tuple_3c_20_5ftailt_2e_2e_2e_20_3e',['tuple&lt; _TailT... &gt;',['../namespacextd.html',1,'xtd']]],
   ['tuple_3c_3e',['tuple&lt;&gt;',['../classxtd_1_1tuple_3_4.html',1,'xtd']]],
-  ['type',['type',['../classxtd_1_1parse_1_1rule__base.html#ae9fe51a7f8083be369f8e7e5f55e34ca',1,'xtd::parse::rule_base::type()'],['../classxtd_1_1parse_1_1rule.html#a2bd8cfec1966022c3b2e699f7e31ec23',1,'xtd::parse::rule::type()']]]
+  ['type',['type',['../classxtd_1_1parse_1_1rule__base.html#a35018cb83d9eab19fe3344372b8c3594',1,'xtd::parse::rule_base::type()'],['../classxtd_1_1parse_1_1rule.html#ab1016f64d99f09c99bed3901414a5433',1,'xtd::parse::rule::type()']]]
 ];
