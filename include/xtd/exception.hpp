@@ -30,6 +30,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
 @tparam _ExpressionT the type of expression tester that evaluates _ReturnT, normally a lambda.
 @param source The location in source code where called.
 @param ret The return value of _throw_if and parameter to exp used to test for success or failure
+@param exp Expression used to evaluate ret. Expression is in the form of: bool (_ReturnT). The exception is thrown if this expression evaluates to true.
 @param expstr String value passed to the exceptions constructor when thrown
 @returns ret if no exception is thrown
 */
@@ -57,7 +58,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
 ///}@
 
 ///explanation of the exception
-    const char * what() const 
+    const char * what() const
     #if (XTD_COMPILER_GCC & XTD_COMPILER)
       noexcept
     #endif
@@ -66,7 +67,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
     }
 
 ///location in source that caused the exception
-    virtual const source_location& location() const 
+    virtual const source_location& location() const
     #if (XTD_COMPILER_GCC & XTD_COMPILER)
       noexcept
     #endif

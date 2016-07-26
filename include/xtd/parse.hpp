@@ -66,7 +66,7 @@ namespace xtd{
       using vector_type = std::vector<pointer_type>;
 
       /** Constructor
-      @param[in] _ChildRuleTs list of child rules that successfully parsed to satisfy the current parse rule. The child rules are stored in a local variable and accessible via the items() member.
+      @param[in] oChildRules list of child rules that successfully parsed to satisfy the current parse rule. The child rules are stored in a local variable and accessible via the items() member.
       */
       template <typename ... _ChildRuleTs>
       explicit rule_base(_ChildRuleTs&& ... oChildRules) : _Items{ std::forward<_ChildRuleTs>(oChildRules)... }{}
@@ -93,9 +93,6 @@ namespace xtd{
     Rules and terminals implement the rule_base interface through this pattern. It provides boiler plate pointer_type, isa() and type() members.
     @tparam _DeclT The type declaration. Permits access to the implementation from the rule class template. Declaration pass their name in the form of: class SomeRule : rule<SomeRule>
     @tparam _ImplT The declaration used by the parsing algorithms. The library instantiates type of _DeclT when _ImplT successfully parses.
-    @startuml
-    rule_base <|-- rule
-    @enduml
     */
     template <typename _DeclT, typename _ImplT = _DeclT>
     class rule : public rule_base{
@@ -205,8 +202,8 @@ namespace xtd{
 
     /** list of whitespace characters to ignore in the input stream.
     Whitespace characters are parsed and discarded from the input stream when encountered between rules or terminals.
-    A typical whitespace declaration for written language might be: whitespace<'\r', '\n', '\t', ' '>;
-    @tparam _Ch... list of characters to ignore. 
+    A typical whitespace declaration for written language might be: whitespace<'\\r', '\\n', '\\t', ' '>;
+    @tparam _Ch... list of characters to ignore.
     */
     template <char..._Ch> class whitespace{
     public:
@@ -257,7 +254,7 @@ namespace xtd{
     namespace _{
 
       template <typename _DeclT, typename _ImplT, bool _IgnoreCase, typename _WhitespaceT> class parse_helper;
-      
+
       ///case sensitive string
       template <typename _DeclT, size_t _len, char(&_str)[_len], typename _WhitespaceT>
       class parse_helper<_DeclT, parse::string<char[_len], _str>, false, _WhitespaceT>{
@@ -277,7 +274,7 @@ namespace xtd{
           /*
           Problem: The string comparison algorithms compare character by character and skip any leading or trailing whitespace between terminals.
             Rules 'ABC' + 'XYZ' maybe defined expecting the two terminals be separated by whitespace but this algorithm could parse the string 'ABCXYZ' as two separate terminals.
-            There's a number of traditional approaches to solving this such as tokenizing before parsing or creating parse tables. 
+            There's a number of traditional approaches to solving this such as tokenizing before parsing or creating parse tables.
             A proper handling would compound the complexity of this library beyond it's intended scope, there are plenty of complex parsers around.
             Currently, the last character parsed is checked against the next character in the stream to see if they're of the same 'class' and fail if so.
             This isn't ideal because it maybe perfectly valid in some grammars to expect 'ABCXYZ' to appear in the input stream yet successfully parse into independent terminals.
@@ -292,14 +289,14 @@ namespace xtd{
           return rule_base::pointer_type(new _DeclT);
         }
       };
-      
+
 
       ///ignore case string
       template <typename _DeclT, size_t _len, char(&_str)[_len], typename _WhitespaceT>
       class parse_helper<_DeclT, parse::string<char[_len], _str>, true, _WhitespaceT>{
       public:
-        
-        template <typename _IteratorT> 
+
+        template <typename _IteratorT>
         static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end){
           _IteratorT oCurr = begin;
 
@@ -315,13 +312,13 @@ namespace xtd{
           if (oCurr < end && isalnum(*oCurr) && isalnum(_str[_len - 2])){
             return rule_base::pointer_type(nullptr);
           }
-          
+
           parse_helper< _WhitespaceT, void, true, void>::parse(oCurr, end);
 
           begin = oCurr;
           return rule_base::pointer_type(new _DeclT);
         }
-        
+
       };
 
       ///regex
@@ -349,7 +346,7 @@ namespace xtd{
 
 
           parse_helper< _WhitespaceT, void, true, void>::parse(oCurr, end);
-          
+
           begin = oCurr;
           return rule_base::pointer_type(new _DeclT(oMatch[0].str()));
 
@@ -371,7 +368,7 @@ namespace xtd{
         template <typename _IteratorT>
         static bool parse(_IteratorT& begin, _IteratorT& end){
           _IteratorT oCurr = begin;
-          
+
           while (oCurr < end){
             if (*oCurr == _HeadCH){
               oCurr++;
@@ -498,7 +495,7 @@ namespace xtd{
       template <typename _DeclT, typename _Ty, bool _IgnoreCase, typename _WhitespaceT >
       class parse_helper < _DeclT, parse::zero_or_more_<_Ty>, _IgnoreCase, _WhitespaceT>{
       public:
-        
+
         template <typename _IteratorT, typename ... _ChildRuleTs>
         static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs ... oChildRules){
           _IteratorT oBegin = begin;

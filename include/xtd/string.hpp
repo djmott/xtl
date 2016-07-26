@@ -39,7 +39,7 @@ namespace xtd{
     /**
     Type safe formatting
     Appends each item in the parameter list together performing type-safe verification and printing
-    @param _ArgsT variable elements appended together
+    @param oArgs variable elements appended together
      */
 
     template <typename ... _ArgsT>
