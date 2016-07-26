@@ -399,4 +399,6 @@ TODO("Remove cassert when XTD implementation is finished")
   #include <xtd/windows/dbghelp.hpp>
 #endif
 
+#include <xtd/nlp/nlp.hpp>
+
 #include <xtd/exception.inl>

@@ -37,7 +37,7 @@ int main(){
   Multiplier oMultiplier;
 
   //attach multiplier instance to oMultiply using .connect() method. This requires the class member to invoke and the instance to invoke it on
-  oMultiply.connect<Multiplier, &Multiplier::Multiply>(&oMultipler);
+  oMultiply.connect<Multiplier, &Multiplier::Multiply>(&oMultiplier);
 
   std::cout << "Calling oMultipler.Multiply(6,3) through oMultiply callback returns : " << oMultiply(6, 3) << std::endl;
   return 0;
