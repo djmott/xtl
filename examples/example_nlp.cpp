@@ -5,6 +5,6 @@
 #include <xtd/xtd.hpp>
 
 int main(){
-  INFO("Hello?");
+
   return 0;
 }

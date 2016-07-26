@@ -12,7 +12,7 @@ namespace xtd{
     using value_type = _ValueT;
 
     bool insert(const key_type& key, const value_type& value){
-
+      return false;
     }
 
 

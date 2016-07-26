@@ -147,6 +147,7 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/concurrent/rw_lock.hpp
   include/xtd/concurrent/spin_lock.hpp
   include/xtd/concurrent/recursive_spin_lock.hpp
+  include/xtd/btree.hpp
   include/xtd/debug.hpp
   include/xtd/dynamic_library.hpp
   include/xtd/event_trace.hpp
@@ -165,10 +166,14 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/tuple.hpp
   include/xtd/unique_id.hpp
   include/xtd/var.hpp
-  include/xtd/xtd.hpp.in
   include/xtd/windows/dbghelp.hpp
   include/xtd/exception.inl
-)
+  include/xtd/nlp/nlp.hpp
+  include/xtd/nlp/bag_of_words.hpp
+
+
+  include/xtd/xtd.hpp.in
+  )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
