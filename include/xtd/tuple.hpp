@@ -93,7 +93,7 @@ namespace xtd {
   };
 
   /// Tuple specialization with one or more elements
-  template <typename _HeadT, typename ... _TailT> class tuple<_HeadT, _TailT...> : tuple<_TailT...>{
+  template <typename _HeadT, typename ... _TailT> class tuple<_HeadT, _TailT...> : public tuple<_TailT...>{
   public:
     using _self_t = tuple<_HeadT, _TailT...>;
     using _super_t = tuple<_TailT...>;
