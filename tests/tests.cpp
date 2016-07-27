@@ -55,6 +55,10 @@ main system and unit test entry point
   #include "test_logging.hpp"
 #endif
 
+#if (ON==TEST_LOGGING)
+  #include "test_mapped_file.hpp"
+#endif
+
 #if (ON==TEST_META)
   #include "test_meta.hpp"
 #endif

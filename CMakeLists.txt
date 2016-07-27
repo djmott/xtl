@@ -147,13 +147,16 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/concurrent/rw_lock.hpp
   include/xtd/concurrent/spin_lock.hpp
   include/xtd/concurrent/recursive_spin_lock.hpp
-  include/xtd/btree.hpp
   include/xtd/debug.hpp
   include/xtd/dynamic_library.hpp
   include/xtd/event_trace.hpp
   include/xtd/exception.hpp
   include/xtd/executable.hpp
   include/xtd/filesystem.hpp
+
+  include/xtd/mapped_file.hpp
+  include/xtd/btree.hpp
+
   include/xtd/log.hpp
   include/xtd/meta.hpp
   include/xtd/parse.hpp

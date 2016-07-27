@@ -149,14 +149,6 @@ namespace xtd{
       }
 #endif
 
-      /** returns the application data directory
-
-      inline static path user_app_directory(){
-        auto oRet = home_directory();
-        oRet /= xtd::this_executable::get_path().filename();
-        return oRet;
-      }
-        */
     };
 
   }
