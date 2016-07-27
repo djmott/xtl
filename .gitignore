@@ -35,6 +35,7 @@ docs/html
 Doxyfile
 .build
 !.travis.yml
+!.drone.yml
 .*
 include/xtd/xtd.hpp
 
