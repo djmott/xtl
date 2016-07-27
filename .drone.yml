@@ -1,0 +1,14 @@
+build:
+  image: teaci/msys$$arch
+  pull: true
+  shell: msys$$arch
+  commands:
+    - mkdir .build
+    - cd .build
+    - cmake ..
+    - make
+    - tests/unit_tests
+
+matrix:
+  arch:
+    - 64

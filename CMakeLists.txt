@@ -65,7 +65,7 @@ else()
   set(XTD_HAS_ICONV 0)
 endif()
 
-if (XTD_HAS_DBGHLP_H OR XTD_HAS_DBGHELP_LIB)
+if(XTD_HAS_DBGHLP_H OR XTD_HAS_DBGHELP_LIB)
   option(XTD_USE_DBGHELP "use dbghelp library" YES)
 else()
   option(XTD_USE_DBGHELP "use dbghelp library" NO)
@@ -232,13 +232,13 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURREN
 
 
 
-if (NOT GTEST_FOUND)
+if(NOT GTEST_FOUND)
   message("Google test framework will be downloaded")
   # lifted from https://crascit.com/2015/07/25/cmake-gtest/
   # Download and unpack googletest at configure time
   configure_file(CMakeLists.txt.gtest googletest-download/CMakeLists.txt)
-  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DBUILD_GTEST:BOOLEAN=ON . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
-  execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DBUILD_GTEST:BOOLEAN=ON . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
+  execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
 
   # Prevent GoogleTest from overriding our compiler/linker options
   # when building with Visual Studio
