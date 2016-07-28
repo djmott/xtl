@@ -3,6 +3,7 @@ memory mapped files
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
+#if 0
 namespace xtd{
   class mapped_file{
     int _FileNum;
@@ -18,3 +19,4 @@ namespace xtd{
     template <typename _Ty> mapped_page<_Ty> read(size_t offset){}
   };
 }
+#endif

@@ -18,7 +18,7 @@ namespace xtd{
 #endif
   }
 
-#if (XTD_HAS_FILESYSTEM)
+#if (XTD_HAS_EXP_FILESYSTEM || XTD_HAS_FILESYSTEM)
   namespace filesystem{
     class path_base : public std::experimental::filesystem::path{
       using _super_t = std::experimental::filesystem::path;
@@ -27,9 +27,7 @@ namespace xtd{
       template <typename ... _ArgTs> path_base(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
   }
-#endif
-
-#if (!XTD_HAS_EXP_FILESYSTEM && !XTD_HAS_FILESYSTEM)
+#else
 
   namespace filesystem {
     /** base path class

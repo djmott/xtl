@@ -40,9 +40,8 @@ namespace xtd {
 #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
 
     static inline xtd::filesystem::path get_path() {
-      static xtd::filesystem::path sRet = "";
-      if (0 == sRet.size()) {
-        sRet.resize(PATH_MAX);
+      static std::string sRet(PATH_MAX, 0);
+      if (!sRet[0]) {
         sRet.resize(xtd::crt_exception::throw_if(::readlink("/proc/self/exe", &sRet[0], sRet.size()), [](int i) { return (-1 == i); }));
       }
       return sRet;

@@ -29,6 +29,7 @@ include(ExternalProject)
 
 check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
 
+
 check_cxx_source_compiles("
   #include <codecvt>
   int main(){return 0;}
@@ -81,6 +82,7 @@ option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
 option(BUILD_EXAMPLES "Build examples" YES)
 option(BUILD_TESTS "Build tests" YES)
 
+option(XTD_LINK_TO_FS_TS "link to the c++ filesystem TS" NO)
 
 ### detect OS
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
@@ -208,6 +210,9 @@ else()
   add_definitions(-DUNICODE)
 endif()
 
+if(XTD_LINK_TO_FS_TS)
+  link_libraries(stdc++fs)
+endif()
 
 ### link libraries
 if(XTD_OS MATCHES "XTD_OS_CYGWIN")
@@ -216,6 +221,9 @@ elseif(XTD_OS MATCHES "XTD_OS_MINGW")
   link_libraries(rpcrt4 ws2_32 pthread stdc++ psapi)
 elseif(XTD_OS MATCHES "XTD_OS_LINUX")
   link_libraries(dl pthread stdc++)
+  if(XTD_LINK_TO_FS_TS)
+    link_libraries(stdc++fs)
+  endif()
 elseif(XTD_OS MATCHES "XTD_OS_WINDOWS")
   link_libraries(rpcrt4 psapi)
 endif()
@@ -237,7 +245,8 @@ if(NOT GTEST_FOUND)
   # lifted from https://crascit.com/2015/07/25/cmake-gtest/
   # Download and unpack googletest at configure time
   configure_file(CMakeLists.txt.gtest googletest-download/CMakeLists.txt)
-  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -DBUILD_GTEST:BOOLEAN=ON . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
+  set(BUILD_GTEST ON CACHE BOOLEAN "")
+  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -D BUILD_GTEST:BOOLEAN=${BUILD_GTEST} . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
   execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
 
   # Prevent GoogleTest from overriding our compiler/linker options
