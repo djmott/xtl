@@ -9,4 +9,6 @@ namespace xtd{
   }
 }
 
+
+#include "wordnet.hpp"
 #include "bag_of_words.hpp"

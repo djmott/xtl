@@ -149,5 +149,11 @@ namespace xtd{
 
     };
 
+    inline path operator+(const path& lhs, const char * addend){
+      auto oRet = lhs;
+      oRet.append(addend);
+      return oRet;
+    }
+
   }
 }

@@ -37,7 +37,7 @@ namespace xtd{
      * @param location location of the call site
      */
     template <typename _Ty>
-    static void Dump(const _Ty& value, const char * name, const source_location& location){ _::DebugDump<_Ty>::Dump(value, name, location); }
+    static void Dump(const _Ty& value, const char * name, const source_location& location){ _::DebugDump<const _Ty&>::Dump(value, name, location); }
   };
 
 

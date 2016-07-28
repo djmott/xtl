@@ -6,5 +6,7 @@
 
 int main(){
 
+  xtd::nlp::wordnet::database oDB("c:/dev/tmp/dict/");
+
   return 0;
 }
