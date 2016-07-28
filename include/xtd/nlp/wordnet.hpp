@@ -20,7 +20,8 @@ namespace xtd{
         }
         //load records
         while (!oFile.eof()){
-          _FileT::record oRecord;
+          typename _FileT::record oRecord;
+          oRecord.file_offset = oFile.tellg();
           oFile >> oRecord;
           oDBFile.records.insert(std::make_pair(oRecord.file_offset, oRecord));
         }
@@ -176,23 +177,22 @@ namespace xtd{
         index_file _index_verb;
 
         database(const xtd::filesystem::path& oPath) {
-          auto t1 = std::async(std::launch::async, &load_wn_file<data_file>, (oPath + "data.adj"), _data_adj);
-//           auto t2 = std::async(std::launch::async, &load_wn_file<data_file>, (oPath + "data.adv"), _data_adv);
-//           auto t3 = std::async(std::launch::async, &load_wn_file<data_file>, (oPath + "data.noun"), _data_noun);
-//           auto t4 = std::async(std::launch::async, &load_wn_file<verb_data_file>, (oPath + "data.verb"), _data_verb);
-//           auto t5 = std::async(std::launch::async, &load_wn_file<index_file>, (oPath + "index.adj"), _index_adj);
-//           auto t6 = std::async(std::launch::async, &load_wn_file<index_file>, (oPath + "index.adv"), _index_adv);
-//           auto t7 = std::async(std::launch::async, &load_wn_file<index_file>, (oPath + "index.noun"), _index_noun);
-//           auto t8 = std::async(std::launch::async, &load_wn_file<index_file>, (oPath + "index.verb"), _index_verb);
+          auto t1 = std::async(std::launch::async, [&](){ load_wn_file(oPath + "data.adj", _data_adj); });
+          auto t2 = std::async(std::launch::async, [&](){ load_wn_file(oPath + "data.adv", _data_adv); });
+          auto t3 = std::async(std::launch::async, [&](){ load_wn_file(oPath + "data.noun", _data_noun); });
+          auto t4 = std::async(std::launch::async, [&](){ load_wn_file(oPath + "data.verb", _data_verb); });
+          auto t5 = std::async(std::launch::async, [&](){ load_wn_file(oPath + "index.adj", _index_adj); });
+          auto t6 = std::async(std::launch::async, [&](){ load_wn_file(oPath + "index.adv", _index_adv); });
+          auto t7 = std::async(std::launch::async, [&](){ load_wn_file(oPath + "index.noun", _index_noun); });
+          auto t8 = std::async(std::launch::async, [&](){ load_wn_file(oPath + "index.verb", _index_verb); });
           t1.get();
-//           t2.get();
-//           t3.get();
-//           t4.get();
-//           t5.get();
-//           t6.get();
-//           t7.get();
-//           t8.get();
-          printf("Fnord");
+          t2.get();
+          t3.get();
+          t4.get();
+          t5.get();
+          t6.get();
+          t7.get();
+          t8.get();
         }
         database(const database&) = delete;
 
