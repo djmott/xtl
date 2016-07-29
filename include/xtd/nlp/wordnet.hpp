@@ -28,6 +28,27 @@ namespace xtd{
         auto x = oDBFile.records.size();
       }
 
+/*      template <typename _FileT> inline void load_wn_file(const xtd::filesystem::path& oPath, _FileT& oDBFile){
+        std::ifstream oFile(oPath);
+        std::string sLine;
+        //skip header
+        while (!oFile.eof()){
+          auto oPOS = oFile.tellg();
+          std::getline(oFile, sLine);
+          if (sLine.size() > 2 && ' ' == sLine[0] && ' ' == sLine[1]) continue;
+          oFile.seekg(oPOS);
+          break;
+        }
+        //load records
+        while (!oFile.eof()){
+          typename _FileT::record oRecord;
+          oRecord.file_offset = oFile.tellg();
+          oFile >> oRecord;
+          oDBFile.records.insert(std::make_pair(oRecord.file_offset, oRecord));
+        }
+        auto x = oDBFile.records.size();
+      }
+*/
       struct index_file{
 
         struct record{
@@ -43,11 +64,11 @@ namespace xtd{
 
       };
 
-      inline std::istream& operator >> (std::istream &in, index_file::record& r){
+/*      inline std::istream& operator >> (std::istream &in, index_file::record& r){
         r.file_offset = in.tellg();
         in >> r.lemma >> r.pos >> r.synset_cnt >> r.p_cnt >> r.ptr_symbol >> r.sense_cnt >> r.tagsense_cnt >> r.synset_offset;
         return in;
-      }
+      }*/
 
       struct data_file{
 
@@ -81,7 +102,7 @@ namespace xtd{
 
       };
 
-      inline std::istream& operator >> (std::istream &in, data_file::record& r){
+/*      inline std::istream& operator >> (std::istream &in, data_file::record& r){
         in >> r.synset_offset >> r.lex_filenum >> r.ss_type >> r.w_cnt;
         auto x = atoi(r.w_cnt.c_str());
         for (auto i = x; i; --i){
@@ -109,7 +130,7 @@ namespace xtd{
       inline std::istream& operator >> (std::istream &in, data_file::record::ptr& p){
         in >> p.pointer_symbol >> p.synset_offset >> p.pos >> p.source_target;
         return in;
-      }
+      }*/
 
       struct verb_data_file : data_file{
 
@@ -134,7 +155,7 @@ namespace xtd{
 
       };
 
-      inline std::istream& operator >> (std::istream &in, verb_data_file::record& r){
+/*      inline std::istream& operator >> (std::istream &in, verb_data_file::record& r){
         in >> r.synset_offset >> r.lex_filenum >> r.ss_type >> r.w_cnt;
         auto x = atoi(r.w_cnt.c_str());
         for (auto i = x; i; --i){
@@ -158,12 +179,12 @@ namespace xtd{
         }
         std::getline(in, r.gloss);
         return in;
-      }
+      }*/
 
-      inline std::istream& operator >> (std::istream &in, verb_data_file::record::generic_frame& f){
+/*      inline std::istream& operator >> (std::istream &in, verb_data_file::record::generic_frame& f){
         in >> f.plus >> f.f_num >> f.w_num;
         return in;
-      }
+      }*/
 
       struct database{
 

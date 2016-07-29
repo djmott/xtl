@@ -13,3 +13,4 @@ namespace xtd{
 #include "wordnet.hpp"
 #include "moby.hpp"
 #include "bag_of_words.hpp"
+#include "english.hpp"

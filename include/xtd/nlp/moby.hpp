@@ -20,7 +20,7 @@ namespace xtd{
                 void load(const xtd::filesystem::path& oPath){
                     std::ifstream in(oPath);
                     std::string sLine;
-                    while (!oPath.eof()){
+                    while (!in.eof()){
                         record r;
                         in >> r;
                         records.insert(std::make_pair(r.word, r));
