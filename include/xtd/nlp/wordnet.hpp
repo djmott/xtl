@@ -8,22 +8,28 @@ namespace xtd{
     namespace wordnet{
 
       template <typename _FileT> inline void load_wn_file(const xtd::filesystem::path& oPath, _FileT& oDBFile){
-        std::ifstream oFile(oPath);
+        std::ifstream in(oPath);
+        in.exceptions(std::ios::badbit | std::ios::failbit);
+        std::string str((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+        //if (oFile.bad()) throw std::runtime_error(oPath.string() + " not found");
         std::string sLine;
         //skip header
         while (!oFile.eof()){
-          auto oPOS = oFile.tellg();
+          if (' ' != oFile.peek()){
+            break;
+          }
           std::getline(oFile, sLine);
-          if (sLine.size() > 2 && ' ' == sLine[0] && ' ' == sLine[1]) continue;
-          oFile.seekg(oPOS);
-          break;
         }
         //load records
         while (!oFile.eof()){
-          typename _FileT::record oRecord;
-          oRecord.file_offset = oFile.tellg();
-          oFile >> oRecord;
-          oDBFile.records.insert(std::make_pair(oRecord.file_offset, oRecord));
+          try{
+            typename _FileT::record oRecord;
+            oRecord.file_offset = oFile.tellg();
+            oFile >> oRecord;
+            oDBFile.records.insert(std::make_pair(oRecord.file_offset, oRecord));
+          }
+          catch (const std::ios::failure&){
+          }
         }
         auto x = oDBFile.records.size();
       }

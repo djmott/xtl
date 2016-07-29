@@ -19,7 +19,7 @@ namespace commands{
 
 int main(){
 
-  xtd::nlp::moby::database oDB("/home/davidmott/Downloads/Moby");
+  xtd::nlp::english oEnglish("C:/Dev/tmp/WordNet-3.0/dict", "C:/Dev/tmp/Moby");
 
     return 0;
   std::cout << "Chatty McChatface says > Hello! What can I do for you?" << std::endl;

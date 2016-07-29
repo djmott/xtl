@@ -12,4 +12,7 @@ namespace xtd{
 
 #include "wordnet.hpp"
 #include "moby.hpp"
+#include "word.hpp"
+#include "document.hpp"
 #include "bag_of_words.hpp"
+#include "english.hpp"
