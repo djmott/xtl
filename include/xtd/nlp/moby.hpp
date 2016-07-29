@@ -4,44 +4,47 @@ c++ interface to moby databases
 */
 
 namespace xtd{
-    namespace nlp{
-        namespace moby{
-            
-            struct pos_file{
-                struct record{
-                    using vector = std::vector<record>;
-                    using map = std::map<std::string, record>;
-                    std::string word;
-                    std::vector<char> pos;
-                private:
-                    friend std::istream& operator >> (std::istream &in, record& r);
-                };
-                
-                void load(const xtd::filesystem::path& oPath){
-                    std::ifstream in(oPath);
-                    std::string sLine;
-                    while (!in.eof()){
-                        record r;
-                        in >> r;
-                        records.insert(std::make_pair(r.word, r));
-                    }
-                }
-                
-                record::map records;
-                
-            private:
-                friend std::istream& operator >> (std::istream &in, pos_file& r);
-                
-            };
-            
-            
-            
-            struct database{
-                pos_file _pos_file;
-                database(const xtd::filesystem::path& oPath){
-                    _pos_file.load(oPath + "mpos/mobyposi.i");
-                }
-            };
+  namespace nlp{
+    namespace moby{
+
+      struct pos_file{
+        struct record{
+          using vector = std::vector<record>;
+          using map = std::map<std::string, record>;
+          std::string word;
+          std::vector<char> pos;
+          record(const std::string& sWord) : word(sWord){}
+        };
+
+        pos_file(const xtd::filesystem::path& oPath){
+          std::ifstream in(oPath);
+          in.exceptions( std::ios::badbit | std::ios::failbit );
+          xtd::string sFile((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
+          for (auto sBegin = sFile.begin(); sBegin < sFile.end() ; ++sBegin){
+            for(;('\r' == *sBegin || '\n' == *sBegin) && sBegin < sFile.end() ; ++sBegin);
+            auto sEnd = sBegin;
+            for(;(char)0xd7 != *sEnd && sEnd < sFile.end(); ++sEnd);
+            record r(std::string(sBegin, sEnd));
+            records.insert(std::make_pair(r.word, r));
+            for(++sEnd;'\r' != *sEnd && '\n' != *sEnd && sEnd < sFile.end();++sEnd){
+              r.pos.push_back(*sEnd);
+            }
+            sBegin = sEnd;
+          }
+
         }
+
+        record::map records;
+
+
+      };
+
+
+
+      struct database{
+        pos_file _pos_file;
+        database(const xtd::filesystem::path& oPath) : _pos_file(oPath + "mpos/mobyposi.i"){}
+      };
     }
+  }
 }
