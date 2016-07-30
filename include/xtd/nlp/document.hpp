@@ -2,18 +2,16 @@
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
-#pragma once
-
 namespace xtd{
   namespace nlp{
-    class document{
-    public:
-      document(const xtd::string text) : _text(text){}
+    struct document{
+      using pointer = std::shared_ptr<document>;
 
-      const xtd::string& const text() const{ return _text; }
-    protected:
-      xtd::string _text;
+      document(english::pointer oEnglish, const std::string sRaw) : _english(oEnglish), _raw(sRaw) {}
 
+    private:
+      english::pointer _english;
+      xtd::string _raw;
     };
   }
 }

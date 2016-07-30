@@ -16,13 +16,13 @@ namespace commands{
   };
 }
 
+xtd::nlp::english::pointer _english;
 
 int main(){
 
-  xtd::nlp::english oEnglish("C:/Dev/tmp/WordNet-3.0/dict", "C:/Dev/tmp/Moby");
+  _english = xtd::nlp::english::pointer(new xtd::nlp::english("/home/davidmott/Downloads/Moby", "/home/davidmott/Downloads/WordNet-3.0/dict"));
 
-    return 0;
-  std::cout << "Chatty McChatface says > Hello! What can I do for you?" << std::endl;
+  std::cout << "Chatty Cathy: Hello! What can I do for you?" << std::endl;
 
   std::string sLine;
   forever{
