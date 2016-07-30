@@ -20,10 +20,6 @@ xtd::nlp::english::pointer _english;
 
 int main(){
 
-/*  xtd::nlp::moby::database oDB("/home/davidmott/Downloads/Moby");*/
-
-//    xtd::nlp::wordnet::database oDB("/home/davidmott/Downloads/WordNet-3.0/dict");
-
   _english = xtd::nlp::english::pointer(new xtd::nlp::english("/home/davidmott/Downloads/Moby", "/home/davidmott/Downloads/WordNet-3.0/dict"));
 
   std::cout << "Chatty Cathy: Hello! What can I do for you?" << std::endl;
