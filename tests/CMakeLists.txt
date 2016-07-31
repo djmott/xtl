@@ -61,7 +61,7 @@ build_option(TEST_SOURCE_LOCATION "test xtd::source_location")
 build_option(TEST_SPIN_LOCK "test xtd::concurrent::spin_lock")
 build_option(TEST_STRING "test xtd::string")
 
-if(XTD_HAS_UUID)
+if(XTD_HAS_UUID OR XTD_OS MATCHES "XTD_OS_WINDOWS")
   build_option(TEST_UNIQUE_ID "test xtd::unique_id")
 endif()
 

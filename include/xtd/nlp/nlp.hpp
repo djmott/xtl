@@ -21,8 +21,10 @@ namespace xtd{
     }
 
 
-    struct lexical_category{
+    class lexical_category{
+    public:
       using vector = std::vector<lexical_category>;
+      virtual ~lexical_category(){}
       virtual const std::type_info& type() const { return typeid(lexical_category); }
       virtual bool is_a(const std::type_info& oType) const { return type() == oType; }
 
@@ -41,7 +43,8 @@ namespace xtd{
 
 
 
-      template <typename _Ty> struct lexical_category_impl : lexical_category{
+      template <typename _Ty> class lexical_category_impl : public lexical_category{
+      public:
         virtual const std::type_info& type() const override { return typeid(_Ty); }
         virtual bool is_a(const std::type_info& oType) const override { return (type() == oType); }
         const std::string& value() const { return _value; }

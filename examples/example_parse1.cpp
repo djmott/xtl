@@ -25,7 +25,7 @@ namespace command_line {
   using parameter = or_<color_param, prime_param>;
 }
 
-int main(int argc, char * argv[]){
+int main(int, char * argv[]){
   std::string sParam = argv[1];
   auto oAST = xtd::parser<command_line::parameter>::parse(sParam.cbegin(), sParam.cend());
   if (!oAST){

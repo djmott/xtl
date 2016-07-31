@@ -40,7 +40,7 @@ namespace xtd{
       stack& operator=(const stack&) = delete;
       
 
-    protected:
+    private:
       struct node{
         using pointer = node *;
         using atomic_ptr = std::atomic<pointer>;
