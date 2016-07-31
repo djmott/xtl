@@ -42,10 +42,18 @@ namespace xtd{
     @param oArgs variable elements appended together
      */
 
-    template <typename ... _ArgsT>
-    static xstring format(_ArgsT&&...oArgs){
-      return _::xstring_format<_ChT, _ArgsT...>::format(std::forward<_ArgsT>(oArgs)...);
+    static xstring format(){
+      return xstring((_ChT*)"");
     }
+
+
+    template <typename _Ty, typename ... _ArgsT>
+    static xstring format(_Ty val, _ArgsT&&...oArgs){
+      xstring sRet = _::xstring_format<_ChT, const _Ty&>::format(static_cast<const _Ty&>(val));
+      sRet += format(std::forward<_ArgsT>(oArgs)...);
+      return sRet;
+    }
+
 
     /**
     Converts the string to lower case
@@ -183,39 +191,35 @@ namespace xtd{
 #endif
   };
 
-#if (!DOXY_INVOKED)
-  namespace _{
 
-    //empty
+  namespace _{
     template <typename _ChT> class xstring_format<_ChT>{
     public:
-      template <typename ... _ArgTs> static xstring<_ChT> format(_ArgTs...){ return xstring<_ChT>(); }
+      static xstring<_ChT> format(){ return xstring<_ChT>(); }
     };
 
-
-#if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)
-
-    template <typename ... _ArgTs> class xstring_format<char, const wchar_t *, _ArgTs...>{
+  #if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)
+    template <> class xstring_format<char, const wchar_t * const &>{
     public:
-      static inline string format(const wchar_t * src, _ArgTs...oArgs){
+      static inline string format(const wchar_t * const & src){
         std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
-        return oConv.to_bytes(src) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+        return oConv.to_bytes(src);
       }
     };
 
-    template <typename ... _ArgTs> class xstring_format<wchar_t, const char *, _ArgTs...>{
+    template <> class xstring_format<wchar_t, const char * const &>{
     public:
-      static inline wstring format(const char * src, _ArgTs...oArgs){
+      static inline wstring format(const char * const & src){
         std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
-        return oConv.from_bytes(src) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
+        return oConv.from_bytes(src);
       }
     };
 
-#elif (XTD_HAS_ICONV)
+  #elif (XTD_HAS_ICONV)
 
-    template <typename ... _ArgTs> class xstring_format<char, const wchar_t *, _ArgTs...>{
+    template <> class xstring_format<char, const wchar_t * const &>{
     public:
-      static string format(const wchar_t * src, _ArgTs...oArgs){
+      static string format(const wchar_t * const & src){
         static iconv_helper oIconv("UTF-8", "WCHAR_T");
         size_t srclen = wcslen(src);
         string sRet(srclen, 0);
@@ -223,24 +227,24 @@ namespace xtd{
         iconv(oIconv, nullptr, nullptr, nullptr, &retlen);
         forever{
           retlen = sRet.size();
-          auto pSrc = reinterpret_cast<const char *>(src);
-          auto iSrcLen = srclen * sizeof(wchar_t);
-          auto sRetPtr = &sRet[0];
-          auto iRet = iconv(oIconv, const_cast<char**>(&pSrc), &iSrcLen, &sRetPtr, &retlen);
-          if (static_cast<size_t>(-1) != iRet){
-           return sRet;
-          }
-          if (errno != E2BIG){
-           throw std::runtime_error("A string conversion error occurred");
-          }
-          sRet.resize(sRet.size() * 2);
+        auto pSrc = reinterpret_cast<const char *>(src);
+        auto iSrcLen = srclen * sizeof(wchar_t);
+        auto sRetPtr = &sRet[0];
+        auto iRet = iconv(oIconv, const_cast<char**>(&pSrc), &iSrcLen, &sRetPtr, &retlen);
+        if (static_cast<size_t>(-1) != iRet){
+          return sRet;
+        }
+        if (errno != E2BIG){
+          throw std::runtime_error("A string conversion error occurred");
+        }
+        sRet.resize(sRet.size() * 2);
         }
       }
     };
 
-    template <typename ... _ArgTs> class xstring_format<wchar_t, const char *, _ArgTs...>{
+    template <> class xstring_format<wchar_t, const char * const &>{
     public:
-      static inline wstring format(const char * src, _ArgTs...oArgs){
+      static inline wstring format(const char * const & src){
         static iconv_helper oIconv("WCHAR_T", "UTF-8");
         size_t srclen = strlen(src);
         wstring sRet(srclen, 0);
@@ -248,65 +252,117 @@ namespace xtd{
         iconv(oIconv, nullptr, nullptr, nullptr, &retlen);
         forever{
           retlen = sRet.size() * sizeof(wchar_t);
-          auto pSrc = const_cast<char*>(src);
-          auto iSrcLen = srclen;
-          auto sRetPtr = reinterpret_cast<char*>(&sRet[0]);
-          auto iRet = iconv(oIconv, &pSrc, &iSrcLen, &sRetPtr, &retlen);
-          if (static_cast<size_t>(-1) != iRet) {
-            return sRet;
-          }
-          if (errno != E2BIG){
-            throw std::runtime_error("A string conversion error occurred");
-          }
-          sRet.resize(sRet.size() * 2);
+        auto pSrc = const_cast<char*>(src);
+        auto iSrcLen = srclen;
+        auto sRetPtr = reinterpret_cast<char*>(&sRet[0]);
+        auto iRet = iconv(oIconv, &pSrc, &iSrcLen, &sRetPtr, &retlen);
+        if (static_cast<size_t>(-1) != iRet){
+          return sRet;
+        }
+        if (errno != E2BIG){
+          throw std::runtime_error("A string conversion error occurred");
+        }
+        sRet.resize(sRet.size() * 2);
         }
       }
     };
 
-#else
+  #else
 
-    template <typename ... _ArgTs> class xstring_format<char, const wchar_t *, _ArgTs...> {
+    template <> class xstring_format<char, const wchar_t * const &>{
     public:
-      static string format(const wchar_t *src, _ArgTs...oArgs) {
+      static string format(const wchar_t * const & src){
         size_t srclen = wcslen(src);
         string sRet(srclen, 0);
-        forever {
+        forever{
           srclen = wcstombs(&sRet[0], src, sRet.size());
-          if (static_cast<size_t>(-1) == srclen) {
-            throw std::runtime_error("A string conversion error occurred");
-          }
-          if (srclen < sRet.size()) {
-            break;
-          }
-          sRet.resize(srclen * 2);
+        if (static_cast<size_t>(-1) == srclen){
+          throw std::runtime_error("A string conversion error occurred");
+        }
+        if (srclen < sRet.size()){
+          break;
+        }
+        sRet.resize(srclen * 2);
         }
         sRet.resize(srclen);
         return sRet;
       }
     };
 
-    template <typename ... _ArgTs> class xstring_format<wchar_t, const char *, _ArgTs...> {
+    template <> class xstring_format<wchar_t, const char * const &>{
     public:
 
-      static inline wstring format(const char *src, _ArgTs...oArgs) {
+      static inline wstring format(const char * const & src){
         size_t srclen = strlen(src);
         wstring sRet(srclen, 0);
-        forever {
+        forever{
           srclen = mbstowcs(&sRet[0], src, sRet.size());
-          if (static_cast<size_t>(-1) == srclen) {
-            throw std::runtime_error("A string conversion error occurred");
-          }
-          if (srclen < sRet.size()) {
-            break;
-          }
-          sRet.resize(srclen * 2);
+        if (static_cast<size_t>(-1) == srclen){
+          throw std::runtime_error("A string conversion error occurred");
+        }
+        if (srclen < sRet.size()){
+          break;
+        }
+        sRet.resize(srclen * 2);
         }
         sRet.resize(srclen);
         return sRet;
       }
     };
 
-#endif
+  #endif
+
+    template <typename _ChT> class xstring_format<_ChT, const _ChT * const &>{
+    public:
+      inline static xstring<_ChT> format(const _ChT * const & src){
+        return xstring<_ChT>(src);
+      }
+    };
+
+    template <typename _ChT, typename _Ch2> class xstring_format<_ChT, const xtd::xstring<_Ch2> &>{
+    public:
+      inline static xstring<_ChT> format(const xtd::xstring<_Ch2> & src){
+        return xstring<_ChT>::format(src.c_str());
+      }
+    };
+
+
+    template <> class xstring_format<char, const void * const &>{
+    public:
+      inline static string format(const void * const & value){
+        return std::to_string(reinterpret_cast<size_t>(value));
+      }
+    };
+
+
+    template <> class xstring_format<char, const int32_t &>{
+    public:
+      inline static string format(const int32_t & value){
+        return std::to_string(value);
+      }
+    };
+
+
+    template <> class xstring_format<char, const DWORD &>{
+    public:
+      inline static string format(const DWORD & value){
+        return std::to_string(value);
+      }
+    };
+
+
+  }
+
+#if (0)
+  namespace _{
+
+    //empty
+    template <typename _ChT> class xstring_format<_ChT>{
+    public:
+      static xstring<_ChT> format(){ return xstring<_ChT>(); }
+    };
+
+
 
 
     template <typename ... _ArgTs> class xstring_format<char, int8_t&, _ArgTs...>{
@@ -420,21 +476,6 @@ namespace xtd{
         return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
       }
     };
-  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-    template <typename ... _ArgTs> class xstring_format<char, DWORD&, _ArgTs...>{
-    public:
-      inline static string format(DWORD& value, _ArgTs&&...oArgs){
-        return std::to_string(value) + xstring_format<char, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
-      }
-    };
-
-    template <typename ... _ArgTs> class xstring_format<wchar_t, DWORD&, _ArgTs...>{
-    public:
-      inline static wstring format(DWORD& value, _ArgTs&&...oArgs){
-        return std::to_wstring(value) + xstring_format<wchar_t, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
-      }
-    };
-  #endif
 
     template <int _Len, typename ... _ArgTs> class xstring_format<char, const wchar_t(&)[_Len], _ArgTs...>{
     public:
@@ -480,12 +521,6 @@ namespace xtd{
     };
 
 
-    template <typename _ChT, typename ... _ArgTs> class xstring_format<_ChT, const _ChT*&, _ArgTs...>{
-    public:
-      inline static xstring<_ChT> format(const _ChT*&src, _ArgTs&&...oArgs){
-        return xstring<_ChT>(src) + xstring_format<_ChT, _ArgTs...>::format(std::forward<_ArgTs>(oArgs)...);
-      }
-    };
 
     template <typename _ChT, typename ... _ArgTs> class xstring_format<_ChT, const _ChT*, _ArgTs...>{
     public:

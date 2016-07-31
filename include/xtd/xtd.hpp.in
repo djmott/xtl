@@ -306,6 +306,7 @@ namespace xtd{
   #include <dlfcn.h>
   #include <cxxabi.h>
   #include <dirent.h>
+  using DWORD = unsigned long;
 #endif
 
 #if (XTD_OS_LINUX & XTD_OS)

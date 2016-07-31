@@ -44,7 +44,7 @@ namespace xtd
           using map = std::map<size_t, record>;
           size_t file_offset;
           std::string lemma, pos, synset_cnt, p_cnt, ptr_symbol, sense_cnt, tagsense_cnt, synset_offset;
-          bool load(const std::string& sFile, size_t & i) {
+          bool load(const std::string& , size_t & ) {
             return false;
           }
         };
@@ -227,7 +227,6 @@ namespace xtd
           t6.get();
           t7.get();
           t8.get();
-          auto x = _index_verb.records.size();
         }
         database(const database&) = delete;
 

@@ -9,7 +9,7 @@ namespace xtd{
     int _FileNum;
   public:
     mapped_file(const path& Path)
-    : _FileNum(xtd::crt_exception::throw_if(open(Path. ), [](int i){ return -1==i; }))
+    : _FileNum(xtd::crt_exception::throw_if(open(Path.string().c_str(), O_CREAT), [](int i){ return -1==i; }))
     {}
 
     template <typename _Ty> class mapped_page{

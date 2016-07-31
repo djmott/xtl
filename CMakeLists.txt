@@ -240,7 +240,11 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp)
 
-
+file(DOWNLOAD http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2 ${CMAKE_BINARY_DIR}/WordNet-3.0.tar.bz2)
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_BINARY_DIR}/WordNet-3.0.tar.bz2
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/
+)
 
 if(NOT GTEST_FOUND)
   message("Google test framework will be downloaded")
