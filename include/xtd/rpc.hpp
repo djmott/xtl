@@ -24,17 +24,6 @@ namespace xtd{
 
 
 
-    class payload : public std::vector<uint8_t>{
-    public:
-
-      using _super_t = std::vector<uint8_t>;
-      using invoke_handler_type = std::function<bool(payload&)>;
-
-      template <typename ... _ArgTs> payload(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
-
-
-    };
-
 
     
     /** represents an exception with the RPC protocol
@@ -43,7 +32,6 @@ namespace xtd{
     class protocol_exception : public xtd::exception{
     public:
       using _super_t = xtd::exception;
-
       template <typename ... _ArgTs> protocol_exception(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
     class malformed_payload : public protocol_exception{
@@ -57,7 +45,24 @@ namespace xtd{
       template <typename ... _ArgTs> bad_call(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
 
-///marshaler_base specialization of no type
+
+    /** contains the packed call data on the wire that is transported between clients and servers
+*/
+    class payload : public std::vector<uint8_t>{
+    public:
+
+      using _super_t = std::vector<uint8_t>;
+      using invoke_handler_type = std::function<bool(payload&)>;
+
+      template <typename ... _ArgTs> payload(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+
+      template <typename _Ty> _Ty peek() const{
+        if (_super_t::size() < sizeof(_Ty)) throw rpc::malformed_payload(here(), "Malformed payload");
+        return _Ty(*reinterpret_cast<const _Ty*>(&_super_t::at(0)));
+      }
+    };
+
+    ///marshaler_base specialization of no type
     template <> class marshaler_base<>{
     public:
       static void marshal(payload&){ /*this specialization is a recursion terminator so has no implementation*/}
@@ -195,8 +200,14 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     };
 
 
-
+    /** super class of rpc call declarations
+    concrete rpc call declarations subclass rpc_call
+    @tparam _DeclT the concrete implementation type passed as a curiously recurring parameter
+    @tparam _ReturnT return type of the rpc call
+    @tparam ... list of call parameters
+    */
     template <typename _DeclT, typename _ReturnT, typename ... _ArgTs> class rpc_call<_DeclT, _ReturnT(_ArgTs...)>{
+      
     public:
       using return_type = _ReturnT;
       using function_type = std::function<_ReturnT(_ArgTs...)>;
@@ -205,6 +216,8 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     };
 
 
+    /** tcp/ip transport
+    */
     class tcp_transport{
       socket::ipv4address _Address;
       xtd::socket::ipv4_tcp_stream _Socket;
@@ -244,25 +257,83 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     /** Dummy transport used for debugging
     */
     class null_transport{
+
+      struct globals{
+        std::thread _ServerThread;
+        std::mutex _CallLock;
+        std::condition_variable _CallCheck;
+        std::promise<void> _ServerThreadStarted;
+        bool _ServerThreadExit = false;
+
+        struct transport_info{
+          using pointer = std::shared_ptr<transport_info>;
+          using stack = xtd::concurrent::stack<pointer>;
+          std::promise<void> _Processed;
+          payload oPayload;
+        };
+
+        transport_info::stack _TransportInfo;
+
+        static globals& get(){
+          static globals _globals;
+          return _globals;
+        }
+      };
+
     public:
+
       using pointer_type = std::shared_ptr<null_transport>;
 
-      void start_server(payload::invoke_handler_type ){
-        //TODO: implement start_server
-        TODO("implement start_server")
+      void start_server(payload::invoke_handler_type oHandler){
+        std::shared_ptr<payload::invoke_handler_type> oInvokeHandler(new payload::invoke_handler_type(oHandler));
+        globals::get()._ServerThread = std::thread([&, oInvokeHandler]{
+          globals::get()._ServerThreadStarted.set_value();
+          globals::transport_info::pointer pTransportInfo;
+          while (!globals::get()._ServerThreadExit){
+            {
+              std::unique_lock<std::mutex> oLock(globals::get()._CallLock);
+              globals::get()._CallCheck.wait(oLock, [&]{ return globals::get()._TransportInfo.try_pop(pTransportInfo); });
+              oLock.unlock();
+              globals::get()._CallCheck.notify_one();
+            }
+            if (pTransportInfo->oPayload.size()){
+              (*oInvokeHandler)(pTransportInfo->oPayload);
+            }
+            pTransportInfo->_Processed.set_value();
+          }
+        });
+        globals::get()._ServerThreadStarted.get_future().get();
       }
       void stop_server(){
-        //TODO: disconnect clients and stop the server thread
-        TODO("disconnect clients and stop the server thread")
+        globals::get()._ServerThreadExit = true;
+        globals::transport_info::pointer pTransportInfo(new globals::transport_info);
+        {
+          std::lock_guard<std::mutex> oLock(globals::get()._CallLock);
+          globals::get()._TransportInfo.push(pTransportInfo);
+          globals::get()._CallCheck.notify_one();
+        }
+        pTransportInfo->_Processed.get_future().get();
+
+        globals::get()._ServerThread.join();
       }
-      void transact(payload& ){
-        //TODO: send the payload to the server and return the resulting payload
-        TODO("send the payload to the server and return the resulting payload")
+
+      void transact(payload& oPayload){
+        globals::transport_info::pointer pTransportInfo(new globals::transport_info);
+        pTransportInfo->oPayload = oPayload;
+        {
+          std::lock_guard<std::mutex> oLock(globals::get()._CallLock);
+          globals::get()._TransportInfo.push(pTransportInfo);
+          globals::get()._CallCheck.notify_one();
+        }
+        pTransportInfo->_Processed.get_future().get();
       }
     };
 
 
-
+    /** super class of server implementation chain
+    @tparam _TransportT the transport type to use (tcp, udp, named pipes, homing pigeons, etc.)
+    @tparam _DeclT the full server declaration
+    */
     template <class _TransportT, class _DeclT> class server_impl<_TransportT, _DeclT>{
     public:
 
@@ -314,7 +385,11 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
     public:
 
-      bool call_handler(payload&){
+      bool call_handler(payload& oPayload){
+        if (typeid(_HeadT).hash_code() != oPayload.peek<size_t>()){
+          return _super_t::call_handler(oPayload);
+        }
+        TODO("invoke call")
         return true;
       }
 

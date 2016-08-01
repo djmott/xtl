@@ -85,7 +85,7 @@ namespace xtd{
       BOOL bRet;
       DWORD dwLastError;
       forever{
-        bRet = EnumProcesses(&pids[0], pids.size() * sizeof(DWORD), &dwNeeded);
+        bRet = EnumProcesses(&pids[0], static_cast<DWORD>(pids.size() * sizeof(DWORD)), &dwNeeded);
         dwLastError = GetLastError();
         if ((dwNeeded / sizeof(DWORD)) < pids.size()){
           break;
@@ -115,7 +115,7 @@ namespace xtd{
       BOOL bRet;
       DWORD dwLastError;
       forever{
-        bRet = EnumProcessModules(*this, &modules[0], modules.size() * sizeof(HMODULE), &dwNeeded);
+        bRet = EnumProcessModules(*this, &modules[0], static_cast<DWORD>(modules.size() * sizeof(HMODULE)), &dwNeeded);
         dwLastError = GetLastError();
         if ((dwNeeded / sizeof(HMODULE)) < modules.size()){
           break;
@@ -126,7 +126,7 @@ namespace xtd{
       for (dynamic_library::native_handle_type module : modules){
         xtd::string sPath(MAX_PATH, 0);
         forever{
-          dwNeeded = GetModuleFileNameExA(*this, module, &sPath[0], sPath.size());
+          dwNeeded = GetModuleFileNameExA(*this, module, &sPath[0],static_cast<DWORD>(sPath.size()));
           if (dwNeeded < sPath.size()){
             break;
           }

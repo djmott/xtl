@@ -104,13 +104,11 @@ namespace xtd{
 
     template <typename _ReturnT, typename ... _ArgsT> function <_ReturnT, _ArgsT...> get(const char * name){
       using return_type = function <_ReturnT, _ArgsT...>;
-      //BEGIN-GENERATED
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
       auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(GetProcAddress(_Handle, name), [](FARPROC p){ return nullptr == p; }));
 #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
       auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(dlsym(_Handle, name), [](void * p){ return nullptr == p; }));
 #endif
-      //END-GENERATED
       return return_type(fnptr, shared_from_this());
     }
 

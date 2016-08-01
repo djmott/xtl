@@ -14,17 +14,21 @@ namespace xtd{
     multiple threads can push and pop items concurrently
     @tparam _ValueT type of value contained in the stack. Must be copy constructible.
     */
-    template <typename _ValueT> class stack{
+    template <typename _ValueT, typename _WaitPolicyT = null_wait_policy> class stack{
     public:
-      using value_type = _ValueT;
 
-      stack() : _Root(nullptr){}
+      using value_type = _ValueT;
+      using wait_policy_type = _WaitPolicyT;
+
+      stack(wait_policy_type oWait = wait_policy_type()) : _Root(nullptr), _WaitPolicy(oWait){}
+
       ~stack(){
         while (_Root.load()){
           auto pNode = _Root.load();
           if (_Root.compare_exchange_strong(pNode, pNode->_Next)){
             delete pNode;
           }
+          _WaitPolicy();
         }
       }
       stack(stack&& src) : _Root(src._Root.load()){
@@ -38,7 +42,37 @@ namespace xtd{
 
       stack(const stack&) = delete;
       stack& operator=(const stack&) = delete;
+
+      bool try_pop(value_type& oRet){        
+        auto oTmp = _Root.load();
+        if (!oTmp) return false;
+        if (!_Root.compare_exchange_strong(oTmp, oTmp->_Next)){
+          return false;
+        }
+        oRet = oTmp->_Value;
+        delete oTmp;
+        return true;
+      }
       
+      void push(const value_type& value){
+        typename node::pointer pNode = new node;
+        pNode->_Value = value;
+        forever{
+          pNode->_Next = _Root.load();
+          if (_Root.compare_exchange_strong(pNode->_Next, pNode)){
+            break;
+          }
+          _WaitPolicy();
+        }
+      }
+
+      value_type pop(){
+        value_type oRet;
+        while (!try_pop(oRet)){
+          _WaitPolicy();
+        }
+        return oRet;
+      }
 
     private:
       struct node{
@@ -48,6 +82,7 @@ namespace xtd{
         value_type _Value;
       };
       typename node::atomic_ptr _Root;
+      _WaitPolicyT _WaitPolicy;
     };
     ///@}
   }

@@ -296,6 +296,7 @@ namespace xtd{
   #include <sys/types.h>
   #include <sys/socket.h>
   #include <sys/ioctl.h>
+  #include <sys/mman.h>
   #include <netinet/in.h>
   #include <netinet/udp.h>
   #include <netinet/tcp.h>
@@ -306,6 +307,7 @@ namespace xtd{
   #include <dlfcn.h>
   #include <cxxabi.h>
   #include <dirent.h>
+  #include <fcntl.h>
   using DWORD = unsigned long;
 #endif
 
@@ -376,6 +378,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/callback.hpp>
 #include <xtd/meta.hpp>
 
+#include <xtd/memory.hpp>
 #include <xtd/concurrent/concurrent.hpp>
 
 #include <xtd/source_location.hpp>

@@ -134,6 +134,9 @@ namespace xtd{
       inline static path home_directory() {
         return path(std::getenv("HOME"));
       }
+      inline static path temp_directory(){
+        return path(std::getenv("TMP"));
+      }
 #elif ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
       inline static path home_directory(){
         std::string sTemp = std::getenv("HOMEPATH");

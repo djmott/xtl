@@ -29,6 +29,7 @@ set(TEST_SOURCE tests.cpp
   test_source_location.hpp
   test_spin_lock.hpp
   test_string.hpp
+  test_stack.hpp
   test_unique_id.hpp
   test_var.hpp
 )
@@ -59,6 +60,7 @@ build_option(TEST_SHARED_MEM_OBJ "test xtd::shared_mem_obj")
 build_option(TEST_SOCKET "test xtd::socket")
 build_option(TEST_SOURCE_LOCATION "test xtd::source_location")
 build_option(TEST_SPIN_LOCK "test xtd::concurrent::spin_lock")
+build_option(TEST_STACK "test xtd::concurrent::stack")
 build_option(TEST_STRING "test xtd::string")
 
 if(XTD_HAS_UUID OR XTD_OS MATCHES "XTD_OS_WINDOWS")

@@ -103,6 +103,10 @@ main system and unit test entry point
   #include "test_spin_lock.hpp"
 #endif
 
+#if (ON==TEST_STACK)
+  #include "test_stack.hpp"
+#endif
+
 #if (ON==TEST_STRING)
   #include "test_string.hpp"
 #endif

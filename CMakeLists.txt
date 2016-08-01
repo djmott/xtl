@@ -246,6 +246,13 @@ execute_process(
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/
 )
 
+file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_BINARY_DIR}/mpos.tar.Z)
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_BINARY_DIR}/mpos.tar.Z
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/
+)
+
+
 if(NOT GTEST_FOUND)
   message("Google test framework will be downloaded")
   # lifted from https://crascit.com/2015/07/25/cmake-gtest/

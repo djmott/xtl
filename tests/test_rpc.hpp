@@ -6,18 +6,17 @@ xtd::rpc system and unit tests
 
 class test_rpc : public ::testing::Test{
 public:
-  static const uint16_t Port = 8765;
   class Add : public xtd::rpc::rpc_call<Add, int(int, int)> {};
   class Echo : public xtd::rpc::rpc_call<Echo, std::string(std::string)> {};
   class Average : public xtd::rpc::rpc_call<Average, double(std::vector<double>)> {};
 
-  using server_type = xtd::rpc::server<xtd::rpc::tcp_transport , Add, Echo, Average>;
+  using server_type = xtd::rpc::server<xtd::rpc::null_transport , Add, Echo, Average>;
   using client_type = typename server_type::client_type;
 
   using server_pointer_type = std::shared_ptr<server_type>;
 
   static server_pointer_type& get_server(){
-    static server_pointer_type oServer(new server_type(xtd::socket::ipv4address("0.0.0.0", Port)));
+    static server_pointer_type oServer(new server_type);
     return oServer;
   }
 
@@ -47,7 +46,7 @@ TEST_F(test_rpc, payload){
 //  EXPECT_EQ(oPayload.peek<uint8_t>(), 123);
 }
 
-TEST_F(test_rpc, DISABLED_echo_test){
-  test_rpc::client_type oClient(xtd::socket::ipv4address("127.0.0.1", test_rpc::Port));
+TEST_F(test_rpc, echo_test){
+  test_rpc::client_type oClient;
   oClient.call<test_rpc::Echo>("Hello?");
 }
