@@ -19,7 +19,7 @@ namespace xtd{
   namespace _{
     template <typename _Ty> class DebugDump{
     public: 
-      static void Dump(_Ty value, const char * name, const source_location& location){
+      static void Dump(const _Ty& value, const char * name, const source_location& location){
         xtd::log::get().write(xtd::log::type::debug, location, "Dumping ", name, " type ", typeid(_Ty).name(), " at ", static_cast<const void*>(&value), " : ", value);
       }
     };

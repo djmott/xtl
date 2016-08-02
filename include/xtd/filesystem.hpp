@@ -148,6 +148,13 @@ namespace xtd{
         }
         return sTemp;
       }
+      inline static path temp_directory(){
+        std::string sRet(MAX_PATH + 1, 0);
+        DWORD dwLen = 0;
+        dwLen = xtd::windows::exception::throw_if(GetTempPath(sRet.size(), &sRet[0]), [](DWORD d){ return 0 == d; });
+        sRet.resize(dwLen);
+        return sRet;
+      }
 #endif
 
     };

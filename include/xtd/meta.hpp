@@ -24,6 +24,15 @@ namespace xtd{
 
   }
 
+  template <typename _Ty> constexpr uint32_t hidword(_Ty value){
+    static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
+    return ((uint32_t)(((value) >> 32) & 0xffffffff));
+  }
+  template <typename _Ty> constexpr uint32_t lodword(_Ty value){
+    static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
+    return ((uint32_t)((value) & 0xffffffff));
+  }
+
   /** meta-function to get the intrinsic of a specified size
   @tparam _Size size
   @return intrinsic of specified size
