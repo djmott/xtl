@@ -16,7 +16,7 @@ namespace xtd{
     static inline size_t page_size(){
       SYSTEM_INFO oSysInfo;
       GetSystemInfo(&oSysInfo);
-      return oSysInfo.dwPageSize;
+      return oSysInfo.dwAllocationGranularity;
     }
   #endif
   }

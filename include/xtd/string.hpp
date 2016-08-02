@@ -319,10 +319,10 @@ namespace xtd{
       }
     };
 
-    template <typename _ChT, size_t _Len> class xstring_format<_ChT, const _ChT (&)[_Len]>{
+    template <typename _ChT, typename _Ch2, size_t _Len> class xstring_format<_ChT, const _Ch2(&)[_Len]>{
     public:
-      inline static xstring<_ChT> format(const _ChT (&src)[_Len]){
-        return xstring<_ChT>(src);
+      inline static xstring<_ChT> format(const _Ch2(&src)[_Len]){
+        return xstring_format<_ChT, const _Ch2 * const &>::format(src);
       }
     };
 
