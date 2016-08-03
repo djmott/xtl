@@ -122,7 +122,7 @@ namespace xtd{
         std::string sRet = _super_t::string();
         auto iPos = sRet.find_last_of( seperator );
         if (xtd::string::npos != iPos && iPos < (sRet.size() - 1)){
-          sRet.substr(1+iPos);
+          sRet = sRet.substr(1+iPos);
         }
         return sRet;
       }
@@ -159,6 +159,11 @@ namespace xtd{
 
     };
 
+    inline path operator+(const path& lhs, const path& addend){
+      auto oRet = lhs;
+      oRet.append(addend);
+      return oRet;
+    }
     inline path operator+(const path& lhs, const char * addend){
       auto oRet = lhs;
       oRet.append(addend);
