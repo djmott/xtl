@@ -18,7 +18,8 @@ TEST(test_path, append){
   ASSERT_STREQ(oPath.make_preferred().string().c_str(), xtd::filesystem::path("/a/b/c").make_preferred().string().c_str());
   oPath /= "d";
   ASSERT_STREQ(oPath.make_preferred().string().c_str(), xtd::filesystem::path("/a/b/c/d").make_preferred().string().c_str());
-
+  auto oPath2 = xtd::filesystem::path("/a/b/c") + xtd::filesystem::path("d");
+  ASSERT_STREQ(oPath.make_preferred().string().c_str(), oPath2.make_preferred().string().c_str());
 }
 
 TEST(test_path, DISABLED_append_fail){
@@ -28,4 +29,8 @@ TEST(test_path, DISABLED_append_fail){
 
 }
 
+TEST(test_path, filename){
+  auto p1 = xtd::filesystem::path::temp_directory() + "fnord";
+  ASSERT_STREQ(p1.filename().c_str(), "fnord");
 
+}

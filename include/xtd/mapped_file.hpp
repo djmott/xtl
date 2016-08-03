@@ -15,7 +15,7 @@ namespace xtd{
     ~mapped_file(){ close(_FileNum); }
 
     explicit mapped_file(const filesystem::path& Path)
-    : _FileNum(xtd::crt_exception::throw_if(open(Path.string().c_str(), O_CREAT), [](int i){ return -1==i; }))
+    : _FileNum(xtd::crt_exception::throw_if(open(Path.string().c_str(), O_CREAT|O_RDWR), [](int i){ return -1==i; }))
     {}
 
 
@@ -63,7 +63,7 @@ namespace xtd{
       DUMP(iPageSize);
       return mapped_page<_Ty>(
         xtd::crt_exception::throw_if(
-          mmap(nullptr, iPageSize, PROT_WRITE, MAP_SHARED,  _FileNum, (pageNum * iPageSize)),
+          mmap(nullptr, iPageSize, PROT_READ|PROT_WRITE, MAP_SHARED,  _FileNum, (pageNum * iPageSize)),
           [](void*addr){ DUMP(addr); return nullptr==addr || MAP_FAILED==addr; }
         ));
     }

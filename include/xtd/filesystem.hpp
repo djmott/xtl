@@ -159,6 +159,10 @@ namespace xtd{
 
     };
 
+    inline static bool remove(const path& oPath){
+      return 0==::remove(oPath.string().c_str());
+    }
+
     inline path operator+(const path& lhs, const path& addend){
       auto oRet = lhs;
       oRet.append(addend);
