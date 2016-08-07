@@ -402,7 +402,7 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/rpc.hpp>
 #include <xtd/var.hpp>
 
-#if (XTD_OS_WINDOWS & XTD_OS)
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
   #include <xtd/windows/dbghelp.hpp>
 #endif
 

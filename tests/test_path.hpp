@@ -30,7 +30,8 @@ TEST(test_path, DISABLED_append_fail){
 }
 
 TEST(test_path, filename){
-  auto p1 = xtd::filesystem::path::temp_directory() + "fnord";
-  ASSERT_STREQ(p1.filename().c_str(), "fnord");
+  auto s = xtd::xstring<xtd::filesystem::path::value_type>::format("fnord");
+  auto p1 = xtd::filesystem::temp_directory_path() + s;
+  ASSERT_STREQ(p1.filename().c_str(), s.c_str());
 
 }

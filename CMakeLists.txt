@@ -79,8 +79,9 @@ option(XTD_LOG_TARGET_COUT "write log output to std::cout" NO)
 option(XTD_LOG_TARGET_XML "write log output to XML file" NO)
 option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
 option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
-option(BUILD_EXAMPLES "Build examples" YES)
-option(BUILD_TESTS "Build tests" YES)
+option(BUILD_EXAMPLES "Build examples" NO)
+option(BUILD_TESTS "Build tests" NO)
+option(BUILD_DOCS "Build documentation" NO)
 
 option(XTD_LINK_TO_FS_TS "link to the c++ filesystem TS" NO)
 
@@ -252,7 +253,7 @@ execute_process(
 )
 
 
-if(NOT GTEST_FOUND)
+if(BUILD_TESTS AND NOT GTEST_FOUND)
   message("Google test framework will be downloaded")
   # lifted from https://crascit.com/2015/07/25/cmake-gtest/
   # Download and unpack googletest at configure time
@@ -271,10 +272,11 @@ if(NOT GTEST_FOUND)
   add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src ${CMAKE_BINARY_DIR}/googletest-build)
 endif()
 
-add_subdirectory(tests)
+if(BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
 
-
-if(DOXYGEN_FOUND)
+if(BUILD_DOCS AND DOXYGEN_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
   add_custom_target(
     docs COMMAND "${DOXYGEN_EXECUTABLE}" Doxyfile
@@ -283,10 +285,6 @@ if(DOXYGEN_FOUND)
   )
 endif()
 
-
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
-
-
-

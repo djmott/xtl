@@ -33,7 +33,6 @@ TEST_F(test_mapped_file, page_initialization){
 TEST_F(test_mapped_file, read){
   xtd::mapped_file oFile(xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename());
   auto oPage = oFile.get<mapped_file_test_struct>(0);
-  int iAge = oPage->age;
   mapped_file_test_struct s;
   memcpy(&s, oPage.get(), sizeof(mapped_file_test_struct));
 }

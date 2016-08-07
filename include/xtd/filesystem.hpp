@@ -6,10 +6,33 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #pragma once
 
+namespace xtd{
+  namespace filesystem{
+
+    namespace _{
+      template <typename, typename> struct path_adder;
+    }
+  }
+}
+
 #if (XTD_HAS_EXP_FILESYSTEM)
 namespace xtd{
   namespace filesystem{
-    using namespace std::experimental::filesystem;
+
+    struct path : std::experimental::filesystem::path{
+      using _super_t = std::experimental::filesystem::path;
+      template <typename ... _ArgTs> path(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+
+      template <typename _Ty> inline path operator+(const _Ty& src) const{ return _::path_adder<value_type, const _Ty&>::add(*this, src); }
+
+      path filename() const{ return path(_super_t::filename()); }
+
+    };
+
+    static inline bool remove(const path& src){ return std::experimental::filesystem::remove(src); }
+
+    static inline path temp_directory_path(){ return path(std::experimental::filesystem::temp_directory_path()); }
+
   }
 }
 #elif (XTD_HAS_FILESYSTEM)
@@ -34,31 +57,46 @@ namespace xtd{
 
 #if ((XTD_OS_MINGW|XTD_OS_WINDOWS) & XTD_OS)
       static constexpr value_type preferred_separator  = '\\';
+      static constexpr value_type non_preferred_separator  = '/';
 #else
       static constexpr value_type preferred_separator  = '/';
+      static constexpr value_type non_preferred_separator  = '\\';
 #endif
 
       template <typename ... _ArgTs> path(_ArgTs...oArgs) : path_base(std::forward<_ArgTs>(oArgs)...){}
 
       path& replace_filename(const path& newval){
-        auto iLastSeperator = string().find_last_of(seperator);
+        auto iEndSep = string().find_last_of(preferred_separator);
 
-        if (0==string().size() || xtd::string::npos == iLastSeperator) {
+        if (0==string().size() || xtd::string::npos == iEndSep) {
           string() = newval.string();
-          return *this;
-        }
-        if (seperator == string().back()){
+        }else if (preferred_separator == string().back()){
           append(newval);
-          return *this;
         }
-
+        return *this;
       }
 
       path filename() const {
-        
+        auto iEndSep = string().find_last_of(preferred_separator);
+        return string().substr(1+iEndSep);
       }
 
+      template <typename _RHST>
+      path& operator /= (const _RHST& rhs){
+        append(rhs);
+        return *this;
+      }
+
+      path& make_preferred(){
+        for (auto & oCh : *this){
+          if (oCh == non_preferred_separator){
+            oCh = preferred_separator;
+          }
+        }
+        return *this;
+      }
     };
+
 
 
     inline path temp_directory_path(){
@@ -76,15 +114,40 @@ namespace xtd{
 
 namespace xtd{
   namespace filesystem{
-    inline path operator+(const path& lhs, const path& rhs){
-      path oRet(lhs);
-      oRet.append(rhs);
-      return oRet;
+    namespace _{
+
+
+      template <typename _ValueT, typename _Ch2, size_t _Dims> struct path_adder<_ValueT, const _Ch2(&)[_Dims]>{
+        inline static path add(const path& dest, const _Ch2(&src)[_Dims]){
+          auto str = xtd::xstring<_ValueT>::format(src);
+          path oRet(dest);
+          oRet.append(str);
+          return oRet;
+        }
+      };
+      template <typename _ValueT, typename _Ch2> struct path_adder<_ValueT, const _Ch2*>{
+        inline static path add(const path& dest, const _Ch2* src){
+          auto str = xtd::xstring<_ValueT>::format(src);
+          path oRet(dest);
+          oRet.append(str);
+          return oRet;
+        }
+      };
+      template <typename _ValueT> struct path_adder<_ValueT, const path&>{
+        inline static path add(const path& dest, const path& src){
+          path oRet(dest);
+          oRet.append(src);
+          return oRet;
+        }
+      };
+      template <typename _ValueT> struct path_adder<_ValueT, const xtd::xstring<_ValueT>&>{
+        inline static path add(const path& dest, const xtd::xstring<_ValueT>& src){
+          return path_adder<_ValueT, const _ValueT*>::add(dest, src.c_str());
+        }
+      };
     }
-    inline path operator+(const path& lhs, const char * rhs){
-      path oRet(lhs);
-      oRet.append(rhs);
-      return oRet;
-    }
+
+
+
   }
 }

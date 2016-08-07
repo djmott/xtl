@@ -34,7 +34,7 @@ namespace xtd{
         initializer(){
           SymSetOptions(SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS);
           xtd::windows::exception::throw_if(SymInitialize(GetCurrentProcess(), nullptr, TRUE), [](BOOL b){return FALSE == b; });
-          xtd::windows::exception::throw_if(SymRegisterCallback64(GetCurrentProcess(), SymCallback, NULL), [](BOOL b){return FALSE == b; });
+          xtd::windows::exception::throw_if(SymRegisterCallback64(GetCurrentProcess(), SymCallback, 0), [](BOOL b){return FALSE == b; });
         }
         ~initializer(){
           SymCleanup(GetCurrentProcess());

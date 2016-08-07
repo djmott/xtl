@@ -4,7 +4,7 @@ deferred exception.hpp inline function definitions
 */
 
 namespace xtd{
-#if (XTD_OS_WINDOWS & XTD_OS)
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
   namespace windows{
 
     inline exception::exception(const xtd::source_location& source, const char * expression) : xtd::exception(source, ""), _last_error(GetLastError()){

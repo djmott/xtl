@@ -116,7 +116,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
     int errnum() const { return _errnum; }
   };
 
-#if (XTD_OS_WINDOWS & XTD_OS)
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
   namespace windows{
     struct exception : xtd::exception{
     public:
