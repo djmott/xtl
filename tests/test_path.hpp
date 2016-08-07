@@ -25,7 +25,7 @@ TEST(test_path, append){
 TEST(test_path, DISABLED_append_fail){
   xtd::filesystem::path p1 = "/a/";
   ASSERT_NO_THROW(p1 += "/b/");
-  ASSERT_STREQ(p1.make_preferred().string().c_str(), xtd::filesystem::path("/a/b/").make_preferred().string().c_str());
+  ASSERT_STREQ(xtd::filesystem::path("/a/b/").make_preferred().string().c_str(), p1.make_preferred().string().c_str());
 
 }
 

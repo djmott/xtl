@@ -128,7 +128,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
         return ret;
       }
 
-      exception(const xtd::source_location& source, const char * expression);
+      exception(const xtd::source_location& source, const std::string& expression);
     private:
       DWORD _last_error;
     };

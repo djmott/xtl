@@ -65,6 +65,8 @@ namespace xtd{
 
       template <typename ... _ArgTs> path(_ArgTs...oArgs) : path_base(std::forward<_ArgTs>(oArgs)...){}
 
+      template <typename _Ty> inline path operator+(const _Ty& src) const{ return _::path_adder<value_type, const _Ty&>::add(*this, src); }
+
       path& replace_filename(const path& newval){
         auto iEndSep = string().find_last_of(preferred_separator);
 
@@ -95,6 +97,17 @@ namespace xtd{
         }
         return *this;
       }
+
+      path& append(const path& rhs){
+        if (non_preferred_separator==back()) back() = preferred_separator;
+        if (preferred_separator != back() && preferred_separator != rhs.string().front()) push_back(preferred_separator);
+        if (preferred_separator == back() && preferred_separator == rhs.string().front()) pop_back();
+        _super_t::append(rhs.string());
+        return *this;
+      }
+
+      path& operator+=(const path& rhs){ return append(rhs); }
+
     };
 
 

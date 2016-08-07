@@ -17,7 +17,7 @@ namespace xtd{
         };
 
         pos_file(const xtd::filesystem::path& oPath){
-          std::ifstream in(oPath);
+          std::ifstream in(oPath.string());
           in.exceptions( std::ios::badbit | std::ios::failbit );
           xtd::string sFile((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
           for (auto sBegin = sFile.begin(); sBegin < sFile.end() ; ++sBegin){

@@ -332,6 +332,12 @@ namespace xtd{
         return xstring<_ChT>::format(src.c_str());
       }
     };
+    template <typename _ChT, typename _Ch2> class xstring_format<_ChT, const std::basic_string<_Ch2> &>{
+    public:
+      inline static xstring<_ChT> format(const std::basic_string<_Ch2> & src){
+        return xstring<_ChT>::format(src.c_str());
+      }
+    };
 
 
     template <> class xstring_format<char, const void * const &>{

@@ -10,7 +10,14 @@ load and invoke methods in a dynamic library
 
 namespace xtd{
 
-  class dynamic_library_exception : public xtd::exception{
+  class dynamic_library_exception
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+    : public xtd::windows::exception{
+      using _super_t = xtd::windows::exception;
+#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+    : public xtd::exception{
+      using _super_t = xtd::exception;
+#endif
   public:
 
     template <typename _ReturnT, typename _ExpressionT>
@@ -25,9 +32,9 @@ namespace xtd{
       return ret;
     }
 
-    dynamic_library_exception(const source_location& Source, const std::string& What) : xtd::exception(Source, What){}
-    dynamic_library_exception(const dynamic_library_exception& src) : xtd::exception(src){}
-    dynamic_library_exception(dynamic_library_exception&& src) : xtd::exception(std::move(src)){}
+    dynamic_library_exception(const source_location& Source, const std::string& What) : _super_t(Source, What){}
+    dynamic_library_exception(const dynamic_library_exception& src) : _super_t(src){}
+    dynamic_library_exception(dynamic_library_exception&& src) : _super_t(std::move(src)){}
 
   };
 
