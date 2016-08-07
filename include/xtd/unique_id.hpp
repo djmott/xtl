@@ -5,6 +5,7 @@
 */
 
 #pragma once
+#include <xtd/xtd.hpp>
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma comment(lib, "rpcrt4")

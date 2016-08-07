@@ -6,6 +6,10 @@ generic and special purpose exceptions
 
 #pragma once
 
+#include <xtd/xtd.hpp>
+
+#include <exception>
+#include <xtd/source_location.hpp>
 
 /**
 @def throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)

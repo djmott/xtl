@@ -4,6 +4,7 @@ concurrently push and pop items in a FILO stack
 */
 
 #pragma once
+#include <xtd/xtd.hpp>
 
 namespace xtd{
  

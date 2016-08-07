@@ -4,6 +4,7 @@ maintains info about locations within source code
 */
 
 #pragma once
+#include <xtd/xtd.hpp>
 
 namespace xtd{
 

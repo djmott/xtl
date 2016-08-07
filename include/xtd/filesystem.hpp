@@ -3,8 +3,11 @@ handle necessary filesystem and path functionality until C++17 is finalized
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
-
 #pragma once
+
+#include <xtd/xtd.hpp>
+
+#include <xtd/string.hpp>
 
 namespace xtd{
   namespace filesystem{
@@ -66,28 +69,39 @@ namespace xtd{
 
       template <typename ... _ArgTs> path(_ArgTs...oArgs) : path_base(std::forward<_ArgTs>(oArgs)...){}
 
-      template <typename _Ty> inline path operator+(const _Ty& src) const{ return _::path_adder<value_type, const _Ty&>::add(*this, src); }
+
+      template <typename _RHST>
+      path& operator /= (const _RHST& rhs){
+        append(rhs);
+        return *this;
+      }
+
+      template <typename _Ty> inline path operator+(const _Ty& src) const{
+        path oRet(*this);
+        oRet /= src;
+        return oRet;
+      }
+
+      path& remove_filename(){
+        if (preferred_separator == string().back()){
+          return *this;
+        }
+        auto iEnd = _super_t::find_last_of(preferred_separator);
+        if (_super_t::npos != iEnd){
+          substr(0, find_last_of(preferred_separator));
+        }
+        return *this;
+      }
 
       path& replace_filename(const path& newval){
-        auto iEndSep = string().find_last_of(preferred_separator);
-
-        if (0==string().size() || xtd::string::npos == iEndSep) {
-          string() = newval.string();
-        }else if (preferred_separator == string().back()){
-          append(newval);
-        }
+        remove_filename();
+        *this /= newval;
         return *this;
       }
 
       path filename() const {
         auto iEndSep = string().find_last_of(preferred_separator);
         return string().substr(1+iEndSep);
-      }
-
-      template <typename _RHST>
-      path& operator /= (const _RHST& rhs){
-        append(rhs);
-        return *this;
       }
 
       path& make_preferred(){

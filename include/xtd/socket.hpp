@@ -4,6 +4,7 @@ general purpose socket communication
 */
 
 #pragma once
+#include <xtd/xtd.hpp>
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
   static_assert(_WIN32_WINNT >= 0x600, "unsupported target Windows version");

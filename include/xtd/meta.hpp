@@ -4,6 +4,7 @@
  */
 
 #pragma once
+#include <xtd/xtd.hpp>
 
 /// @def RAII general purpose Resource Acquisition Is Initialization idiom to perform exception safe cleanup by executing arbitrary code when a scope exits
 #define RAII(...) xtd::_::_RAII UNIQUE_IDENTIFIER(raii_object)([&](){ __VA_ARGS__ ; });

@@ -3,6 +3,7 @@ xtd::concurrent::hash_map system and unit tests
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
+#include <xtd/concurrent/hash_map.hpp>
 
 using hash_map_type = xtd::concurrent::hash_map<uint16_t, std::string>;
 

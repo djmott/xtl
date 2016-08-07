@@ -6,7 +6,9 @@
 
 #pragma once
 
+#include <xtd/xtd.hpp>
 
+#include <string>
 
 namespace xtd{
 

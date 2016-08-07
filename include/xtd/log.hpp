@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <xtd/xtd.hpp>
+
 #include "process.hpp"
 
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)

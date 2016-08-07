@@ -2,8 +2,10 @@
  * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
  */
 
-#include <xtd/xtd.hpp>
-
+//#include <xtd/xtd.hpp>
+#include <xtd/concurrent/hash_map.hpp>
+#include <string>
+#include <stack>
 
 namespace{
   xtd::concurrent::hash_map<void*,std::string> _FunctionNames;

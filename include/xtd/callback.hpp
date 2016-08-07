@@ -5,6 +5,7 @@ Single producer - multiple subscriber callback
 */
 
 #pragma once
+#include <xtd/xtd.hpp>
 
 namespace xtd{
 #if (!DOXY_INVOKED)

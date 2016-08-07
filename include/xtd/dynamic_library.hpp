@@ -6,7 +6,16 @@ load and invoke methods in a dynamic library
 
 #pragma once
 
+#include <xtd/xtd.hpp>
 
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+  #include <dlfcn.h>
+#endif
+
+#include <memory>
+
+#include <xtd/exception.hpp>
+#include <xtd/filesystem.hpp>
 
 namespace xtd{
 

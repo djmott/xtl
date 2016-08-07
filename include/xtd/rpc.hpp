@@ -5,6 +5,7 @@ transport neutral light weight IPC/RPC library
 
 #pragma once
 
+#include <xtd/xtd.hpp>
 
 namespace xtd{
   namespace rpc{

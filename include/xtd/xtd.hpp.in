@@ -279,6 +279,7 @@ namespace xtd{
   #endif
 #endif
 
+#if 0
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     #include <winsock2.h>
     #include <windows.h>
@@ -409,3 +410,4 @@ TODO("Remove cassert when XTD implementation is finished")
 #include <xtd/nlp/nlp.hpp>
 
 #include <xtd/exception.inl>
+#endif

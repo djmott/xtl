@@ -3,6 +3,11 @@ Debugging
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
+#pragma once
+
+#include <xtd/xtd.hpp>
+
+
 /// @def XTD_ASSERT debug assertion. The expression is expanded and checked for debug builds
 #if (XTD_CONFIG_DEBUG & XTD_CONFIG)
   #define XTD_ASSERT(_exp, ...) assert(_exp)

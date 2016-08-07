@@ -3,6 +3,7 @@
 */
 
 #pragma once
+#include <xtd/xtd.hpp>
 
 namespace xtd{
   namespace nlp{
