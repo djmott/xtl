@@ -69,11 +69,11 @@ namespace xtd {
     template <typename, typename...> class tuple_index_of;
     template <typename _Ty, typename..._TailT> class tuple_index_of<_Ty, _Ty, _TailT...> {
     public:
-      static const int value = 0;
+      static constexpr int value = 0;
     };
     template <typename _Ty, typename _HeadT, typename..._TailT> class tuple_index_of<_Ty, _HeadT, _TailT...> {
     public:
-      static const int value = 1 + tuple_index_of<_Ty, _TailT...>::value;
+      static constexpr int value = 1 + tuple_index_of<_Ty, _TailT...>::value;
     };
   }
 #endif
@@ -86,7 +86,7 @@ namespace xtd {
   /// Tuple specialization with no elements
   template <> class tuple<> {
   public:
-    static const size_t Length = 0;
+    static constexpr size_t Length = 0;
     tuple(){}
     tuple(const tuple&){}
     tuple(tuple&&){}
@@ -98,7 +98,7 @@ namespace xtd {
     using _self_t = tuple<_HeadT, _TailT...>;
     using _super_t = tuple<_TailT...>;
     using value_type = _HeadT;
-    static const size_t Length = 1 + _super_t::Length;
+    static constexpr size_t Length = 1 + _super_t::Length;
 
     /** Gets an item from the tuple by type
     @tparam _Ty the type to retrieve

@@ -6,173 +6,85 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #pragma once
 
+#if (XTD_HAS_EXP_FILESYSTEM)
+namespace xtd{
+  namespace filesystem{
+    using namespace std::experimental::filesystem;
+  }
+}
+#elif (XTD_HAS_FILESYSTEM)
+namespace xtd{
+  namespace filesystem{
+    using namespace std::filesystem;
+  }
+}
+#else
+
+namespace xtd{
+  namespace filesystem{
+
+
+    struct path_base : xtd::string{
+
+      xtd::string& string() { return static_cast<xtd::string&>(*this);}
+      const xtd::string& string() const { return static_cast<const xtd::string&>(*this);}
+      template <typename ... _ArgTs> path_base(_ArgTs...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
+    };
+    struct path : path_base{
+
+#if ((XTD_OS_MINGW|XTD_OS_WINDOWS) & XTD_OS)
+      static constexpr value_type preferred_separator  = '\\';
+#else
+      static constexpr value_type preferred_separator  = '/';
+#endif
+
+      template <typename ... _ArgTs> path(_ArgTs...oArgs) : path_base(std::forward<_ArgTs>(oArgs)...){}
+
+      path& replace_filename(const path& newval){
+        auto iLastSeperator = string().find_last_of(seperator);
+
+        if (0==string().size() || xtd::string::npos == iLastSeperator) {
+          string() = newval.string();
+          return *this;
+        }
+        if (seperator == string().back()){
+          append(newval);
+          return *this;
+        }
+
+      }
+
+      path filename() const {
+        
+      }
+
+    };
+
+
+    inline path temp_directory_path(){
+      return path(getenv("TEMP"));
+    }
+
+    inline bool remove(const path& oPath){
+      return 0==::remove(oPath.string().c_str());
+    }
+  }
+}
+
+#endif
 
 
 namespace xtd{
-
-  namespace _{
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-    using path_value_type = tchar;
-#else
-    using path_value_type = char;
-#endif
-  }
-
-#if (XTD_HAS_EXP_FILESYSTEM || XTD_HAS_FILESYSTEM)
   namespace filesystem{
-    class path_base : public std::experimental::filesystem::path{
-      using _super_t = std::experimental::filesystem::path;
-    public:
-      static const value_type seperator = '/';
-      template <typename ... _ArgTs> path_base(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
-    };
-  }
-#else
-
-  namespace filesystem {
-    /** base path class
-    path_base is a placeholder for std::path and implements the same neccessary methods.  It will be removed when the standard is finalized.
-    */
-
-    class path_base : public xtd::xstring<_::path_value_type> {
-    public:
-
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-      static const value_type seperator = __('\\');
-#else
-      static const value_type seperator = '/';
-#endif
-
-      using string_type = xtd::xstring<_::path_value_type>;
-
-      inline operator string_type() const { return *this; }
-
-      inline const string_type &native() const { return *this; }
-
-      string_type &string() { return *this; }
-
-      const string_type &string() const { return *this; }
-
-      path_base() : string_type() {}
-
-      explicit path_base(const path_base &src) : string_type(src) {}
-
-      explicit path_base(path_base &&src) : string_type(std::move(src)) {}
-
-      template<typename ... _Ty>
-      path_base(_Ty &&... src) : string_type(std::forward<_Ty>(src)...) {}
-
-      path_base &operator=(path_base &&src) {
-        static_cast<string_type &>(*this) = std::move(src);
-        return *this;
-      }
-
-      template<typename _Ty>
-      path_base &append(const _Ty &src) {
-        //add a seperator only if absent from the end of the current path and beginning of the appended item
-        if (seperator != back() && seperator != src[0]) {
-          *this += seperator;
-        } else if (seperator == back() && seperator == src[0]) {
-          //if both the end of the current path and the beginning of the appended path have a seperator then remove one
-          pop_back();
-        }
-        *this += src;
-        return *this;
-      }
-
-      template<typename _Ty>
-      path_base &operator/=(const _Ty &src) { return append(src); }
-
-      TODO("path_base::replace_filename needs a lot of work to be TS compliant");
-
-      path_base &replace_filename(const path_base &src) {
-
-        resize(1 + find_last_of(seperator));
-        return append(src);
-      }
-
-      path_base &make_preferred() {
-#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
-        char non_preferred_seperator = '\\';
-#elif ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-        char non_preferred_seperator = '/';
-#endif
-        for (size_type i = 0; i < size(); i++) {
-          if ((*this)[i] == non_preferred_seperator) {
-            (*this)[i] = seperator;
-          }
-        }
-        return *this;
-      }
-    };
-  }
-#endif
-
-  namespace filesystem {
-    /** xtd specific path extensions
-    */
-    class path : public path_base {
-      using _super_t = path_base;
-    public:
-
-      template<typename ... _ArgTs>
-      path(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...) {}
-
-      path filename() const {
-        std::string sRet = _super_t::string();
-        auto iPos = sRet.find_last_of( seperator );
-        if (xtd::string::npos != iPos && iPos < (sRet.size() - 1)){
-          sRet = sRet.substr(1+iPos);
-        }
-        return sRet;
-      }
-
-#if ((XTD_OS_LINUX | XTD_OS_MSYS | XTD_OS_CYGWIN) & XTD_OS)
-
-      /** returns the user's home directory
-      */
-      inline static path home_directory() {
-        return path(std::getenv("HOME"));
-      }
-      inline static path temp_directory(){
-        return path(std::getenv("TMP"));
-      }
-#elif ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-      inline static path home_directory(){
-        std::string sTemp = std::getenv("HOMEPATH");
-        if (0 == sTemp.c_str()){
-          PWSTR pStr = nullptr;
-          xtd::windows::exception::throw_if(SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &pStr), [](HRESULT hr){return S_OK != hr; });
-          return xtd::string::format(static_cast<const wchar_t*>(pStr));
-          RAII(CoTaskMemFree(pStr));
-        }
-        return sTemp;
-      }
-      inline static path temp_directory(){
-        std::string sRet(MAX_PATH + 1, 0);
-        DWORD dwLen = 0;
-        dwLen = xtd::windows::exception::throw_if(GetTempPath(sRet.size(), &sRet[0]), [](DWORD d){ return 0 == d; });
-        sRet.resize(dwLen);
-        return sRet;
-      }
-#endif
-
-    };
-
-    inline static bool remove(const path& oPath){
-      return 0==::remove(oPath.string().c_str());
-    }
-
-    inline path operator+(const path& lhs, const path& addend){
-      auto oRet = lhs;
-      oRet.append(addend);
+    inline path operator+(const path& lhs, const path& rhs){
+      path oRet(lhs);
+      oRet.append(rhs);
       return oRet;
     }
-    inline path operator+(const path& lhs, const char * addend){
-      auto oRet = lhs;
-      oRet.append(addend);
+    inline path operator+(const path& lhs, const char * rhs){
+      path oRet(lhs);
+      oRet.append(rhs);
       return oRet;
     }
-
   }
 }

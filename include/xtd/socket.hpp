@@ -167,8 +167,8 @@ namespace xtd{
       using shared_ptr = std::shared_ptr<socket_base>;
       using address_type = _AddressT;
 
-      static const socket_type type = _SocketT;
-      static const socket_protocol protocol = _Protocol;
+      static constexpr socket_type type = _SocketT;
+      static constexpr socket_protocol protocol = _Protocol;
 
       ~socket_base(){ close(); }
 

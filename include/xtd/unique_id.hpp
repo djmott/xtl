@@ -39,10 +39,7 @@ namespace xtd{
     bool operator<(const uuid_t& rhs) const{
       return -1 == uuid_compare(_uuid, rhs);
     }
-    static unique_id nullid(){
-      unique_id oRet({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-      return oRet;
-    }
+    static constexpr unique_id nullid(){ return unique_id({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }); }
   private:
     uuid_t _uuid;
   };

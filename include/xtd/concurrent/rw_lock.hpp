@@ -12,8 +12,8 @@ namespace xtd{
     template <typename _WaitPolicyT>
     class rw_lock_base{
       std::atomic<uint32_t> _lock;
-      static const uint32_t write_lock_bit = 0x80000000;
-      static const uint32_t read_bits_mask = ~write_lock_bit;
+      static constexpr uint32_t write_lock_bit = 0x80000000;
+      static constexpr uint32_t read_bits_mask = ~write_lock_bit;
       _WaitPolicyT _WaitPolicy;
     public:
       using wait_policy_type = _WaitPolicyT;

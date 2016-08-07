@@ -50,7 +50,7 @@ TEST(test_socket, ipv4_bind_and_listen){
 TEST(test_socket, ipv4_connect){
 
   auto do_ipv4_connect_test = []()->void {
-    static const uint16_t iPort = 9977;
+    static constexpr uint16_t iPort = 9977;
     std::promise<bool> oPromise;
     std::thread oServerThread([&oPromise](uint16_t iPort) {
       try {
@@ -84,7 +84,7 @@ TEST(test_socket, ipv4_stream){
 
   auto do_ipv4_write_server_test = [](){
 
-    static const uint16_t iPort = 8855;
+    static constexpr uint16_t iPort = 8855;
     std::promise<int> oPromise;
     std::thread oServerThread([&oPromise](uint16_t iPort){
       try{

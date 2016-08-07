@@ -20,7 +20,7 @@ namespace xtd{
       template<typename, typename, int> friend
       class hash_map;
 
-      static const int key_nibbles = sizeof(typename _HashMapT::key_type) * 2;
+      static constexpr int key_nibbles = sizeof(typename _HashMapT::key_type) * 2;
       const _HashMapT *_Map;
       typename _HashMapT::value_type *_Current;
       std::vector<int8_t> _Key;
@@ -119,14 +119,14 @@ namespace xtd{
       class hash_map {
         using _my_t = hash_map<_KeyT, _ValueT, _NibblePos>;
         using child_bucket_type = hash_map<_KeyT, _ValueT, _NibblePos - 1>;
-        static const int nibble_pos = _NibblePos;
+        static constexpr int nibble_pos = _NibblePos;
         template<typename> friend
         class hash_map_iterator;
 
         template<typename, typename, int> friend
         class hash_map;
 
-        static const int8_t nibble_count = 16;
+        static constexpr int8_t nibble_count = 16;
         std::atomic<child_bucket_type *> _Buckets[nibble_count];
 
       public:
@@ -297,8 +297,8 @@ namespace xtd{
         template<typename, typename, int> friend
         class hash_map;
 
-        static const int nibble_pos = 1;
-        static const int8_t nibble_count = 16;
+        static constexpr int nibble_pos = 1;
+        static constexpr int8_t nibble_count = 16;
         std::atomic<_ValueT *> _Values[nibble_count];
       public:
         using _my_t = hash_map<_KeyT, _ValueT, 1>;

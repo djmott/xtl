@@ -195,29 +195,34 @@ namespace xtd
         index_file _index_verb;
 
         database(const xtd::filesystem::path& oPath) {
+          auto make_path = [&](const char * sAddend){
+            xtd::filesystem::path oRet(oPath);
+            oRet /= sAddend;
+            return oRet;
+          };
           auto t1 = std::async(std::launch::async, [&]() {
-            return _data_adj.load(oPath + "data.adj");
+            return make_path("data.adj");
           });
           auto t2 = std::async(std::launch::async, [&]() {
-            return _data_adv.load(oPath + "data.adv");
+            return make_path("data.adv");
           });
           auto t3 = std::async(std::launch::async, [&]() {
-            return _data_noun.load(oPath + "data.noun");
+            return make_path("data.noun");
           });
           auto t4 = std::async(std::launch::async, [&]() {
-            return _data_verb.load(oPath + "data.verb");
+            return make_path("data.verb");
           });
           auto t5 = std::async(std::launch::async, [&]() {
-            return _index_adj.load(oPath + "index.adj");
+            return make_path("index.adj");
           });
           auto t6 = std::async(std::launch::async, [&]() {
-            return _index_adv.load(oPath + "index.adv");
+            return make_path("index.adv");
           });
           auto t7 = std::async(std::launch::async, [&]() {
-            return _index_noun.load(oPath + "index.noun");
+            return make_path("index.noun");
           });
           auto t8 = std::async(std::launch::async, [&]() {
-            return _index_verb.load(oPath + "index.verb");
+            return make_path("index.verb");
           });
           t1.get();
           t2.get();
