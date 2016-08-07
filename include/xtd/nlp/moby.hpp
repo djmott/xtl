@@ -7,8 +7,10 @@ namespace xtd{
   namespace nlp{
     namespace moby{
 
-      struct pos_file{
-        struct record{
+      class pos_file{
+      public:
+        class record{
+        public:
           using vector = std::vector<record>;
           using map = std::map<std::string, record>;
           std::string word;
@@ -41,7 +43,8 @@ namespace xtd{
 
 
 
-      struct database{
+      class database{
+      public:
         pos_file _pos_file;
         database(const xtd::filesystem::path& oPath) : _pos_file(oPath + "mpos/mobyposi.i"){}
       };

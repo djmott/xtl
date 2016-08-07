@@ -53,20 +53,20 @@ namespace xtd{
       };
 
 
-      struct noun : lexical_category_impl<noun>{};
-      struct adjective : lexical_category_impl<adjective>{};
-      struct verb : lexical_category_impl<verb>{};
-      struct adverb : lexical_category_impl<adverb>{};
-      struct pronoun : lexical_category_impl<pronoun>{};
-      struct preposition : lexical_category_impl<preposition>{};
-      struct determiner : lexical_category_impl<determiner>{};
-      struct interjection : lexical_category_impl<interjection>{};
-      struct conjunction : lexical_category_impl<conjunction>{};
+      class noun : public lexical_category_impl<noun>{};
+      class adjective : public lexical_category_impl<adjective>{};
+      class verb : public lexical_category_impl<verb>{};
+      class adverb : public lexical_category_impl<adverb>{};
+      class pronoun : public lexical_category_impl<pronoun>{};
+      class preposition : public lexical_category_impl<preposition>{};
+      class determiner : public lexical_category_impl<determiner>{};
+      class interjection : public lexical_category_impl<interjection>{};
+      class conjunction : public lexical_category_impl<conjunction>{};
 
-      struct sentence;
-      struct noun_phrase;
-      struct prepositional_phrase;
-      struct verb_phrase;
+      class sentence;
+      class noun_phrase;
+      class prepositional_phrase;
+      class verb_phrase;
 
       template <typename _Ty> struct opt{
         using type = _Ty;

@@ -47,14 +47,15 @@ namespace xtd{
   namespace filesystem{
 
 
-    struct path_base : xtd::string{
+    class path_base : public xtd::string{
+    public:
 
       xtd::string& string() { return static_cast<xtd::string&>(*this);}
       const xtd::string& string() const { return static_cast<const xtd::string&>(*this);}
       template <typename ... _ArgTs> path_base(_ArgTs...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
     };
-    struct path : path_base{
-
+    class path : public path_base{
+    public:
 #if ((XTD_OS_MINGW|XTD_OS_WINDOWS) & XTD_OS)
       static constexpr value_type preferred_separator  = '\\';
       static constexpr value_type non_preferred_separator  = '/';

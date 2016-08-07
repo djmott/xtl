@@ -4,8 +4,8 @@
 
 namespace xtd{
   namespace nlp{
-    struct english{
-
+    class english{
+    public:
       using pointer = std::shared_ptr<english>;
 
       struct lemma{

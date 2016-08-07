@@ -4,7 +4,8 @@
 
 namespace xtd{
   namespace nlp{
-    struct document{
+    class document{
+    public:
       using pointer = std::shared_ptr<document>;
 
       document(english::pointer oEnglish, const std::string sRaw) : _english(oEnglish), _raw(sRaw) {}
