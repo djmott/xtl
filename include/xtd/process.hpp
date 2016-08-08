@@ -18,6 +18,7 @@
 
 #include <regex>
 #include <memory>
+#include <map>
 
 #include <xtd/dynamic_library.hpp>
 
