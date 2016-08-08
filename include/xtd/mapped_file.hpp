@@ -12,7 +12,6 @@ memory mapped files
 #endif
 
 #include <xtd/memory.hpp>
-#include <xtd/debug.hpp>
 #include <xtd/filesystem.hpp>
 #include <xtd/exception.hpp>
 #include <xtd/meta.hpp>
@@ -20,6 +19,7 @@ memory mapped files
 namespace xtd{
 
 #if ((XTD_OS_CYGWIN|XTD_OS_MSYS|XTD_OS_LINUX) & XTD_OS)
+
   class mapped_file{
     int _FileNum;
     size_t _PageSize;
@@ -73,11 +73,10 @@ namespace xtd{
 
     template <typename _Ty> mapped_page<_Ty> get(size_t pageNum){
       auto iPageSize = memory::page_size();
-      DUMP(iPageSize);
       return mapped_page<_Ty>(
         xtd::crt_exception::throw_if(
           mmap(nullptr, iPageSize, PROT_READ|PROT_WRITE, MAP_SHARED,  _FileNum, (pageNum * iPageSize)),
-          [](void*addr){ DUMP(addr); return nullptr==addr || MAP_FAILED==addr; }
+          [](void*addr){ return nullptr==addr || MAP_FAILED==addr; }
         ));
     }
   };

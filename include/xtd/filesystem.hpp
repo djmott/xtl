@@ -11,11 +11,8 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 TODO("Remove this block after testing")
 
-#if 0
-#undef XTD_HAS_FILESYSTEM
-#undef XTD_HAS_EXP_FILESYSTEM
-#define XTD_HAS_FILESYSTEM 0
-#define XTD_HAS_EXP_FILESYSTEM 0
+#if ((XTD_OS_CYGWIN | XTD_OS_MSYS | XTD_OS_LINUX) & XTD_OS)
+  #include <paths.h>
 #endif
 
 #if (XTD_HAS_FILESYSTEM)
@@ -147,7 +144,13 @@ namespace xtd{
 
 
     inline path temp_directory_path(){
-      return path(getenv("TEMP"));
+      const char * cTempEnv = getenv("TMPDIR");
+      if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = getenv("TEMP");
+#if defined(P_tmpdir)
+      if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = P_tmpdir;
+#endif
+      if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = _PATH_TMP;
+      return path(cTempEnv);
     }
 
     inline bool remove(const path& oPath){
