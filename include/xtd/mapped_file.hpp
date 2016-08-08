@@ -15,6 +15,7 @@ memory mapped files
 #include <xtd/debug.hpp>
 #include <xtd/filesystem.hpp>
 #include <xtd/exception.hpp>
+#include <xtd/meta.hpp>
 
 namespace xtd{
 
@@ -133,7 +134,15 @@ namespace xtd{
     };
 
     template <typename _Ty> mapped_page<_Ty> get(size_t pageNum){
-      pageNum *= memory::page_size();
+      auto iPageSize = memory::page_size();;
+      pageNum *= iPageSize;
+      LARGE_INTEGER iSize;
+      xtd::windows::exception::throw_if(GetFileSizeEx(_hFile, &iSize), [](BOOL b){return FALSE == b; });
+      if (iSize.QuadPart < iPageSize + pageNum){
+        xtd::windows::exception::throw_if(CloseHandle(_hMap), [](BOOL b){ return FALSE == b; });
+        iSize.QuadPart += iPageSize;
+        _hMap = xtd::windows::exception::throw_if(CreateFileMapping(_hFile, nullptr, PAGE_READWRITE, iSize.HighPart, iSize.LowPart, nullptr), [](HANDLE h){ return nullptr == h || INVALID_HANDLE_VALUE == h; });
+      }
       return mapped_page<_Ty>(
         xtd::windows::exception::throw_if(
         MapViewOfFile(_hMap, FILE_MAP_READ|FILE_MAP_WRITE , hidword(pageNum), lodword(pageNum), memory::page_size()),

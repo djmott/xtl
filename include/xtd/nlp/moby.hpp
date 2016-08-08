@@ -5,6 +5,7 @@ c++ interface to moby databases
 #pragma once
 
 #include <xtd/xtd.hpp>
+#include <fstream>
 
 namespace xtd{
   namespace nlp{

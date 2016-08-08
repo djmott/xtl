@@ -5,6 +5,8 @@
 
 #include <xtd/xtd.hpp>
 
+#include <iostream>
+
 namespace xtd{
   namespace nlp{
     class english{

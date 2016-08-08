@@ -6,21 +6,22 @@ natural language processing
 
 #include <xtd/xtd.hpp>
 
+#include <vector>
+#include <typeinfo>
+
 namespace xtd{
   namespace nlp{
 
-
-
     namespace _ {
-      struct noun;
-      struct adjective;
-      struct verb;
-      struct adverb;
-      struct pronoun;
-      struct preposition;
-      struct determiner;
-      struct interjection;
-      struct conjunction;
+      class noun;
+      class adjective;
+      class verb;
+      class adverb;
+      class pronoun;
+      class preposition;
+      class determiner;
+      class interjection;
+      class conjunction;
     }
 
 

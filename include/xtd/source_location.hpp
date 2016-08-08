@@ -5,7 +5,7 @@ maintains info about locations within source code
 
 #pragma once
 #include <xtd/xtd.hpp>
-
+#include <string.h>
 namespace xtd{
 
 /// @def here() creates an xtd::source_location at the definition site

@@ -6,8 +6,12 @@ object oriented access to the dbghelp library
 
 #include <xtd/xtd.hpp>
 
-#include <winsock2.h>
 #include <dbghelp.h>
+
+#include <mutex>
+
+#include <xtd/debug.hpp>
+#include <xtd/exception.hpp>
 
 namespace xtd{
   namespace windows{

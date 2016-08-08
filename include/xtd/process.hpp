@@ -12,6 +12,10 @@
   #include <dirent.h>
 #endif
 
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+  #include <Psapi.h>
+#endif
+
 #include <regex>
 #include <memory>
 

@@ -9,6 +9,12 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #include <xtd/string.hpp>
 
+#if (XTD_HAS_FILESYSTEM)
+  #include <filesystem>
+#elif (XTD_HAS_EXP_FILESYSTEM)
+  #include <experimental/filesystem>
+#endif
+
 namespace xtd{
   namespace filesystem{
 

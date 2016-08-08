@@ -132,7 +132,12 @@ Throws exception if the test expression returns true. _throw_if methods are pres
         return ret;
       }
 
-      exception(const xtd::source_location& source, const std::string& expression);
+      exception(const xtd::source_location& source, const std::string& expression) :xtd::exception(source, ""), _last_error(GetLastError()){
+        const char * sTemp = nullptr;
+        FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, _last_error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&sTemp), 0, nullptr);
+        _what = sTemp;
+        LocalFree((HLOCAL)sTemp);
+      }
     private:
       DWORD _last_error;
     };

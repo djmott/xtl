@@ -7,6 +7,10 @@ Single producer - multiple subscriber callback
 #pragma once
 #include <xtd/xtd.hpp>
 
+#include <memory>
+#include <vector>
+
+
 namespace xtd{
 #if (!DOXY_INVOKED)
   template <typename _FnSig> class callback;

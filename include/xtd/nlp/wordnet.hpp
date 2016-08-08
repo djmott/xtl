@@ -6,6 +6,11 @@ c++ interface to wordnet databases
 
 #include <xtd/xtd.hpp>
 
+#include <map>
+#include <future>
+
+#include <xtd/filesystem.hpp>
+
 namespace xtd
 {
   namespace nlp

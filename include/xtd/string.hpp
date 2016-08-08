@@ -9,6 +9,16 @@
 #include <xtd/xtd.hpp>
 
 #include <string>
+#include <vector>
+
+#if (XTD_HAS_CODECVT)
+  #include <codecvt>
+#elif (XTD_HAS_EXP_CODECVT)
+  #include <experimental/codecvt>
+#elif (XTD_HAS_ICONV)
+  #include <iconv.h>
+#endif
+#include <cwctype>
 
 namespace xtd{
 
