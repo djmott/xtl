@@ -9,6 +9,14 @@
 
 #include <xtd/xtd.hpp>
 
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+  #include <limits.h>
+  #include <unistd.h>
+#endif
+
+#include <xtd/filesystem.hpp>
+#include <xtd/exception.hpp>
+
 namespace xtd {
 
   /** Represents an executable binary

@@ -6,7 +6,13 @@ text parsing and AST generation
  */
 
 #pragma once
+
 #include <xtd/xtd.hpp>
+
+#include <memory>
+#include <regex>
+
+#include <xtd/meta.hpp>
 
 namespace xtd{
 

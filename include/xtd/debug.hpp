@@ -7,6 +7,8 @@ Debugging
 
 #include <xtd/xtd.hpp>
 
+#include <xtd/source_location.hpp>
+#include <xtd/log.hpp>
 
 /// @def XTD_ASSERT debug assertion. The expression is expanded and checked for debug builds
 #if (XTD_CONFIG_DEBUG & XTD_CONFIG)

@@ -364,18 +364,35 @@ namespace xtd{
       }
     };
 
-
-    template <> class xstring_format<char, const DWORD &>{
+    template <> class xstring_format<char, const int64_t &>{
     public:
-      inline static string format(const DWORD & value){
+      inline static string format(const int64_t & value){
         return std::to_string(value);
       }
     };
+
+    template <> class xstring_format<char, const uint64_t &>{
+    public:
+      inline static string format(const uint64_t & value){
+        return std::to_string(value);
+      }
+    };
+
     template <> class xstring_format<char, void * const &>{
     public:
       inline static string format(const void * const & value){
         return std::to_string(reinterpret_cast<size_t>(value));
       }
     };
+
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+    template <> class xstring_format<char, const DWORD &>{
+    public:
+      inline static string format(const DWORD & value){
+        return std::to_string(value);
+      }
+    };
+#endif
+
   }
 }

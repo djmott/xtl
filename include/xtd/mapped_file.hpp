@@ -6,6 +6,15 @@ memory mapped files
 
 #include <xtd/xtd.hpp>
 
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+  #include <sys/mman.h>
+  #include <fcntl.h>
+#endif
+
+#include <xtd/memory.hpp>
+#include <xtd/debug.hpp>
+#include <xtd/filesystem.hpp>
+#include <xtd/exception.hpp>
 
 namespace xtd{
 

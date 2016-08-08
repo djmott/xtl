@@ -5,7 +5,16 @@
 */
 
 #pragma once
+
 #include <xtd/xtd.hpp>
+
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+  #include <dirent.h>
+#endif
+
+#include <regex>
+#include <memory>
+
 
 namespace xtd{
 

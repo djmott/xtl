@@ -3,21 +3,18 @@ main system and unit test entry point
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
-#include <xtd/xtd.hpp>
-
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(push, 0)
 #endif
 
-#include "gtest/gtest.h"
-
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(pop)
 #endif
 
-#undef XTD_ASSERT
-#define XTD_ASSERT ASSERT_TRUE
+#include <string>
+
+#include "gtest/gtest.h"
 
 #if (ON==TEST_CALLBACK)
   #include "test_callback.hpp"

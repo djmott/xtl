@@ -4,7 +4,7 @@ Simple multi reader/single writer spin lock
 */
 #pragma once
 
-#include <xtd/xtd.hpp>
+#include <xtd/concurrent/concurrent.hpp>
 
 namespace xtd{
   namespace concurrent{

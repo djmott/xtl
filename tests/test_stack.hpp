@@ -4,6 +4,10 @@ xtd::concurrent::stack system and unit tests
 */
 #pragma once
 
+#include <future>
+
+#include <xtd/concurrent/stack.hpp>
+
 TEST(test_stack, initialization){
   EXPECT_NO_THROW(xtd::concurrent::stack<int> oStack);
 }

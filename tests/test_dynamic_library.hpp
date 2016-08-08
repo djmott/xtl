@@ -4,7 +4,7 @@ xtd::dynamic_library system and unit tests
 */
 
 #include <xtd/dynamic_library.hpp>
-
+#include <xtd/executable.hpp>
 
 auto get_dummy_library = []() -> xtd::dynamic_library::pointer {
   auto sPath = xtd::executable::this_executable().path();

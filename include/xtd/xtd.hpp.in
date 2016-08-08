@@ -295,13 +295,7 @@ namespace xtd{
 
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
   #include <sys/types.h>
-  #include <sys/socket.h>
-  #include <sys/ioctl.h>
-  #include <sys/mman.h>
-  #include <netinet/in.h>
-  #include <netinet/udp.h>
-  #include <netinet/tcp.h>
-  #include <arpa/inet.h>
+
   #include <unistd.h>
   #include <limits.h>
   #include <poll.h>

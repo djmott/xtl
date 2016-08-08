@@ -4,11 +4,13 @@ concurrently insert, query and delete items in an unordered hash map
 */
 
 #pragma once
-#include <xtd/xtd.hpp>
+#include <xtd/concurrent/concurrent.hpp>
 
 #include <cstdint>
 #include <vector>
 #include <atomic>
+
+#include <xtd/meta.hpp>
 
 namespace xtd{
 

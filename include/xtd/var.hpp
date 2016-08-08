@@ -5,7 +5,10 @@
 */
 
 #pragma once
+
 #include <xtd/xtd.hpp>
+
+#include <xtd/string.hpp>
 
 namespace xtd {
 

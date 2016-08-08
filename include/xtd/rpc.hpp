@@ -7,6 +7,14 @@ transport neutral light weight IPC/RPC library
 
 #include <xtd/xtd.hpp>
 
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <future>
+
+#include <xtd/socket.hpp>
+#include <xtd/concurrent/hash_map.hpp>
+
 namespace xtd{
   namespace rpc{
     template <typename _DeclT, typename _CallT> class rpc_call;

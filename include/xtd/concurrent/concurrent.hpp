@@ -6,6 +6,8 @@ shared declarations for the concurrent namespace
 #pragma once
 #include <xtd/xtd.hpp>
 
+#include <thread>
+
 namespace xtd{
 
 

@@ -3,14 +3,15 @@ xtd::var system and unit tests
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
-
-using namespace xtd;
+#include <xtd/var.hpp>
 
 TEST(test_var, initialization) {
+  using namespace xtd;
   ASSERT_NO_THROW(var v1);
 }
 
 TEST(test_var, test_empty) {
+  using namespace xtd;
   var v1;
   EXPECT_EQ(typeid(xtd::var::empty), v1.get_type());
   EXPECT_THROW(v1.is_pod(), std::runtime_error);
@@ -18,6 +19,7 @@ TEST(test_var, test_empty) {
 }
 
 TEST(test_var, initialization_with_value) {
+  using namespace xtd;
   ASSERT_NO_THROW(var v1(123));
   ASSERT_NO_THROW(var v2(3.14));
   ASSERT_NO_THROW(var v3("abc123"));
@@ -25,6 +27,7 @@ TEST(test_var, initialization_with_value) {
 }
 
 TEST(test_var, assignments){
+  using namespace xtd;
   var v1 = 123;
   ASSERT_EQ(v1.get_type(), typeid(int));
   ASSERT_EQ(v1.as<int>(), 123);
@@ -43,6 +46,7 @@ TEST(test_var, assignments){
 }
 
 TEST(test_var, xstring){
+  using namespace xtd;
   xtd::string s1="12345";
   ASSERT_NO_THROW(var t(s1));
   var x(s1);
@@ -54,6 +58,7 @@ TEST(test_var, xstring){
 
 
 TEST(test_var, is_pod){
+  using namespace xtd;
   xtd::var v1 = 123;
   ASSERT_TRUE(v1.is_pod());
   xtd::string xs = "abc";

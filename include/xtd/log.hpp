@@ -6,9 +6,19 @@
 
 #pragma once
 
+
 #include <xtd/xtd.hpp>
 
-#include "process.hpp"
+#include <chrono>
+#include <thread>
+#include <condition_variable>
+#include <mutex>
+#include <future>
+#include <deque>
+
+#include <xtd/string.hpp>
+#include <xtd/source_location.hpp>
+//#include "process.hpp"
 
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
