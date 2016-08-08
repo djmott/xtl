@@ -9,6 +9,15 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #include <xtd/string.hpp>
 
+TODO("Remove this block after testing")
+
+#if 0
+#undef XTD_HAS_FILESYSTEM
+#undef XTD_HAS_EXP_FILESYSTEM
+#define XTD_HAS_FILESYSTEM 0
+#define XTD_HAS_EXP_FILESYSTEM 0
+#endif
+
 #if (XTD_HAS_FILESYSTEM)
   #include <filesystem>
 #elif (XTD_HAS_EXP_FILESYSTEM)
@@ -32,7 +41,11 @@ namespace xtd{
       using _super_t = std::experimental::filesystem::path;
       template <typename ... _ArgTs> path(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
 
-      template <typename _Ty> inline path operator+(const _Ty& src) const{ return _::path_adder<value_type, const _Ty&>::add(*this, src); }
+      template <typename _Ty> inline path operator+(const _Ty& src) const{
+        path oRet(*this);
+        oRet /= src;
+        return oRet;
+      }
 
       path filename() const{ return path(_super_t::filename()); }
 
@@ -92,9 +105,10 @@ namespace xtd{
         if (preferred_separator == string().back()){
           return *this;
         }
-        auto iEnd = _super_t::find_last_of(preferred_separator);
-        if (_super_t::npos != iEnd){
-          substr(0, find_last_of(preferred_separator));
+        auto iEnd = --end();
+        for (; iEnd > begin() && preferred_separator != *iEnd && non_preferred_separator != *iEnd; --iEnd);
+        if (iEnd > begin()){
+          *this = substr(0, iEnd-begin());
         }
         return *this;
       }
@@ -120,9 +134,8 @@ namespace xtd{
       }
 
       path& append(const path& rhs){
-        if (non_preferred_separator==back()) back() = preferred_separator;
-        if (preferred_separator != back() && preferred_separator != rhs.string().front()) push_back(preferred_separator);
-        if (preferred_separator == back() && preferred_separator == rhs.string().front()) pop_back();
+        if (preferred_separator == back() || non_preferred_separator==back()) pop_back();
+        if (preferred_separator != rhs.string().front() && non_preferred_separator != rhs.string().front()) push_back(preferred_separator);
         _super_t::append(rhs.string());
         return *this;
       }
