@@ -13,6 +13,7 @@ load and invoke methods in a dynamic library
 #endif
 
 #include <memory>
+#include <map>
 
 #include <xtd/exception.hpp>
 #include <xtd/filesystem.hpp>
