@@ -9,6 +9,7 @@ object oriented access to the dbghelp library
 #include <dbghelp.h>
 
 #include <mutex>
+#include <map>
 
 #include <xtd/debug.hpp>
 #include <xtd/exception.hpp>

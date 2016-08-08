@@ -8,6 +8,7 @@ memory mapped files
 
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
   #include <sys/mman.h>
+  #include <sys/stat.h>
   #include <fcntl.h>
 #endif
 
@@ -73,6 +74,13 @@ namespace xtd{
 
     template <typename _Ty> mapped_page<_Ty> get(size_t pageNum){
       auto iPageSize = memory::page_size();
+      struct stat oStat;
+      xtd::crt_exception::throw_if(fstat(_FileNum, &oStat), [](int i){ return -1 == i; });
+      off_t iLastByte = (pageNum * iPageSize) + iPageSize;
+      if (oStat.st_size < iLastByte){
+        xtd::crt_exception::throw_if(lseek(_FileNum, iLastByte, SEEK_SET), [](long l){ return -1==l;});
+        xtd::crt_exception::throw_if(write(_FileNum, "", 1), [](int i){ return 1 != i;});
+      }
       return mapped_page<_Ty>(
         xtd::crt_exception::throw_if(
           mmap(nullptr, iPageSize, PROT_READ|PROT_WRITE, MAP_SHARED,  _FileNum, (pageNum * iPageSize)),

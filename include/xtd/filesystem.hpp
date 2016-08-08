@@ -142,7 +142,13 @@ namespace xtd{
     };
 
 
-
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+    inline path temp_directory_path() {
+      xtd::string sTemp(1 + MAX_PATH, 0);
+      sTemp.resize(xtd::windows::exception::throw_if(GetTempPath(MAX_PATH, &sTemp[0]), [](DWORD d){return 0 == d;}));
+      return path(sTemp);
+    }
+#else
     inline path temp_directory_path(){
       const char * cTempEnv = getenv("TMPDIR");
       if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = getenv("TEMP");
@@ -152,7 +158,8 @@ namespace xtd{
       if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = _PATH_TMP;
       return path(cTempEnv);
     }
-
+#endif
+    
     inline bool remove(const path& oPath){
       return 0==::remove(oPath.string().c_str());
     }

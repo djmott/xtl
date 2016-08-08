@@ -7,11 +7,14 @@ general purpose socket communication
 #include <xtd/xtd.hpp>
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-  #include <winsock2.h>
   #include <Ws2ipdef.h>
   #include <ws2tcpip.h>
   static_assert(_WIN32_WINNT >= 0x600, "unsupported target Windows version");
   #define poll WSAPoll
+#endif
+
+#if (XTD_OS_MINGW & XTD_OS)
+  #include <mswsock.h>
 #endif
 
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
