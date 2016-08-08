@@ -19,6 +19,8 @@
 #include <regex>
 #include <memory>
 
+#include <xtd/dynamic_library.hpp>
+
 
 namespace xtd{
 

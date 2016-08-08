@@ -8,6 +8,8 @@
 
 #include <xtd/xtd.hpp>
 
+#include <memory>
+
 #include <xtd/string.hpp>
 
 namespace xtd {

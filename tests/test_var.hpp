@@ -14,8 +14,8 @@ TEST(test_var, test_empty) {
   using namespace xtd;
   var v1;
   EXPECT_EQ(typeid(xtd::var::empty), v1.get_type());
-  EXPECT_THROW(v1.is_pod(), std::runtime_error);
-  EXPECT_THROW(v1.size(), std::runtime_error);
+  ASSERT_THROW(v1.is_pod(), std::runtime_error);
+  ASSERT_THROW(v1.size(), std::runtime_error);
 }
 
 TEST(test_var, initialization_with_value) {

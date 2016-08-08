@@ -36,7 +36,7 @@ TEST(test_path, DISABLED_append_fail){
 TEST(test_path, remove_filename){
   using namespace xtd::filesystem;
   path oPath="/a/b/c";
-  ASSERT_STREQ(oPath.remove_filename().make_preferred().string().c_str(),  path("/a/b/").make_preferred().string().c_str());
+  ASSERT_STREQ(oPath.remove_filename().make_preferred().string().c_str(),  path("/a/b").make_preferred().string().c_str());
 }
 
 TEST(test_path, filename){
