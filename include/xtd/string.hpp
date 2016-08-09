@@ -20,6 +20,8 @@
 #endif
 #include <cwctype>
 
+#include <string.h>
+
 namespace xtd{
 
   template <typename _ChT> class xstring;
