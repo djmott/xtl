@@ -9,8 +9,6 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #include <xtd/string.hpp>
 
-TODO("Remove this block after testing")
-
 #if ((XTD_OS_CYGWIN | XTD_OS_MSYS | XTD_OS_LINUX) & XTD_OS)
   #include <paths.h>
 #endif
@@ -51,6 +49,8 @@ namespace xtd{
     static inline bool remove(const path& src){ return std::experimental::filesystem::remove(src); }
 
     static inline path temp_directory_path(){ return path(std::experimental::filesystem::temp_directory_path()); }
+
+    static inline path home_directory_path() { return path(getenv("HOME")); }
 
   }
 }
@@ -159,7 +159,9 @@ namespace xtd{
       return path(cTempEnv);
     }
 #endif
-    
+
+    static inline path home_directory_path() { return path(getenv("HOME")); }
+
     inline bool remove(const path& oPath){
       return 0==::remove(oPath.string().c_str());
     }

@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 #if (XTD_HAS_CODECVT)
   #include <codecvt>

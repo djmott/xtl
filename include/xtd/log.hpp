@@ -16,9 +16,20 @@
 #include <future>
 #include <deque>
 
+#if XTD_LOG_TARGET_CSV
+  #include <fstream>
+#endif
+
+#if XTD_LOG_TARGET_SYSLOG
+  #include <syslog.h>
+#endif
+
+
+
 #include <xtd/string.hpp>
 #include <xtd/source_location.hpp>
-//#include "process.hpp"
+#include <xtd/filesystem.hpp>
+#include <xtd/process.hpp>
 
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
@@ -87,30 +98,30 @@ namespace xtd{
       ~syslog_target() override { closelog(); }
       void operator()(const message::pointer_type& oMessage) override {
         int iFacility = LOG_MAKEPRI(LOG_USER, LOG_DEBUG);
-        switch (oMessage->type){
-          case message::type::fatal:
+        switch (oMessage->_type){
+          case type::fatal:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_CRIT); 
             break;
           }
-          case message::type::error:
+          case type::error:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_ERR); 
             break;
           }
-          case message::type::warning:
+          case type::warning:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_WARNING); 
             break;
           }
-          case message::type::info:
+          case type::info:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_INFO); 
             break;
           }
-          case message::type::debug:
-          case message::type::enter:
-          case message::type::leave:
+          case type::debug:
+          case type::enter:
+          case type::leave:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_DEBUG); 
             break;
@@ -159,7 +170,7 @@ namespace xtd{
         }
       }
       csv_target(){
-        _LogPath = xtd::filesystem::path::home_directory();
+        _LogPath = xtd::filesystem::home_directory_path();
         _LogPath /= xtd::executable::this_executable().path().filename();
         _LogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()));
       }
