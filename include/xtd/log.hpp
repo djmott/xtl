@@ -16,7 +16,7 @@
 #include <future>
 #include <deque>
 
-#if XTD_LOG_TARGET_CSV
+#if (XTD_LOG_TARGET_CSV | XTD_LOG_TARGET_XML)
   #include <fstream>
 #endif
 
@@ -24,12 +24,17 @@
   #include <syslog.h>
 #endif
 
+#if XTD_LOG_TARGET_COUT
+  #include <iostream>
+#endif
 
 
 #include <xtd/string.hpp>
 #include <xtd/source_location.hpp>
 #include <xtd/filesystem.hpp>
 #include <xtd/process.hpp>
+#include <xtd/executable.hpp>
+#include <xtd/meta.hpp>
 
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
