@@ -25,6 +25,7 @@ general purpose socket communication
   #include <netinet/tcp.h>
   #include <arpa/inet.h>
   #include <poll.h>
+  #include <unistd.h>
 #endif
 
 #include <type_traits>
