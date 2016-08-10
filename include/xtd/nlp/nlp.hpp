@@ -8,6 +8,8 @@ natural language processing
 
 #include <vector>
 #include <typeinfo>
+#include <string>
+#include <fstream>
 
 namespace xtd{
   namespace nlp{

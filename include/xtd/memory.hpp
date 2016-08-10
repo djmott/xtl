@@ -5,6 +5,12 @@
 #pragma once
 #include <xtd/xtd.hpp>
 
+#if ((XTD_OS_LINUX|XTD_OS_MSYS|XTD_OS_CYGWIN) & XTD_OS)
+  #include <unistd.h>
+#endif
+
+#include <xtd/debug.hpp>
+
 namespace xtd{
 
   namespace memory{
