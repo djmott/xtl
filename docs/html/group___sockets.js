@@ -16,15 +16,13 @@ var group___sockets =
       [ "_throw_if", "classxtd_1_1socket_1_1exception.html#a5147cf1a72e933404def5c1fa82b2552", null ]
     ] ],
     [ "ip_options", "classxtd_1_1socket_1_1ip__options.html", [
-      [ "ip_options", "classxtd_1_1socket_1_1ip__options.html#a5754ad8549f820335dc46913ae8c4809", null ],
-      [ "TODO", "classxtd_1_1socket_1_1ip__options.html#af9de732e0cd0ce2bc585b1ccca28f9c3", null ]
+      [ "ip_options", "classxtd_1_1socket_1_1ip__options.html#a5754ad8549f820335dc46913ae8c4809", null ]
     ] ],
     [ "ipv4address", "classxtd_1_1socket_1_1ipv4address.html", [
       [ "ipv4address", "classxtd_1_1socket_1_1ipv4address.html#a7b26de5b4081b55014f7ac044c52090d", null ],
       [ "address_family", "classxtd_1_1socket_1_1ipv4address.html#ae6f409f1ef6160524ebb07bb86724473", null ]
     ] ],
     [ "ipv6address", "classxtd_1_1socket_1_1ipv6address.html", [
-      [ "TODO", "classxtd_1_1socket_1_1ipv6address.html#a8dec25f246e5dfdfd5fa4eef4d5ad816", null ],
       [ "address_family", "classxtd_1_1socket_1_1ipv6address.html#ac53836d45a0906a108965ed356ab4c05", null ]
     ] ],
     [ "listening_socket", "classxtd_1_1socket_1_1listening__socket.html", [
@@ -67,24 +65,21 @@ var group___sockets =
       [ "set_blocking", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a6a2e835383c4a8f35cbeef3a71ae97c1", null ],
       [ "write", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a88c001bb4b1b1ba81139a5614d1b28b3", null ],
       [ "_Socket", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3f2efdeebba6a86c2e8b534e76746fe4", null ],
-      [ "protocol", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a77b710afee8f56319d0325ad027caabf", null ],
-      [ "type", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a899cd2e06f30fdfef69d1e964a855218", null ]
+      [ "protocol", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#aef6747ca74bff04e1b630f988e12c17d", null ],
+      [ "type", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3bce247106dfaac57ac70c2f10e56bdd", null ]
     ] ],
     [ "socket_options", "classxtd_1_1socket_1_1socket__options.html", [
       [ "socket_options", "classxtd_1_1socket_1_1socket__options.html#a18905fc5792fd9fec44097bc782831c2", null ],
       [ "keep_alive", "classxtd_1_1socket_1_1socket__options.html#a07c5a7247a21ad82e793d4e7ff634a4f", null ],
-      [ "keep_alive", "classxtd_1_1socket_1_1socket__options.html#a36b061a0f61ced8522d2520a0d67a2fd", null ],
-      [ "TODO", "classxtd_1_1socket_1_1socket__options.html#a0e355dbc66cc29f6799d37cee1cb7b3f", null ]
+      [ "keep_alive", "classxtd_1_1socket_1_1socket__options.html#a36b061a0f61ced8522d2520a0d67a2fd", null ]
     ] ],
     [ "tcp_options", "classxtd_1_1socket_1_1tcp__options.html", [
       [ "tcp_options", "classxtd_1_1socket_1_1tcp__options.html#a4b7a43253076361d69448f8a39954ff0", null ],
       [ "no_delay", "classxtd_1_1socket_1_1tcp__options.html#a5b7a9dc68d0f1495a76f178b33363011", null ],
-      [ "no_delay", "classxtd_1_1socket_1_1tcp__options.html#a446146e0ba0bdc47b9b1605e2b7f5bde", null ],
-      [ "TODO", "classxtd_1_1socket_1_1tcp__options.html#a49574eeff02d9ebc6bf5731c7b923d6c", null ]
+      [ "no_delay", "classxtd_1_1socket_1_1tcp__options.html#a446146e0ba0bdc47b9b1605e2b7f5bde", null ]
     ] ],
     [ "udp_options", "classxtd_1_1socket_1_1udp__options.html", [
-      [ "udp_options", "classxtd_1_1socket_1_1udp__options.html#af1a604261c4dbe9e4506a54d2ea0d186", null ],
-      [ "TODO", "classxtd_1_1socket_1_1udp__options.html#ac9d7c375686d4da5022c8dbc351e5cc9", null ]
+      [ "udp_options", "classxtd_1_1socket_1_1udp__options.html#af1a604261c4dbe9e4506a54d2ea0d186", null ]
     ] ],
     [ "ipv4_tcp_stream", "group___sockets.html#gacea74d06932d4679a8de04380ee60880", null ],
     [ "ipv4_udp_socket", "group___sockets.html#ga12477e09d906800fad34e6f14bf119fe", null ],

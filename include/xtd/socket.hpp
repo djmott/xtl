@@ -45,6 +45,7 @@ namespace xtd{
     namespace socket{
     /// @addtogroup Sockets
     /// @{
+#if (!DOXY_INVOKED)
 #if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
     using SOCKET = int;
   #define closesocket close
@@ -54,12 +55,16 @@ namespace xtd{
 #elif (XTD_OS_MINGW & XTD_OS)
     using POLLFD = WSAPOLLFD;
 #endif
+#endif
     ///Represents an socket error
     class exception : public xtd::crt_exception{
     public:
+      /// constructors
+      /// @{
       exception(const source_location& loc, const xtd::string& swhat) : crt_exception(loc, swhat){}
       exception(const exception& ex) : crt_exception(ex){}
       explicit exception(exception&& ex) : crt_exception(std::move(ex)){}
+      /// @}
 
       template <typename _ReturnT, typename _ExpressionT>
       inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
@@ -108,7 +113,13 @@ namespace xtd{
     ///IPv4 address wrapper around sockaddr_in
     class ipv4address : public sockaddr_in{
     public:
+      /// ipv4 address familt
       static const int address_family = AF_INET;
+      /**
+       * constructor
+       * @param sIP IP address
+       * @param iPort port
+       */
       ipv4address(const char * sIP, uint16_t iPort){
         sin_family = AF_INET;
         sin_addr.s_addr = inet_addr(sIP);
@@ -119,6 +130,7 @@ namespace xtd{
     ///IPv6 address wrapper around sockaddr_in6
     class ipv6address : public sockaddr_in6{
     public:
+      /// ipv6 address family
       static const int address_family = AF_INET6;
       TODO("Implement proper ipv6 address");
     };
@@ -189,15 +201,24 @@ namespace xtd{
     class socket_base<_AddressT, _SocketT, _Protocol>{
     public:
 
+      /// typedefs
+      /// @{
       using unique_ptr = std::unique_ptr<socket_base>;
       using shared_ptr = std::shared_ptr<socket_base>;
       using address_type = _AddressT;
+      /// @}
 
+      /// constants
+      /// @{
       static constexpr socket_type type = _SocketT;
       static constexpr socket_protocol protocol = _Protocol;
+      /// @}
 
+      /// dtor
       ~socket_base(){ close(); }
 
+      /// constructors
+      /// @{
       socket_base() : _Socket(0){
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
         winsock_initializer::get();
@@ -213,31 +234,57 @@ namespace xtd{
       explicit socket_base(SOCKET newval) : _Socket(newval){}
 
       socket_base(const socket_base&) = delete;
+      /// @}
 
+      /// copy-assignment not permitted
       socket_base& operator=(const socket_base&) = delete;
 
+      /**
+       * move assignment
+       * @param src source socket
+       * @return *this
+       */
       socket_base& operator=(socket_base&& src){
         std::swap(_Socket, src._Socket);
         return *this;
       }
 
+      /**
+       * cast to native socket
+       * @return native socket value
+       */
       operator SOCKET() const{ return _Socket; }
 
 
+      /**
+       * writes data to the connected socket
+       * @param data the data to write
+       */
       template <typename _Ty> void write(const _Ty& data){
         serializer<_Ty>::write(*this, data);
       }
 
+      /**
+       * reads data from the connected socket
+       * @param data returned data
+       */
       template <typename _Ty> void read(_Ty& data){
         serializer<_Ty>::read(*this, data);
       }
 
+      /**
+       * reads data from the connected socket
+       * @return the data of type _Ty from the socket
+       */
       template <typename _Ty> _Ty read(){
         _Ty data;
         serializer<_Ty>::read(*this, data);
         return data;
       }
 
+      /**
+       * Closes the open socket
+       */
       void close(){
         if (!_Socket){
           return;
@@ -246,14 +293,22 @@ namespace xtd{
         _Socket = -1;
       }
 
+      /**
+       * sets the blocking mode of the socket
+       * @param blocking true to set to blocking mode
+       */
       void set_blocking(bool blocking){
         uint32_t val = (blocking ? 0 : 1);
         xtd::crt_exception::throw_if(ioctlsocket(_Socket, FIONBIO, &val), [](int i){ return i < 0; });
       }
 
+      /**
+       * test if the socket is valid
+       */
       bool is_valid() const{ return -1 != _Socket; }
 
     protected:
+      /// OS/CRT inner SOCKET that is being managed by this wrapper
       SOCKET _Socket;
 
     };
@@ -263,10 +318,15 @@ namespace xtd{
     template <typename _SuperT>
     class polling_socket : public _SuperT{
     public:
+      /// callback event fires when data is ready to read data
       callback<void()> read_event;
+      /// callback event fires when socket is ready to write data
       callback<void()> write_event;
+      /// callback event fires when socket becomes disconnected
       callback<void()> disconnect_event;
+      /// callback event fires when an error occurs
       callback<void()> error_event;
+      /// begins polling the socket for events for a period of Timeout
       void poll(int Timeout){
         class pollfd oPoll;
         oPoll.events = POLLIN | POLLOUT;
@@ -288,6 +348,7 @@ namespace xtd{
           write_event();
         }
       }
+      ///ctor
       template<typename ... _ArgTs>
       explicit polling_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
@@ -302,9 +363,11 @@ namespace xtd{
     class bindable_socket : public _SuperT{
     public:
 
+      /// ctor
       template<typename ... _ArgTs>
       explicit bindable_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
+      /// binds the socket to an address and port
       void bind(const typename _SuperT::address_type& addr){
         exception::throw_if(::bind(_SuperT::_Socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _SuperT::address_type)), [](int i){ return i < 0; });
       }
@@ -316,9 +379,11 @@ namespace xtd{
     class connectable_socket : public _SuperT{
     public:
 
+      /// ctor
       template<typename ... _ArgTs>
       explicit connectable_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
+      /// initiates connection to a socket
       void connect(const typename _SuperT::address_type& addr){
         exception::throw_if(::connect(_SuperT::_Socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _SuperT::address_type)), [](int i){ return i < 0; });
       }
@@ -330,13 +395,16 @@ namespace xtd{
     class listening_socket : public _SuperT{
     public:
 
+      /// ctor
       template<typename ... _ArgTs>
       explicit listening_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
+      /// begins listening on the socket
       void listen(int Backlog = SOMAXCONN){
         exception::throw_if(::listen(_SuperT::_Socket, Backlog), [](int i){ return i < 0; });
       }
 
+      /// accepts an incoming connection request
       template <typename _ReturnT>
       _ReturnT accept(){
         return _ReturnT(exception::throw_if(::accept(_SuperT::_Socket, nullptr, nullptr), [](SOCKET s){ return (s <= 0); }));
@@ -348,10 +416,13 @@ namespace xtd{
     class socket_options : public _SuperT{
     public:
 
+      /// ctor
       template<typename ... _ArgTs>
       explicit socket_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
+      /// gets the SO_KEEPALIVE property
       bool keep_alive() const{ return (_::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket) ? true : false); }
+      /// sets the SO_KEEPALIVE property
       void keep_alive(bool newval){ _::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::set(_SuperT::_Socket, newval); }
       TODO("Add more SOL_SOCKET options");
     };
@@ -361,10 +432,13 @@ namespace xtd{
     class ip_options : public _SuperT{
     public:
 
+      /// ctor
       template<typename ... _ArgTs>
       explicit ip_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+      /// gets the IP_DONTFRAGMENT property
       bool dont_fragment() const{ return (_::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::get(_SuperT::_Socket) ? true : false); }
+      /// sets the IP_DONTFRAGMENT property
       void dont_fragment(bool newval){ _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::set(_SuperT::_Socket, newval); }
 #endif
       TODO("Add more IPPROTO_IP options");
@@ -375,10 +449,13 @@ namespace xtd{
     class tcp_options : public _SuperT{
     public:
 
+      /// ctor
       template<typename ... _ArgTs>
       explicit tcp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
+      /// gets the TCP_NODELAY property
       bool no_delay() const{ return (_::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::get(_SuperT::_Socket) ? true : false); }
+      /// sets the TCP_NODELAY property
       void no_delay(bool newval){ _::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::set(_SuperT::_Socket, newval); }
       TODO("Add more IPPROTO_TCP options");
     };
@@ -388,11 +465,14 @@ namespace xtd{
     class udp_options : public _SuperT{
     public:
 
+      /// ctor
       template<typename ... _ArgTs>
       explicit udp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+      /// gets the UDP_NOCHECKSUM property
       bool no_checksum() const{ return (_::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_SuperT::_Socket) ? true : false); }
+      /// sets the UDP_NOCHECKSUM property
       void no_checksum(bool newval){ _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::set(_SuperT::_Socket, newval); }
 #endif
       TODO("Add more IPPROTO_UDP options");
@@ -403,13 +483,18 @@ namespace xtd{
     template <typename _SuperT>
     class selectable_socket : public _SuperT{
     public:
+      /// ctor
       template<typename ... _ArgTs>
       explicit selectable_socket(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
 
+      /// callback event fired when data is ready to be read
       xtd::callback<void()> onRead;
+      /// callback event fired when socket is ready to write
       xtd::callback<void()> onWrite;
+      /// callback event fired when a socket error occurs
       xtd::callback<void()> onError;
 
+      /// begin the select to wait for an event or timeout
       void select(int WaitMS){
         timeval tv;
         fd_set fdRead;

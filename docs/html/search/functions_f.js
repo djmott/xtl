@@ -1,4 +1,9 @@
 var searchData=
 [
-  ['xstring',['xstring',['../classxtd_1_1xstring.html#abc7eca290c0ac91fc2054b876ac70699',1,'xtd::xstring']]]
+  ['select',['select',['../classxtd_1_1socket_1_1selectable__socket.html#a90af5ed8765e72866c1da00b4b2f8d30',1,'xtd::socket::selectable_socket']]],
+  ['selectable_5fsocket',['selectable_socket',['../classxtd_1_1socket_1_1selectable__socket.html#aa8c0335bdbe6b13e632f328494b8155e',1,'xtd::socket::selectable_socket']]],
+  ['set_5fblocking',['set_blocking',['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a6a2e835383c4a8f35cbeef3a71ae97c1',1,'xtd::socket::socket_base&lt; _AddressT, _SocketT, _Protocol &gt;']]],
+  ['socket_5fbase',['socket_base',['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a9fbf0350534002eccc0f78018f523ec8',1,'xtd::socket::socket_base&lt; _AddressT, _SocketT, _Protocol &gt;::socket_base()'],['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a257fcd4b95490a4fffedcdff0262b707',1,'xtd::socket::socket_base&lt; _AddressT, _SocketT, _Protocol &gt;::socket_base(socket_base &amp;&amp;src)'],['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a44a304f7aa09301bd7a78a3b0215424d',1,'xtd::socket::socket_base&lt; _AddressT, _SocketT, _Protocol &gt;::socket_base(SOCKET newval)'],['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#aa26abf79a65199150643480d554695ca',1,'xtd::socket::socket_base&lt; _AddressT, _SocketT, _Protocol &gt;::socket_base(const socket_base &amp;)=delete']]],
+  ['socket_5foptions',['socket_options',['../classxtd_1_1socket_1_1socket__options.html#a18905fc5792fd9fec44097bc782831c2',1,'xtd::socket::socket_options']]],
+  ['split',['split',['../classxtd_1_1xstring.html#a786289874762957f2aff1e9b71e453d0',1,'xtd::xstring']]]
 ];

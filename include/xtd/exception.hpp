@@ -101,6 +101,8 @@ Throws exception if the test expression returns true. _throw_if methods are pres
       return ret;
     }
 
+    /// constructors
+    /// @{
     crt_exception(const source_location& Source, const std::string& What) : xtd::exception(Source, What){
       if (!_errnum){
         return;
@@ -117,6 +119,11 @@ Throws exception if the test expression returns true. _throw_if methods are pres
     }
     crt_exception(const crt_exception& ex) : xtd::exception(ex){}
     crt_exception(crt_exception&& ex) : xtd::exception(std::move(ex)){}
+    /// @}
+    /**
+     * Error number associated with the CRT exception
+     * @return thread local _errnum that caused the exception
+     */
     int errnum() const { return _errnum; }
   };
 

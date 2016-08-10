@@ -5,18 +5,18 @@ object oriented access to the dbghelp library
 #pragma once
 
 #include <xtd/xtd.hpp>
-
 #include <dbghelp.h>
-
 #include <mutex>
 #include <map>
-
 #include <xtd/debug.hpp>
 #include <xtd/exception.hpp>
 
 namespace xtd{
   namespace windows{
 
+    /**
+     * Represents a debug symbol
+     */
     class debug_symbol{
       friend class debug_help;
       std::unique_ptr<SYMBOL_INFO> _symbol_info;
@@ -26,13 +26,20 @@ namespace xtd{
     };
 
 
+    /**
+     * C++ interface to the dbghelp library
+     */
     class debug_help{
     public:
+      /// the default pointer type used by the library
       using pointer = std::shared_ptr<debug_help>;
 
+      /// ctor
       debug_help(){}
+      /// dtor
       ~debug_help(){}
 
+      /// constructs a new debug_help and returns a pointer type
       static pointer make(){ return pointer(new debug_help); }
 
     private:
