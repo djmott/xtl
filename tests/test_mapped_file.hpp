@@ -23,25 +23,32 @@ struct mapped_file_test_struct{
 };
 
 TEST_F(test_mapped_file, initialization){
-  EXPECT_NO_THROW(xtd::mapped_file oFile(xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename()));
+  auto oPath = xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename();
+  EXPECT_NO_THROW(xtd::mapped_file oFile(oPath));
+  xtd::filesystem::remove(oPath);
 }
 
 TEST_F(test_mapped_file, page_initialization){
+  auto oPath = xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename();
   xtd::mapped_file oFile(xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename());
   EXPECT_NO_THROW(auto oPage = oFile.get<mapped_file_test_struct>(0));
   EXPECT_NO_THROW(auto oPage2 = oFile.get<mapped_file_test_struct>(1));
   EXPECT_NO_THROW(auto oPage3 = oFile.get<mapped_file_test_struct>(2));
+  xtd::filesystem::remove(oPath);
 }
 
 TEST_F(test_mapped_file, read){
-  xtd::mapped_file oFile(xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename());
+  auto oPath = xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename();
+  xtd::mapped_file oFile(oPath);
   auto oPage = oFile.get<mapped_file_test_struct>(0);
   mapped_file_test_struct s;
   memcpy(&s, oPage.get(), sizeof(mapped_file_test_struct));
+  xtd::filesystem::remove(oPath);
 }
 
 TEST_F(test_mapped_file, write){
-  xtd::mapped_file oFile(xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename());
+  auto oPath = xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename();
+  xtd::mapped_file oFile(oPath);
   {
     auto oPage = oFile.get<mapped_file_test_struct>(0);
     oPage->age=123;
@@ -56,5 +63,6 @@ TEST_F(test_mapped_file, write){
     EXPECT_STREQ(oPage->last_name, "Marx");
     EXPECT_EQ(oPage->ssn, 456);
   }
+  xtd::filesystem::remove(oPath);
 
 }
