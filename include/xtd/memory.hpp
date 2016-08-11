@@ -21,8 +21,12 @@ namespace xtd{
     }
   #elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     static inline size_t page_size(){
-      SYSTEM_INFO oSysInfo;
-      GetSystemInfo(&oSysInfo);
+      static bool bInit = false;
+      static SYSTEM_INFO oSysInfo;
+      if (!bInit){
+        bInit = true;
+        GetSystemInfo(&oSysInfo);
+      }
       return oSysInfo.dwAllocationGranularity;
     }
   #endif

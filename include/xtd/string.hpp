@@ -206,6 +206,7 @@ namespace xtd{
 #endif
   };
 
+#if (!DOXY_INVOKED)
 
   namespace _{
     template <typename _ChT> class xstring_format<_ChT>{
@@ -283,7 +284,6 @@ namespace xtd{
     };
 
   #else
-  #if (!DOXY_INVOKED)
     template <> class xstring_format<char, const wchar_t * const &>{
     public:
       static string format(const wchar_t * const & src){
@@ -406,6 +406,6 @@ namespace xtd{
       }
     };
 #endif
-  #endif
   }
+#endif
 }

@@ -143,6 +143,4 @@ namespace xtd{
 
     native_handle_type _Handle;
   };
-
-
 }

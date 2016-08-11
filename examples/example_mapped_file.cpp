@@ -5,6 +5,7 @@
 
 #include <xtd/filesystem.hpp>
 #include <xtd/mapped_file.hpp>
+#include <xtd/debug.hpp>
 
 struct person{
   int age;
