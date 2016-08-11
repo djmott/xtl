@@ -108,21 +108,61 @@ $(document).ready(function(){initNavTree('md__src_github_xtl_docs__t_m_p-_techni
 <div class="contents">
 <div class="textblock"><p>There are a few patterns in wide-spread employ across the TMP landscape and it's worth recognizing them. Here are a few of the more common patterns/idioms with examples.</p>
 <h3>Use before declaration</h3>
-<p>Template declarations are parsed at compile time and not instantiated until their use is defined in run-time code. If a template is not used in run-time code then it can contain a myriad of errors and the application will compile just fine since it's not used. This permits template to contain code that operates on template parameters before the concrete types are declared effectively decoupling two class declarations in ways that aren't possible in classic C++. For example, the following will not compile: ```{.cpp} struct Cat{ Mouse m_Mouse; }; struct Mouse{ int m_Cheese; };</p>
-<p>int main(){ return 0; } ``` Neither Cat nor Mouse are used in run-time code but it won't compile because Cat reference Mouse before it's declared and forward declarations won't help. However, consider the following: ```{.cpp} template &lt;typename _membert&gt;=""&gt; struct Cat{ _MemberT m_Mouse; }; struct Mouse{ int m_Cheese; }; int main(){ Cat&lt;Mouse&gt; oCat; } ``<code> The templated version compiles just fine because the template isn't fully resolved until it's used in the run-time code in</code>main<code>(</code>Cat&lt;Mouse&gt; oCat`.) At this point the template becomes instantiated. All the types are fully defined at the time they're used in run-time code so everything works.</p>
-<p>Expanding on this idiom, a template can interrogate the parameter: ```{.cpp} template &lt;typename _mouset&gt;=""&gt; struct Cat{ static bool Catch(){ return _MouseT::Slow; } }; struct MickeyMouse{ static const bool Slow = true; }; struct MightyMouse{ static const bool Slow = false; } int main(){ std::cout &lt;&lt; "Catch Mickey " &lt;&lt; std::boolalpha &lt;&lt; Cat&lt;MickeyMouse&gt;::Catch() &lt;&lt; std::endl; std::cout &lt;&lt; "Catch Mighty " &lt;&lt; std::boolalpha &lt;&lt; Cat&lt;MightyMouse&gt;::Catch() &lt;&lt; std::endl; } ``<code> Here again</code>Cat<code>uses</code>_MouseT<code>but also uses a member named</code>Slow<code>. Using members of a template parameter like this requires that any type passed to the</code>Cat<code>template have a</code>Slow<code>member. In other words, the</code>_MouseT<code>parameter must adhere to a _concept_ that</code>Cat<code>requires. As long as the type passed as</code>_MouseT<code>to the</code>Cat` template adheres to the <em>interface concept</em> the code is valid.</p>
+<p>Template declarations are parsed at compile time and not instantiated until their use is defined in run-time code. If a template is not used in run-time code then it can contain a myriad of errors and the application will compile just fine since it's not used. This permits template to contain code that operates on template parameters before the concrete types are declared effectively decoupling two class declarations in ways that aren't possible in classic C++. For example, the following will not compile: </p>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>Cat{</div>
+<div class="line">   Mouse m_Mouse;</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">struct </span>Mouse{</div>
+<div class="line">  <span class="keywordtype">int</span> m_Cheese;</div>
+<div class="line">};</div>
+<div class="line"></div>
+<div class="line"><span class="keywordtype">int</span> main(){</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --><p> Neither Cat nor Mouse are used in run-time code but it won't compile because Cat reference Mouse before it's declared and forward declarations won't help. However, consider the following: </p>
+<div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _MemberT&gt; <span class="keyword">struct </span>Cat{</div>
+<div class="line">  _MemberT m_Mouse;</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">struct </span>Mouse{</div>
+<div class="line">  <span class="keywordtype">int</span> m_Cheese;</div>
+<div class="line">};</div>
+<div class="line"><span class="keywordtype">int</span> main(){</div>
+<div class="line">  Cat&lt;Mouse&gt; oCat;</div>
+<div class="line">}</div>
+</div><!-- fragment --><p> The templated version compiles just fine because the template isn't fully resolved until it's used in the run-time code in <code>main</code> (<code>Cat&lt;Mouse&gt; oCat</code>.) At this point the template becomes instantiated. All the types are fully defined at the time they're used in run-time code so everything works.</p>
+<p>Expanding on this idiom, a template can interrogate the parameter: </p>
+<div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _MouseT&gt; <span class="keyword">struct </span>Cat{</div>
+<div class="line">  <span class="keyword">static</span> <span class="keywordtype">bool</span> Catch(){</div>
+<div class="line">    <span class="keywordflow">return</span> _MouseT::Slow;</div>
+<div class="line">  }</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">struct </span>MickeyMouse{</div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">bool</span> Slow = <span class="keyword">true</span>;</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">struct </span>MightyMouse{</div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">bool</span> Slow = <span class="keyword">false</span>;</div>
+<div class="line">}</div>
+<div class="line"><span class="keywordtype">int</span> main(){</div>
+<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Catch Mickey &quot;</span> &lt;&lt; std::boolalpha &lt;&lt; Cat&lt;MickeyMouse&gt;::Catch() &lt;&lt; std::endl;</div>
+<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Catch Mighty &quot;</span> &lt;&lt; std::boolalpha &lt;&lt; Cat&lt;MightyMouse&gt;::Catch() &lt;&lt; std::endl;</div>
+<div class="line">}</div>
+</div><!-- fragment --><p> Here again <code>Cat</code> uses <code>_MouseT</code> but also uses a member named <code>Slow</code>. Using members of a template parameter like this requires that any type passed to the <code>Cat</code> template have a <code>Slow</code> member. In other words, the <code>_MouseT</code> parameter must adhere to a <em>concept</em> that <code>Cat</code> requires. As long as the type passed as <code>_MouseT</code> to the <code>Cat</code> template adheres to the <em>interface concept</em> the code is valid.</p>
 <p>Performing similar feats in classic C++ normally requires a generic interface such as <code>IMouse</code> be declared with some pure virtual members that subclasses implement.</p>
 <h3>Curiously Recurring Template Pattern</h3>
-<p>This one looks odd at first glance and seems that it shouldn't compile. Here's a common use care with STL: ```{.cpp} struct MyStruct : std::enable_shared_from_this&lt;MyStruct&gt; ... ``` The MyStruct passes itself as a parameter to specialize std::enable_shared_from_this before the definition is complete. It doesn't look like it will compile but it does. This pattern is often used to give the base class visibility into the subclasses, something that cannot be easily done in classic OO.</p>
+<p>This one looks odd at first glance and seems that it shouldn't compile. Here's a common use care with STL: </p>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>MyStruct : std::enable_shared_from_this&lt;MyStruct&gt; ...</div>
+</div><!-- fragment --><p> The MyStruct passes itself as a parameter to specialize std::enable_shared_from_this before the definition is complete. It doesn't look like it will compile but it does. This pattern is often used to give the base class visibility into the subclasses, something that cannot be easily done in classic OO.</p>
 <h3>Parameterized Base Class</h3>
-<p>This one also appears curious at first: ```{.cpp} template &lt;typename _baset&gt;=""&gt; struct MyStruct : _BaseT ... ``` MyStruct is a template that subclasses it's template parameter. </p>
+<p>This one also appears curious at first: </p>
+<div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _BaseT&gt; <span class="keyword">struct </span>MyStruct : _BaseT ...</div>
+</div><!-- fragment --><p> MyStruct is a template that subclasses it's template parameter. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.11-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 9 2016 20:08:25 for XTL by
+    <li class="footer">Generated on Thu Aug 11 2016 07:59:58 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

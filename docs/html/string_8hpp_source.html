@@ -292,84 +292,84 @@ $(document).ready(function(){initNavTree('string_8hpp_source.html','');});
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="preprocessor"></span>  };</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  <span class="keyword">namespace </span>_{</div>
-<div class="line"><a name="l00211"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01___ch_t_01_4.html">  211</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT&gt; <span class="keyword">class </span>xstring_format&lt;_ChT&gt;{</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;      <span class="keyword">static</span> <a class="code" href="classxtd_1_1xstring.html">xstring&lt;_ChT&gt;</a> format(){ <span class="keywordflow">return</span> <a class="code" href="classxtd_1_1xstring.html">xstring&lt;_ChT&gt;</a>(); }</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    };</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="preprocessor">  #if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)</span></div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="preprocessor"></span>    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const wchar_t * <span class="keyword">const</span> &amp;&gt;{</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;      <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> * <span class="keyword">const</span> &amp; src){</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        std::wstring_convert&lt;std::codecvt_utf8_utf16&lt;wchar_t&gt;, <span class="keywordtype">wchar_t</span>&gt; oConv;</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">return</span> oConv.to_bytes(src);</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      }</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    };</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;wchar_t, const char * <span class="keyword">const</span> &amp;&gt;{</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;      <span class="keyword">static</span> <span class="keyword">inline</span> wstring format(<span class="keyword">const</span> <span class="keywordtype">char</span> * <span class="keyword">const</span> &amp; src){</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        std::wstring_convert&lt;std::codecvt_utf8_utf16&lt;wchar_t&gt;, <span class="keywordtype">wchar_t</span>&gt; oConv;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordflow">return</span> oConv.from_bytes(src);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      }</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    };</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="preprocessor">  #elif (XTD_HAS_ICONV)</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const wchar_t * <span class="keyword">const</span> &amp;&gt;{</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> * <span class="keyword">const</span> &amp; src){</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keyword">static</span> iconv_helper oIconv(<span class="stringliteral">&quot;UTF-8&quot;</span>, <span class="stringliteral">&quot;WCHAR_T&quot;</span>);</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keywordtype">size_t</span> srclen = wcslen(src);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keywordtype">string</span> sRet(srclen, 0);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordtype">size_t</span> retlen = srclen;</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        iconv(oIconv, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, &amp;retlen);</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        forever{</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;          retlen = sRet.size();</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keyword">auto</span> pSrc = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span><span class="keywordtype">char</span> *<span class="keyword">&gt;</span>(src);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keyword">auto</span> iSrcLen = srclen * <span class="keyword">sizeof</span>(wchar_t);</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keyword">auto</span> sRetPtr = &amp;sRet[0];</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keyword">auto</span> iRet = iconv(oIconv, const_cast&lt;char**&gt;(&amp;pSrc), &amp;iSrcLen, &amp;sRetPtr, &amp;retlen);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keywordflow">if</span> (static_cast&lt;size_t&gt;(-1) != iRet){</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;          <span class="keywordflow">return</span> sRet;</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        }</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <span class="keywordflow">if</span> (errno != E2BIG){</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;          <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;A string conversion error occurred&quot;</span>);</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        }</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        sRet.resize(sRet.size() * 2);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        }</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;      }</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    };</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;wchar_t, const char * <span class="keyword">const</span> &amp;&gt;{</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;      <span class="keyword">static</span> <span class="keyword">inline</span> wstring format(<span class="keyword">const</span> <span class="keywordtype">char</span> * <span class="keyword">const</span> &amp; src){</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keyword">static</span> iconv_helper oIconv(<span class="stringliteral">&quot;WCHAR_T&quot;</span>, <span class="stringliteral">&quot;UTF-8&quot;</span>);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        <span class="keywordtype">size_t</span> srclen = strlen(src);</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        wstring sRet(srclen, 0);</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keywordtype">size_t</span> retlen = srclen;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        iconv(oIconv, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, &amp;retlen);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        forever{</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;          retlen = sRet.size() * <span class="keyword">sizeof</span>(wchar_t);</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="keyword">auto</span> pSrc = <span class="keyword">const_cast&lt;</span><span class="keywordtype">char</span>*<span class="keyword">&gt;</span>(src);</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keyword">auto</span> iSrcLen = srclen;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <span class="keyword">auto</span> sRetPtr = <span class="keyword">reinterpret_cast&lt;</span><span class="keywordtype">char</span>*<span class="keyword">&gt;</span>(&amp;sRet[0]);</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keyword">auto</span> iRet = iconv(oIconv, &amp;pSrc, &amp;iSrcLen, &amp;sRetPtr, &amp;retlen);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">if</span> (static_cast&lt;size_t&gt;(-1) != iRet){</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;          <span class="keywordflow">return</span> sRet;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        }</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordflow">if</span> (errno != E2BIG){</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;          <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;A string conversion error occurred&quot;</span>);</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        }</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        sRet.resize(sRet.size() * 2);</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        }</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;      }</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    };</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="preprocessor">  #else</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #if (!DOXY_INVOKED)</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="preprocessor">#if (!DOXY_INVOKED)</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;  <span class="keyword">namespace </span>_{</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT&gt; <span class="keyword">class </span>xstring_format&lt;_ChT&gt;{</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;      <span class="keyword">static</span> xstring&lt;_ChT&gt; format(){ <span class="keywordflow">return</span> xstring&lt;_ChT&gt;(); }</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    };</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="preprocessor">  #if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="preprocessor"></span>    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const wchar_t * <span class="keyword">const</span> &amp;&gt;{</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;      <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> * <span class="keyword">const</span> &amp; src){</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        std::wstring_convert&lt;std::codecvt_utf8_utf16&lt;wchar_t&gt;, <span class="keywordtype">wchar_t</span>&gt; oConv;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keywordflow">return</span> oConv.to_bytes(src);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      }</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    };</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;wchar_t, const char * <span class="keyword">const</span> &amp;&gt;{</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      <span class="keyword">static</span> <span class="keyword">inline</span> wstring format(<span class="keyword">const</span> <span class="keywordtype">char</span> * <span class="keyword">const</span> &amp; src){</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        std::wstring_convert&lt;std::codecvt_utf8_utf16&lt;wchar_t&gt;, <span class="keywordtype">wchar_t</span>&gt; oConv;</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="keywordflow">return</span> oConv.from_bytes(src);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;      }</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    };</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="preprocessor">  #elif (XTD_HAS_ICONV)</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const wchar_t * <span class="keyword">const</span> &amp;&gt;{</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> * <span class="keyword">const</span> &amp; src){</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keyword">static</span> iconv_helper oIconv(<span class="stringliteral">&quot;UTF-8&quot;</span>, <span class="stringliteral">&quot;WCHAR_T&quot;</span>);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keywordtype">size_t</span> srclen = wcslen(src);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordtype">string</span> sRet(srclen, 0);</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordtype">size_t</span> retlen = srclen;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        iconv(oIconv, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, &amp;retlen);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        forever{</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;          retlen = sRet.size();</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keyword">auto</span> pSrc = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span><span class="keywordtype">char</span> *<span class="keyword">&gt;</span>(src);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keyword">auto</span> iSrcLen = srclen * <span class="keyword">sizeof</span>(wchar_t);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keyword">auto</span> sRetPtr = &amp;sRet[0];</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keyword">auto</span> iRet = iconv(oIconv, const_cast&lt;char**&gt;(&amp;pSrc), &amp;iSrcLen, &amp;sRetPtr, &amp;retlen);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <span class="keywordflow">if</span> (static_cast&lt;size_t&gt;(-1) != iRet){</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;          <span class="keywordflow">return</span> sRet;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        }</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="keywordflow">if</span> (errno != E2BIG){</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;          <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;A string conversion error occurred&quot;</span>);</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        sRet.resize(sRet.size() * 2);</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        }</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;      }</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    };</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;wchar_t, const char * <span class="keyword">const</span> &amp;&gt;{</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;      <span class="keyword">static</span> <span class="keyword">inline</span> wstring format(<span class="keyword">const</span> <span class="keywordtype">char</span> * <span class="keyword">const</span> &amp; src){</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        <span class="keyword">static</span> iconv_helper oIconv(<span class="stringliteral">&quot;WCHAR_T&quot;</span>, <span class="stringliteral">&quot;UTF-8&quot;</span>);</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keywordtype">size_t</span> srclen = strlen(src);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        wstring sRet(srclen, 0);</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordtype">size_t</span> retlen = srclen;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        iconv(oIconv, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, &amp;retlen);</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        forever{</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;          retlen = sRet.size() * <span class="keyword">sizeof</span>(wchar_t);</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keyword">auto</span> pSrc = <span class="keyword">const_cast&lt;</span><span class="keywordtype">char</span>*<span class="keyword">&gt;</span>(src);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <span class="keyword">auto</span> iSrcLen = srclen;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keyword">auto</span> sRetPtr = <span class="keyword">reinterpret_cast&lt;</span><span class="keywordtype">char</span>*<span class="keyword">&gt;</span>(&amp;sRet[0]);</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keyword">auto</span> iRet = iconv(oIconv, &amp;pSrc, &amp;iSrcLen, &amp;sRetPtr, &amp;retlen);</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keywordflow">if</span> (static_cast&lt;size_t&gt;(-1) != iRet){</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;          <span class="keywordflow">return</span> sRet;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        }</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordflow">if</span> (errno != E2BIG){</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;          <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;A string conversion error occurred&quot;</span>);</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        }</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        sRet.resize(sRet.size() * 2);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        }</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;      }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    };</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="preprocessor">  #else</span></div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="preprocessor"></span>    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const wchar_t * <span class="keyword">const</span> &amp;&gt;{</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> * <span class="keyword">const</span> &amp; src){</div>
@@ -413,35 +413,35 @@ $(document).ready(function(){initNavTree('string_8hpp_source.html','');});
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="preprocessor">  #endif</span></div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00330"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5const_01_6_01_4.html">  330</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT&gt; <span class="keyword">class </span>xstring_format&lt;_ChT, const _ChT * <span class="keyword">const</span> &amp;&gt;{</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT&gt; <span class="keyword">class </span>xstring_format&lt;_ChT, const _ChT * <span class="keyword">const</span> &amp;&gt;{</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <a class="code" href="classxtd_1_1xstring.html">xstring&lt;_ChT&gt;</a> format(<span class="keyword">const</span> _ChT * <span class="keyword">const</span> &amp; src){</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classxtd_1_1xstring.html">xstring&lt;_ChT&gt;</a>(src);</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> xstring&lt;_ChT&gt; format(<span class="keyword">const</span> _ChT * <span class="keyword">const</span> &amp; src){</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">return</span> xstring&lt;_ChT&gt;(src);</div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;      }</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    };</div>
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;</div>
-<div class="line"><a name="l00337"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch2_07_6_08[___len]_4.html">  337</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT, <span class="keyword">typename</span> _Ch2, <span class="keywordtype">size_t</span> _Len&gt; <span class="keyword">class </span>xstring_format&lt;_ChT, const _Ch2(&amp;)[_Len]&gt;{</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT, <span class="keyword">typename</span> _Ch2, <span class="keywordtype">size_t</span> _Len&gt; <span class="keyword">class </span>xstring_format&lt;_ChT, const _Ch2(&amp;)[_Len]&gt;{</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <a class="code" href="classxtd_1_1xstring.html">xstring&lt;_ChT&gt;</a> format(<span class="keyword">const</span> _Ch2(&amp;src)[_Len]){</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> xstring&lt;_ChT&gt; format(<span class="keyword">const</span> _Ch2(&amp;src)[_Len]){</div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="keywordflow">return</span> xstring_format&lt;_ChT, const _Ch2 * const &amp;&gt;::format(src);</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;      }</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    };</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;</div>
-<div class="line"><a name="l00344"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01xtd_1_1xstring_3_01___ch2_01_4_01_6_01_4.html">  344</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT, <span class="keyword">typename</span> _Ch2&gt; <span class="keyword">class </span>xstring_format&lt;_ChT, const xtd::<a class="code" href="classxtd_1_1xstring.html">xstring</a>&lt;_Ch2&gt; &amp;&gt;{</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT, <span class="keyword">typename</span> _Ch2&gt; <span class="keyword">class </span>xstring_format&lt;_ChT, const xtd::xstring&lt;_Ch2&gt; &amp;&gt;{</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <a class="code" href="classxtd_1_1xstring.html">xstring&lt;_ChT&gt;</a> format(<span class="keyword">const</span> <a class="code" href="classxtd_1_1xstring.html">xtd::xstring&lt;_Ch2&gt;</a> &amp; src){</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> xstring&lt;_ChT&gt; format(<span class="keyword">const</span> <a class="code" href="classxtd_1_1xstring.html">xtd::xstring&lt;_Ch2&gt;</a> &amp; src){</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classxtd_1_1xstring.html#a3b091795c36bb376d2bb841f1d0296e2">xstring&lt;_ChT&gt;::format</a>(src.c_str());</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;      }</div>
 <div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    };</div>
-<div class="line"><a name="l00350"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01std_1_1basic__string_3_01___ch2_01_4_01_6_01_4.html">  350</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT, <span class="keyword">typename</span> _Ch2&gt; <span class="keyword">class </span>xstring_format&lt;_ChT, const std::basic_string&lt;_Ch2&gt; &amp;&gt;{</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ChT, <span class="keyword">typename</span> _Ch2&gt; <span class="keyword">class </span>xstring_format&lt;_ChT, const std::basic_string&lt;_Ch2&gt; &amp;&gt;{</div>
 <div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <a class="code" href="classxtd_1_1xstring.html">xstring&lt;_ChT&gt;</a> format(<span class="keyword">const</span> std::basic_string&lt;_Ch2&gt; &amp; src){</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> xstring&lt;_ChT&gt; format(<span class="keyword">const</span> std::basic_string&lt;_Ch2&gt; &amp; src){</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classxtd_1_1xstring.html#a3b091795c36bb376d2bb841f1d0296e2">xstring&lt;_ChT&gt;::format</a>(src.c_str());</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;      }</div>
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    };</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;</div>
-<div class="line"><a name="l00358"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01char_00_01const_01void_01_5const_01_6_01_4.html">  358</a></span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const void * <span class="keyword">const</span> &amp;&gt;{</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const void * <span class="keyword">const</span> &amp;&gt;{</div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> <span class="keywordtype">void</span> * <span class="keyword">const</span> &amp; value){</div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        <span class="keywordflow">return</span> std::to_string(reinterpret_cast&lt;size_t&gt;(value));</div>
@@ -449,35 +449,35 @@ $(document).ready(function(){initNavTree('string_8hpp_source.html','');});
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    };</div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;</div>
-<div class="line"><a name="l00366"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01char_00_01const_01int32__t_01_6_01_4.html">  366</a></span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const int32_t &amp;&gt;{</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const int32_t &amp;&gt;{</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> int32_t &amp; value){</div>
 <div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        <span class="keywordflow">return</span> std::to_string(value);</div>
 <div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;      }</div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    };</div>
 <div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;</div>
-<div class="line"><a name="l00373"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01char_00_01const_01uint32__t_01_6_01_4.html">  373</a></span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const uint32_t &amp;&gt;{</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const uint32_t &amp;&gt;{</div>
 <div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> uint32_t &amp; value){</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordflow">return</span> std::to_string(value);</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;      }</div>
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    };</div>
 <div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;</div>
-<div class="line"><a name="l00380"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01char_00_01const_01int64__t_01_6_01_4.html">  380</a></span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const int64_t &amp;&gt;{</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const int64_t &amp;&gt;{</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> int64_t &amp; value){</div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <span class="keywordflow">return</span> std::to_string(value);</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;      }</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    };</div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;</div>
-<div class="line"><a name="l00387"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01char_00_01const_01uint64__t_01_6_01_4.html">  387</a></span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const uint64_t &amp;&gt;{</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, const uint64_t &amp;&gt;{</div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> uint64_t &amp; value){</div>
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        <span class="keywordflow">return</span> std::to_string(value);</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;      }</div>
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    };</div>
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;</div>
-<div class="line"><a name="l00394"></a><span class="lineno"><a class="line" href="classxtd_1_1___1_1xstring__format_3_01char_00_01void_01_5const_01_6_01_4.html">  394</a></span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, void * <span class="keyword">const</span> &amp;&gt;{</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    <span class="keyword">template</span> &lt;&gt; <span class="keyword">class </span>xstring_format&lt;char, void * <span class="keyword">const</span> &amp;&gt;{</div>
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;      <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">string</span> format(<span class="keyword">const</span> <span class="keywordtype">void</span> * <span class="keyword">const</span> &amp; value){</div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;        <span class="keywordflow">return</span> std::to_string(reinterpret_cast&lt;size_t&gt;(value));</div>
@@ -492,9 +492,9 @@ $(document).ready(function(){initNavTree('string_8hpp_source.html','');});
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;      }</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    };</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #endif</span></div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="preprocessor"></span>  }</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;}</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="preprocessor"></span>  }</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;<span class="preprocessor"></span>}</div>
 <div class="ttc" id="classxtd_1_1xstring_html_a744939fad6fa2c3ca84c4b8f7d58e0da"><div class="ttname"><a href="classxtd_1_1xstring.html#a744939fad6fa2c3ca84c4b8f7d58e0da">xtd::xstring::to_upper</a></div><div class="ttdeci">xstring &amp; to_upper(const std::locale &amp;loc)</div><div class="ttdoc">Converts the string to upper case. </div><div class="ttdef"><b>Definition:</b> <a href="string_8hpp_source.html#l00088">string.hpp:88</a></div></div>
 <div class="ttc" id="classxtd_1_1xstring_html_ac8eae3dd624952760b78fb34fb380fcd"><div class="ttname"><a href="classxtd_1_1xstring.html#ac8eae3dd624952760b78fb34fb380fcd">xtd::xstring::rtrim</a></div><div class="ttdeci">xstring &amp; rtrim()</div><div class="ttdoc">Trim trailing whitespace. </div><div class="ttdef"><b>Definition:</b> <a href="string_8hpp_source.html#l00111">string.hpp:111</a></div></div>
 <div class="ttc" id="classxtd_1_1xstring_html_a1f624f3c983badbc084f0d35e3b2ec18"><div class="ttname"><a href="classxtd_1_1xstring.html#a1f624f3c983badbc084f0d35e3b2ec18">xtd::xstring::ltrim</a></div><div class="ttdeci">xstring &amp; ltrim()</div><div class="ttdoc">Trim leading whitespace. </div><div class="ttdef"><b>Definition:</b> <a href="string_8hpp_source.html#l00096">string.hpp:96</a></div></div>
@@ -512,7 +512,7 @@ $(document).ready(function(){initNavTree('string_8hpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="string_8hpp.html">string.hpp</a></li>
-    <li class="footer">Generated on Tue Aug 9 2016 20:08:24 for XTL by
+    <li class="footer">Generated on Thu Aug 11 2016 07:59:58 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

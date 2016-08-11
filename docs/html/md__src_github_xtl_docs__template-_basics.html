@@ -247,7 +247,40 @@ Class Template Specialization</div></div>
 Class Template Specialization</div></div>
 <p>]</p>
 <p>The output parameters of specializations must match the order of inputs on the generic form but the input parameters don't have to.</p>
-<p>Here's an example of partial specialization: ```{.cpp} struct Widget{ static const int Cost = 3; }; struct Snafoo{ static const int Cost = 5; }; struct Fizzbang{ static const int Cost = 7; }; template &lt;typename _Ty, int _Quantity&gt; struct Order{ static const int Total = _Ty::Cost * _Quantity; }; template &lt;typename _ty&gt;=""&gt; struct Order&lt;_Ty, 10&gt;{ static const int Total = _Ty::Cost * 10 - 5; }; int main(int argc, char * argv[]){ std::cout &lt;&lt; "Order&lt;Widget, 5&gt;::Total : " &lt;&lt; Order&lt;Widget, 5&gt;::Total &lt;&lt; std::endl; std::cout &lt;&lt; "Order&lt;Snafoo, 5&gt;::Total : " &lt;&lt; Order&lt;Snafoo, 5&gt;::Total &lt;&lt; std::endl; std::cout &lt;&lt; "Order&lt;Fizzbang, 5&gt;::Total : " &lt;&lt; Order&lt;Fizzbang, 5&gt;::Total &lt;&lt; std::endl; std::cout &lt;&lt; "Order&lt;Widget, 10&gt;::Total : " &lt;&lt; Order&lt;Widget, 10&gt;::Total &lt;&lt; std::endl; std::cout &lt;&lt; "Order&lt;Snafoo, 10&gt;::Total : " &lt;&lt; Order&lt;Snafoo, 10&gt;::Total &lt;&lt; std::endl; std::cout &lt;&lt; "Order&lt;Fizzbang, 10&gt;::Total : " &lt;&lt; Order&lt;Fizzbang, 10&gt;::Total &lt;&lt; std::endl; return oConfig.Total; } ``` This app calculates the total cost of an order. The partial specialization produces a $5 discount when 10 items are ordered. The first three outputs are: ``` Order&lt;Widget, 5&gt;::Total : 15 Order&lt;Snafoo, 5&gt;::Total : 25 Order&lt;Fizzbang, 5&gt;::Total : 35 ``` The last three outputs are: ``` Order&lt;Widget, 10&gt;::Total : 25 Order&lt;Snafoo, 10&gt;::Total : 45 Order&lt;Fizzbang, 10&gt;::Total : 65 ``` During the type deduction phase, the compiler chooses the <em>most specialized</em> variation of a template to instantiate and expand. Order&lt;Widget, 10&gt;, Order&lt;Snafoo, 10&gt; and Order&lt;Fizzbang, 10&gt; match both form of the Order templates but the partial specialization is <em>more specialized</em> than the generic form so the compiler chooses it to instantiate during type deduction.</p>
+<p>Here's an example of partial specialization: </p>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>Widget{</div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> Cost = 3;</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">struct </span>Snafoo{</div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> Cost = 5;</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">struct </span>Fizzbang{</div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> Cost = 7;</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Ty, <span class="keywordtype">int</span> _Quantity&gt; <span class="keyword">struct </span>Order{</div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> Total = _Ty::Cost * _Quantity;</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Ty&gt; <span class="keyword">struct </span>Order&lt;_Ty, 10&gt;{</div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> Total = _Ty::Cost * 10 - 5;</div>
+<div class="line">};</div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> * argv[]){</div>
+<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Order&lt;Widget, 5&gt;::Total : &quot;</span> &lt;&lt; Order&lt;Widget, 5&gt;::Total &lt;&lt; std::endl;</div>
+<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Order&lt;Snafoo, 5&gt;::Total : &quot;</span> &lt;&lt; Order&lt;Snafoo, 5&gt;::Total &lt;&lt; std::endl;</div>
+<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Order&lt;Fizzbang, 5&gt;::Total : &quot;</span> &lt;&lt; Order&lt;Fizzbang, 5&gt;::Total &lt;&lt; std::endl;</div>
+<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Order&lt;Widget, 10&gt;::Total : &quot;</span> &lt;&lt; Order&lt;Widget, 10&gt;::Total &lt;&lt; std::endl;</div>
+<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Order&lt;Snafoo, 10&gt;::Total : &quot;</span> &lt;&lt; Order&lt;Snafoo, 10&gt;::Total &lt;&lt; std::endl;</div>
+<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Order&lt;Fizzbang, 10&gt;::Total : &quot;</span> &lt;&lt; Order&lt;Fizzbang, 10&gt;::Total &lt;&lt; std::endl;</div>
+<div class="line">  <span class="keywordflow">return</span> oConfig.Total;</div>
+<div class="line">}</div>
+</div><!-- fragment --><p> This app calculates the total cost of an order. The partial specialization produces a $5 discount when 10 items are ordered. The first three outputs are: </p>
+<div class="fragment"><div class="line">Order&lt;Widget, 5&gt;::Total : 15</div>
+<div class="line">Order&lt;Snafoo, 5&gt;::Total : 25</div>
+<div class="line">Order&lt;Fizzbang, 5&gt;::Total : 35</div>
+</div><!-- fragment --><p> The last three outputs are: </p>
+<div class="fragment"><div class="line">Order&lt;Widget, 10&gt;::Total : 25</div>
+<div class="line">Order&lt;Snafoo, 10&gt;::Total : 45</div>
+<div class="line">Order&lt;Fizzbang, 10&gt;::Total : 65</div>
+</div><!-- fragment --><p> During the type deduction phase, the compiler chooses the <em>most specialized</em> variation of a template to instantiate and expand. Order&lt;Widget, 10&gt;, Order&lt;Snafoo, 10&gt; and Order&lt;Fizzbang, 10&gt; match both form of the Order templates but the partial specialization is <em>more specialized</em> than the generic form so the compiler chooses it to instantiate during type deduction.</p>
 <h2>Suggested Reading </h2>
 <ul>
 <li><a href="https://www.amazon.com/Advanced-Metaprogramming-Classic-Davide-Gennaro/dp/1484210115">Advanced Metaprogramming in Classic C++</a></li>
@@ -263,7 +296,7 @@ Class Template Specialization</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 9 2016 20:08:25 for XTL by
+    <li class="footer">Generated on Thu Aug 11 2016 07:59:58 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

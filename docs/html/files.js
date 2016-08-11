@@ -1,8 +1,6 @@
 var files =
 [
-    [ "btree.hpp", "btree_8hpp.html", [
-      [ "btree", "classxtd_1_1btree.html", "classxtd_1_1btree" ]
-    ] ],
+    [ "btree.hpp", "btree_8hpp.html", "btree_8hpp" ],
     [ "callback.hpp", "callback_8hpp.html", [
       [ "callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ]
     ] ],
@@ -37,6 +35,8 @@ var files =
     [ "log.hpp", "log_8hpp.html", "log_8hpp" ],
     [ "mapped_file.hpp", "mapped__file_8hpp.html", [
       [ "mapped_file", "classxtd_1_1mapped__file.html", "classxtd_1_1mapped__file" ],
+      [ "mapped_file_base", "classxtd_1_1___1_1mapped__file__base.html", "classxtd_1_1___1_1mapped__file__base" ],
+      [ "mapped_file_base<-1 >", "classxtd_1_1___1_1mapped__file__base_3-1_01_4.html", "classxtd_1_1___1_1mapped__file__base_3-1_01_4" ],
       [ "mapped_page", "classxtd_1_1mapped__file_1_1mapped__page.html", "classxtd_1_1mapped__file_1_1mapped__page" ]
     ] ],
     [ "memory.hpp", "memory_8hpp.html", "memory_8hpp" ],

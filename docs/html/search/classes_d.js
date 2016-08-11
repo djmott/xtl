@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['page_5fheader',['page_header',['../classxtd_1_1___1_1btree_1_1leaf_1_1page__header.html',1,'xtd::_::btree::leaf']]],
+  ['page_5fheader',['page_header',['../classxtd_1_1___1_1btree_1_1branch_1_1page__header.html',1,'xtd::_::btree::branch']]],
   ['parser',['parser',['../classxtd_1_1parser.html',1,'xtd']]],
   ['path',['path',['../classxtd_1_1filesystem_1_1path.html',1,'xtd::filesystem']]],
   ['path_5fadder',['path_adder',['../classxtd_1_1filesystem_1_1___1_1path__adder.html',1,'xtd::filesystem::_']]],

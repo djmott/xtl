@@ -107,20 +107,54 @@ $(document).ready(function(){initNavTree('md__src_github_xtl_docs__hierarchy-_ge
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>This is a TMP pattern to generate a class hierarchy from a collection of policy classes. It permits arbitrarily mixing policies to generate rich components while avoiding multiple inheritance. It works by chaining together a series of policies in a linear class hierarchy through a couple controller templates.</p>
-<p>The various policies are required to implement a parameterized super class idiom: ```{.cpp} template &lt;class _supert&gt;=""&gt; class OnClick : <a class="el" href="class___super_t.html">_SuperT</a> { ... }; template &lt;class _supert&gt;=""&gt; class OnPaint : <a class="el" href="class___super_t.html">_SuperT</a> { ... }; template &lt;class _supert&gt;=""&gt; class OnResize : <a class="el" href="class___super_t.html">_SuperT</a> { ... }; template &lt;class _supert&gt;=""&gt; class OnTimer : <a class="el" href="class___super_t.html">_SuperT</a> { ... }; ``` Each policy template is a self contained behavioral unit that describes an aspect of the larger whole. To maximize reuse they should be independent but it's possible to share information between them if care is taken.</p>
+<p>The various policies are required to implement a parameterized super class idiom: </p>
+<div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _SuperT&gt; <span class="keyword">class </span>OnClick : <a class="code" href="class___super_t.html">_SuperT</a> {</div>
+<div class="line">    ...</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _SuperT&gt; <span class="keyword">class </span>OnPaint : <a class="code" href="class___super_t.html">_SuperT</a> {</div>
+<div class="line">    ...</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _SuperT&gt; <span class="keyword">class </span>OnResize : <a class="code" href="class___super_t.html">_SuperT</a> {</div>
+<div class="line">    ...</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _SuperT&gt; <span class="keyword">class </span>OnTimer : <a class="code" href="class___super_t.html">_SuperT</a> {</div>
+<div class="line">    ...</div>
+<div class="line">};</div>
+</div><!-- fragment --><p> Each policy template is a self contained behavioral unit that describes an aspect of the larger whole. To maximize reuse they should be independent but it's possible to share information between them if care is taken.</p>
 <p>The process of chaining the policies together is performed through a controller with the following declaration:</p>
-<p>```{.cpp} template &lt;class _BaseT, template &lt;class&gt; class ... _PolicyList&gt; class HierarchyGenerator; ```</p>
-<p>The parameters of the <code>HierarchyGenerator</code> are <code>_BaseT</code> and <code>_PolicyList</code>. The <code>_BaseT</code> parameter in this example is the super class of the entire hierarchy and will normally be a non-templated class. Policies are passed as parameters to the <code>HierarchyGenerator</code> in the <code>_PolicyList</code> parameter to successively declare a linear class hierarchy:</p>
-<p>```{.cpp} class Window{ ... }; using Button = HierarchyGenerator&lt;Window, OnClick, OnPaint, OnResize&gt;; using Label = HierarchyGenerator&lt;Window, OnPaint&gt;; using Sizer = HierarchyGenerator&lt;Window, OnClick, OnPaint, OnResize, OnTimer&gt;; using Timer = HierarchyGenerator&lt;Window, OnTimer&gt;; ``` This results in linear class hierarchies composed of a mixture of policies. It equivalently declares the following:</p>
-<p>```{.cpp} using Button = OnClick&lt;OnPaint&lt;OnResize&lt;Window&gt;&gt;&gt;; using Label = OnPaint&lt;Window&gt;; using Sizer = OnClick&lt;OnPaint&lt;OnResize&lt;OnTimer&lt;Window&gt;&gt;&gt;&gt;; using Timer = OnTimer&lt;Window&gt;; ``<code> The two forms are the same and the varation using the</code>HierarchyGenerator` is more verbose but the intent is clearer and more readable.</p>
-<p>The 'magic' is done through a couple partial specializations of <code>HierarchyGenerator</code>: ```{.cpp} template &lt;typename _baset&gt;=""&gt; class HierarchyGenerator&lt;_BaseT&gt; : public _BaseT{ template &lt;typename ... _Args&gt; HierarchyGenerator(_Args&amp;&amp;...oArgs) : _BaseT(std::forward&lt;_Args&gt;(oArgs)...){} }; ``<code> This is the final specialization in the recusive template instantation chain that makes</code>_BaseT<code>the base class of all the policies. The compiler selects this specialization when the</code>_PolicyList<code>has been depleted of items. Chaining together the items in the</code>_PolicyList<code>is performed with the following partial specialization: </code>`` template &lt;typename _BaseT, template &lt;class&gt; class _PolicyT, template &lt;class&gt; class ... _PolicyList&gt; class HierarchyGenerator&lt;_BaseT, _PolicyT, _PolicyList...&gt; : public _PolicyT&lt; HierarchyGenerator&lt;_PolicyList...&gt;&gt; { template &lt;typename ... _Args&gt; HierarchyGenerator(_Args&amp;&amp;...oArgs) : _PolicyT&lt; HierarchyGenerator&lt;_PolicyList...&gt;&gt;(std::forward&lt;_Args&gt;(oArgs)...){} }; ``` </p>
-</div></div><!-- contents -->
+<div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _BaseT, <span class="keyword">template</span> &lt;<span class="keyword">class</span>&gt; <span class="keyword">class </span>... _PolicyList&gt; </div>
+<div class="line"><span class="keyword">class </span>HierarchyGenerator;</div>
+</div><!-- fragment --><p>The parameters of the <code>HierarchyGenerator</code> are <code>_BaseT</code> and <code>_PolicyList</code>. The <code>_BaseT</code> parameter in this example is the super class of the entire hierarchy and will normally be a non-templated class. Policies are passed as parameters to the <code>HierarchyGenerator</code> in the <code>_PolicyList</code> parameter to successively declare a linear class hierarchy:</p>
+<div class="fragment"><div class="line"><span class="keyword">class </span>Window{</div>
+<div class="line">...</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">using</span> Button = HierarchyGenerator&lt;Window, OnClick, OnPaint, OnResize&gt;;</div>
+<div class="line"><span class="keyword">using</span> Label = HierarchyGenerator&lt;Window, OnPaint&gt;;</div>
+<div class="line"><span class="keyword">using</span> Sizer = HierarchyGenerator&lt;Window, OnClick, OnPaint, OnResize, OnTimer&gt;;</div>
+<div class="line"><span class="keyword">using</span> Timer = HierarchyGenerator&lt;Window, OnTimer&gt;;</div>
+</div><!-- fragment --><p> This results in linear class hierarchies composed of a mixture of policies. It equivalently declares the following:</p>
+<div class="fragment"><div class="line"><span class="keyword">using</span> Button = OnClick&lt;OnPaint&lt;OnResize&lt;Window&gt;&gt;&gt;;</div>
+<div class="line"><span class="keyword">using</span> Label = OnPaint&lt;Window&gt;;</div>
+<div class="line"><span class="keyword">using</span> Sizer = OnClick&lt;OnPaint&lt;OnResize&lt;OnTimer&lt;Window&gt;&gt;&gt;&gt;;</div>
+<div class="line"><span class="keyword">using</span> Timer = OnTimer&lt;Window&gt;;</div>
+</div><!-- fragment --><p> The two forms are the same and the varation using the <code>HierarchyGenerator</code> is more verbose but the intent is clearer and more readable.</p>
+<p>The 'magic' is done through a couple partial specializations of <code>HierarchyGenerator</code>: </p>
+<div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _BaseT&gt; <span class="keyword">class </span>HierarchyGenerator&lt;_BaseT&gt; : <span class="keyword">public</span> _BaseT{</div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ... _Args&gt; HierarchyGenerator(_Args&amp;&amp;...oArgs) : _BaseT(std::forward&lt;_Args&gt;(oArgs)...){}</div>
+<div class="line">};</div>
+</div><!-- fragment --><p> This is the final specialization in the recusive template instantation chain that makes <code>_BaseT</code> the base class of all the policies. The compiler selects this specialization when the <code>_PolicyList</code> has been depleted of items. Chaining together the items in the <code>_PolicyList</code> is performed with the following partial specialization: </p>
+<div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _BaseT, <span class="keyword">template</span> &lt;<span class="keyword">class</span>&gt; <span class="keyword">class </span>_PolicyT, <span class="keyword">template</span> &lt;<span class="keyword">class</span>&gt; <span class="keyword">class </span>... _PolicyList&gt;</div>
+<div class="line"><span class="keyword">class </span>HierarchyGenerator&lt;_BaseT, _PolicyT, _PolicyList...&gt; : <span class="keyword">public</span> _PolicyT&lt; HierarchyGenerator&lt;_PolicyList...&gt;&gt; {</div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ... _Args&gt; HierarchyGenerator(_Args&amp;&amp;...oArgs) </div>
+<div class="line">        : _PolicyT&lt; HierarchyGenerator&lt;_PolicyList...&gt;&gt;(std::forward&lt;_Args&gt;(oArgs)...){}</div>
+<div class="line">};</div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.11-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 9 2016 20:08:25 for XTL by
+    <li class="footer">Generated on Thu Aug 11 2016 07:59:58 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

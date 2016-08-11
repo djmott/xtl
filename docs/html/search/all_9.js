@@ -7,7 +7,7 @@ var searchData=
   ['inner',['inner',['../classxtd_1_1var_1_1inner.html',1,'xtd::var']]],
   ['inner_3c_20xtd_3a_3axstring_3c_20_5fcht_20_3e_20_3e',['inner&lt; xtd::xstring&lt; _ChT &gt; &gt;',['../classxtd_1_1var_1_1inner_3_01xtd_1_1xstring_3_01___ch_t_01_4_01_4.html',1,'xtd::var']]],
   ['inner_5fbase',['inner_base',['../classxtd_1_1var_1_1inner__base.html',1,'xtd::var']]],
-  ['insert',['insert',['../classxtd_1_1btree.html#a023651d728fc22f56e75ca0f2ddc8cb9',1,'xtd::btree']]],
+  ['insert',['insert',['../classxtd_1_1btree.html#a341fd4300e9f8d146f15419d1b36fae8',1,'xtd::btree']]],
   ['interjection',['interjection',['../classxtd_1_1nlp_1_1___1_1interjection.html',1,'xtd::nlp::_']]],
   ['intrinsic_5fcast',['intrinsic_cast',['../namespacextd.html#ae7cfddbf2d39f8b39f5e49d7a82dfefc',1,'xtd']]],
   ['intrinsic_5fof_5fsize',['intrinsic_of_size',['../namespacextd.html#classxtd_1_1intrinsic__of__size',1,'xtd']]],

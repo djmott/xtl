@@ -1,6 +1,8 @@
 var searchData=
 [
   ['parsing',['Parsing',['../md__src_github_xtl_docs__parsing.html',1,'']]],
+  ['page_5fheader',['page_header',['../classxtd_1_1___1_1btree_1_1branch_1_1page__header.html',1,'xtd::_::btree::branch']]],
+  ['page_5fheader',['page_header',['../classxtd_1_1___1_1btree_1_1leaf_1_1page__header.html',1,'xtd::_::btree::leaf']]],
   ['parse',['parse',['../classxtd_1_1parser.html#af0a78e430f2a4fcbef82ed012366cdcf',1,'xtd::parser']]],
   ['parse_2ehpp',['parse.hpp',['../parse_8hpp.html',1,'']]],
   ['parser',['parser',['../classxtd_1_1parser.html',1,'xtd']]],

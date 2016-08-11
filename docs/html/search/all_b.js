@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['leaf',['leaf',['../classxtd_1_1___1_1btree_1_1leaf.html',1,'xtd::_::btree']]],
   ['lemma',['lemma',['../classxtd_1_1nlp_1_1english_1_1lemma.html',1,'xtd::nlp::english']]],
   ['lexical_5fcategory',['lexical_category',['../classxtd_1_1nlp_1_1lexical__category.html',1,'xtd::nlp']]],
   ['lexical_5fcategory_5fimpl',['lexical_category_impl',['../classxtd_1_1nlp_1_1___1_1lexical__category__impl.html',1,'xtd::nlp::_']]],
@@ -23,5 +24,6 @@ var searchData=
   ['log_2ehpp',['log.hpp',['../log_8hpp.html',1,'']]],
   ['longlongtochar',['LongLongToChar',['../classxtd_1_1_long_long_to_char.html',1,'xtd']]],
   ['lower_5fcase',['lower_case',['../classxtd_1_1lower__case.html',1,'xtd']]],
+  ['lru_5fcache',['lru_cache',['../classxtd_1_1___1_1btree_1_1lru__cache.html',1,'xtd::_::btree']]],
   ['ltrim',['ltrim',['../classxtd_1_1xstring.html#a1f624f3c983badbc084f0d35e3b2ec18',1,'xtd::xstring']]]
 ];

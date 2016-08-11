@@ -1,7 +1,7 @@
 var searchData=
 [
   ['index',['Index',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4.html#a99aa7f3bde3368f6f2d556c7e46fe8a5',1,'xtd::tuple&lt; _HeadT, _TailT...&gt;']]],
-  ['insert',['insert',['../classxtd_1_1btree.html#a023651d728fc22f56e75ca0f2ddc8cb9',1,'xtd::btree']]],
+  ['insert',['insert',['../classxtd_1_1btree.html#a341fd4300e9f8d146f15419d1b36fae8',1,'xtd::btree']]],
   ['intrinsic_5fcast',['intrinsic_cast',['../namespacextd.html#ae7cfddbf2d39f8b39f5e49d7a82dfefc',1,'xtd']]],
   ['ip_5foptions',['ip_options',['../classxtd_1_1socket_1_1ip__options.html#a5754ad8549f820335dc46913ae8c4809',1,'xtd::socket::ip_options']]],
   ['ipv4address',['ipv4address',['../classxtd_1_1socket_1_1ipv4address.html#a7b26de5b4081b55014f7ac044c52090d',1,'xtd::socket::ipv4address']]],

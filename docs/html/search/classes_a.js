@@ -2,6 +2,9 @@ var searchData=
 [
   ['malformed_5fpayload',['malformed_payload',['../classxtd_1_1rpc_1_1malformed__payload.html',1,'xtd::rpc']]],
   ['mapped_5ffile',['mapped_file',['../classxtd_1_1mapped__file.html',1,'xtd']]],
+  ['mapped_5ffile_3c_20_5fpagesize_20_3e',['mapped_file&lt; _PageSize &gt;',['../classxtd_1_1mapped__file.html',1,'xtd']]],
+  ['mapped_5ffile_5fbase',['mapped_file_base',['../classxtd_1_1___1_1mapped__file__base.html',1,'xtd::_']]],
+  ['mapped_5ffile_5fbase_3c_2d1_20_3e',['mapped_file_base&lt;-1 &gt;',['../classxtd_1_1___1_1mapped__file__base_3-1_01_4.html',1,'xtd::_']]],
   ['mapped_5fpage',['mapped_page',['../classxtd_1_1mapped__file_1_1mapped__page.html',1,'xtd::mapped_file']]],
   ['marshaler',['marshaler',['../classxtd_1_1rpc_1_1marshaler.html',1,'xtd::rpc']]],
   ['marshaler_3c_20_5fskipbyval_20_3e',['marshaler&lt; _SkipByVal &gt;',['../classxtd_1_1rpc_1_1marshaler_3_01___skip_by_val_01_4.html',1,'xtd::rpc']]],

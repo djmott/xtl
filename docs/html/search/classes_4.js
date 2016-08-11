@@ -1,6 +1,8 @@
 var searchData=
 [
   ['data_5ffile',['data_file',['../classxtd_1_1nlp_1_1wordnet_1_1data__file.html',1,'xtd::nlp::wordnet']]],
+  ['data_5fpage',['data_page',['../classxtd_1_1___1_1btree_1_1data__page.html',1,'xtd::_::btree']]],
+  ['data_5fpage_3c_2d1_20_3e',['data_page&lt;-1 &gt;',['../classxtd_1_1___1_1btree_1_1data__page_3-1_01_4.html',1,'xtd::_::btree']]],
   ['database',['database',['../classxtd_1_1nlp_1_1moby_1_1database.html',1,'xtd::nlp::moby']]],
   ['database',['database',['../classxtd_1_1nlp_1_1wordnet_1_1database.html',1,'xtd::nlp::wordnet']]],
   ['debug',['Debug',['../classxtd_1_1_debug.html',1,'xtd']]],

@@ -22,7 +22,7 @@ var hierarchy =
       ] ],
       [ "xtd::xstring< _ChT >", "classxtd_1_1xstring.html", null ]
     ] ],
-    [ "xtd::btree< _KeyT, _ValueT >", "classxtd_1_1btree.html", null ],
+    [ "xtd::btree< _KeyT, _ValueT, _PageSize, _CacheSize >", "classxtd_1_1btree.html", null ],
     [ "xtd::ByteToChar< _ChT, _val >", "classxtd_1_1_byte_to_char.html", null ],
     [ "xtd::callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", null ],
     [ "xtd::rpc::client< _TransportT, _Calls >", "classxtd_1_1rpc_1_1client.html", null ],
@@ -30,11 +30,20 @@ var hierarchy =
     [ "xtd::rpc::client< _TransportT, _TailT...>", "classxtd_1_1rpc_1_1client.html", [
       [ "xtd::rpc::client< _TransportT, _HeadT, _TailT...>", "classxtd_1_1rpc_1_1client_3_01___transport_t_00_01___head_t_00_01___tail_t_8_8_8_4.html", null ]
     ] ],
+    [ "xtd::_::btree::data_page< _PageSize >", "classxtd_1_1___1_1btree_1_1data__page.html", [
+      [ "xtd::_::btree::branch< _KeyT, _ValueT, _PageSize >", "classxtd_1_1___1_1btree_1_1branch.html", null ],
+      [ "xtd::_::btree::file_header< _KeyT, _ValueT, _PageSize >", "classxtd_1_1___1_1btree_1_1file__header.html", null ],
+      [ "xtd::_::btree::leaf< _KeyT, _ValueT, _PageSize >", "classxtd_1_1___1_1btree_1_1leaf.html", null ]
+    ] ],
+    [ "xtd::_::btree::data_page<-1 >", "classxtd_1_1___1_1btree_1_1data__page_3-1_01_4.html", null ],
     [ "xtd::nlp::moby::database", "classxtd_1_1nlp_1_1moby_1_1database.html", null ],
     [ "xtd::nlp::wordnet::database", "classxtd_1_1nlp_1_1wordnet_1_1database.html", null ],
     [ "xtd::Debug", "classxtd_1_1_debug.html", null ],
     [ "xtd::windows::debug_help", "classxtd_1_1windows_1_1debug__help.html", null ],
     [ "xtd::windows::debug_symbol", "classxtd_1_1windows_1_1debug__symbol.html", null ],
+    [ "std::deque< T >", null, [
+      [ "xtd::_::btree::lru_cache< _PageSize, _CacheSize >", "classxtd_1_1___1_1btree_1_1lru__cache.html", null ]
+    ] ],
     [ "xtd::nlp::document", "classxtd_1_1nlp_1_1document.html", null ],
     [ "enable_shared_from_this", null, [
       [ "xtd::dynamic_library", "classxtd_1_1dynamic__library.html", null ]
@@ -112,6 +121,9 @@ var hierarchy =
     [ "xtd::LongLongToChar< _ChT, _val >", "classxtd_1_1_long_long_to_char.html", null ],
     [ "xtd::lower_case< _ChT, _val >", "classxtd_1_1lower__case.html", null ],
     [ "xtd::mapped_file", "classxtd_1_1mapped__file.html", null ],
+    [ "xtd::mapped_file< _PageSize >", "classxtd_1_1mapped__file.html", null ],
+    [ "xtd::_::mapped_file_base< _PageSize >", "classxtd_1_1___1_1mapped__file__base.html", null ],
+    [ "xtd::_::mapped_file_base<-1 >", "classxtd_1_1___1_1mapped__file__base_3-1_01_4.html", null ],
     [ "xtd::mapped_file::mapped_page< _Ty >", "classxtd_1_1mapped__file_1_1mapped__page.html", null ],
     [ "xtd::rpc::marshaler< _SkipByVal, >", "classxtd_1_1rpc_1_1marshaler.html", null ],
     [ "xtd::rpc::marshaler< _SkipByVal >", "classxtd_1_1rpc_1_1marshaler_3_01___skip_by_val_01_4.html", null ],
@@ -130,6 +142,8 @@ var hierarchy =
     [ "xtd::concurrent::null_wait_policy", "classxtd_1_1concurrent_1_1null__wait__policy.html", null ],
     [ "xtd::nlp::_::opt< _Ty >", "classxtd_1_1nlp_1_1___1_1opt.html", null ],
     [ "xtd::parse::or_<>", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1or__", null ],
+    [ "xtd::_::btree::leaf< _KeyT, _ValueT, _PageSize >::page_header", "classxtd_1_1___1_1btree_1_1leaf_1_1page__header.html", null ],
+    [ "xtd::_::btree::branch< _KeyT, _ValueT, _PageSize >::page_header", "classxtd_1_1___1_1btree_1_1branch_1_1page__header.html", null ],
     [ "xtd::parser< _RuleT, _IgnoreCase, _WhitespaceT >", "classxtd_1_1parser.html", null ],
     [ "xtd::filesystem::_::path_adder< typename, typename >", "classxtd_1_1filesystem_1_1___1_1path__adder.html", null ],
     [ "xtd::filesystem::_::path_adder< _ValueT, const _Ch2 * >", "classxtd_1_1filesystem_1_1___1_1path__adder_3_01___value_t_00_01const_01___ch2_01_5_01_4.html", null ],
@@ -139,6 +153,8 @@ var hierarchy =
     [ "xtd::nlp::moby::pos_file", "classxtd_1_1nlp_1_1moby_1_1pos__file.html", null ],
     [ "xtd::process", "classxtd_1_1process.html", null ],
     [ "xtd::processor_intrinsic< _Ty >", "classxtd_1_1processor__intrinsic.html", null ],
+    [ "xtd::_::btree::leaf< _KeyT, _ValueT, _PageSize >::record", "classxtd_1_1___1_1btree_1_1leaf_1_1record.html", null ],
+    [ "xtd::_::btree::branch< _KeyT, _ValueT, _PageSize >::record", "classxtd_1_1___1_1btree_1_1branch_1_1record.html", null ],
     [ "xtd::nlp::moby::pos_file::record", "classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record.html", null ],
     [ "xtd::concurrent::_::recursive_spin_lock_base< _WaitPolicyT >", "classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html", null ],
     [ "xtd::parse::regex< _Ty, >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1regex", null ],
@@ -200,17 +216,7 @@ var hierarchy =
       [ "xtd::rpc::payload", "classxtd_1_1rpc_1_1payload.html", null ]
     ] ],
     [ "xtd::parse::whitespace< _Ch >", "namespacextd_1_1parse.html#classxtd_1_1parse_1_1whitespace", null ],
-    [ "xtd::_::xstring_format< _ChT >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_01_4.html", null ],
-    [ "xtd::_::xstring_format< _ChT, const _Ch2(&)[_Len]>", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch2_07_6_08[___len]_4.html", null ],
-    [ "xtd::_::xstring_format< _ChT, const _ChT *const & >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5const_01_6_01_4.html", null ],
-    [ "xtd::_::xstring_format< _ChT, const std::basic_string< _Ch2 > & >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01std_1_1basic__string_3_01___ch2_01_4_01_6_01_4.html", null ],
-    [ "xtd::_::xstring_format< _ChT, const xtd::xstring< _Ch2 > & >", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01xtd_1_1xstring_3_01___ch2_01_4_01_6_01_4.html", null ],
-    [ "xtd::_::xstring_format< char, const int32_t & >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01int32__t_01_6_01_4.html", null ],
-    [ "xtd::_::xstring_format< char, const int64_t & >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01int64__t_01_6_01_4.html", null ],
-    [ "xtd::_::xstring_format< char, const uint32_t & >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01uint32__t_01_6_01_4.html", null ],
-    [ "xtd::_::xstring_format< char, const uint64_t & >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01uint64__t_01_6_01_4.html", null ],
-    [ "xtd::_::xstring_format< char, const void *const & >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01void_01_5const_01_6_01_4.html", null ],
-    [ "xtd::_::xstring_format< char, void *const & >", "classxtd_1_1___1_1xstring__format_3_01char_00_01void_01_5const_01_6_01_4.html", null ],
     [ "xtd::concurrent::yield_wait_policy", "classxtd_1_1concurrent_1_1yield__wait__policy.html", null ],
+    [ "pair< size_t, data_page< _PageSize >::pointer >", "classstd_1_1pair_3_01size__t_00_01data__page_3_01___page_size_01_4_1_1pointer_01_4.html", null ],
     [ "uint8_t", "classuint8__t.html", null ]
 ];

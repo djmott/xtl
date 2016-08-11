@@ -118,15 +118,15 @@ $(document).ready(function(){initNavTree('_sockets_8md.html','');});
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;This concept is probably best explained from the highest level interfaces that will most commonly be used in applications. Here&#39;s a pre-defined typedef for an IPv4 UDP socket:</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;```{.cpp}</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;~~~{.cpp}</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">using</span> <a class="code" href="group___sockets.html#ga12477e09d906800fad34e6f14bf119fe">ipv4_udp_socket</a> = socket_base&lt;ipv4address, socket_type::datagram, socket_protocol::udp, ip_options&gt;;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;```</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;~~~</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;The four constituent components that compose an `<a class="code" href="group___sockets.html#ga12477e09d906800fad34e6f14bf119fe">ipv4_udp_socket</a>` are `ipv4address`, `socket_type::datagram`, `socket_protocol::udp` and `ip_options`. The `socket_base` <span class="keyword">template</span> composes these individual behavioral components in a linear <span class="keywordtype">object</span> hierarchy that avoids multiple inheritance. Some of these components are used in the IPv4 TCP socket:</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;```{.cpp}</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;~~~{.cpp}</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">using</span> <a class="code" href="group___sockets.html#gacea74d06932d4679a8de04380ee60880">ipv4_tcp_stream</a> = socket_base&lt;ipv4address, socket_type::stream, socket_protocol::tcp, ip_options, connectable_socket, bindable_socket, listening_socket, selectable_socket&gt;;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;```</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;~~~</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;Additional behavioral policies can be added or removed as desired to achieve a variety of custom interfaces. For example, the `connectable_socket` behavior produces a `connect` method typically <span class="keywordflow">for</span> TCP clients which the `bindable_socket` and `listening_socket` provide `bind` and `listen` respectively, typically <span class="keywordflow">for</span> TCP servers. So, the predefined `<a class="code" href="group___sockets.html#gacea74d06932d4679a8de04380ee60880">ipv4_tcp_stream</a>` type can be used as both a client and server. If so desired, these behaviors could be declared in separate interfaces to produce independent client and server socket types.</div>
 <div class="ttc" id="group___sockets_html_gacea74d06932d4679a8de04380ee60880"><div class="ttname"><a href="group___sockets.html#gacea74d06932d4679a8de04380ee60880">xtd::socket::ipv4_tcp_stream</a></div><div class="ttdeci">socket_base&lt; ipv4address, socket_type::stream, socket_protocol::tcp, socket_options, ip_options, tcp_options, connectable_socket, bindable_socket, listening_socket, selectable_socket &gt; ipv4_tcp_stream</div><div class="ttdoc">General purpose IPV4 client and server socket type. </div><div class="ttdef"><b>Definition:</b> <a href="socket_8hpp_source.html#l00602">socket.hpp:602</a></div></div>
@@ -138,7 +138,7 @@ $(document).ready(function(){initNavTree('_sockets_8md.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>Sockets.md</b></li>
-    <li class="footer">Generated on Tue Aug 9 2016 20:08:24 for XTL by
+    <li class="footer">Generated on Thu Aug 11 2016 07:59:58 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>
