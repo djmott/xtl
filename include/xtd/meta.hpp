@@ -115,27 +115,6 @@ namespace xtd{
   template <> struct nibble_hex_char <char, 15 > { static constexpr char value = 'f'; };
 #endif
 
-  template <typename _ChT, unsigned char _val> struct ByteToChar {
-    typedef nibble_hex_char<_ChT, _val & 0x0f> LoNibble;
-    typedef nibble_hex_char<_ChT, ((_val & 0xf0) >> 4)> HiNibble;
-  };
-
-  template <typename _ChT, unsigned short _val> struct ShortToChar {
-    typedef ByteToChar<_ChT, _val & 0x00ff> LoByte;
-    typedef ByteToChar<_ChT,((_val & 0xff00) >> 8)> HiByte;
-  };
-
-  template <typename _ChT, unsigned int _val> struct IntToChar {
-    typedef ShortToChar<_ChT, _val & 0x0000ffff> LoWord;
-    typedef ShortToChar<_ChT, ((_val & 0xffff0000) >> 16)> HiWord;
-  };
-
-  template <typename _ChT, unsigned long long _val> struct LongLongToChar {
-    typedef IntToChar<_ChT, _val & 0x00000000ffffffff> LoWord;
-    typedef IntToChar<_ChT, ((_val & 0xffffffff00000000) >> 32)> HiWord;
-  };
-
-
   /**
     \struct nibble_hex_char
     meta-function to convert a static upper case ascii character to lower case
