@@ -149,6 +149,10 @@ namespace xtd{
       return path(sTemp);
     }
 #else
+
+    static inline path home_directory_path(){ return path(getenv("HOME")); }
+
+
     inline path temp_directory_path(){
       const char * cTempEnv = getenv("TMPDIR");
       if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = getenv("TEMP");
@@ -160,7 +164,6 @@ namespace xtd{
     }
 #endif
 
-    static inline path home_directory_path() { return path(getenv("HOME")); }
 
     inline bool remove(const path& oPath){
       return 0==::remove(oPath.string().c_str());

@@ -240,17 +240,39 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp)
 
-file(DOWNLOAD http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2 ${CMAKE_BINARY_DIR}/WordNet-3.0.tar.bz2)
+# download assets
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
+message("Downloading Wordnet")
+file(DOWNLOAD http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2 ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_BINARY_DIR}/WordNet-3.0.tar.bz2
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/
+  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
 )
+endif()
 
-file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_BINARY_DIR}/mpos.tar.Z)
+
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
+message("Downloading Moby")
+file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_BINARY_DIR}/mpos.tar.Z
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/
+  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
 )
+endif()
+
+
+
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
+message("Downloading sqlite")
+file(DOWNLOAD https://www.sqlite.org/2016/sqlite-autoconf-3140100.tar.gz ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+)
+endif()
+target_sources(XTL PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100/sqlite3.c)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100)
+
 
 
 if(BUILD_TESTS AND NOT GTEST_FOUND)

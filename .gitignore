@@ -40,3 +40,9 @@ Doxyfile
 include/xtd/xtd.hpp
 
 doxygen_sqlite3.db
+assets/mpos
+assets/mpos.tar.Z
+assets/sqlite-autoconf-3140100
+assets/sqlite-autoconf-3140100.tar.gz
+assets/WordNet-3.0
+assets/WordNet-3.0.tar.bz2
