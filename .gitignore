@@ -30,15 +30,13 @@
 *.out
 *.app
 
+.*
 docs/html
-.idea
-Doxyfile
-.build
 !.travis.yml
 !.drone.yml
-.*
+!.gitignore
+!.gitattributes
 include/xtd/xtd.hpp
-
 doxygen_sqlite3.db
 assets/mpos
 assets/mpos.tar.Z
