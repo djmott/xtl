@@ -17,6 +17,7 @@ set(TEST_SOURCE tests.cpp
   test_hash_map.hpp
   test_logging.hpp
   test_mapped_file.hpp
+  test_mapped_vector.hpp
   test_meta.hpp
   test_parse.hpp
   test_path.hpp
@@ -49,6 +50,7 @@ build_option(TEST_EXCEPTION "test xtd::exception")
 build_option(TEST_EXCUTABLE "test xtd::executable")
 build_option(TEST_LOGGING "test xtd::log")
 build_option(TEST_MAPPED_FILE "test xtd::mapped_file")
+build_option(TEST_MAPPED_VECTOR "test xtd::mapped_vector")
 build_option(TEST_META "test meta programming")
 build_option(TEST_PARSE "test xtd::parse")
 build_option(TEST_PATH "test xtd::filesystem::path")
