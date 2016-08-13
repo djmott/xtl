@@ -41,7 +41,7 @@ namespace xtd{
 
       }
 
-      inline static void _throw_err(xtd::source_location& where, int test, const char * source){
+      inline static void _throw_err(const xtd::source_location& where, int test, const char * source){
         if (SQLITE_OK!=test) {
           throw exception(where, test, source);
         }
@@ -105,9 +105,9 @@ namespace xtd{
     /**
     sqlite3 database
     */
-    class database : std::enable_shared_from_this<database>{
+    class database : public std::enable_shared_from_this<database>{
       sqlite3 * _pDB;
-      database(const xtd::filesystem::path& oPath){
+      explicit database(const xtd::filesystem::path& oPath){
         exception::throw_err(sqlite3_open(oPath.string().c_str(), &_pDB));
       }
     public:
