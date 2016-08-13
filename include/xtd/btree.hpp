@@ -61,29 +61,29 @@ namespace xtd{
 
         template <typename _Ty>
         typename _Ty::pointer get(size_t Page){
-          for (_super_t::iterator oItem = _super_t::begin(); _super_t::end() != oItem; ++oItem){
-            if (std::get<0>(*oItem) == Page){
+          for (typename _super_t::iterator oItem = _super_t::begin(); _super_t::end() != oItem; ++oItem){
+            if (oItem->first == Page){
               if (oItem == _super_t::begin()){
-                return oItem->second.cast<_Ty>();
+                return oItem->second.template cast<_Ty>();
               }
-              data_page<_PageSize>::pointer oRet = std::get<1>(*oItem);
+              auto oRet = oItem->second;
               _super_t::erase(oItem);
               _super_t::push_front(std::make_pair(Page, oRet));
-              return oRet.cast<_Ty>();
+              return oRet.template cast<_Ty>();
             }
           }
-          if (size() >= _CacheSize) _super_t::pop_back();
+          if (_super_t::size() >= _CacheSize) _super_t::pop_back();
           _super_t::push_front(std::make_pair(Page, _File.get<data_page<_PageSize>>(Page)));
-          return _super_t::front().second.cast<_Ty>();
+          return _super_t::front().second.template cast<_Ty>();
         }
 
         template <typename _Ty>
         typename _Ty::pointer append(size_t& newpage){
-          if (size() >= _CacheSize) _super_t::pop_back();
-          auto pNewPage = _File.append<data_page<_PageSize>>(newpage);
+          if (_super_t::size() >= _CacheSize) _super_t::pop_back();
+          auto pNewPage = _File.template append<data_page<_PageSize>>(newpage);
           _super_t::push_front(std::make_pair(newpage, pNewPage));
           pNewPage->_page_type = _Ty::type;
-          return pNewPage.cast<_Ty>();
+          return pNewPage.template cast<_Ty>();
         }
 
       };
@@ -141,7 +141,7 @@ namespace xtd{
 
         template <typename _CacheT>
         void split(_CacheT& oCache, size_t left_page_idx, key_type& left_page_key, size_t& right_page_idx){
-          auto oNewPage = oCache.append<leaf>(right_page_idx);
+          auto oNewPage = oCache.template append<leaf>(right_page_idx);
           D_(const leaf * pNewPage = oNewPage.get());
           left_page_key = _records[records_per_page() / 2]._key;
           for (size_t i = 1+(records_per_page() / 2); i < records_per_page(); ++i, ++oNewPage->_page_header._count, --_page_header._count){
@@ -158,8 +158,7 @@ namespace xtd{
       template <typename _KeyT, typename _ValueT, size_t _PageSize>
       class branch : public data_page<_PageSize>{
         using _super_t = data_page<_PageSize>;
-        using leaf = leaf<_KeyT, _ValueT, _PageSize>;
-        using data_page = data_page<_PageSize>;
+        using leaf_t = leaf<_KeyT, _ValueT, _PageSize>;
       public:
         using pointer = typename xtd::mapped_file<_PageSize>::template mapped_page<branch<_KeyT, _ValueT, _PageSize>>;
         using key_type = _KeyT;
@@ -189,15 +188,15 @@ namespace xtd{
 
         template <typename _CacheT>
         inline bool insert(_CacheT& oCache, const key_type& key, const value_type& value){
-          typename data_page::pointer oPage;
+          typename _super_t::pointer oPage;
           for(;;){
             for (size_t i = 0; i < _page_header._count; ++i){
               if (key <= _records[i]._key){
-                oPage = oCache.get<data_page>(_records[i]._left);
+                oPage = oCache.template get<_super_t>(_records[i]._left);
                 if (page_type::leaf_page == oPage->_page_type){
-                  auto oLeaf = oPage.cast<leaf>();
-                  D_(const leaf * pLeaf = oLeaf.get());
-                  if (oLeaf->_page_header._count >= leaf::records_per_page()){
+                  auto oLeaf = oPage.template cast<leaf_t>();
+                  D_(const leaf_t * pLeaf = oLeaf.get());
+                  if (oLeaf->_page_header._count >= leaf_t::records_per_page()){
                     _records[_page_header._count]._left = _records[i]._left;
                     oLeaf->split(oCache, _records[i]._left, _records[_page_header._count]._key, _records[i]._left);
                     std::sort(&_records[0], &_records[_page_header._count], [](const record& lhs, const record& rhs){ return lhs._key < rhs._key; });
@@ -206,7 +205,7 @@ namespace xtd{
                   }
                   return oLeaf->insert(key, value);
                 } else{
-                  auto oBranch = oPage.cast<branch>();
+                  auto oBranch = oPage.template cast<branch>();
                   D_(const branch * pBranch = oBranch.get());
                   if (oBranch->_page_header._count >= branch::records_per_page()){
                     _records[_page_header._count] = _records[i];
@@ -219,11 +218,11 @@ namespace xtd{
                 }                
               }
             }
-            oPage = oCache.get<data_page>(_page_header._right);
+            oPage = oCache.template get<_super_t>(_page_header._right);
             if (page_type::leaf_page == oPage->_page_type){
-              auto oLeaf = oPage.cast<leaf>();
-              D_(const leaf * pLeaf = oLeaf.get());
-              if (oLeaf->_page_header._count >= leaf::records_per_page()){
+              auto oLeaf = oPage.template cast<leaf_t>();
+              D_(const leaf_t * pLeaf = oLeaf.get());
+              if (oLeaf->_page_header._count >= leaf_t::records_per_page()){
                 _records[_page_header._count]._left = _page_header._right;
                 oLeaf->split(oCache, _page_header._right, _records[_page_header._count]._key, _page_header._right);
                 std::sort(&_records[0], &_records[_page_header._count], [](const record& lhs, const record& rhs){ return lhs._key < rhs._key; });
@@ -232,7 +231,7 @@ namespace xtd{
               }
               return oLeaf->insert(key, value);              
             } else {
-              auto oBranch = oPage.cast<branch>();
+              auto oBranch = oPage.template cast<branch>();
               D_(const branch * pBranch = oBranch.get());
               if (oBranch->_page_header._count < branch::records_per_page()){
                 _records[_page_header._count]._left = _page_header._right;
@@ -248,7 +247,7 @@ namespace xtd{
         }
         template <typename _CacheT>
         inline void split(_CacheT& oCache, key_type& left_page_key, size_t & right_page_idx){
-          auto oNewPage = oCache.append<branch>(right_page_idx);
+          auto oNewPage = oCache.template append<branch>(right_page_idx);
           D_(const branch * pNewPage = oNewPage.get());
           TODO("convert to memcpy")
           for (size_t i = 1+records_per_page() / 2; i < records_per_page(); ++i, ++oNewPage->_page_header._count, --_page_header._count){
@@ -275,15 +274,15 @@ namespace xtd{
   private:
     _::btree::lru_cache<_PageSize, _CacheSize> _cache;
     using file_header = _::btree::file_header<_KeyT, _ValueT, _PageSize>;
-    using data_page = _::btree::data_page<_PageSize>;
-    using leaf = typename _::btree::leaf<_KeyT, _ValueT, _PageSize>;
-    using branch = _::btree::branch<_KeyT, _ValueT, _PageSize>;
+    using data_page_t = _::btree::data_page<_PageSize>;
+    using leaf_t = _::btree::leaf<_KeyT, _ValueT, _PageSize>;
+    using branch_t = _::btree::branch<_KeyT, _ValueT, _PageSize>;
     using page_type = _::btree::page_type;
 
     typename file_header::pointer _file_header;
   public:
 
-    btree(const xtd::filesystem::path& oPath) : _cache(oPath), _file_header(_cache.get<file_header>(0)){}
+    btree(const xtd::filesystem::path& oPath) : _cache(oPath), _file_header(_cache.template get<file_header>(0)){}
 
     /** insert a value in the container
      *
@@ -294,8 +293,8 @@ namespace xtd{
     bool insert(const key_type& key, const value_type& value){
       //no root page
       if (0 == _file_header->_root_page){
-        auto oLeaf = _cache.append<leaf>(_file_header->_root_page);
-        D_(const leaf * pLeaf = oLeaf.get());
+        auto oLeaf = _cache.template append<leaf_t>(_file_header->_root_page);
+        D_(const leaf_t * pLeaf = oLeaf.get());
         if (oLeaf->insert(key, value)){
           _file_header->_count++;
           return true;
@@ -303,20 +302,20 @@ namespace xtd{
         return false;
       }
 
-      auto oRoot = _cache.get<data_page>(_file_header->_root_page);
+      auto oRoot = _cache.template get<data_page_t>(_file_header->_root_page);
 
       if (page_type::branch_page == oRoot->_page_type){ //root is a branch page
         //root page is full
-        auto oBranch = oRoot.cast<branch>();
-        D_(const branch * pBranch = oBranch.get());
-        if (oBranch->_page_header._count >= branch::records_per_page()){
+        auto oBranch = oRoot.template cast<branch_t>();
+        D_(const branch_t * pBranch = oBranch.get());
+        if (oBranch->_page_header._count >= branch_t::records_per_page()){
           size_t iNewRoot;
-          auto oNewRoot = _cache.append<branch>(iNewRoot);
+          auto oNewRoot = _cache.template append<branch_t>(iNewRoot);
           oBranch->split(_cache, oNewRoot->_records[0]._key, oNewRoot->_page_header._right);
           oNewRoot->_records[0]._left = _file_header->_root_page;
           oNewRoot->_page_header._count = 1;
           _file_header->_root_page = iNewRoot;
-          oBranch = oNewRoot;
+          oBranch = std::move(oNewRoot);
         }
         // root page is not full
         if (oBranch->insert(_cache, key, value)){
@@ -326,10 +325,10 @@ namespace xtd{
         return false;
       }
       // root is a leaf page
-      auto oLeaf = oRoot.cast<leaf>();
-      D_(const leaf * pLeaf = oLeaf.get());
+      auto oLeaf = oRoot.template cast<leaf_t>();
+      D_(const leaf_t * pLeaf = oLeaf.get());
       //leaf is not full
-      if (oLeaf->_page_header._count < leaf::records_per_page()){
+      if (oLeaf->_page_header._count < leaf_t::records_per_page()){
         if (oLeaf->insert(key, value)){
           _file_header->_count++;
           return true;
@@ -338,7 +337,7 @@ namespace xtd{
       }
       //leaf is full
       auto iOldRootIdx = _file_header->_root_page;
-      auto oNewRoot = _cache.append<branch>(_file_header->_root_page);
+      auto oNewRoot = _cache.template append<branch_t>(_file_header->_root_page);
       oNewRoot->_records[0]._left = iOldRootIdx;
       oLeaf->split(_cache, iOldRootIdx, oNewRoot->_records[0]._key, oNewRoot->_page_header._right);
       oNewRoot->_page_header._count = 1;

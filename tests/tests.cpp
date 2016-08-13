@@ -52,12 +52,16 @@ main system and unit test entry point
   #include "test_logging.hpp"
 #endif
 
-#if (ON==TEST_LOGGING)
+#if (ON==TEST_META)
+  #include "test_meta.hpp"
+#endif
+
+#if (ON==TEST_MAPPED_FILE)
   #include "test_mapped_file.hpp"
 #endif
 
-#if (ON==TEST_META)
-  #include "test_meta.hpp"
+#if (ON==TEST_MAPPED_VECTOR)
+  #include "test_mapped_vector.hpp"
 #endif
 
 #if (ON==TEST_PARSE)

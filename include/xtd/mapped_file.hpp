@@ -36,14 +36,14 @@ namespace xtd{
         return iRet;
       }
     };
-
   }
 
 #if ((XTD_OS_CYGWIN|XTD_OS_MSYS|XTD_OS_LINUX) & XTD_OS)
 
-  class mapped_file{
+  template <size_t _page_size>
+  class mapped_file : _::mapped_file_base<_page_size>{
+    using _super_t = _::mapped_file_base<_page_size>;
     int _FileNum;
-    size_t _PageSize;
   public:
 
     ~mapped_file(){ close(_FileNum); }
@@ -53,47 +53,31 @@ namespace xtd{
     {}
 
 
+    template <typename _Ty> class mapped_page : public std::shared_ptr <_Ty>{
 
-    template <typename _Ty> class mapped_page{
+      using _super_t = std::shared_ptr<_Ty>;
+      template <size_t> friend class mapped_file;
+      explicit mapped_page(void * addr) : _super_t(reinterpret_cast<_Ty*>(addr), [](_Ty*addr){ munmap(addr, _::mapped_file_base<_page_size>::page_size());}){}
+      template <typename ... _ArgTs> mapped_page(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     public:
-      using value_type = _Ty;
 
-      ~mapped_page(){ munmap(_Page, memory::page_size()); }
-
-      mapped_page(const mapped_page&) = delete;
-      mapped_page& operator=(const mapped_page&) = delete;
-
-      mapped_page(mapped_page&& src) : _Page(nullptr){
-        std::swap(_Page, src._Page);
-      }
-      mapped_page& operator=(mapped_page&& src){
-        if (this != &src) {
-          std::swap(_Page, src._Page);
-        }
-        return *this;
-      }
-
-      value_type* get() { return _Page; }
-      const value_type* get() const { return _Page; }
-
-      value_type* operator->() { return get();}
-      const value_type* operator->() const { return get();}
-
-      value_type& operator*() { XTD_ASSERT(get()); return *get();}
-      const value_type& operator*() const { XTD_ASSERT(get()); return *get();}
+      mapped_page() : _super_t(nullptr, [](_Ty*addr){ munmap(addr, _::mapped_file_base<_page_size>::page_size());}){}
 
       void flush(){
-        xtd::crt_exception::throw_if(msync(_Page, memory::page_size(), MS_SYNC), [](int i){return 0 != i;});
+        xtd::crt_exception::throw_if(msync(_super_t::get(), _::mapped_file_base<_page_size>::page_size(), MS_SYNC), [](int i){return 0 != i;});
       }
 
-    protected:
-      friend class mapped_file;
-      explicit mapped_page(void * addr) : _Page(reinterpret_cast<value_type*>(addr)){}
-      value_type* _Page;
+      template<typename _OtherT>
+      mapped_page<_OtherT> cast(){
+        return (mapped_page<_OtherT>(*this, static_cast<_OtherT*>(get())));
+      }
+
+
     };
 
+
     template <typename _Ty> mapped_page<_Ty> get(size_t pageNum){
-      auto iPageSize = memory::page_size();
+      auto iPageSize = _super_t::page_size();
       struct stat oStat;
       xtd::crt_exception::throw_if(fstat(_FileNum, &oStat), [](int i){ return -1 == i; });
       off_t iLastByte = (pageNum * iPageSize) + iPageSize;
@@ -106,6 +90,21 @@ namespace xtd{
           mmap(nullptr, iPageSize, PROT_READ|PROT_WRITE, MAP_SHARED,  _FileNum, (pageNum * iPageSize)),
           [](void*addr){ return nullptr==addr || MAP_FAILED==addr; }
         ));
+    }
+
+    template <typename _Ty> mapped_page<_Ty> append(size_t& newpage){
+      auto iPageSize = _super_t::page_size();
+      struct stat oStat;
+      xtd::crt_exception::throw_if(fstat(_FileNum, &oStat), [](int i){ return -1 == i; });
+      newpage = oStat.st_size / iPageSize;
+      xtd::crt_exception::throw_if(lseek(_FileNum, oStat.st_size + iPageSize, SEEK_SET), [](long l){ return -1==l;});
+      xtd::crt_exception::throw_if(write(_FileNum, "", 1), [](int i){ return 1 != i;});
+
+      return mapped_page<_Ty>(
+          xtd::crt_exception::throw_if(
+              mmap(nullptr, iPageSize, PROT_READ|PROT_WRITE, MAP_SHARED,  _FileNum, oStat.st_size),
+              [](void*addr){ return nullptr==addr || MAP_FAILED==addr; }
+          ));
     }
   };
 #elif ((XTD_OS_MINGW|XTD_OS_WINDOWS) & XTD_OS)
