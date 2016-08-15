@@ -143,8 +143,8 @@ namespace xtd{
     HANDLE _hMap;
   public:
     ~mapped_file(){
-      CloseHandle(_hMap); 
-      CloseHandle(_hFile);  
+      if (_hMap && INVALID_HANDLE_VALUE != _hMap) CloseHandle(_hMap);
+      if (_hFile && INVALID_HANDLE_VALUE != _hFile) CloseHandle(_hFile);
     }
     explicit mapped_file(const filesystem::path& Path)
       : _hFile(xtd::windows::exception::throw_if(CreateFileA(Path.string().c_str(), GENERIC_READ|GENERIC_WRITE, FILE_SHARE_WRITE|FILE_SHARE_READ, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr), [](HANDLE h){ return nullptr==h || INVALID_HANDLE_VALUE==h; }))

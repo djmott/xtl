@@ -74,6 +74,43 @@ namespace xtd{
     return reinterpret_cast<typename processor_intrinsic<_Ty>::type>(src);
   }
 
+  /// gets the last element of a parameter pack
+  namespace _{
+    template <size_t, typename ...> struct last_t;
+    template <size_t _index, typename _HeadT, typename ... _TailT> struct last_t<_index, _HeadT, _TailT...>{
+      using type = typename last_t<_index - 1, _TailT...>::type;
+    };
+    template <typename _HeadT> struct last_t<1, _HeadT>{
+      using type = _HeadT;
+    };
+  }
+  template <typename ... _Tys> struct last{
+    using type = typename _::last_t<sizeof...(_Tys), _Tys...>::type;
+  };
+
+  
+  /// chains together multiple methods in a single task
+
+  template <typename ...> struct task;
+  template <> struct task<>{
+    template <typename _Ty> _Ty&& operator()(_Ty&& src){ return std::move(src); }
+  };
+
+  template <typename _HeadT, typename ... _TailT> struct task<_HeadT, _TailT...>{
+    using final_task = typename last<_HeadT, _TailT...>::type;
+    using return_type = decltype( typename std::decay<final_task>::type() );
+
+    template <typename _ParamT>
+    return_type operator()(_ParamT oParam) const{
+      _HeadT oHead;
+      task<_TailT...> oTail;
+      return oTail(oHead(oParam));
+    }
+
+  };
+
+
+
   /// Determine if a type is specified in a list
   template <typename, typename...> struct is_a;
   template <typename _Ty> struct is_a<_Ty> : std::false_type {};

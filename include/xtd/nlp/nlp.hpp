@@ -10,6 +10,10 @@ natural language processing
 #include <typeinfo>
 #include <string>
 #include <fstream>
+#include <map>
+
+#include <xtd/meta.hpp>
+#include <xtd/string.hpp>
 
 namespace xtd{
   namespace nlp{
@@ -77,7 +81,30 @@ namespace xtd{
       template <typename _Ty> struct opt{
         using type = _Ty;
       };
+
+
+
+
+
+
     }
+
+    struct BOW{
+      std::map<std::string, size_t> operator()(const std::vector<xtd::string>& oDoc) const{
+        std::map<std::string, size_t> oRet;
+        for (const auto& oItem : oDoc){
+          ++oRet[oItem];
+        }
+        return oRet;
+      }
+    };
+
+    struct SimpleParse{
+      std::vector<xtd::string> operator()(const std::string& src) const {
+        return xtd::string(src).split({'.', '!', '?', ' ', ','});
+      }
+    };
+
 
   }
 }

@@ -20,7 +20,30 @@ namespace commands{
 xtd::nlp::english::pointer _english;
 
 int main(){
+  using namespace xtd;
 
+  std::ifstream oFile;
+  std::string sFile = "";
+  oFile.open("c:\\users\\david\\documents\\fnord.txt");
+  while (!oFile.eof()){
+    std::string sTemp;
+    std::getline(oFile, sTemp);
+    sFile += sTemp;
+    sFile += " ";
+  }
+
+  std::locale oLoc("en-US");
+  for (char & oCH : sFile){
+    if (!std::isalnum(oCH, oLoc)) oCH = ' ';
+  }
+  auto oWords = nlp::SimpleParse()(sFile);
+  auto oBOW = nlp::BOW()(oWords);
+
+  return 0;
+
+}
+#if 0
+int main(){
   _english = xtd::nlp::english::pointer(new xtd::nlp::english("/home/davidmott/Downloads/Moby", "/home/davidmott/Downloads/WordNet-3.0/dict"));
 
   std::cout << "Chatty Cathy: Hello! What can I do for you?" << std::endl;
@@ -34,3 +57,4 @@ int main(){
 
   return 0;
 }
+#endif

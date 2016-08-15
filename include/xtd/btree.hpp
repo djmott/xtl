@@ -6,9 +6,7 @@ STL-ish map using on disk b-tree
 
 #include <xtd/xtd.hpp>
 
-#include <deque>
-#include <cassert>
-
+#include <xtd/lru_cache.hpp>
 #include <xtd/mapped_file.hpp>
 #include <xtd/filesystem.hpp>
 #include <xtd/debug.hpp>
@@ -26,6 +24,9 @@ namespace xtd{
         branch_page,
       };
 
+      /** base class of btree pages
+      @tparam _PageSize size of the page to use or -1 to use the system default
+      */
       template <size_t _PageSize>
       class data_page{
       public:
@@ -38,6 +39,8 @@ namespace xtd{
 
       };
 
+      /** specialized data page, uses the system default page size
+      */
       template <>
       class data_page<-1>{
       public:
@@ -50,57 +53,59 @@ namespace xtd{
 
       };
 
+      template <size_t _PageSize, size_t _CacheSize> class lru_cache;
 
-      template <size_t _PageSize, size_t _CacheSize>
-      class lru_cache : public std::deque< std::pair<size_t, typename data_page<_PageSize>::pointer> >{
-        using _super_t = std::deque< std::pair<size_t, typename data_page<_PageSize>::pointer> >;
+      template <size_t _PageSize>
+      class page_loader{
+        template <size_t, size_t> friend class lru_cache;
         xtd::mapped_file<_PageSize> _File;
       public:
 
-        lru_cache(const xtd::filesystem::path& oPath) : _File(oPath){}
+        page_loader(const xtd::filesystem::path& oPath) : _File(oPath){}
+        page_loader(const page_loader&) = delete;
+        page_loader(page_loader&& src) : _File(std::move(src._File)){}
 
-        template <typename _Ty>
-        typename _Ty::pointer get(size_t Page){
-          for (typename _super_t::iterator oItem = _super_t::begin(); _super_t::end() != oItem; ++oItem){
-            if (oItem->first == Page){
-              if (oItem == _super_t::begin()){
-                return xtd::static_page_cast<_Ty>(oItem->second);
-              }
-              auto oRet = oItem->second;
-              _super_t::erase(oItem);
-              _super_t::push_front(std::make_pair(Page, oRet));
-              return xtd::static_page_cast<_Ty>(oRet);
-            }
-          }
-          if (_super_t::size() >= _CacheSize) _super_t::pop_back();
-          _super_t::push_front(std::make_pair(Page, _File.get<data_page<_PageSize>>(Page)));
-          return xtd::static_page_cast<_Ty>(_super_t::front().second);
+        typename data_page<_PageSize>::pointer operator()(size_t pagenum){
+          return _File.template get<data_page<_PageSize>>(pagenum);
         }
-
-        template <typename _Ty>
-        typename _Ty::pointer append(size_t& newpage){
-          if (_super_t::size() >= _CacheSize) _super_t::pop_back();
-          auto pNewPage = _File.template append<data_page<_PageSize>>(newpage);
-          _super_t::push_front(std::make_pair(newpage, pNewPage));
-          pNewPage->_page_type = _Ty::type;
-          return xtd::static_page_cast<_Ty>(pNewPage);
-        }
-
       };
 
-      template <typename _KeyT, typename _ValueT, size_t _PageSize>
+      template <size_t _PageSize, size_t _CacheSize>
+      class lru_cache : public xtd::lru_cache<size_t, typename data_page<_PageSize>::pointer, _CacheSize, page_loader<_PageSize> >{
+        using _super_t = xtd::lru_cache<size_t, typename data_page<_PageSize>::pointer, _CacheSize, page_loader<_PageSize> >;
+
+      public:
+        using value_type = typename data_page<_PageSize>::pointer;
+        static const size_t cache_size = _CacheSize;
+        explicit lru_cache(const xtd::filesystem::path& oPath) : _super_t(page_loader<_PageSize>(oPath)) {}
+
+        typename data_page<_PageSize>::pointer append(size_t & newpage){
+          if (_super_t::size() >= cache_size){
+            _super_t::pop_back();
+          }
+          _super_t::push_front(std::make_pair(newpage, _loader._File.template append<data_page<_PageSize>>(newpage)));
+          return _super_t::front().second;
+        }
+      };
+
+      /** btree file header present only on the first page of the file
+      @tparam _PageSize size of btree page
+      */
+      template <size_t _PageSize>
       class file_header : public data_page<_PageSize>{
       public:
-        using key_type = _KeyT;
-        using value_type = _ValueT;
-        using pointer = mapped_page<file_header<_KeyT, _ValueT, _PageSize>>;
+        using pointer = mapped_page<file_header>;
         static const page_type type = page_type::file_header_page;
         size_t _root_page;
         size_t _free_page;
         size_t _count;
       };
 
-
+      /** leaf page contains all the keys and values
+      @tparam _KeyT key type
+      @tparam _ValueT value type
+      @tparam _PageSize size of the page
+      */
       template <typename _KeyT, typename _ValueT, size_t _PageSize>
       class leaf : public data_page<_PageSize>{
         using _super_t = data_page<_PageSize>;
@@ -141,7 +146,7 @@ namespace xtd{
 
         template <typename _CacheT>
         void split(_CacheT& oCache, size_t left_page_idx, key_type& left_page_key, size_t& right_page_idx){
-          auto oNewPage = oCache.template append<leaf>(right_page_idx);
+          auto oNewPage = static_page_cast<leaf>(oCache[right_page_idx]);
           D_(const leaf * pNewPage = oNewPage.get());
           left_page_key = _records[records_per_page() / 2]._key;
           for (size_t i = 1+(records_per_page() / 2); i < records_per_page(); ++i, ++oNewPage->_page_header._count, --_page_header._count){
@@ -155,6 +160,11 @@ namespace xtd{
         record _records[1];
       };
 
+      /** branch page contains keys and indexes to more branch or leaf pages
+      @tparam _KeyT key type
+      @tparam _ValueT value type
+      @tparam _PageSize size of the page
+      */
       template <typename _KeyT, typename _ValueT, size_t _PageSize>
       class branch : public data_page<_PageSize>{
         using _super_t = data_page<_PageSize>;
@@ -190,9 +200,10 @@ namespace xtd{
         inline bool insert(_CacheT& oCache, const key_type& key, const value_type& value){
           typename _super_t::pointer oPage;
           for(;;){
+            TODO("binary search instead of full scan")
             for (size_t i = 0; i < _page_header._count; ++i){
               if (key <= _records[i]._key){
-                oPage = oCache.template get<_super_t>(_records[i]._left);
+                oPage = static_page_cast<_super_t>(oCache[_records[i]._left]);
                 if (page_type::leaf_page == oPage->_page_type){
                   auto oLeaf = xtd::static_page_cast<leaf_t>(oPage);
                   D_(const leaf_t * pLeaf = oLeaf.get());
@@ -218,7 +229,7 @@ namespace xtd{
                 }                
               }
             }
-            oPage = oCache.template get<_super_t>(_page_header._right);
+            oPage = static_page_cast<_super_t>(oCache[_page_header._right]);
             if (page_type::leaf_page == oPage->_page_type){
               auto oLeaf = xtd::static_page_cast<leaf_t>(oPage);
               D_(const leaf_t * pLeaf = oLeaf.get());
@@ -247,7 +258,7 @@ namespace xtd{
         }
         template <typename _CacheT>
         inline void split(_CacheT& oCache, key_type& left_page_key, size_t & right_page_idx){
-          auto oNewPage = oCache.template append<branch>(right_page_idx);
+          auto oNewPage = static_page_cast<branch>(oCache[right_page_idx]);
           D_(const branch * pNewPage = oNewPage.get());
           TODO("convert to memcpy")
           for (size_t i = 1+records_per_page() / 2; i < records_per_page(); ++i, ++oNewPage->_page_header._count, --_page_header._count){
@@ -257,7 +268,6 @@ namespace xtd{
         }
 
       };
-
 
     }
   }
@@ -273,7 +283,7 @@ namespace xtd{
 
   private:
     _::btree::lru_cache<_PageSize, _CacheSize> _cache;
-    using file_header = _::btree::file_header<_KeyT, _ValueT, _PageSize>;
+    using file_header = _::btree::file_header<_PageSize>;
     using data_page_t = _::btree::data_page<_PageSize>;
     using leaf_t = _::btree::leaf<_KeyT, _ValueT, _PageSize>;
     using branch_t = _::btree::branch<_KeyT, _ValueT, _PageSize>;
@@ -282,7 +292,7 @@ namespace xtd{
     typename file_header::pointer _file_header;
   public:
 
-    btree(const xtd::filesystem::path& oPath) : _cache(oPath), _file_header(_cache.template get<file_header>(0)){}
+    btree(const xtd::filesystem::path& oPath) : _cache(oPath), _file_header(static_page_cast<file_header>(_cache[0])){}
 
     /** insert a value in the container
      *
@@ -293,7 +303,7 @@ namespace xtd{
     bool insert(const key_type& key, const value_type& value){
       //no root page
       if (0 == _file_header->_root_page){
-        auto oLeaf = _cache.template append<leaf_t>(_file_header->_root_page);
+        auto oLeaf = static_page_cast<leaf_t>(_cache.append(_file_header->_root_page));
         D_(const leaf_t * pLeaf = oLeaf.get());
         if (oLeaf->insert(key, value)){
           _file_header->_count++;
@@ -302,7 +312,7 @@ namespace xtd{
         return false;
       }
 
-      auto oRoot = _cache.template get<data_page_t>(_file_header->_root_page);
+      auto oRoot = static_page_cast<data_page_t>(_cache[_file_header->_root_page]);
 
       if (page_type::branch_page == oRoot->_page_type){ //root is a branch page
         //root page is full
@@ -311,7 +321,7 @@ namespace xtd{
         D_(const branch_t * pBranch = oBranch.get());
         if (oBranch->_page_header._count >= branch_t::records_per_page()){
           size_t iNewRoot;
-          auto oNewRoot = _cache.template append<branch_t>(iNewRoot);
+          auto oNewRoot = static_page_cast<branch_t>(_cache[iNewRoot]);
           oBranch->split(_cache, oNewRoot->_records[0]._key, oNewRoot->_page_header._right);
           oNewRoot->_records[0]._left = _file_header->_root_page;
           oNewRoot->_page_header._count = 1;
@@ -338,7 +348,7 @@ namespace xtd{
       }
       //leaf is full
       auto iOldRootIdx = _file_header->_root_page;
-      auto oNewRoot = _cache.template append<branch_t>(_file_header->_root_page);
+      auto oNewRoot = static_page_cast<branch_t>(_cache[_file_header->_root_page]);
       oNewRoot->_records[0]._left = iOldRootIdx;
       oLeaf->split(_cache, iOldRootIdx, oNewRoot->_records[0]._key, oNewRoot->_page_header._right);
       oNewRoot->_page_header._count = 1;

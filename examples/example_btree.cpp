@@ -8,14 +8,15 @@ int main(){}
 #else
 #include <xtd/btree.hpp>
 #include <xtd/executable.hpp>
+#include <xtd/unique_id.hpp>
 #include <iostream>
 
 int main(){
-  auto oFile = xtd::filesystem::temp_directory_path() + xtd::executable::this_executable().path().filename();
+  auto oFile = xtd::filesystem::temp_directory_path() + xtd::string::format(xtd::unique_id());
   oFile += ".dat";
   try{
     xtd::btree<int, int> oTree(oFile);
-    for (int i = 0; i < 10000 && oTree.insert(i, i); i++);
+    for (int i = 0; i < 10000 && oTree.insert(i, 10+i); i++);
     return 0;
   }
   catch(const xtd::exception& ex){
