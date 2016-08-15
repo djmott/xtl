@@ -6,48 +6,72 @@
 
 #pragma once
 #include <xtd/xtd.hpp>
+#include <xtd/string.hpp>
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma comment(lib, "rpcrt4")
 #endif
 
+#if (XTD_HAS_LIBUUID)
+  #include <uuid/uuid.h>
+#endif
+
 namespace xtd{
+#if ((XTD_OS_MSYS|XTD_OS_LINUX|XTD_OS_CYGWIN) & XTD_OS)
+  #if (XTD_HAS_LIBUUID)
+    class unique_id{
+    public:
+      unique_id(){
+        uuid_generate(_uuid);
+      }
+      unique_id(const unique_id& src){
+        uuid_copy(_uuid, src._uuid);
+      }
+      explicit unique_id(const uuid_t& src){
+        uuid_copy(_uuid, src);
+      }
+      unique_id& operator=(const unique_id& src){
+        uuid_copy(_uuid, src._uuid);
+        return *this;
+      }
+      unique_id& operator=(const uuid_t& src){
+        uuid_copy(_uuid, src);
+        return *this;
+      }
+      bool operator<(const unique_id& rhs) const{
+        return -1 == uuid_compare(_uuid, rhs._uuid);
+      }
+      bool operator<(const uuid_t& rhs) const{
+        return -1 == uuid_compare(_uuid, rhs);
+      }
+      static const unique_id& nullid(){
+        static uuid_t null_id = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        static unique_id oRet(null_id);
+        return oRet;
+      }
+    private:
+      template <typename> friend class _::xstring_format;
+      uuid_t _uuid;
+    };
 
-#if (XTD_HAS_UUID)
-
-  class unique_id{
-  public:
-    unique_id(){
-      uuid_generate(_uuid);
-    }
-    unique_id(const unique_id& src){
-      uuid_copy(_uuid, src._uuid);
-    }
-    explicit unique_id(const uuid_t& src){
-      uuid_copy(_uuid, src);
-    }
-    unique_id& operator=(const unique_id& src){
-      uuid_copy(_uuid, src._uuid);
-      return *this;
-    }
-    unique_id& operator=(const uuid_t& src){
-      uuid_copy(_uuid, src);
-      return *this;
-    }
-    bool operator<(const unique_id& rhs) const{
-      return -1 == uuid_compare(_uuid, rhs._uuid);
-    }
-    bool operator<(const uuid_t& rhs) const{
-      return -1 == uuid_compare(_uuid, rhs);
-    }
-    static constexpr unique_id nullid(){ return unique_id({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }); }
-  private:
-    uuid_t _uuid;
-  };
-
+  namespace _{
+    template <> class xstring_format<char, const unique_id&>{
+    public:
+      inline static string format(const unique_id& value){
+        xtd::string oRet(36, 0);
+        sprintf(&oRet[0], "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+                *(long unsigned int*)&value._uuid[0], *(uint16_t*)&value._uuid[4], *(uint16_t*)&value._uuid[6],
+                value._uuid[8], value._uuid[9], value._uuid[10], value._uuid[11],
+                value._uuid[12], value._uuid[13], value._uuid[14], value._uuid[15]);
+        return oRet;
+      }
+    };
+  }
+  #endif
 #elif ((XTD_OS_WINDOWS & XTD_OS) || (XTD_OS_MINGW & XTD_OS))
 
   class unique_id : uuid_t{
+    template <typename, typename> friend class _::xstring_format;
   public:
     unique_id(){
       xtd::exception::throw_if(UuidCreate(this), [](RPC_STATUS x){return (RPC_S_OK != x && RPC_S_UUID_LOCAL_ONLY != x && RPC_S_UUID_NO_ADDRESS != x); });
@@ -92,5 +116,22 @@ namespace xtd{
     }
   };
 
+  namespace _{
+    template <> class xstring_format<char, const unique_id&>{
+    public:
+      inline static string format(const unique_id& value){
+        xtd::string oRet(36, 0);
+        sprintf(&oRet[0], "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+                value.Data1, value.Data2, value.Data3,
+                value.Data4[0], value.Data4[1], value.Data4[2], value.Data4[3],
+                value.Data4[4], value.Data4[5], value.Data4[6], value.Data4[7]);
+        return oRet;
+      }
+    };
+  }
+
 #endif
+
+
+
 }

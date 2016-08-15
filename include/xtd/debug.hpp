@@ -10,6 +10,8 @@ Debugging
 #include <xtd/source_location.hpp>
 #include <xtd/log.hpp>
 
+#include <cassert>
+
 /// @def XTD_ASSERT debug assertion. The expression is expanded and checked for debug builds
 #if (XTD_CONFIG_DEBUG & XTD_CONFIG)
   #define XTD_ASSERT(_exp, ...) assert(_exp)

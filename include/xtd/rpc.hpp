@@ -41,17 +41,17 @@ namespace xtd{
     class protocol_exception : public xtd::exception{
     public:
       using _super_t = xtd::exception;
-      template <typename ... _ArgTs> protocol_exception(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> protocol_exception(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
     class malformed_payload : public protocol_exception{
     public:
       using _super_t = rpc::protocol_exception;
-      template <typename ... _ArgTs> malformed_payload(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> malformed_payload(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
     class bad_call : public protocol_exception{
     public:
       using _super_t = rpc::protocol_exception;
-      template <typename ... _ArgTs> bad_call(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> bad_call(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
     };
 
 
@@ -63,7 +63,7 @@ namespace xtd{
       using _super_t = std::vector<uint8_t>;
       using invoke_handler_type = std::function<bool(payload&)>;
 
-      template <typename ... _ArgTs> payload(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> payload(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
 
       template <typename _Ty> _Ty peek() const{
         if (_super_t::size() < sizeof(_Ty)) throw rpc::malformed_payload(here(), "Malformed payload");
@@ -155,10 +155,10 @@ throws a static assertion if used with a non-pod type indicating that a speciali
   */
     template <typename _Ty, typename..._ArgTs> class marshaler<true, const _Ty&, _ArgTs...>{
     public:
-      static void marshal(payload& oPayload, const _Ty&, _ArgTs...oArgs){
+      static void marshal(payload& oPayload, const _Ty&, _ArgTs&&...oArgs){
         marshaler<true, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
       }
-      static void unmarshal(payload& oPayload, const _Ty&, _ArgTs...oArgs){
+      static void unmarshal(payload& oPayload, const _Ty&, _ArgTs&&...oArgs){
         marshaler<true, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
       }
     };
@@ -169,10 +169,10 @@ throws a static assertion if used with a non-pod type indicating that a speciali
   */
     template <typename _Ty, typename ..._ArgTs> class marshaler<true, _Ty, _ArgTs...>{
     public:
-      static void marshal(payload& oPayload, const _Ty&, _ArgTs...oArgs){
+      static void marshal(payload& oPayload, const _Ty&, _ArgTs&&...oArgs){
         marshaler<true, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
       }
-      static void unmarshal(payload& oPayload, const _Ty&, _ArgTs...oArgs){
+      static void unmarshal(payload& oPayload, const _Ty&, _ArgTs&&...oArgs){
         marshaler<true, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
       }
     };
@@ -183,11 +183,11 @@ throws a static assertion if used with a non-pod type indicating that a speciali
   */
     template <typename _Ty, typename ..._ArgTs> class marshaler<false, _Ty&, _ArgTs...>{
     public:
-      static void marshal(payload& oPayload, const _Ty& value, _ArgTs...oArgs){
+      static void marshal(payload& oPayload, const _Ty& value, _ArgTs&&...oArgs){
         marshaler_base<_Ty>::marshal(oPayload, value);
         marshaler<false, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
       }
-      static void unmarshal(payload& oPayload, _Ty& value, _ArgTs...oArgs){
+      static void unmarshal(payload& oPayload, _Ty& value, _ArgTs&&...oArgs){
         value = marshaler_base<_Ty>::unmarshal(oPayload);
         marshaler<false, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
       }
@@ -198,11 +198,11 @@ throws a static assertion if used with a non-pod type indicating that a speciali
   */
     template <typename _Ty, typename ..._ArgTs> class marshaler<false, _Ty, _ArgTs...>{
     public:
-      static void marshal(payload& oPayload, const _Ty& value, _ArgTs...oArgs){
+      static void marshal(payload& oPayload, const _Ty& value, _ArgTs&&...oArgs){
         marshaler_base<_Ty>::marshal(oPayload, value);
         marshaler<false, _ArgTs...>::marshal(oPayload, std::forward<_ArgTs>(oArgs)...);
       }
-      static void unmarshal(payload& oPayload, _Ty& value, _ArgTs...oArgs){
+      static void unmarshal(payload& oPayload, _Ty& value, _ArgTs&&...oArgs){
         value = marshaler_base<_Ty>::unmarshal(oPayload);
         marshaler<false, _ArgTs...>::unmarshal(oPayload, std::forward<_ArgTs>(oArgs)...);
       }

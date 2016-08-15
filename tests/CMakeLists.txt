@@ -7,6 +7,7 @@ add_library(dummy_library_test SHARED dummy_library.cpp)
 add_dependencies(dummy_library_test XTL)
 
 set(TEST_SOURCE tests.cpp
+  test_btree.hpp
   test_callback.hpp
   test_concurrent_stack.hpp
   test_debug_help.hpp
@@ -16,6 +17,7 @@ set(TEST_SOURCE tests.cpp
   test_executable.hpp
   test_hash_map.hpp
   test_logging.hpp
+  test_lru_cache.hpp
   test_mapped_file.hpp
   test_mapped_vector.hpp
   test_meta.hpp
@@ -40,6 +42,7 @@ function(build_option NAME DESC)
   add_definitions(-D${NAME}=${${NAME}})
 endfunction()
 
+build_option(TEST_BTREE "test xtd::btree")
 build_option(TEST_CALLBACK "test xtd::callback")
 build_option(TEST_CONCURRENT_HASH_MAP "test xtd::concurrent::hash_map")
 build_option(TEST_CONCURRENT_STACK "test xtd::concurrent::stack")
@@ -49,6 +52,7 @@ build_option(TEST_EVENT_TRACE "test event trace")
 build_option(TEST_EXCEPTION "test xtd::exception")
 build_option(TEST_EXCUTABLE "test xtd::executable")
 build_option(TEST_LOGGING "test xtd::log")
+build_option(TEST_LRU_CACHE "test xtd::lru_cache")
 build_option(TEST_MAPPED_FILE "test xtd::mapped_file")
 build_option(TEST_MAPPED_VECTOR "test xtd::mapped_vector")
 build_option(TEST_META "test meta programming")

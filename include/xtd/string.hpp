@@ -33,7 +33,7 @@ namespace xtd{
 
 #if (!DOXY_INVOKED)
   namespace _{
-    template <typename, typename ...> class xstring_format;
+    template <typename, typename> class xstring_format;
 
   }
 #endif
@@ -209,10 +209,6 @@ namespace xtd{
 #if (!DOXY_INVOKED)
 
   namespace _{
-    template <typename _ChT> class xstring_format<_ChT>{
-    public:
-      static xstring<_ChT> format(){ return xstring<_ChT>(); }
-    };
 
   #if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)
     template <> class xstring_format<char, const wchar_t * const &>{

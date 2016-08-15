@@ -156,8 +156,10 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/exception.hpp
   include/xtd/executable.hpp
   include/xtd/filesystem.hpp
+  include/xtd/lru_cache.hpp
   include/xtd/memory.hpp
   include/xtd/mapped_file.hpp
+  include/xtd/mapped_vector.hpp
   include/xtd/btree.hpp
   include/xtd/log.hpp
   include/xtd/meta.hpp

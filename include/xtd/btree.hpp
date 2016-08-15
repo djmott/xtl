@@ -32,7 +32,7 @@ namespace xtd{
 
         page_type _page_type;
 
-        using pointer = typename xtd::mapped_file<_PageSize>::template mapped_page<data_page>;
+        using pointer = mapped_page<data_page>;
 
         static size_t page_size(){ return _PageSize; }
 
@@ -44,7 +44,7 @@ namespace xtd{
 
         page_type _page_type;
 
-        using pointer = typename xtd::mapped_file<-1>::template mapped_page<data_page>;
+        using pointer = mapped_page<data_page>;
 
         static size_t page_size(){ return xtd::memory::page_size(); }
 
@@ -64,17 +64,17 @@ namespace xtd{
           for (typename _super_t::iterator oItem = _super_t::begin(); _super_t::end() != oItem; ++oItem){
             if (oItem->first == Page){
               if (oItem == _super_t::begin()){
-                return oItem->second.template cast<_Ty>();
+                return xtd::static_page_cast<_Ty>(oItem->second);
               }
               auto oRet = oItem->second;
               _super_t::erase(oItem);
               _super_t::push_front(std::make_pair(Page, oRet));
-              return oRet.template cast<_Ty>();
+              return xtd::static_page_cast<_Ty>(oRet);
             }
           }
           if (_super_t::size() >= _CacheSize) _super_t::pop_back();
           _super_t::push_front(std::make_pair(Page, _File.get<data_page<_PageSize>>(Page)));
-          return _super_t::front().second.template cast<_Ty>();
+          return xtd::static_page_cast<_Ty>(_super_t::front().second);
         }
 
         template <typename _Ty>
@@ -83,7 +83,7 @@ namespace xtd{
           auto pNewPage = _File.template append<data_page<_PageSize>>(newpage);
           _super_t::push_front(std::make_pair(newpage, pNewPage));
           pNewPage->_page_type = _Ty::type;
-          return pNewPage.template cast<_Ty>();
+          return xtd::static_page_cast<_Ty>(pNewPage);
         }
 
       };
@@ -93,7 +93,7 @@ namespace xtd{
       public:
         using key_type = _KeyT;
         using value_type = _ValueT;
-        using pointer = typename xtd::mapped_file<_PageSize>::template mapped_page<file_header<_KeyT, _ValueT, _PageSize>>;
+        using pointer = mapped_page<file_header<_KeyT, _ValueT, _PageSize>>;
         static const page_type type = page_type::file_header_page;
         size_t _root_page;
         size_t _free_page;
@@ -107,7 +107,7 @@ namespace xtd{
       public:
         using key_type = _KeyT;
         using value_type = _ValueT;
-        using pointer = typename xtd::mapped_file<_PageSize>::template mapped_page<leaf<_KeyT, _ValueT, _PageSize>>;
+        using pointer = mapped_page<leaf<_KeyT, _ValueT, _PageSize>>;
         static const page_type type = page_type::leaf_page;
         struct page_header{
           size_t _count;
@@ -160,7 +160,7 @@ namespace xtd{
         using _super_t = data_page<_PageSize>;
         using leaf_t = leaf<_KeyT, _ValueT, _PageSize>;
       public:
-        using pointer = typename xtd::mapped_file<_PageSize>::template mapped_page<branch<_KeyT, _ValueT, _PageSize>>;
+        using pointer = mapped_page<branch<_KeyT, _ValueT, _PageSize>>;
         using key_type = _KeyT;
         using value_type = _ValueT;
         static const page_type type = page_type::branch_page;
@@ -194,7 +194,7 @@ namespace xtd{
               if (key <= _records[i]._key){
                 oPage = oCache.template get<_super_t>(_records[i]._left);
                 if (page_type::leaf_page == oPage->_page_type){
-                  auto oLeaf = oPage.template cast<leaf_t>();
+                  auto oLeaf = xtd::static_page_cast<leaf_t>(oPage);
                   D_(const leaf_t * pLeaf = oLeaf.get());
                   if (oLeaf->_page_header._count >= leaf_t::records_per_page()){
                     _records[_page_header._count]._left = _records[i]._left;
@@ -205,7 +205,7 @@ namespace xtd{
                   }
                   return oLeaf->insert(key, value);
                 } else{
-                  auto oBranch = oPage.template cast<branch>();
+                  auto oBranch = xtd::static_page_cast<branch>(oPage);
                   D_(const branch * pBranch = oBranch.get());
                   if (oBranch->_page_header._count >= branch::records_per_page()){
                     _records[_page_header._count] = _records[i];
@@ -220,7 +220,7 @@ namespace xtd{
             }
             oPage = oCache.template get<_super_t>(_page_header._right);
             if (page_type::leaf_page == oPage->_page_type){
-              auto oLeaf = oPage.template cast<leaf_t>();
+              auto oLeaf = xtd::static_page_cast<leaf_t>(oPage);
               D_(const leaf_t * pLeaf = oLeaf.get());
               if (oLeaf->_page_header._count >= leaf_t::records_per_page()){
                 _records[_page_header._count]._left = _page_header._right;
@@ -231,7 +231,7 @@ namespace xtd{
               }
               return oLeaf->insert(key, value);              
             } else {
-              auto oBranch = oPage.template cast<branch>();
+              auto oBranch = xtd::static_page_cast<branch>(oPage);
               D_(const branch * pBranch = oBranch.get());
               if (oBranch->_page_header._count < branch::records_per_page()){
                 _records[_page_header._count]._left = _page_header._right;
@@ -306,7 +306,8 @@ namespace xtd{
 
       if (page_type::branch_page == oRoot->_page_type){ //root is a branch page
         //root page is full
-        auto oBranch = oRoot.template cast<branch_t>();
+        //auto oBranch = oRoot.template cast<branch_t>();
+        auto oBranch = xtd::static_page_cast<branch_t>(oRoot);
         D_(const branch_t * pBranch = oBranch.get());
         if (oBranch->_page_header._count >= branch_t::records_per_page()){
           size_t iNewRoot;
@@ -325,7 +326,7 @@ namespace xtd{
         return false;
       }
       // root is a leaf page
-      auto oLeaf = oRoot.template cast<leaf_t>();
+      auto oLeaf = xtd::static_page_cast<leaf_t>(oRoot);
       D_(const leaf_t * pLeaf = oLeaf.get());
       //leaf is not full
       if (oLeaf->_page_header._count < leaf_t::records_per_page()){

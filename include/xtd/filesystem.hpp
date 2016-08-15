@@ -34,7 +34,7 @@ namespace xtd{
 
     struct path : std::experimental::filesystem::path{
       using _super_t = std::experimental::filesystem::path;
-      template <typename ... _ArgTs> path(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> path(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
 
       template <typename _Ty> inline path operator+(const _Ty& src) const{
         path oRet(*this);
@@ -71,7 +71,7 @@ namespace xtd{
 
       xtd::string& string() { return static_cast<xtd::string&>(*this);}
       const xtd::string& string() const { return static_cast<const xtd::string&>(*this);}
-      template <typename ... _ArgTs> path_base(_ArgTs...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> path_base(_ArgTs&&...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
     };
     class path : public path_base{
     public:
@@ -83,7 +83,7 @@ namespace xtd{
       static constexpr value_type non_preferred_separator  = '\\';
 #endif
 
-      template <typename ... _ArgTs> path(_ArgTs...oArgs) : path_base(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> path(_ArgTs&&...oArgs) : path_base(std::forward<_ArgTs>(oArgs)...){}
 
 
       template <typename _RHST>

@@ -16,6 +16,10 @@ main system and unit test entry point
 
 #include "gtest/gtest.h"
 
+#if (ON==TEST_BTREE)
+  #include "test_btree.hpp"
+#endif
+
 #if (ON==TEST_CALLBACK)
   #include "test_callback.hpp"
 #endif

@@ -90,33 +90,8 @@ namespace xtd{
     using type = typename get_parameter<_ParamNum-1, _ReturnT(_TailT...)>::type;
   };
 
-  /**
-   \struct nibble_hex_char
-   meta-function to convert a static nibble to an ascii hex value
-   \tparam char nibble to convert
-   */
-  template <typename _ChT, _ChT> struct nibble_hex_char;
-#if (!DOXY_INVOKED)
-  template <> struct nibble_hex_char <char, 0 > { static constexpr char value = '0'; };
-  template <> struct nibble_hex_char <char, 1 > { static constexpr char value = '1'; };
-  template <> struct nibble_hex_char <char, 2 > { static constexpr char value = '2'; };
-  template <> struct nibble_hex_char <char, 3 > { static constexpr char value = '3'; };
-  template <> struct nibble_hex_char <char, 4 > { static constexpr char value = '4'; };
-  template <> struct nibble_hex_char <char, 5 > { static constexpr char value = '5'; };
-  template <> struct nibble_hex_char <char, 6 > { static constexpr char value = '6'; };
-  template <> struct nibble_hex_char <char, 7 > { static constexpr char value = '7'; };
-  template <> struct nibble_hex_char <char, 8 > { static constexpr char value = '8'; };
-  template <> struct nibble_hex_char <char, 9 > { static constexpr char value = '9'; };
-  template <> struct nibble_hex_char <char, 10 > { static constexpr char value = 'a'; };
-  template <> struct nibble_hex_char <char, 11 > { static constexpr char value = 'b'; };
-  template <> struct nibble_hex_char <char, 12 > { static constexpr char value = 'c'; };
-  template <> struct nibble_hex_char <char, 13 > { static constexpr char value = 'd'; };
-  template <> struct nibble_hex_char <char, 14 > { static constexpr char value = 'e'; };
-  template <> struct nibble_hex_char <char, 15 > { static constexpr char value = 'f'; };
-#endif
 
   /**
-    \struct nibble_hex_char
     meta-function to convert a static upper case ascii character to lower case
     \tparam _ChT character type
     \tparam _val value of type _ChT to convert

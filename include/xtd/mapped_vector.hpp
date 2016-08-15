@@ -6,54 +6,140 @@ memory mapped vector
 #pragma once
 
 #include <xtd/mapped_file.hpp>
+#include <xtd/lru_cache.hpp>
 
 namespace xtd{
 
-  template <typename _Ty, size_t _page_size = -1>
-  class mapped_vector : mapped_file<_page_size>{
-    friend class iterator;
-    using _super_t = mapped_file<_page_size>;
+  /**
+  erase item from a mapped vector policy that shifts remaining items one place toward the erased item
+  @tparam _MappedVectorT the mapped vector type
+  */
+  template <typename _MappedVectorT>
+  class shift_erase_policy{
 
-    struct file_header_page{
-      using pointer = typename _super_t::template mapped_page<file_header_page>;
+  };
+
+  template <typename _Ty, size_t _page_size = -1, template <typename> class _ErasePolicyT = shift_erase_policy>
+  class mapped_vector {
+    friend class iterator;
+    template <typename> friend class shift_erase_policy;
+    using _super_t = mapped_file<_page_size>;
+    using _erase_policy_t = _ErasePolicyT<mapped_vector>;
+
+    struct page{
+      using pointer = mapped_page<page>;
+    };
+
+    PACK_PUSH(1);
+    struct file_header_page : page{
       size_t _count;
     };
+    PACK_POP();
 
-    struct data_page{
-      using pointer = typename _super_t::template mapped_page<data_page>;
+    PACK_PUSH(1);
+    struct data_page : page{
       _Ty _values[1];
-      static size_t items_per_page(){ return _::mapped_file_base<_page_size>::page_size() / sizeof(_Ty); }
+      //static size_t items_per_page(){ return _::mapped_file_base<_page_size>::page_size() / sizeof(_Ty); }
+      static size_t items_per_page(){ return 5; }
+    };
+    PACK_POP();
+
+    class page_loader{
+      mapped_file<_page_size>& _file;
+    public:
+      explicit page_loader(mapped_file<_page_size>& oFile) : _file(oFile){}
+      page_loader(const page_loader& src) : _file(src._file){}
+      typename page::pointer operator()(size_t iPage){
+        return _file.template get<page>(iPage);
+      }
     };
 
-    typename file_header_page::pointer _root;
+    using cache_type = lru_cache<size_t, typename page::pointer, 3, page_loader>;
+
+    mutable mapped_file<_page_size> _file;
+    mutable cache_type _cache;
 
   public:
     using value_type = _Ty;
-    template <typename ... _ArgTs> mapped_vector(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...), _root(_super_t::template get<file_header_page>(0)){}
+    static const size_t npos = -1;
+    
+    explicit mapped_vector(const xtd::filesystem::path& oPath) 
+      : _file(oPath),
+      _cache(page_loader(_file)){}
 
     class iterator{
-      template <typename,size_t> friend class mapped_vector;
-      using data_page_t = typename mapped_vector<_Ty, _page_size>::data_page;
-      mapped_vector& _file;
+      template <typename,size_t, template <typename> typename> friend class mapped_vector;
       size_t _current_index;
-      typename _super_t::template mapped_page<data_page_t> _current_page;
-      iterator(size_t index, mapped_vector& oFile) : _current_index(index), _file(oFile){
-        if (-1 != _current_index){
-          _current_page = _file.get(1 + _current_index / _super_t::page_size());
-        }
-      }
+      mapped_vector& _vector;
+
+      iterator(size_t index, mapped_vector& oVector) : _current_index(index), _vector(oVector){}
+
     public:
+
+      bool operator != (const iterator& rhs) const { return _current_index != rhs._current_index; }
+
+      iterator& operator++(int){
+        _current_index++;
+        return *this;
+      }
+
+      iterator operator++(){
+        iterator oRet(*this);
+        this->operator++(0);
+        return oRet;
+      }
+
+      value_type* get(){
+        XTD_ASSERT(npos != _current_index);
+        auto iPage = 1 + (_current_index / data_page::items_per_page());
+        auto oPage = xtd::static_page_cast<data_page>(_vector._cache[iPage]);
+        return &oPage->_values[_current_index % data_page::items_per_page()];
+      }
+
+      const value_type* get() const {
+        XTD_ASSERT(npos != _current_index);
+        auto iPage = 1 + (_current_index / data_page::items_per_page());
+        auto oPage = xtd::static_page_cast<data_page>(_vector._cache[iPage]);
+        return &oPage->_values[_current_index % data_page::items_per_page()];
+      }
+            
+      value_type* operator->(){
+        return get();
+      }
+      const value_type* operator->() const {
+        return get();
+      }
+
+      value_type& operator*(){
+        return *get();
+      }
+
+      const value_type& operator*() const {
+        return *get();
+      }
+
 
     };
 
-    void push_back(value_type& value){
-      auto oPage = _super_t::template get<data_page>(1 + _root->_count / data_page::items_per_page());
-      oPage->_values[_root->_count % data_page::items_per_page()] = value;
-      _root->_count++;
+    void push_back(const value_type& value){
+      auto oRoot = xtd::static_page_cast<file_header_page>(_cache[0]);
+      auto iPage = 1 + (oRoot->_count / data_page::items_per_page());
+      auto oPage = xtd::static_page_cast<data_page>(_cache[iPage]);
+      oPage->_values[ oRoot->_count % data_page::items_per_page() ] = value;
+      oRoot->_count++;
     }
 
-    iterator end() { return iterator(-1, *this);}
-    iterator begin(){ return iterator( (_root->_count ? 0 : -1), *this); }
+    size_t size() const {
+      auto oRoot = xtd::static_page_cast<file_header_page>(_cache[0]);
+      return oRoot->_count;
+    }
+    iterator end() { 
+      auto oRoot = xtd::static_page_cast<file_header_page>(_cache[0]);
+      return iterator(oRoot->_count, *this);
+    }
+    iterator begin(){
+      auto oRoot = xtd::static_page_cast<file_header_page>(_cache[0]);
+      return iterator( (oRoot->_count ? 0 : -1), *this); }
 
   };
 }
