@@ -68,7 +68,7 @@ namespace xtd{
       _cache(page_loader(_file)){}
 
     class iterator{
-      template <typename,size_t, template <typename> typename> friend class mapped_vector;
+      template <typename,size_t, template <typename> class> friend class mapped_vector;
       size_t _current_index;
       mapped_vector& _vector;
 
