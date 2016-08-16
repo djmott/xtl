@@ -5,6 +5,9 @@
 
 #include <xtd/xtd.hpp>
 
+#include <memory>
+#include <vector>
+#include <map>
 #include <iostream>
 
 namespace xtd{
@@ -15,13 +18,13 @@ namespace xtd{
       using pointer = std::shared_ptr<english>;
 
       enum parts_of_speech{
-        adj                 = 0x0000000000000007,
+        unknown             = 0,
         adj_all             = 0x0000000000000001,
         adj_ppl             = 0x0000000000000002,
         adj_pert	          = 0x0000000000000004,
-        adv                 = 0x0000000000000008,
+        adj                 = 0x0000000000000007,
         adv_all         	  = 0x0000000000000008,
-        noun                = 0x000000003ffffff0,
+        adv                 = 0x0000000000000008,
         noun_Tops          	= 0x0000000000000010,
         noun_act	          = 0x0000000000000020,
         noun_animal	        = 0x0000000000000040,
@@ -48,7 +51,7 @@ namespace xtd{
         noun_state	        = 0x0000000008000000,
         noun_substance	    = 0x0000000010000000,
         noun_time	          = 0x0000000020000000,
-        verb	              = 0x00001fffc0000000,
+        noun                = 0x000000003ffffff0,
         verb_body	          = 0x0000000040000000,
         verb_change	        = 0x0000000080000000,
         verb_cognition	    = 0x0000000100000000,
@@ -64,15 +67,20 @@ namespace xtd{
         verb_social	        = 0x0000040000000000,
         verb_stative        = 0x0000080000000000,
         verb_weather        = 0x0000100000000000,
+        verb	              = 0x00001fffc0000000,
       };
 
       struct lemma{
-        using pointer = std::shared_ptr<lemma>;
-        using vector = std::vector<pointer>;
+        using vector = std::vector<lemma>;
+        using map = std::map<std::string, lemma>;
 
         const std::string& value() const { return _value; }
-        parts_of_speech part_of_speech() const { return _part_of_speech; }
-        lemma(const std::string& val) : _value(val){}
+
+        const parts_of_speech& part_of_speech() const { return _part_of_speech; }
+        parts_of_speech& part_of_speech() { return _part_of_speech; }
+
+        lemma() = default;
+        lemma(const std::string& val) : _value(val), _part_of_speech(parts_of_speech::unknown){}
 
       private:
         std::string _value;
@@ -80,28 +88,11 @@ namespace xtd{
       };
 
 
-<<<<<<< HEAD
-      lemma::vector& lemmata() { return _lemmata; }
-      const lemma::vector lemmata() const { return _lemmata; }
-=======
-
-      english() : _wordnet(){
-        for (const auto & oRecord : _wordnet._data_adj.records){
-          for (const auto & oWord : oRecord.second.words){
-            std::cout << oWord.word << std::endl;
-          }
-
-        }
-      }
->>>>>>> branch 'master' of git@github.com:djmott/xtl.git
+      lemma::map& lemmata() { return _lemmata; }
+      const lemma::map lemmata() const { return _lemmata; }
 
     private:
-<<<<<<< HEAD
-      lemma::vector _lemmata;
-=======
-      wordnet::database _wordnet;
-      lemma::lemmata _lemmata;
->>>>>>> branch 'master' of git@github.com:djmott/xtl.git
+      lemma::map _lemmata;
     };
   }
 }

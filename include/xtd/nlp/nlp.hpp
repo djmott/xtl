@@ -110,8 +110,6 @@ namespace xtd{
 
 
 
-#include "wordnet.hpp"
-#include "moby.hpp"
 #include "pos.hpp"
 #include "english.hpp"
 

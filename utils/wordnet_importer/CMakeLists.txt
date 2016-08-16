@@ -8,3 +8,4 @@ set(SOURCE_FILES main.cpp
     )
 add_executable(wordnet_importer ${SOURCE_FILES})
 include_directories("../../include")
+target_link_libraries(wordnet_importer pthread)
