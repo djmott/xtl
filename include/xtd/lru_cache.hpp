@@ -31,7 +31,7 @@ namespace xtd{
     ~lru_cache(){}
 
     _ValueT& operator[](const _KeyT& key){
-      for (typename deque::iterator oItem = _super_t::begin(); _super_t::end() != oItem; ++oItem){
+      for (typename _super_t::iterator oItem = _super_t::begin(); _super_t::end() != oItem; ++oItem){
         if (key == oItem->first){
           value_type oRet = oItem->second;
           _super_t::erase(oItem);
