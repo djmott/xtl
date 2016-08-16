@@ -10,6 +10,7 @@ handle necessary filesystem and path functionality until C++17 is finalized
 #include <xtd/string.hpp>
 
 #if ((XTD_OS_CYGWIN | XTD_OS_MSYS | XTD_OS_LINUX) & XTD_OS)
+  #include <sys/stat.h>
   #include <paths.h>
 #endif
 
@@ -149,6 +150,20 @@ namespace xtd{
       return path(sTemp);
     }
 #else
+
+    static inline size_t file_size(const path& oPath){
+      struct ::stat oStat;
+      if (0==::stat(oPath.string().c_str(), &oStat)){
+        return oStat.st_size;
+      }
+      return -1;
+    }
+
+    static inline bool exists(const path& oPath){
+      FILE * pFile = fopen(oPath.string().c_str(), "r");
+      if (pFile) fclose(pFile);
+      return (pFile ? true : false);
+    }
 
     static inline path home_directory_path(){ return path(getenv("HOME")); }
 
