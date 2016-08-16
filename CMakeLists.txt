@@ -82,6 +82,7 @@ option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
 option(BUILD_EXAMPLES "Build examples" NO)
 option(BUILD_TESTS "Build tests" NO)
 option(BUILD_DOCS "Build documentation" NO)
+option(BUILD_UTILS "Build utilities" NO)
 
 option(XTD_LINK_TO_FS_TS "link to the c++ filesystem TS" NO)
 
@@ -309,4 +310,8 @@ endif()
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
+endif()
+
+if(BUILD_UTILS)
+  add_subdirectory(utils/wordnet_importer)
 endif()

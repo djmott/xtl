@@ -96,6 +96,7 @@ namespace xtd{
     }
   };
 
+  #endif
   namespace _{
     template <> class xstring_format<char, const unique_id&>{
     public:
@@ -109,7 +110,6 @@ namespace xtd{
       }
     };
   }
-  #endif
 
 #elif ((XTD_OS_WINDOWS & XTD_OS) || (XTD_OS_MINGW & XTD_OS))
 
