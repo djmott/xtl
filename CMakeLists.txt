@@ -177,9 +177,7 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/exception.inl
   include/xtd/nlp/nlp.hpp
   include/xtd/nlp/english.hpp
-  include/xtd/nlp/moby.hpp
   include/xtd/nlp/pos.hpp
-  include/xtd/nlp/wordnet.hpp
 
   include/xtd/xtd.hpp.in
   )
