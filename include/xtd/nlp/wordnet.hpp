@@ -8,6 +8,7 @@ c++ interface to wordnet databases
 
 #include <map>
 #include <future>
+#include <sstream>
 
 #include <xtd/filesystem.hpp>
 
@@ -52,8 +53,13 @@ namespace xtd
           using map = std::map<size_t, record>;
           size_t file_offset;
           std::string lemma, pos, synset_cnt, p_cnt, ptr_symbol, sense_cnt, tagsense_cnt, synset_offset;
-          bool load(const std::string& , size_t & ) {
-            return false;
+          bool load(const std::string& str, size_t & i) {
+            auto x = str.find('\n', i);
+            std::stringstream oSS;
+            oSS.str(std::string(&str[i], &str[x]));
+            oSS >> lemma >> pos >> synset_cnt >> p_cnt >> ptr_symbol >> sense_cnt >> tagsense_cnt >> synset_offset;
+            i = x;
+            return true;
           }
         };
 
@@ -202,35 +208,36 @@ namespace xtd
         index_file _index_noun;
         index_file _index_verb;
 
-        database(const xtd::filesystem::path& oPath) {
+        database() {
           auto make_path = [&](const char * sAddend){
-            xtd::filesystem::path oRet(oPath);
+            xtd::filesystem::path oRet(XTD_ASSETS_DIR "/WordNet-3.0/dict");
             oRet /= sAddend;
+            oRet.make_preferred();
             return oRet;
           };
           auto t1 = std::async(std::launch::async, [&]() {
-            return make_path("data.adj");
+            return _data_adj.load(make_path("data.adj"));
           });
           auto t2 = std::async(std::launch::async, [&]() {
-            return make_path("data.adv");
+            return _data_adv.load(make_path("data.adv"));
           });
           auto t3 = std::async(std::launch::async, [&]() {
-            return make_path("data.noun");
+            return _data_noun.load(make_path("data.noun"));
           });
           auto t4 = std::async(std::launch::async, [&]() {
-            return make_path("data.verb");
+            return _data_verb.load(make_path("data.verb"));
           });
           auto t5 = std::async(std::launch::async, [&]() {
-            return make_path("index.adj");
+            return _index_adj.load(make_path("index.adj"));
           });
           auto t6 = std::async(std::launch::async, [&]() {
-            return make_path("index.adv");
+            return _index_adv.load(make_path("index.adv"));
           });
           auto t7 = std::async(std::launch::async, [&]() {
-            return make_path("index.noun");
+            return _index_noun.load(make_path("index.noun"));
           });
           auto t8 = std::async(std::launch::async, [&]() {
-            return make_path("index.verb");
+            return _index_verb.load(make_path("index.verb"));
           });
           t1.get();
           t2.get();

@@ -19,6 +19,7 @@ namespace commands{
 
 xtd::nlp::english::pointer _english;
 
+#if 0
 int main(){
   using namespace xtd;
 
@@ -42,9 +43,11 @@ int main(){
   return 0;
 
 }
-#if 0
+#else
 int main(){
-  _english = xtd::nlp::english::pointer(new xtd::nlp::english("/home/davidmott/Downloads/Moby", "/home/davidmott/Downloads/WordNet-3.0/dict"));
+
+  xtd::nlp::wordnet::database oDB;
+  
 
   std::cout << "Chatty Cathy: Hello! What can I do for you?" << std::endl;
 

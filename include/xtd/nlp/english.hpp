@@ -30,7 +30,7 @@ namespace xtd{
       const lemma::lemmata& lemmata() const { return _lemmata; }
 
 
-      english(const xtd::filesystem::path& oMobyPath, const xtd::filesystem::path& oWordnetPath) : _moby(oMobyPath), _wordnet(oWordnetPath){
+      english() : _wordnet(){
         for (const auto & oRecord : _wordnet._data_adj.records){
           for (const auto & oWord : oRecord.second.words){
             std::cout << oWord.word << std::endl;
@@ -40,7 +40,6 @@ namespace xtd{
       }
 
     private:
-      moby::database _moby;
       wordnet::database _wordnet;
       lemma::lemmata _lemmata;
     };
