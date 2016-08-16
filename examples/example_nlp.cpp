@@ -19,7 +19,9 @@ namespace commands{
 
 xtd::nlp::english::pointer _english;
 
-#if 0
+#if 1
+int main(){ return 0; }
+#elif 0
 int main(){
   using namespace xtd;
 
