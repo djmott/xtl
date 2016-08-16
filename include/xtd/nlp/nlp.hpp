@@ -82,12 +82,9 @@ namespace xtd{
         using type = _Ty;
       };
 
-
-
-
-
-
     }
+
+
 
     struct BOW{
       std::map<std::string, size_t> operator()(const std::vector<xtd::string>& oDoc) const{
@@ -99,11 +96,13 @@ namespace xtd{
       }
     };
 
+
     struct SimpleParse{
       std::vector<xtd::string> operator()(const std::string& src) const {
         return xtd::string(src).split({'.', '!', '?', ' ', ','});
       }
     };
+
 
 
   }

@@ -28,6 +28,10 @@
   #define DOXY_INVOKED 0
 #endif
 
+#if !defined(XTD_ASSETS_DIR)
+  #define XTD_ASSETS_DIR "@CMAKE_CURRENT_SOURCE_DIR@/assets"
+#endif
+
 #if !defined(XTD_HAS_LIBUUID)
   #cmakedefine01 XTD_HAS_LIBUUID
 #endif

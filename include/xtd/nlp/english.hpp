@@ -80,11 +80,28 @@ namespace xtd{
       };
 
 
+<<<<<<< HEAD
       lemma::vector& lemmata() { return _lemmata; }
       const lemma::vector lemmata() const { return _lemmata; }
+=======
+
+      english() : _wordnet(){
+        for (const auto & oRecord : _wordnet._data_adj.records){
+          for (const auto & oWord : oRecord.second.words){
+            std::cout << oWord.word << std::endl;
+          }
+
+        }
+      }
+>>>>>>> branch 'master' of git@github.com:djmott/xtl.git
 
     private:
+<<<<<<< HEAD
       lemma::vector _lemmata;
+=======
+      wordnet::database _wordnet;
+      lemma::lemmata _lemmata;
+>>>>>>> branch 'master' of git@github.com:djmott/xtl.git
     };
   }
 }
