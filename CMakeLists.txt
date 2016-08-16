@@ -175,7 +175,6 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/unique_id.hpp
   include/xtd/var.hpp
   include/xtd/windows/dbghelp.hpp
-  include/xtd/exception.inl
   include/xtd/nlp/nlp.hpp
   include/xtd/nlp/english.hpp
   include/xtd/nlp/pos.hpp
