@@ -14,6 +14,7 @@ transport neutral light weight IPC/RPC library
 
 #include <xtd/socket.hpp>
 #include <xtd/concurrent/hash_map.hpp>
+#include <xtd/memory.hpp>
 
 namespace xtd{
   namespace rpc{
@@ -231,7 +232,7 @@ throws a static assertion if used with a non-pod type indicating that a speciali
       socket::ipv4address _Address;
       xtd::socket::ipv4_tcp_stream _Socket;
       std::unique_ptr<std::thread> _ServerThread;    
-
+      bool _StopServer;
       xtd::concurrent::hash_map<std::thread::id, std::thread> _Clients;
       bool _ClientConnected;
 
@@ -240,9 +241,28 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
       tcp_transport(const socket::ipv4address& oAddress) : _Address(oAddress), _Socket(), _ServerThread(), _ClientConnected(false){}
 
-      void start_server(payload::invoke_handler_type ){
-        //TODO: implement start_server
-        TODO("implement start_server")
+      void start_server(payload::invoke_handler_type oHandler){
+        _StopServer = false;
+        std::shared_ptr<std::promise<void>> oServerStarted(new std::promise<void>);
+        std::shared_ptr<payload::invoke_handler_type> oInvokeHandler(new payload::invoke_handler_type(oHandler));
+        _ServerThread = xtd::make_unique<std::thread>([&, oInvokeHandler, oServerStarted]{
+          oServerStarted->set_value();
+          _Socket.bind(_Address);
+          while (!_StopServer){
+            _Socket.listen();
+            std::shared_ptr<xtd::socket::ipv4_tcp_stream> oClientSocket(new xtd::socket::ipv4_tcp_stream(std::move(_Socket.accept<xtd::socket::ipv4_tcp_stream>())));
+            std::thread oClientThread([&, oClientSocket, oInvokeHandler](){
+              payload oPayload;
+              forever{
+                oClientSocket->read(static_cast<std::vector<uint8_t>&>(oPayload));
+                if (!(*oInvokeHandler)(oPayload)) break;
+                oClientSocket->write(static_cast<std::vector<uint8_t>&>(oPayload));
+              }
+            });
+            oClientThread.detach();
+          }
+        });
+        oServerStarted->get_future().get();
       }
       void stop_server(){
         //TODO: implement stop_server
@@ -347,7 +367,12 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     public:
 
       ~server_impl(){
-        stop_server();
+        try{
+          stop_server();
+        }
+        catch (const xtd::exception& ex){
+          ERR("An unhandled xtd::exception occured while stopping the transport: ", ex.what());
+        }
       }
 
       bool call_handler(payload&){

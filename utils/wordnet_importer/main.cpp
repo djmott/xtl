@@ -1,6 +1,12 @@
 #include <xtd/xtd.hpp>
 #include <xtd/nlp/english.hpp>
-#include "wordnet.hpp"
+
+namespace wordnet{
+  struct database{
+
+  };
+}
+
 
 int main() {
   wordnet::database oDB;

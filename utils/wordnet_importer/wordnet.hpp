@@ -14,6 +14,7 @@ c++ interface to wordnet databases
 #include <xtd/filesystem.hpp>
 
 
+#if 0
 namespace wordnet
 {
 
@@ -275,3 +276,4 @@ namespace wordnet
 
   };
 }
+#endif

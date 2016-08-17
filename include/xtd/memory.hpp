@@ -32,4 +32,7 @@ namespace xtd{
   #endif
   }
 
+  template <typename _Ty, typename _ParamT> static inline std::unique_ptr<_Ty> make_unique(_ParamT&& src){ return std::unique_ptr<_Ty>(new _Ty(std::forward<_ParamT>(src))); }
+  template <typename _Ty, typename _ParamT> static inline std::unique_ptr<_Ty> make_unique(const _ParamT& src){ return std::unique_ptr<_Ty>(new _Ty(src)); }
+
 }

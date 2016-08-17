@@ -8,6 +8,8 @@
 
 #pragma once
 
+#define XTD_GIT_IDENT "$Id$"
+
 #if !defined(ON)
   #define ON    1
 #endif
