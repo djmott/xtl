@@ -21,18 +21,6 @@ namespace wordnet
 
   struct database {
 
-    enum class part_of_speech{
-      noun,
-      verb,
-      adj,
-      adv,
-      adj_satellite,
-    };
-
-    std::vector<xtd::string> Morph(const xtd::string& Original, part_of_speech oPos) const {
-      
-    }
-
     database() :
       _data_adj(new data_file),
       _data_adv(new data_file),
@@ -116,19 +104,27 @@ namespace wordnet
       using pointer = std::shared_ptr<index_file>;
 
       struct record{
+        enum SyntacticCategory : char{
+          noun = 'n',
+          verb = 'v',
+          adj = 'a',
+          adverb = 'r',
+        };
         using vector = std::vector<record>;
         using map = std::map<uint32_t, record>;
         std::vector<std::string> ptr_symbol;
 
-        xtd::string lemma, pos;
+        xtd::string lemma;
+        SyntacticCategory pos;
         uint32_t synset_offset, synset_cnt, sense_cnt, tagsense_cnt;
 
         bool load(const xtd::string& sz, size_t & i){
           std::stringstream oSS;
           auto x = sz.find('\n', i);
-          xtd::string ssynset_offset, p_cnt, ssynset_cnt, ssense_cnt, stagsense_cnt, sLine(&sz[i], &sz[x]);
+          xtd::string spos, ssynset_offset, p_cnt, ssynset_cnt, ssense_cnt, stagsense_cnt, sLine(&sz[i], &sz[x]);
           oSS.str(sLine);
-          oSS >> lemma >> pos >> ssynset_cnt >> p_cnt;
+          oSS >> lemma >> spos >> ssynset_cnt >> p_cnt;
+          pos = static_cast<SyntacticCategory>(spos[0]);
           synset_cnt = atoi(ssynset_cnt.c_str());
           for (auto t = atoi(p_cnt.c_str()); t; --t){
             xtd::string sTemp;

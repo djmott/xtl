@@ -2,25 +2,34 @@
  * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
  */
 
+
+
+#if 0
+
+#include <xtd/xtd.hpp>
+
+#include <iterator>
+
 #include <xtd/nlp/nlp.hpp>
-#include <xtd/parse.hpp>
+#include <xtd/nlp/buparser.hpp>
+#include <xtd/dynamic_object.hpp>
 
-namespace commands{
-  using namespace xtd::parse;
-  namespace strings{
-    STRING_(quit);
-    STRING_(exit);
-  }
-  struct quit_command : rule<quit_command, or_<strings::quit, strings::exit>>{
-    template <typename ... _Ty>
-    quit_command(_Ty&&...params) : rule(std::forward<_Ty>(params)...){}
-  };
+int main(){ 
+  using namespace xtd;
+
+
+  using doc_type = std::vector<xtd::dynamic_object>;
+  doc_type oDoc;
+
+  auto oRet = xtd::string("I WANT MY MONEY").split({ ' ' }, true);
+  std::transform(oRet.begin(), oRet.end(), std::back_insert_iterator<doc_type>(oDoc), [](xtd::string str){
+    xtd::dynamic_object oRet;
+    oRet.item<xtd::string>() = str;
+    return oRet;
+  });
+  return oDoc.size();
+
 }
-
-xtd::nlp::english::pointer _english;
-
-#if 1
-int main(){ return 0; }
 #elif 0
 int main(){
   using namespace xtd;
@@ -46,17 +55,44 @@ int main(){
 
 }
 #else
+
+
+#include <xtd/xtd.hpp>
+
+#include <iterator>
+
+#include <xtd/dynamic_object.hpp>
+#include <xtd/nlp/nlp.hpp>
+#include <xtd/parse.hpp>
+#include <xtd/nlp/wordnet.hpp>
+
+namespace commands{
+  using namespace xtd::parse;
+  namespace strings{
+    STRING_(quit);
+    STRING_(exit);
+  }
+  struct quit_command : rule<quit_command, or_<strings::quit, strings::exit>>{
+    template <typename ... _Ty>
+    quit_command(_Ty&&...params) : rule(std::forward<_Ty>(params)...){}
+  };
+}
+
+xtd::nlp::english::pointer _english;
+
+struct ChatSession{
+
+};
 int main(){
 
-  xtd::nlp::wordnet::database oDB;
-  
+//   wordnet::database oDB;
 
   std::cout << "Chatty Cathy: Hello! What can I do for you?" << std::endl;
 
   std::string sLine;
   forever{
     std::cin >> sLine;
-    auto oQuit = xtd::parser<commands::quit_command, true>::parse(sLine.begin(), sLine.end());
+    auto oQuit = xtd::parser<commands::quit_command, true, xtd::parse::whitespace<'\t', ' '>>::parse(sLine.begin(), sLine.end());
     if (oQuit) break;
   };
 

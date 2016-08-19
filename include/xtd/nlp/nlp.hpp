@@ -14,9 +14,22 @@ natural language processing
 
 #include <xtd/meta.hpp>
 #include <xtd/string.hpp>
+#include <xtd/var.hpp>
+#include <xtd/type_info.hpp>
 
 namespace xtd{
   namespace nlp{
+
+    class string_vector : public std::vector<xtd::string>{
+      using _super_t = std::vector<xtd::string>;
+    public:
+      template <typename ... _ArgTs> string_vector(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+      template <typename _Ty> string_vector& operator=(_Ty&& rhs){
+        _super_t::operator=(std::forward<_Ty>(rhs));
+        return *this;
+      }
+    };
+
 
     namespace _ {
       class noun;

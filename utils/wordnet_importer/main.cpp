@@ -1,6 +1,6 @@
 #include <xtd/xtd.hpp>
 #include <xtd/nlp/pos.hpp>
-#include "wordnet.hpp"
+#include <xtd/nlp/wordnet.hpp>
 
 
 

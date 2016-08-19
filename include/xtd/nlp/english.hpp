@@ -17,7 +17,7 @@ namespace xtd{
     public:
       using pointer = std::shared_ptr<english>;
 
-      enum parts_of_speech{
+      enum parts_of_speech : uint64_t{
         unknown             = 0,
         adj_all             = 0x0000000000000001,
         adj_ppl             = 0x0000000000000002,
