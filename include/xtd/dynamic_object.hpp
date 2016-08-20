@@ -9,34 +9,47 @@
 #include <map>
 #include <vector>
 #include <typeinfo>
+#include <cassert>
 
 #include <xtd/var.hpp>
 
 namespace xtd{
-  class dynamic_object : std::map<size_t, xtd::var>{
-    using _super_t = std::map<size_t, xtd::var>;
+  class dynamic_object{
+    
+    using map_type = std::map<size_t, xtd::var>;
     using pair = std::pair<size_t, xtd::var>;
+    map_type _map;
   public:
     
     using vector = std::vector<dynamic_object>;
 
-    template <typename ... _ArgTs> dynamic_object(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+    template <typename ... _ArgTs> dynamic_object(_ArgTs&&...oArgs) : _map(std::forward<_ArgTs>(oArgs)...){}
 
     template <typename _Ty> _Ty& item(){
-      auto oItem = _super_t::find(typeid(_Ty).hash_code());
-      if (_super_t::end() != oItem){
+      auto oItem = _map.find(typeid(_Ty).hash_code());
+      if (_map.end() != oItem){
         return oItem->second.as<_Ty>();
       }
       var oRet = _Ty();
-      _super_t::emplace(typeid(_Ty).hash_code(), oRet);
-      return _super_t::operator[](typeid(_Ty).hash_code()).as<_Ty>();
+      auto oTmp = _map.emplace(typeid(_Ty).hash_code(), oRet);
+      assert(oTmp.second);
+      return oTmp.first->second.as<_Ty>();
     }
     template <typename _Ty> const _Ty& item() const {
-      auto oItem = _super_t::find(typeid(_Ty).hash_code());
-      if (_super_t::end() != oItem){
+      auto oItem = _map.find(typeid(_Ty).hash_code());
+      if (_map.end() != oItem){
         return oItem->second.as<_Ty>();
       }
       throw std::runtime_error("Attempt to modify a const object");
+    }
+
+    template <typename _Ty> bool has_item() const {
+      auto oItem = _map.find(typeid(_Ty).hash_code());
+      return (_map.end() != oItem);
+    }
+
+    template <typename _Ty> void remove_item() {
+      _map.erase(typeid(_Ty).hash_code());
     }
 
   };
