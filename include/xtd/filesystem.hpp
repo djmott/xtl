@@ -12,6 +12,8 @@ handle necessary filesystem and path functionality until C++17 is finalized
 #if ((XTD_OS_CYGWIN | XTD_OS_MSYS | XTD_OS_LINUX) & XTD_OS)
   #include <sys/stat.h>
   #include <paths.h>
+#else
+  #include <xtd/exception.hpp>
 #endif
 
 #if (XTD_HAS_FILESYSTEM)
@@ -50,8 +52,16 @@ namespace xtd{
     static inline bool remove(const path& src){ return std::experimental::filesystem::remove(src); }
 
     static inline path temp_directory_path(){ return path(std::experimental::filesystem::temp_directory_path()); }
-
+  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+    static inline path home_directory_path(){ 
+      PWSTR sTemp;
+      xtd::windows::exception::throw_if(SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &sTemp), [](HRESULT hr){ return FAILED(hr); });
+      RAII(CoTaskMemFree(sTemp));
+      return xtd::string::format(static_cast<const wchar_t*>(sTemp));
+    }
+  #else
     static inline path home_directory_path() { return path(getenv("HOME")); }
+  #endif
 
   }
 }

@@ -95,32 +95,32 @@ namespace xtd{
     };
   }
 
-  template <> class _::xstring_format<char, const nlp::part_of_speech & > {
-  public:
-    inline static string format(const nlp::part_of_speech & iPOS) {
-      xtd::string sRet = "(";
-      if (nlp::part_of_speech::unknown == iPOS) sRet += "unknown";
-      if (nlp::part_of_speech::adj & iPOS) sRet += "adj | ";
-      if (nlp::part_of_speech::adv & iPOS) sRet += "adv | ";
-      if (nlp::part_of_speech::noun & iPOS) sRet += "noun | ";
-      if (nlp::part_of_speech::verb & iPOS) sRet += "verb | ";
-      if (nlp::part_of_speech::conjunction & iPOS) sRet += "conjunction | ";
-      if (nlp::part_of_speech::preposition & iPOS) sRet += "preposition | ";
-      if (nlp::part_of_speech::interjection & iPOS) sRet += "interjection | ";
-      if (nlp::part_of_speech::definite_article & iPOS) sRet += "definite_article | ";
-      if (nlp::part_of_speech::indefinite_article & iPOS) sRet += "indefinite_article | ";
-      if (nlp::part_of_speech::nominative & iPOS) sRet += "nominative | ";
-      if (nlp::part_of_speech::pronoun & iPOS) sRet += "pronoun | ";
-      sRet += ")";
-      return sRet;
-    }
-  };
+  namespace _ {
+    template<>
+    class xstring_format<char, const nlp::part_of_speech &> {
+    public:
+      inline static string format(const nlp::part_of_speech &iPOS) {
+          xtd::string sRet = "(";
+          if (nlp::part_of_speech::unknown == iPOS) sRet += "unknown";
+          if (nlp::part_of_speech::adj & iPOS) sRet += "adj | ";
+          if (nlp::part_of_speech::adv & iPOS) sRet += "adv | ";
+          if (nlp::part_of_speech::noun & iPOS) sRet += "noun | ";
+          if (nlp::part_of_speech::verb & iPOS) sRet += "verb | ";
+          if (nlp::part_of_speech::conjunction & iPOS) sRet += "conjunction | ";
+          if (nlp::part_of_speech::preposition & iPOS) sRet += "preposition | ";
+          if (nlp::part_of_speech::interjection & iPOS) sRet += "interjection | ";
+          if (nlp::part_of_speech::definite_article & iPOS) sRet += "definite_article | ";
+          if (nlp::part_of_speech::indefinite_article & iPOS) sRet += "indefinite_article | ";
+          if (nlp::part_of_speech::nominative & iPOS) sRet += "nominative | ";
+          if (nlp::part_of_speech::pronoun & iPOS) sRet += "pronoun | ";
+          sRet += ")";
+          return sRet;
+      }
+    };
+  }
 
 }
 
 
 
 #include "pos.hpp"
-#include "english.hpp"
-
-#include "document.hpp"

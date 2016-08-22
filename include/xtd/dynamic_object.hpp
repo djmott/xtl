@@ -12,6 +12,7 @@
 #include <cassert>
 
 #include <xtd/var.hpp>
+#include <xtd/debug.hpp>
 
 namespace xtd{
   class dynamic_object{
@@ -32,7 +33,7 @@ namespace xtd{
       }
       var oRet = _Ty();
       auto oTmp = _map.emplace(typeid(_Ty).hash_code(), oRet);
-      assert(oTmp.second);
+      XTD_ASSERT(oTmp.second);
       return oTmp.first->second.as<_Ty>();
     }
     template <typename _Ty> const _Ty& item() const {

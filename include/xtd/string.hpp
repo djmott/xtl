@@ -21,6 +21,8 @@
 #endif
 #include <cwctype>
 
+#include <locale>
+
 #include <string.h>
 
 namespace xtd{
@@ -386,6 +388,7 @@ namespace xtd{
         return std::to_string(value);
       }
     };
+
 
     template <> class xstring_format<char, void * const &>{
     public:

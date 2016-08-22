@@ -131,7 +131,7 @@ namespace xtd{
     }
 
     void flush(){
-      xtd::windows::exception::throw_if(FlushViewOfFile(get(), 0), [](BOOL b){return FALSE == b; });
+      xtd::windows::exception::throw_if(FlushViewOfFile(_super_t::get(), 0), [](BOOL b){return FALSE == b; });
     }
 
   };

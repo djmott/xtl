@@ -26,7 +26,7 @@ build_example(mapped_vector)
 build_example(nlp)
 build_example(parse1)
 build_example(parse2)
-build_example(rpc)
+#build_example(rpc)
 build_example(sqlite)
 build_example(string)
 

@@ -15,6 +15,7 @@ transport neutral light weight IPC/RPC library
 #include <xtd/socket.hpp>
 #include <xtd/concurrent/hash_map.hpp>
 #include <xtd/memory.hpp>
+#include <xtd/debug.hpp>
 
 namespace xtd{
   namespace rpc{
@@ -248,15 +249,31 @@ throws a static assertion if used with a non-pod type indicating that a speciali
         _ServerThread = xtd::make_unique<std::thread>([&, oInvokeHandler, oServerStarted]{
           oServerStarted->set_value();
           _Socket.bind(_Address);
-          while (!_StopServer){
+          bool ExitThread = false;
+          payload oPayload;
+          while (!_StopServer && !ExitThread){
             _Socket.listen();
-            std::shared_ptr<xtd::socket::ipv4_tcp_stream> oClientSocket(new xtd::socket::ipv4_tcp_stream(std::move(_Socket.accept<xtd::socket::ipv4_tcp_stream>())));
+            auto oClient = _Socket.accept<xtd::socket::ipv4_tcp_stream>();
+            std::shared_ptr<xtd::socket::ipv4_tcp_stream> oClientSocket(new xtd::socket::ipv4_tcp_stream(std::move(oClient)));
             std::thread oClientThread([&, oClientSocket, oInvokeHandler](){
+              oClientSocket->onError.connect([&ExitThread](){
+                ERR("Socket error");
+                ExitThread = true;
+              });
+              oClientSocket->onRead.connect([&](){ 
+                oClientSocket->read<payload::_super_t>(oPayload);
+                if (!oHandler(oPayload)){
+                  ExitThread = true;
+                }
+              });
+              oClientSocket->onWrite.connect([&](){
+                if (oPayload.size()){
+                  oClientSocket->write<payload::_super_t>(oPayload);
+                }
+              });
               payload oPayload;
-              forever{
-                oClientSocket->read(static_cast<std::vector<uint8_t>&>(oPayload));
-                if (!(*oInvokeHandler)(oPayload)) break;
-                oClientSocket->write(static_cast<std::vector<uint8_t>&>(oPayload));
+              for (;;){
+                oClientSocket->select(250);
               }
             });
             oClientThread.detach();
@@ -269,15 +286,12 @@ throws a static assertion if used with a non-pod type indicating that a speciali
         TODO("implement stop_server")
       }
       void transact(payload& oPayload){
-        payload oTmpPayload;
-        marshaler<false, size_t>::marshal(oTmpPayload, oPayload.size());
-        marshaler<false, typename payload::_super_t>::marshal(oTmpPayload, oPayload);
         if (!_ClientConnected){
           _Socket.connect(_Address);
           _ClientConnected = true;
         }
-        _Socket.write<typename payload::_super_t>(oTmpPayload);
-        _Socket.read<typename payload::_super_t>(oTmpPayload);
+        _Socket.write<typename payload::_super_t>(oPayload);
+        _Socket.read<typename payload::_super_t>(oPayload);
 
       }
 
@@ -364,7 +378,12 @@ throws a static assertion if used with a non-pod type indicating that a speciali
     @tparam _DeclT the full server declaration
     */
     template <class _TransportT, class _DeclT> class server_impl<_TransportT, _DeclT>{
+    protected:
+
     public:
+      virtual bool call_handler(payload&){
+        return false;
+      }
 
       ~server_impl(){
         try{
@@ -375,9 +394,6 @@ throws a static assertion if used with a non-pod type indicating that a speciali
         }
       }
 
-      bool call_handler(payload&){
-        return true; 
-      }
 
       typename _TransportT::pointer_type _Transport;
 
@@ -393,10 +409,6 @@ throws a static assertion if used with a non-pod type indicating that a speciali
         _Transport->stop_server(); 
       }
 
-      bool invoke(payload& oPayload){
-        TODO("empty out payload and return a marshaled 'invalid call' exception")
-        return false;
-      }
 
     };
 
@@ -415,23 +427,20 @@ throws a static assertion if used with a non-pod type indicating that a speciali
 
       template <typename _CallT, typename _ParamT> void _attach(_ParamT oCallImpl){ _super_t::template _attach<_CallT, _ParamT>(oCallImpl); }
 
-      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _super_t(std::forward<_XportCtorTs>(oParams)...){}
+
 
     public:
 
-      bool call_handler(payload& oPayload){
+
+      template <typename ... _XportCtorTs> server_impl(_XportCtorTs&&...oParams) : _super_t(std::forward<_XportCtorTs>(oParams)...){}
+
+      virtual bool call_handler(payload& oPayload) override{
         if (typeid(_HeadT).hash_code() != oPayload.peek<size_t>()){
           return _super_t::call_handler(oPayload);
         }
         TODO("invoke call")
-        return true;
+          return true;
       }
-
-      bool invoke(payload& oPayload){
-       TODO("unpack parameters and call _Function")
-        return false;
-      }
-
 
       template <typename _CallT, typename _ParamT> void attach(_ParamT oCallImpl){ _attach<_CallT, _ParamT>(oCallImpl); }
 

@@ -143,16 +143,22 @@ endif()
 add_library(XTL STATIC ${EVT_TRACE_SRC}
   src/xtl.cpp
   src/event_trace/event_trace.cpp
-  include/xtd/callback.hpp
   include/xtd/concurrent/concurrent.hpp
   include/xtd/concurrent/hash_map.hpp
   include/xtd/concurrent/queue.hpp
-  include/xtd/concurrent/stack.hpp
+  include/xtd/concurrent/recursive_spin_lock.hpp
   include/xtd/concurrent/rw_lock.hpp
   include/xtd/concurrent/spin_lock.hpp
-  include/xtd/concurrent/recursive_spin_lock.hpp
+  include/xtd/concurrent/stack.hpp
+  include/xtd/nlp/moby.hpp
+  include/xtd/nlp/nlp.hpp
+  include/xtd/nlp/pos.hpp
+  include/xtd/nlp/wordnet.hpp
+  include/xtd/windows/dbghelp.hpp
+  include/xtd/callback.hpp
   include/xtd/debug.hpp
   include/xtd/dynamic_library.hpp
+  include/xtd/dynamic_object.hpp
   include/xtd/event_trace.hpp
   include/xtd/exception.hpp
   include/xtd/executable.hpp
@@ -170,14 +176,12 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/shared_mem_obj.hpp
   include/xtd/socket.hpp
   include/xtd/source_location.hpp
+  include/xtd/sqlite.hpp
   include/xtd/string.hpp
   include/xtd/tuple.hpp
   include/xtd/unique_id.hpp
   include/xtd/var.hpp
-  include/xtd/windows/dbghelp.hpp
-  include/xtd/nlp/nlp.hpp
-  include/xtd/nlp/english.hpp
-  include/xtd/nlp/pos.hpp
+  include/xtd/wrapped_type.hpp
 
   include/xtd/xtd.hpp.in
   )

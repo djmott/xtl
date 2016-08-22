@@ -292,4 +292,5 @@ namespace xtd{
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     #include <winsock2.h>
     #include <windows.h>
+    #include <Shlobj.h>
 #endif

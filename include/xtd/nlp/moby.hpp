@@ -20,8 +20,8 @@ namespace xtd {
           using vector = std::vector<record>;
           using map = std::map<std::string, record>;
           xtd::string _word;
-          xtd::nlp::part_of_speech _pos;
-          record(const std::string& sWord) : _word(sWord) {}
+          part_of_speech _pos;
+          record(const std::string& sWord) : _word(sWord), _pos(part_of_speech::unknown) {}
         };
 
         record::map records;

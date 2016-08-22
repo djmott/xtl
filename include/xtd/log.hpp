@@ -56,6 +56,27 @@ namespace xtd{
       leave,
     };
 
+    static const char * type_string(type oType){
+      switch (oType){
+        case xtd::log::type::fatal:
+          return "fatal";
+        case xtd::log::type::error:
+          return "error";
+        case xtd::log::type::warning:
+          return "warning";
+        case xtd::log::type::info:
+          return "info";
+        case xtd::log::type::debug:
+          return "debug";
+        case xtd::log::type::enter:
+          return "enter";
+        case xtd::log::type::leave:
+          return "leave";
+        default:
+          break;
+      }
+    }
+
   private:
     
     class message{
@@ -160,24 +181,29 @@ namespace xtd{
 
 #if (XTD_LOG_TARGET_CSV)
     class csv_target : public log_target{
-
-      static std::ofstream& File(){
-        static thread_local std::ofstream _File;
-        return _File;
-      }
-
-      xtd::filesystem::path _LogPath;
+      std::ofstream _LogFile;
+      std::mutex _FileLock;
     public:
-      void operator()(const message::pointer_type&) override{
-        auto & oFile = File();
-        if (!oFile.is_open()){
 
-        }
+
+
+      void operator()(const message::pointer_type& oMsg) override{
+        static thread_local size_t _StackDepth = 1;
+        if (type::leave == oMsg->_type) --_StackDepth;
+        std::string sMsgPrefix(_StackDepth, ',');
+        std::hash<std::thread::id> oHash;
+        auto sMsg = xtd::string::format(oHash(oMsg->_tid), ",", oMsg->_time.time_since_epoch().count(), ",", type_string(oMsg->_type), ",", oMsg->_location.file(), ",", oMsg->_location.line(), sMsgPrefix, oMsg->_text);
+        if (type::enter == oMsg->_type) ++_StackDepth;
+        std::unique_lock<std::mutex> oLock(_FileLock);
+        _LogFile << sMsg << std::endl;
       }
-      csv_target(){
-        _LogPath = xtd::filesystem::home_directory_path();
-        _LogPath /= xtd::executable::this_executable().path().filename();
-        _LogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()));
+
+      csv_target() : _LogFile(), _FileLock(){
+        auto oLogPath = xtd::filesystem::home_directory_path();
+        oLogPath /= xtd::executable::this_executable().path().filename();
+        oLogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()));
+        oLogPath.append(".csv");
+        _LogFile.open(oLogPath.string(), std::ios::out);
       }
     };
 #endif

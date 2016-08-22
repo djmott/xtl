@@ -10,7 +10,6 @@ pos tagging
 #include <algorithm>
 #include <vector>
 #include <map>
-#include <cassert>
 
 #include <xtd/meta.hpp>
 #include <xtd/string.hpp>
