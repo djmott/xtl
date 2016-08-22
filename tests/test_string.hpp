@@ -88,9 +88,10 @@ TEST(test_string, string_from_wchar_ptr){
 }
 
 TEST(test_string, wstring_from_char_ptr){
-  auto s = xtd::wstring::format("123456789");
-  ASSERT_EQ(9, s.size());
-  ::testing::StaticAssertTypeEq<decltype(s)::value_type, wchar_t>();
+  xtd::string s = "12345";
+  auto ws = xtd::wstring::format(s.c_str());
+  ASSERT_EQ(ws.size(), s.size());
+  ::testing::StaticAssertTypeEq<decltype(ws)::value_type, wchar_t>();
 }
 
 TEST(test_string, wstring_from_string){

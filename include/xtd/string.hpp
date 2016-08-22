@@ -60,7 +60,8 @@ namespace xtd{
      */
 
     static xstring format(){
-      return xstring((_ChT*)"");
+      xstring sRet = ((_ChT*)"\0\0\0");
+      return sRet;
     }
 
 
@@ -307,13 +308,13 @@ namespace xtd{
 
       static inline wstring format(const char * const & src){
         size_t srclen = strlen(src);
-        wstring sRet(srclen, 0);
+        wstring sRet(1+srclen, '\0');
         forever{
           srclen = mbstowcs(&sRet[0], src, sRet.size());
         if (static_cast<size_t>(-1) == srclen){
           throw std::runtime_error("A string conversion error occurred");
         }
-        if (srclen < sRet.size()){
+        if (srclen <= sRet.size()){
           break;
         }
         sRet.resize(srclen * 2);
