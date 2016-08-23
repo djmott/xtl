@@ -10,7 +10,11 @@ handle necessary filesystem and path functionality until C++17 is finalized
 #include <xtd/string.hpp>
 
 #if ((XTD_OS_CYGWIN | XTD_OS_MSYS | XTD_OS_LINUX) & XTD_OS)
+  #include <sys/stat.h>
   #include <paths.h>
+#else
+  #include <xtd/exception.hpp>
+  #include <xtd/meta.hpp>
 #endif
 
 #if (XTD_HAS_FILESYSTEM)
@@ -34,7 +38,7 @@ namespace xtd{
 
     struct path : std::experimental::filesystem::path{
       using _super_t = std::experimental::filesystem::path;
-      template <typename ... _ArgTs> path(_ArgTs...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> path(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
 
       template <typename _Ty> inline path operator+(const _Ty& src) const{
         path oRet(*this);
@@ -49,8 +53,16 @@ namespace xtd{
     static inline bool remove(const path& src){ return std::experimental::filesystem::remove(src); }
 
     static inline path temp_directory_path(){ return path(std::experimental::filesystem::temp_directory_path()); }
-
+  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+    static inline path home_directory_path(){ 
+      PWSTR sTemp;
+      xtd::windows::exception::throw_if(SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &sTemp), [](HRESULT hr){ return FAILED(hr); });
+      RAII(CoTaskMemFree(sTemp));
+      return xtd::string::format(static_cast<const wchar_t*>(sTemp));
+    }
+  #else
     static inline path home_directory_path() { return path(getenv("HOME")); }
+  #endif
 
   }
 }
@@ -71,7 +83,7 @@ namespace xtd{
 
       xtd::string& string() { return static_cast<xtd::string&>(*this);}
       const xtd::string& string() const { return static_cast<const xtd::string&>(*this);}
-      template <typename ... _ArgTs> path_base(_ArgTs...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> path_base(_ArgTs&&...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
     };
     class path : public path_base{
     public:
@@ -83,7 +95,7 @@ namespace xtd{
       static constexpr value_type non_preferred_separator  = '\\';
 #endif
 
-      template <typename ... _ArgTs> path(_ArgTs...oArgs) : path_base(std::forward<_ArgTs>(oArgs)...){}
+      template <typename ... _ArgTs> path(_ArgTs&&...oArgs) : path_base(std::forward<_ArgTs>(oArgs)...){}
 
 
       template <typename _RHST>
@@ -149,6 +161,24 @@ namespace xtd{
       return path(sTemp);
     }
 #else
+
+    static inline size_t file_size(const path& oPath){
+      struct ::stat oStat;
+      if (0==::stat(oPath.string().c_str(), &oStat)){
+        return oStat.st_size;
+      }
+      return -1;
+    }
+
+    static inline bool exists(const path& oPath){
+      FILE * pFile = fopen(oPath.string().c_str(), "r");
+      if (pFile) fclose(pFile);
+      return (pFile ? true : false);
+    }
+
+    static inline path home_directory_path(){ return path(getenv("HOME")); }
+
+
     inline path temp_directory_path(){
       const char * cTempEnv = getenv("TMPDIR");
       if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = getenv("TEMP");
@@ -160,7 +190,6 @@ namespace xtd{
     }
 #endif
 
-    static inline path home_directory_path() { return path(getenv("HOME")); }
 
     inline bool remove(const path& oPath){
       return 0==::remove(oPath.string().c_str());

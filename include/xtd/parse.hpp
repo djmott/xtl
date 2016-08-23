@@ -436,7 +436,7 @@ namespace xtd{
       public:
 
         template <typename _IteratorT, typename ... _ChildRuleTs>
-        static rule_base::pointer_type parse(_IteratorT& , _IteratorT& , _ChildRuleTs ... oChildRules){
+        static rule_base::pointer_type parse(_IteratorT& , _IteratorT& , _ChildRuleTs&& ... oChildRules){
           return rule_base::pointer_type(new _DeclT(std::forward<_ChildRuleTs>(oChildRules)...));
         }
 
@@ -447,7 +447,7 @@ namespace xtd{
       public:
 
         template <typename _IteratorT, typename ... _ChildRuleTs>
-        static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs ... oChildRules){
+        static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs&& ... oChildRules){
           _IteratorT oBegin = begin;
           auto oItem = parse_helper<_HeadT, typename _HeadT::impl_type, _IgnoreCase, _WhitespaceT>::parse(oBegin, end);
           if (!oItem){
@@ -480,7 +480,7 @@ namespace xtd{
       public:
 
         template <typename _IteratorT, typename ... _ChildRuleTs>
-        static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs ... oChildRules){
+        static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs&& ... oChildRules){
           _IteratorT oBegin = begin;
           auto oItem = parse_helper<_HeadT, typename _HeadT::impl_type, _IgnoreCase, _WhitespaceT>::parse(oBegin, end);
           if (oItem){
@@ -504,7 +504,7 @@ namespace xtd{
       public:
 
         template <typename _IteratorT, typename ... _ChildRuleTs>
-        static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs ... oChildRules){
+        static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end, _ChildRuleTs&& ... oChildRules){
           _IteratorT oBegin = begin;
           auto oItem = parse_helper<_Ty, typename _Ty::impl_type, _IgnoreCase, _WhitespaceT>::parse(oBegin, end);
           if (!oItem){

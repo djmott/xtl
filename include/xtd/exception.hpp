@@ -10,7 +10,7 @@ generic and special purpose exceptions
 
 #include <exception>
 #include <xtd/source_location.hpp>
-
+#include <xtd/string.hpp>
 /**
 @def throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
 

@@ -79,12 +79,12 @@ namespace xtd{
       const value_type *operator->() const { return _Current; }
 
       value_type &operator*() {
-        assert(_Current);
+        XTD_ASSERT(_Current);
         return *_Current;
       }
 
       const value_type &operator*() const {
-        assert(_Current);
+        XTD_ASSERT(_Current);
         return *_Current;
       }
 

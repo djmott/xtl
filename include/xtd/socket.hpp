@@ -125,6 +125,13 @@ namespace xtd{
         sin_addr.s_addr = inet_addr(sIP);
         sin_port = htons(iPort);
       }
+      ipv4address(const ipv4address& src){
+        memcpy(this, &src, sizeof(ipv4address));
+      }
+      ipv4address& operator=(const ipv4address& src){
+        if (&src != this) memcpy(this, &src, sizeof(ipv4address));
+        return *this;
+      }
     };
 
     ///IPv6 address wrapper around sockaddr_in6
@@ -495,7 +502,7 @@ namespace xtd{
       xtd::callback<void()> onError;
 
       /// begin the select to wait for an event or timeout
-      void select(int WaitMS){
+      bool select(int WaitMS){
         timeval tv;
         fd_set fdRead;
         fd_set fdWrite;
@@ -515,7 +522,7 @@ namespace xtd{
         auto iRet = xtd::crt_exception::throw_if(::select(1 + (SOCKET)*this, &fdRead, &fdWrite, &fdErr, &tv), [](int i){return i < 0; });
 #endif
         if (0 == iRet){
-          return;
+          return false;
         }
         if (FD_ISSET((SOCKET)*this, &fdErr)){
           onError();
@@ -526,6 +533,7 @@ namespace xtd{
         if (FD_ISSET((SOCKET)*this, &fdWrite)){
           onWrite();
         }
+        return true;
       }
     };
 

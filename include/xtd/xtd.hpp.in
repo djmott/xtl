@@ -8,6 +8,8 @@
 
 #pragma once
 
+#define XTD_GIT_IDENT "$Id$"
+
 #if !defined(ON)
   #define ON    1
 #endif
@@ -28,8 +30,12 @@
   #define DOXY_INVOKED 0
 #endif
 
-#if !defined(XTD_HAS_UUID)
-  #cmakedefine01 XTD_HAS_UUID
+#if !defined(XTD_ASSETS_DIR)
+  #define XTD_ASSETS_DIR "@CMAKE_CURRENT_SOURCE_DIR@/assets"
+#endif
+
+#if !defined(XTD_HAS_LIBUUID)
+  #cmakedefine01 XTD_HAS_LIBUUID
 #endif
 
 #if !defined(XTD_COLOR_MESSAGES)
@@ -180,6 +186,8 @@
 
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
+  #define PACK_PUSH(n) __pragma(pack(push, n))
+  #define PACK_POP() __pragma(pack(pop))
   #define FORCEINLINE __forceinline
   #define NOVTABLE __declspec(novtable)
   #define NORETURN __declspec(noreturn)
@@ -189,13 +197,15 @@
   #define TODO( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : TODO : " x  ))
   #define NOTE( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : NOTE : " x  ))
 #elif (XTD_COMPILER_GCC & XTD_COMPILER)
+  #define PRAGMA_(x) _Pragma( #x )
+  #define PACK_PUSH(n) PRAGMA_(pack(push, n))
+  #define PACK_POP() PRAGMA_(pack(pop))
   #define FORCEINLINE __attribute__((always_inline))
   #define NOVTABLE
   #define NORETURN __attribute__((noreturn))
   #define MULTIPLE __attribute__ ((weak))
   #define ALIGN(val) __attribute__ ((aligned (val)))
   #define EXPORT __attribute__ ((visibility ("default")))
-  #define PRAGMA_(x) _Pragma( #x )
   #if XTD_COLOR_MESSAGES
     #define TODO( x ) PRAGMA_(message ("\e[31mTODO : " x "\e[0m" ))
     #define NOTE( x ) PRAGMA_(message ("\e[32mNOTE : " x  "\e[0m"))
@@ -282,4 +292,5 @@ namespace xtd{
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     #include <winsock2.h>
     #include <windows.h>
+    #include <Shlobj.h>
 #endif
