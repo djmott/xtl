@@ -140,7 +140,19 @@ else()
   message(FATAL_ERROR "event trace not supported for compiler")
 endif()
 
+
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
+  message("Downloading sqlite")
+  file(DOWNLOAD https://www.sqlite.org/2016/sqlite-autoconf-3140100.tar.gz ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+  )
+endif()
+set(SQLITE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100/sqlite3.c)
+
 add_library(XTL STATIC ${EVT_TRACE_SRC}
+  ${SQLITE_SRC}
   src/xtl.cpp
   src/event_trace/event_trace.cpp
   include/xtd/concurrent/concurrent.hpp
@@ -187,6 +199,7 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100)
 
 if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
   target_compile_options(XTL PUBLIC -std=c++11 -Wall -Wextra)
@@ -265,17 +278,6 @@ execute_process(
 endif()
 
 
-
-if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
-message("Downloading sqlite")
-file(DOWNLOAD https://www.sqlite.org/2016/sqlite-autoconf-3140100.tar.gz ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
-execute_process(
-  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
-)
-endif()
-target_sources(XTL PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100/sqlite3.c)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100)
 
 
 
