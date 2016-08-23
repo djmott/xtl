@@ -7,7 +7,6 @@
 #pragma once
 #include <xtd/xtd.hpp>
 #include <xtd/string.hpp>
-#include <bits/ios_base.h>
 #include <ios>
 #include <fstream>
 #include "exception.hpp"
