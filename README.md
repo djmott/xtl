@@ -47,47 +47,47 @@ XTL works with modern C++11 compilers and has been tested with MinGW, GCC, Intel
 XTL is hosted on GitHub and is available at http://www.github.io/djmott/xtl
 Checkout the repo with git:
 
-```
+~~~
 git clone https://github.com/djmott/xtl.git
-```
+~~~
 
 ### Compiling
 
 For the most part XTL is a 'header-only' library so compilation isn't necessary. None the less, it must be configured for use with the compiler and operating system with [CMake](https://cmake.org/). From within the top level directory:
 
-```
+~~~
 mkdir build
 cd build
 cmake ..
-```
+~~~
 The compilation step is not always necessary depending on the required components that will be used. The method used to compile the run-time code is platform, toolchain and CMake configuration specific. For Linux, Cygwin and MinGW make files just run `make`.
 
 ### Using
 
 Several configuration options are available during configuration with CMake. For most purposes the default configuration should work fine. Applications should add the `include` folder to the search path. The configuration with CMake detects the compiler toolchain and target operating system then produces the primary include file. For most applications just including the project header will go a long way:
-```{.cpp}
+~~~{.cpp}
  #include <xtd/xtd.hpp>
-```
+~~~
 
 ### Testing
 
 XTL uses the [Google Test](https://github.com/google/googletest) framework for unit tests and system test. From within the build directory:
-```
+~~~
 make unit_tests
-```
+~~~
 The unit tests and system tests are contained in the same resulting binary at `tests/unit_tests`. The `coverage_tests` build target is only available for GCC:
-```
+~~~
 make coverage_tests
-```
+~~~
 This will produce the binary `tests/coverage_tests` which is identical to the `tests/unit_tests` binary but has additional instrumenting enabled for gcov.
 
 ### Documentation
 
 Online documentation is available at [https://djmott.github.io/xtl](https://djmott.github.io/xtl) and [Doxygen](http://www.doxygen.org) is used to generate offline documentation. The code is fairly well marked up for doxygen generation. After the project has been configured with CMake build with documentation with:
 
-```
+~~~
 make docs
-```
+~~~
 This will extract the source comments and generate nice documentation in the `docs/html` folder. Also available is the [wiki](https://github.com/djmott/xtl/wiki)
 
 ### Feedback and Issues
