@@ -3,9 +3,14 @@ var searchData=
   ['template_20basics',['Template Basics',['../md__src_github_xtl_docs__template-_basics.html',1,'']]],
   ['tmp_20techniques',['TMP Techniques',['../md__src_github_xtl_docs__t_m_p-_techniques.html',1,'']]],
   ['text_20parsing_20and_20ast_20generation_20library',['Text parsing and AST generation library',['../group___parsing.html',1,'']]],
+  ['table_5fdef',['table_def',['../classxtd_1_1sqlite_1_1table__def.html',1,'xtd::sqlite']]],
+  ['tagged_5fword',['tagged_word',['../classxtd_1_1nlp_1_1pos__tagger_1_1tagged__word.html',1,'xtd::nlp::pos_tagger']]],
+  ['task',['task',['../namespacextd.html#classxtd_1_1task',1,'xtd']]],
+  ['task_3c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_3e',['task&lt; _HeadT, _TailT...&gt;',['../classxtd_1_1task_3_01___head_t_00_01___tail_t_8_8_8_4.html',1,'xtd']]],
+  ['task_3c_3e',['task&lt;&gt;',['../classxtd_1_1task_3_4.html',1,'xtd']]],
   ['tcp',['tcp',['../group___sockets.html#gga01b72313c52c174d6fd373b0d3498b47ae20bb202b1d5537b1415e3263a37ed78',1,'xtd::socket']]],
-  ['tcp_5foptions',['tcp_options',['../classxtd_1_1socket_1_1tcp__options.html#a4b7a43253076361d69448f8a39954ff0',1,'xtd::socket::tcp_options']]],
   ['tcp_5foptions',['tcp_options',['../classxtd_1_1socket_1_1tcp__options.html',1,'xtd::socket']]],
+  ['tcp_5foptions',['tcp_options',['../classxtd_1_1socket_1_1tcp__options.html#a4b7a43253076361d69448f8a39954ff0',1,'xtd::socket::tcp_options']]],
   ['tcp_5ftransport',['tcp_transport',['../classxtd_1_1rpc_1_1tcp__transport.html',1,'xtd::rpc']]],
   ['throw_5fif',['throw_if',['../exception_8hpp.html#a634fb2b21866703d2760f62927010cb6',1,'exception.hpp']]],
   ['to_5flower',['to_lower',['../classxtd_1_1xstring.html#a9640e8bacbe5d13d193802fa545fda3f',1,'xtd::xstring']]],
@@ -18,5 +23,6 @@ var searchData=
   ['tuple_3c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_3e',['tuple&lt; _HeadT, _TailT...&gt;',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4.html',1,'xtd']]],
   ['tuple_3c_20_5ftailt_2e_2e_2e_3e',['tuple&lt; _TailT...&gt;',['../namespacextd.html',1,'xtd']]],
   ['tuple_3c_3e',['tuple&lt;&gt;',['../classxtd_1_1tuple_3_4.html',1,'xtd']]],
-  ['type',['type',['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3bce247106dfaac57ac70c2f10e56bdd',1,'xtd::socket::socket_base&lt; _AddressT, _SocketT, _Protocol &gt;::type()'],['../classxtd_1_1parse_1_1rule__base.html#a35018cb83d9eab19fe3344372b8c3594',1,'xtd::parse::rule_base::type()'],['../classxtd_1_1parse_1_1rule.html#ab1016f64d99f09c99bed3901414a5433',1,'xtd::parse::rule::type()']]]
+  ['type',['type',['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3bce247106dfaac57ac70c2f10e56bdd',1,'xtd::socket::socket_base&lt; _AddressT, _SocketT, _Protocol &gt;::type()'],['../classxtd_1_1parse_1_1rule__base.html#a35018cb83d9eab19fe3344372b8c3594',1,'xtd::parse::rule_base::type()'],['../classxtd_1_1parse_1_1rule.html#ab1016f64d99f09c99bed3901414a5433',1,'xtd::parse::rule::type()']]],
+  ['type_5finfo_2ehpp',['type_info.hpp',['../type__info_8hpp.html',1,'']]]
 ];

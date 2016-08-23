@@ -161,47 +161,47 @@ $(document).ready(function(){initNavTree('_r_e_a_d_m_e_8md.html','');});
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;XTL is hosted on GitHub and is available at http:<span class="comment">//www.github.io/djmott/xtl</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;Checkout the repo with git:</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;```</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;~~~</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;git clone https:<span class="comment">//github.com/djmott/xtl.git</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;```</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;~~~</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">### Compiling</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;For the most part XTL is a <span class="stringliteral">&#39;header-only&#39;</span> library so compilation isn<span class="stringliteral">&#39;t necessary. None the less, it must be configured for use with the compiler and operating system with [CMake](https://cmake.org/). From within the top level directory:</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">mkdir build</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">cd build</span></div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">cmake ..</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">The compilation step is not always necessary depending on the required components that will be used. The method used to compile the run-time code is platform, toolchain and CMake configuration specific. For Linux, Cygwin and MinGW make files just run `make`.</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">### Using</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">Several configuration options are available during configuration with CMake. For most purposes the default configuration should work fine. Applications should add the `include` folder to the search path. The configuration with CMake detects the compiler toolchain and target operating system then produces the primary include file. For most applications just including the project header will go a long way:</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">```{.cpp}</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">~~~{.cpp}</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral"> #include &lt;xtd/xtd.hpp&gt;</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">### Testing</span></div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">XTL uses the [Google Test](https://github.com/google/googletest) framework for unit tests and system test. From within the build directory:</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">make unit_tests</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">The unit tests and system tests are contained in the same resulting binary at `tests/unit_tests`. The `coverage_tests` build target is only available for GCC:</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">make coverage_tests</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">This will produce the binary `tests/coverage_tests` which is identical to the `tests/unit_tests` binary but has additional instrumenting enabled for gcov.</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">### Documentation</span></div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">Online documentation is available at [https://djmott.github.io/xtl](https://djmott.github.io/xtl) and [Doxygen](http://www.doxygen.org) is used to generate offline documentation. The code is fairly well marked up for doxygen generation. After the project has been configured with CMake build with documentation with:</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">make docs</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">```</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">This will extract the source comments and generate nice documentation in the `docs/html` folder. Also available is the [wiki](https://github.com/djmott/xtl/wiki)</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral">### Feedback and Issues</span></div>
@@ -235,7 +235,7 @@ $(document).ready(function(){initNavTree('_r_e_a_d_m_e_8md.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>README.md</b></li>
-    <li class="footer">Generated on Thu Aug 11 2016 07:59:57 for XTL by
+    <li class="footer">Generated on Tue Aug 23 2016 06:51:08 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

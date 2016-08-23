@@ -2,6 +2,7 @@ var searchData=
 [
   ['page_5fheader',['page_header',['../classxtd_1_1___1_1btree_1_1leaf_1_1page__header.html',1,'xtd::_::btree::leaf']]],
   ['page_5fheader',['page_header',['../classxtd_1_1___1_1btree_1_1branch_1_1page__header.html',1,'xtd::_::btree::branch']]],
+  ['page_5floader',['page_loader',['../classxtd_1_1___1_1btree_1_1page__loader.html',1,'xtd::_::btree']]],
   ['parser',['parser',['../classxtd_1_1parser.html',1,'xtd']]],
   ['path',['path',['../classxtd_1_1filesystem_1_1path.html',1,'xtd::filesystem']]],
   ['path_5fadder',['path_adder',['../classxtd_1_1filesystem_1_1___1_1path__adder.html',1,'xtd::filesystem::_']]],
@@ -12,10 +13,8 @@ var searchData=
   ['path_5fbase',['path_base',['../classxtd_1_1filesystem_1_1path__base.html',1,'xtd::filesystem']]],
   ['payload',['payload',['../classxtd_1_1rpc_1_1payload.html',1,'xtd::rpc']]],
   ['polling_5fsocket',['polling_socket',['../classxtd_1_1socket_1_1polling__socket.html',1,'xtd::socket']]],
-  ['pos_5ffile',['pos_file',['../classxtd_1_1nlp_1_1moby_1_1pos__file.html',1,'xtd::nlp::moby']]],
-  ['preposition',['preposition',['../classxtd_1_1nlp_1_1___1_1preposition.html',1,'xtd::nlp::_']]],
+  ['pos_5ftagger',['pos_tagger',['../classxtd_1_1nlp_1_1pos__tagger.html',1,'xtd::nlp']]],
   ['process',['process',['../classxtd_1_1process.html',1,'xtd']]],
   ['processor_5fintrinsic',['processor_intrinsic',['../classxtd_1_1processor__intrinsic.html',1,'xtd']]],
-  ['pronoun',['pronoun',['../classxtd_1_1nlp_1_1___1_1pronoun.html',1,'xtd::nlp::_']]],
   ['protocol_5fexception',['protocol_exception',['../classxtd_1_1rpc_1_1protocol__exception.html',1,'xtd::rpc']]]
 ];

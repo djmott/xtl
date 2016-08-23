@@ -1,18 +1,6 @@
 var namespacextd =
 [
-    [ "_", null, [
-      [ "btree", null, [
-        [ "branch", "classxtd_1_1___1_1btree_1_1branch.html", "classxtd_1_1___1_1btree_1_1branch" ],
-        [ "data_page", "classxtd_1_1___1_1btree_1_1data__page.html", "classxtd_1_1___1_1btree_1_1data__page" ],
-        [ "data_page<-1 >", "classxtd_1_1___1_1btree_1_1data__page_3-1_01_4.html", "classxtd_1_1___1_1btree_1_1data__page_3-1_01_4" ],
-        [ "file_header", "classxtd_1_1___1_1btree_1_1file__header.html", "classxtd_1_1___1_1btree_1_1file__header" ],
-        [ "leaf", "classxtd_1_1___1_1btree_1_1leaf.html", "classxtd_1_1___1_1btree_1_1leaf" ],
-        [ "lru_cache", "classxtd_1_1___1_1btree_1_1lru__cache.html", "classxtd_1_1___1_1btree_1_1lru__cache" ]
-      ] ],
-      [ "_RAII", "classxtd_1_1___1_1___r_a_i_i.html", "classxtd_1_1___1_1___r_a_i_i" ],
-      [ "mapped_file_base", "classxtd_1_1___1_1mapped__file__base.html", "classxtd_1_1___1_1mapped__file__base" ],
-      [ "mapped_file_base<-1 >", "classxtd_1_1___1_1mapped__file__base_3-1_01_4.html", "classxtd_1_1___1_1mapped__file__base_3-1_01_4" ]
-    ] ],
+    [ "_", "namespacextd_1_1__.html", "namespacextd_1_1__" ],
     [ "concurrent", "namespacextd_1_1concurrent.html", "namespacextd_1_1concurrent" ],
     [ "filesystem", null, [
       [ "_", null, [
@@ -26,34 +14,10 @@ var namespacextd =
       [ "path_base", "classxtd_1_1filesystem_1_1path__base.html", "classxtd_1_1filesystem_1_1path__base" ]
     ] ],
     [ "nlp", null, [
-      [ "_", null, [
-        [ "adjective", "classxtd_1_1nlp_1_1___1_1adjective.html", null ],
-        [ "adverb", "classxtd_1_1nlp_1_1___1_1adverb.html", null ],
-        [ "conjunction", "classxtd_1_1nlp_1_1___1_1conjunction.html", null ],
-        [ "determiner", "classxtd_1_1nlp_1_1___1_1determiner.html", null ],
-        [ "interjection", "classxtd_1_1nlp_1_1___1_1interjection.html", null ],
-        [ "lexical_category_impl", "classxtd_1_1nlp_1_1___1_1lexical__category__impl.html", "classxtd_1_1nlp_1_1___1_1lexical__category__impl" ],
-        [ "noun", "classxtd_1_1nlp_1_1___1_1noun.html", null ],
-        [ "opt", "classxtd_1_1nlp_1_1___1_1opt.html", null ],
-        [ "preposition", "classxtd_1_1nlp_1_1___1_1preposition.html", null ],
-        [ "pronoun", "classxtd_1_1nlp_1_1___1_1pronoun.html", null ],
-        [ "verb", "classxtd_1_1nlp_1_1___1_1verb.html", null ]
-      ] ],
       [ "moby", null, [
-        [ "database", "classxtd_1_1nlp_1_1moby_1_1database.html", "classxtd_1_1nlp_1_1moby_1_1database" ],
-        [ "pos_file", "classxtd_1_1nlp_1_1moby_1_1pos__file.html", "classxtd_1_1nlp_1_1moby_1_1pos__file" ]
+        [ "database", "classxtd_1_1nlp_1_1moby_1_1database.html", "classxtd_1_1nlp_1_1moby_1_1database" ]
       ] ],
-      [ "wordnet", null, [
-        [ "data_file", "classxtd_1_1nlp_1_1wordnet_1_1data__file.html", null ],
-        [ "database", "classxtd_1_1nlp_1_1wordnet_1_1database.html", null ],
-        [ "file", "classxtd_1_1nlp_1_1wordnet_1_1file.html", "classxtd_1_1nlp_1_1wordnet_1_1file" ],
-        [ "index_file", "classxtd_1_1nlp_1_1wordnet_1_1index__file.html", null ],
-        [ "verb_data_file", "classxtd_1_1nlp_1_1wordnet_1_1verb__data__file.html", null ]
-      ] ],
-      [ "document", "classxtd_1_1nlp_1_1document.html", "classxtd_1_1nlp_1_1document" ],
-      [ "english", "classxtd_1_1nlp_1_1english.html", "classxtd_1_1nlp_1_1english" ],
-      [ "lexical_category", "classxtd_1_1nlp_1_1lexical__category.html", "classxtd_1_1nlp_1_1lexical__category" ],
-      [ "word", "classxtd_1_1nlp_1_1word.html", null ]
+      [ "pos_tagger", "classxtd_1_1nlp_1_1pos__tagger.html", "classxtd_1_1nlp_1_1pos__tagger" ]
     ] ],
     [ "parse", "namespacextd_1_1parse.html", "namespacextd_1_1parse" ],
     [ "rpc", null, [
@@ -86,42 +50,55 @@ var namespacextd =
       [ "tcp_transport", "classxtd_1_1rpc_1_1tcp__transport.html", "classxtd_1_1rpc_1_1tcp__transport" ]
     ] ],
     [ "socket", "namespacextd_1_1socket.html", "namespacextd_1_1socket" ],
+    [ "sqlite", null, [
+      [ "database", "classxtd_1_1sqlite_1_1database.html", "classxtd_1_1sqlite_1_1database" ],
+      [ "exception", "classxtd_1_1sqlite_1_1exception.html", "classxtd_1_1sqlite_1_1exception" ],
+      [ "field_def", "classxtd_1_1sqlite_1_1field__def.html", "classxtd_1_1sqlite_1_1field__def" ],
+      [ "statement", "classxtd_1_1sqlite_1_1statement.html", "classxtd_1_1sqlite_1_1statement" ],
+      [ "table_def", "classxtd_1_1sqlite_1_1table__def.html", null ]
+    ] ],
     [ "windows", null, [
       [ "debug_help", "classxtd_1_1windows_1_1debug__help.html", "classxtd_1_1windows_1_1debug__help" ],
       [ "debug_symbol", "classxtd_1_1windows_1_1debug__symbol.html", "classxtd_1_1windows_1_1debug__symbol" ]
     ] ],
     [ "btree", "classxtd_1_1btree.html", "classxtd_1_1btree" ],
-    [ "ByteToChar", "classxtd_1_1_byte_to_char.html", null ],
     [ "callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ],
     [ "crt_exception", "classxtd_1_1crt__exception.html", "classxtd_1_1crt__exception" ],
     [ "Debug", "classxtd_1_1_debug.html", "classxtd_1_1_debug" ],
     [ "dynamic_library", "classxtd_1_1dynamic__library.html", "classxtd_1_1dynamic__library" ],
     [ "dynamic_library_exception", "classxtd_1_1dynamic__library__exception.html", "classxtd_1_1dynamic__library__exception" ],
+    [ "dynamic_object", "classxtd_1_1dynamic__object.html", "classxtd_1_1dynamic__object" ],
     [ "exception", "classxtd_1_1exception.html", "classxtd_1_1exception" ],
     [ "executable", "classxtd_1_1executable.html", "classxtd_1_1executable" ],
     [ "get_parameter", "namespacextd.html#classxtd_1_1get__parameter", null ],
     [ "get_parameter< 0, _ReturnT(_HeadT, _TailT...)>", "classxtd_1_1get__parameter_3_010_00_01___return_t_07___head_t_00_01___tail_t_8_8_8_08_4.html", null ],
     [ "get_parameter< _ParamNum, _ReturnT(_HeadT, _TailT...)>", "classxtd_1_1get__parameter_3_01___param_num_00_01___return_t_07___head_t_00_01___tail_t_8_8_8_08_4.html", null ],
     [ "intrinsic_of_size", "namespacextd.html#classxtd_1_1intrinsic__of__size", null ],
-    [ "IntToChar", "classxtd_1_1_int_to_char.html", null ],
     [ "is_a", "namespacextd.html#classxtd_1_1is__a", null ],
     [ "is_a< _Ty >", "classxtd_1_1is__a_3_01___ty_01_4.html", null ],
     [ "is_a< _Ty, _HeadT, _TailT...>", "classxtd_1_1is__a_3_01___ty_00_01___head_t_00_01___tail_t_8_8_8_4.html", null ],
     [ "is_a< _Ty, _Ty, _TailT...>", "classxtd_1_1is__a_3_01___ty_00_01___ty_00_01___tail_t_8_8_8_4.html", null ],
+    [ "last", "classxtd_1_1last.html", null ],
     [ "log", "classxtd_1_1log.html", "classxtd_1_1log" ],
-    [ "LongLongToChar", "classxtd_1_1_long_long_to_char.html", null ],
     [ "lower_case", "classxtd_1_1lower__case.html", null ],
+    [ "lru_cache", "classxtd_1_1lru__cache.html", "classxtd_1_1lru__cache" ],
     [ "mapped_file", "classxtd_1_1mapped__file.html", "classxtd_1_1mapped__file" ],
-    [ "nibble_hex_char", "namespacextd.html#classxtd_1_1nibble__hex__char", null ],
+    [ "mapped_page", "classxtd_1_1mapped__page.html", "classxtd_1_1mapped__page" ],
+    [ "mapped_vector", "classxtd_1_1mapped__vector.html", "classxtd_1_1mapped__vector" ],
     [ "parser", "classxtd_1_1parser.html", "classxtd_1_1parser" ],
     [ "process", "classxtd_1_1process.html", "classxtd_1_1process" ],
     [ "processor_intrinsic", "classxtd_1_1processor__intrinsic.html", null ],
     [ "shared_mem_obj", "classxtd_1_1shared__mem__obj.html", "classxtd_1_1shared__mem__obj" ],
-    [ "ShortToChar", "classxtd_1_1_short_to_char.html", null ],
+    [ "shift_erase_policy", "namespacextd.html#classxtd_1_1shift__erase__policy", null ],
     [ "source_location", "classxtd_1_1source__location.html", "classxtd_1_1source__location" ],
+    [ "task", "namespacextd.html#classxtd_1_1task", null ],
+    [ "task< _HeadT, _TailT...>", "classxtd_1_1task_3_01___head_t_00_01___tail_t_8_8_8_4.html", null ],
+    [ "task<>", "classxtd_1_1task_3_4.html", null ],
     [ "tuple", "namespacextd.html#classxtd_1_1tuple", null ],
     [ "tuple< _HeadT, _TailT...>", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4.html", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4" ],
     [ "tuple<>", "classxtd_1_1tuple_3_4.html", "classxtd_1_1tuple_3_4" ],
+    [ "unique_id", "classxtd_1_1unique__id.html", "classxtd_1_1unique__id" ],
     [ "var", "classxtd_1_1var.html", "classxtd_1_1var" ],
+    [ "wrapped", "classxtd_1_1wrapped.html", "classxtd_1_1wrapped" ],
     [ "xstring", "classxtd_1_1xstring.html", "classxtd_1_1xstring" ]
 ];

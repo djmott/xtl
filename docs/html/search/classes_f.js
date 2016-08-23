@@ -12,7 +12,7 @@ var searchData=
   ['server_5fimpl_3c_20_5ftransportt_2c_20_5fdeclt_2c_20_5ftailt_2e_2e_2e_3e',['server_impl&lt; _TransportT, _DeclT, _TailT...&gt;',['../classxtd_1_1rpc_1_1server__impl.html',1,'xtd::rpc']]],
   ['server_5fimpl_3c_20_5ftransportt_2c_20server_3c_20_5ftransportt_2c_20_5fcalls_2e_2e_2e_3e_2c_20_5fcalls_2e_2e_2e_3e',['server_impl&lt; _TransportT, server&lt; _TransportT, _Calls...&gt;, _Calls...&gt;',['../classxtd_1_1rpc_1_1server__impl.html',1,'xtd::rpc']]],
   ['shared_5fmem_5fobj',['shared_mem_obj',['../classxtd_1_1shared__mem__obj.html',1,'xtd']]],
-  ['shorttochar',['ShortToChar',['../classxtd_1_1_short_to_char.html',1,'xtd']]],
+  ['shift_5ferase_5fpolicy',['shift_erase_policy',['../namespacextd.html#classxtd_1_1shift__erase__policy',1,'xtd']]],
   ['sockaddr_5fin',['sockaddr_in',['../classsockaddr__in.html',1,'']]],
   ['sockaddr_5fin6',['sockaddr_in6',['../classsockaddr__in6.html',1,'']]],
   ['socket_5fbase_3c_20_5faddresst_2c_20_5fsockett_2c_20_5fprotocol_20_3e',['socket_base&lt; _AddressT, _SocketT, _Protocol &gt;',['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html',1,'xtd::socket']]],
@@ -21,5 +21,6 @@ var searchData=
   ['spin_5flock_5fbase',['spin_lock_base',['../classxtd_1_1concurrent_1_1spin__lock__base.html',1,'xtd::concurrent']]],
   ['stack',['stack',['../classxtd_1_1concurrent_1_1stack.html',1,'xtd::concurrent']]],
   ['stack_3c_20pointer_20_3e',['stack&lt; pointer &gt;',['../classxtd_1_1concurrent_1_1stack.html',1,'xtd::concurrent']]],
+  ['statement',['statement',['../classxtd_1_1sqlite_1_1statement.html',1,'xtd::sqlite']]],
   ['string',['string',['../namespacextd_1_1parse.html#classxtd_1_1parse_1_1string',1,'xtd::parse']]]
 ];

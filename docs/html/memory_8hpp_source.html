@@ -143,7 +143,10 @@ $(document).ready(function(){initNavTree('memory_8hpp_source.html','');});
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">  #endif</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor"></span>  }</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Ty, <span class="keyword">typename</span> _ParamT&gt; <span class="keyword">static</span> <span class="keyword">inline</span> std::unique_ptr&lt;_Ty&gt; make_unique(_ParamT&amp;&amp; src){ <span class="keywordflow">return</span> std::unique_ptr&lt;_Ty&gt;(<span class="keyword">new</span> _Ty(std::forward&lt;_ParamT&gt;(src))); }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Ty, <span class="keyword">typename</span> _ParamT&gt; <span class="keyword">static</span> <span class="keyword">inline</span> std::unique_ptr&lt;_Ty&gt; make_unique(<span class="keyword">const</span> _ParamT&amp; src){ <span class="keywordflow">return</span> std::unique_ptr&lt;_Ty&gt;(<span class="keyword">new</span> _Ty(src)); }</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
 <div class="ttc" id="xtd_8hpp_html"><div class="ttname"><a href="xtd_8hpp.html">xtd.hpp</a></div><div class="ttdoc">host, target and build configurations and settings Various components are purpose built for specific ...</div></div>
 <div class="ttc" id="debug_8hpp_html"><div class="ttname"><a href="debug_8hpp.html">debug.hpp</a></div><div class="ttdoc">Debugging. </div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -153,7 +156,7 @@ $(document).ready(function(){initNavTree('memory_8hpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="memory_8hpp.html">memory.hpp</a></li>
-    <li class="footer">Generated on Thu Aug 11 2016 07:59:57 for XTL by
+    <li class="footer">Generated on Tue Aug 23 2016 06:51:08 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

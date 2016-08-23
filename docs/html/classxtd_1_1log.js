@@ -10,5 +10,6 @@ var classxtd_1_1log =
       [ "leave", "classxtd_1_1log.html#a330a67a4d2cad7a2e038946d0de35737a6c374e70334072aeeb62ed46ea987838", null ]
     ] ],
     [ "get", "classxtd_1_1log.html#a3afc393dd7940ce500822521b4bd107e", null ],
+    [ "type_string", "classxtd_1_1log.html#a092e25317baff41d3d13a35cdaeae718", null ],
     [ "write", "classxtd_1_1log.html#a756b3c7f18962656e711dced11081119", null ]
 ];

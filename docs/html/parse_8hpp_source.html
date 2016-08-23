@@ -453,7 +453,7 @@ $(document).ready(function(){initNavTree('parse_8hpp_source.html','');});
 <div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;      <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;</div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _IteratorT, <span class="keyword">typename</span> ... _ChildRuleTs&gt;</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        <span class="keyword">static</span> rule_base::pointer_type parse(_IteratorT&amp; , _IteratorT&amp; , _ChildRuleTs ... oChildRules){</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        <span class="keyword">static</span> rule_base::pointer_type parse(_IteratorT&amp; , _IteratorT&amp; , _ChildRuleTs&amp;&amp; ... oChildRules){</div>
 <div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;          <span class="keywordflow">return</span> rule_base::pointer_type(<span class="keyword">new</span> _DeclT(std::forward&lt;_ChildRuleTs&gt;(oChildRules)...));</div>
 <div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        }</div>
 <div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;</div>
@@ -464,7 +464,7 @@ $(document).ready(function(){initNavTree('parse_8hpp_source.html','');});
 <div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;      <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;</div>
 <div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _IteratorT, <span class="keyword">typename</span> ... _ChildRuleTs&gt;</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keyword">static</span> rule_base::pointer_type parse(_IteratorT&amp; begin, _IteratorT&amp; end, _ChildRuleTs ... oChildRules){</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keyword">static</span> rule_base::pointer_type parse(_IteratorT&amp; begin, _IteratorT&amp; end, _ChildRuleTs&amp;&amp; ... oChildRules){</div>
 <div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;          _IteratorT oBegin = begin;</div>
 <div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;          <span class="keyword">auto</span> oItem = parse_helper&lt;_HeadT, typename _HeadT::impl_type, _IgnoreCase, _WhitespaceT&gt;::parse(oBegin, end);</div>
 <div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;          <span class="keywordflow">if</span> (!oItem){</div>
@@ -496,7 +496,7 @@ $(document).ready(function(){initNavTree('parse_8hpp_source.html','');});
 <div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;      <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;</div>
 <div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _IteratorT, <span class="keyword">typename</span> ... _ChildRuleTs&gt;</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <span class="keyword">static</span> rule_base::pointer_type parse(_IteratorT&amp; begin, _IteratorT&amp; end, _ChildRuleTs ... oChildRules){</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <span class="keyword">static</span> rule_base::pointer_type parse(_IteratorT&amp; begin, _IteratorT&amp; end, _ChildRuleTs&amp;&amp; ... oChildRules){</div>
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;          _IteratorT oBegin = begin;</div>
 <div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;          <span class="keyword">auto</span> oItem = parse_helper&lt;_HeadT, typename _HeadT::impl_type, _IgnoreCase, _WhitespaceT&gt;::parse(oBegin, end);</div>
 <div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;          <span class="keywordflow">if</span> (oItem){</div>
@@ -519,7 +519,7 @@ $(document).ready(function(){initNavTree('parse_8hpp_source.html','');});
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;      <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;</div>
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _IteratorT, <span class="keyword">typename</span> ... _ChildRuleTs&gt;</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;        <span class="keyword">static</span> rule_base::pointer_type parse(_IteratorT&amp; begin, _IteratorT&amp; end, _ChildRuleTs ... oChildRules){</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;        <span class="keyword">static</span> rule_base::pointer_type parse(_IteratorT&amp; begin, _IteratorT&amp; end, _ChildRuleTs&amp;&amp; ... oChildRules){</div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;          _IteratorT oBegin = begin;</div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;          <span class="keyword">auto</span> oItem = parse_helper&lt;_Ty, typename _Ty::impl_type, _IgnoreCase, _WhitespaceT&gt;::parse(oBegin, end);</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;          <span class="keywordflow">if</span> (!oItem){</div>
@@ -573,7 +573,7 @@ $(document).ready(function(){initNavTree('parse_8hpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="parse_8hpp.html">parse.hpp</a></li>
-    <li class="footer">Generated on Thu Aug 11 2016 07:59:57 for XTL by
+    <li class="footer">Generated on Tue Aug 23 2016 06:51:08 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

@@ -1,8 +1,8 @@
 var classxtd_1_1mapped__file =
 [
-    [ "mapped_page", "classxtd_1_1mapped__file_1_1mapped__page.html", "classxtd_1_1mapped__file_1_1mapped__page" ],
-    [ "~mapped_file", "classxtd_1_1mapped__file.html#afe6ae48c39c95592cf2521ecdc65a20c", null ],
-    [ "mapped_file", "classxtd_1_1mapped__file.html#a3002148806c9cdcc99719c2eed45d40e", null ],
-    [ "get", "classxtd_1_1mapped__file.html#a024cfc475c27aae16669d380164521e5", null ],
-    [ "open", "classxtd_1_1mapped__file.html#a392c7d1dba87788b2ffc8e2fff28d559", null ]
+    [ "~mapped_file", "classxtd_1_1mapped__file.html#a8055cdd145c3ee8c87176c6b645472a9", null ],
+    [ "mapped_file", "classxtd_1_1mapped__file.html#a71651483b9106d4b6a46120c0f6259a8", null ],
+    [ "append", "classxtd_1_1mapped__file.html#abc1cd9e188a4b37472eab5b02e3f4bb4", null ],
+    [ "get", "classxtd_1_1mapped__file.html#a1e474dc8ce4863c9c72c7fd007d2bb0f", null ],
+    [ "open", "classxtd_1_1mapped__file.html#ac01ce2e468a423d18310da78369eeb71", null ]
 ];

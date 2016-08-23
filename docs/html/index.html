@@ -165,17 +165,26 @@ $(document).ready(function(){initNavTree('index.html','');});
 </ul>
 <h3>Obtaining</h3>
 <p>XTL is hosted on GitHub and is available at <a href="http://www.github.io/djmott/xtl">http://www.github.io/djmott/xtl</a> Checkout the repo with git:</p>
-<p>``` git clone <a href="https://github.com/djmott/xtl.git">https://github.com/djmott/xtl.git</a> ```</p>
-<h3>Compiling</h3>
+<div class="fragment"><div class="line">git clone https:<span class="comment">//github.com/djmott/xtl.git</span></div>
+</div><!-- fragment --><h3>Compiling</h3>
 <p>For the most part XTL is a 'header-only' library so compilation isn't necessary. None the less, it must be configured for use with the compiler and operating system with <a href="https://cmake.org/">CMake</a>. From within the top level directory:</p>
-<p>``` mkdir build cd build cmake .. ``<code> The compilation step is not always necessary depending on the required components that will be used. The method used to compile the run-time code is platform, toolchain and CMake configuration specific. For Linux, Cygwin and MinGW make files just run</code>make`.</p>
+<div class="fragment"><div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">cmake ..</div>
+</div><!-- fragment --><p> The compilation step is not always necessary depending on the required components that will be used. The method used to compile the run-time code is platform, toolchain and CMake configuration specific. For Linux, Cygwin and MinGW make files just run <code>make</code>.</p>
 <h3>Using</h3>
-<p>Several configuration options are available during configuration with CMake. For most purposes the default configuration should work fine. Applications should add the <code>include</code> folder to the search path. The configuration with CMake detects the compiler toolchain and target operating system then produces the primary include file. For most applications just including the project header will go a long way: ```{.cpp} #include &lt;<a class="el" href="xtd_8hpp.html" title="host, target and build configurations and settings Various components are purpose built for specific ...">xtd/xtd.hpp</a>&gt; ```</p>
-<h3>Testing</h3>
-<p>XTL uses the <a href="https://github.com/google/googletest">Google Test</a> framework for unit tests and system test. From within the build directory: ``` make unit_tests ``<code> The unit tests and system tests are contained in the same resulting binary at</code>tests/unit_tests<code>. The</code>coverage_tests<code>build target is only available for GCC: </code>`` make coverage_tests ``<code> This will produce the binary</code>tests/coverage_tests<code>which is identical to the</code>tests/unit_tests` binary but has additional instrumenting enabled for gcov.</p>
+<p>Several configuration options are available during configuration with CMake. For most purposes the default configuration should work fine. Applications should add the <code>include</code> folder to the search path. The configuration with CMake detects the compiler toolchain and target operating system then produces the primary include file. For most applications just including the project header will go a long way: </p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="xtd_8hpp.html">xtd/xtd.hpp</a>&gt;</span></div>
+</div><!-- fragment --><h3>Testing</h3>
+<p>XTL uses the <a href="https://github.com/google/googletest">Google Test</a> framework for unit tests and system test. From within the build directory: </p>
+<div class="fragment"><div class="line">make unit_tests</div>
+</div><!-- fragment --><p> The unit tests and system tests are contained in the same resulting binary at <code>tests/unit_tests</code>. The <code>coverage_tests</code> build target is only available for GCC: </p>
+<div class="fragment"><div class="line">make coverage_tests</div>
+</div><!-- fragment --><p> This will produce the binary <code>tests/coverage_tests</code> which is identical to the <code>tests/unit_tests</code> binary but has additional instrumenting enabled for gcov.</p>
 <h3>Documentation</h3>
 <p>Online documentation is available at <a href="https://djmott.github.io/xtl">https://djmott.github.io/xtl</a> and <a href="http://www.doxygen.org">Doxygen</a> is used to generate offline documentation. The code is fairly well marked up for doxygen generation. After the project has been configured with CMake build with documentation with:</p>
-<p>``` make docs ``<code> This will extract the source comments and generate nice documentation in the</code>docs/html` folder. Also available is the <a href="https://github.com/djmott/xtl/wiki">wiki</a></p>
+<div class="fragment"><div class="line">make docs</div>
+</div><!-- fragment --><p> This will extract the source comments and generate nice documentation in the <code>docs/html</code> folder. Also available is the <a href="https://github.com/djmott/xtl/wiki">wiki</a></p>
 <h3>Feedback and Issues</h3>
 <p>Submit a <a href="https://github.com/djmott/xtl/issues">ticket</a> on GitHub if a bug is found. Effort will be made to fix it ASAP.</p>
 <h3>Contributing</h3>
@@ -197,7 +206,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Aug 11 2016 07:59:58 for XTL by
+    <li class="footer">Generated on Tue Aug 23 2016 06:51:09 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

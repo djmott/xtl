@@ -2,7 +2,6 @@ var searchData=
 [
   ['record',['record',['../classxtd_1_1___1_1btree_1_1leaf_1_1record.html',1,'xtd::_::btree::leaf']]],
   ['record',['record',['../classxtd_1_1___1_1btree_1_1branch_1_1record.html',1,'xtd::_::btree::branch']]],
-  ['record',['record',['../classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record.html',1,'xtd::nlp::moby::pos_file']]],
   ['recursive_5fspin_5flock_5fbase',['recursive_spin_lock_base',['../classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html',1,'xtd::concurrent::_']]],
   ['regex',['regex',['../namespacextd_1_1parse.html#classxtd_1_1parse_1_1regex',1,'xtd::parse']]],
   ['rpc_5fcall',['rpc_call',['../classxtd_1_1rpc_1_1rpc__call.html',1,'xtd::rpc']]],

@@ -10,17 +10,13 @@ var files =
       [ "debug_symbol", "classxtd_1_1windows_1_1debug__symbol.html", "classxtd_1_1windows_1_1debug__symbol" ]
     ] ],
     [ "debug.hpp", "debug_8hpp.html", "debug_8hpp" ],
-    [ "document.hpp", "document_8hpp.html", [
-      [ "document", "classxtd_1_1nlp_1_1document.html", "classxtd_1_1nlp_1_1document" ]
-    ] ],
     [ "dynamic_library.hpp", "dynamic__library_8hpp.html", [
       [ "dynamic_library", "classxtd_1_1dynamic__library.html", "classxtd_1_1dynamic__library" ],
       [ "dynamic_library_exception", "classxtd_1_1dynamic__library__exception.html", "classxtd_1_1dynamic__library__exception" ],
       [ "function", "classxtd_1_1dynamic__library_1_1function.html", "classxtd_1_1dynamic__library_1_1function" ]
     ] ],
-    [ "english.hpp", "english_8hpp.html", [
-      [ "english", "classxtd_1_1nlp_1_1english.html", "classxtd_1_1nlp_1_1english" ],
-      [ "lemma", "classxtd_1_1nlp_1_1english_1_1lemma.html", null ]
+    [ "dynamic_object.hpp", "dynamic__object_8hpp.html", [
+      [ "dynamic_object", "classxtd_1_1dynamic__object.html", "classxtd_1_1dynamic__object" ]
     ] ],
     [ "event_trace.cpp", "event__trace_8cpp.html", "event__trace_8cpp" ],
     [ "event_trace.hpp", "event__trace_8hpp.html", null ],
@@ -33,35 +29,27 @@ var files =
     [ "filesystem.hpp", "filesystem_8hpp.html", "filesystem_8hpp" ],
     [ "hash_map.hpp", "hash__map_8hpp.html", null ],
     [ "log.hpp", "log_8hpp.html", "log_8hpp" ],
-    [ "mapped_file.hpp", "mapped__file_8hpp.html", [
-      [ "mapped_file", "classxtd_1_1mapped__file.html", "classxtd_1_1mapped__file" ],
-      [ "mapped_file_base", "classxtd_1_1___1_1mapped__file__base.html", "classxtd_1_1___1_1mapped__file__base" ],
-      [ "mapped_file_base<-1 >", "classxtd_1_1___1_1mapped__file__base_3-1_01_4.html", "classxtd_1_1___1_1mapped__file__base_3-1_01_4" ],
-      [ "mapped_page", "classxtd_1_1mapped__file_1_1mapped__page.html", "classxtd_1_1mapped__file_1_1mapped__page" ]
+    [ "lru_cache.hpp", "lru__cache_8hpp.html", [
+      [ "lru_cache", "classxtd_1_1lru__cache.html", "classxtd_1_1lru__cache" ]
+    ] ],
+    [ "main.cpp", "main_8cpp_source.html", null ],
+    [ "mapped_file.hpp", "mapped__file_8hpp.html", "mapped__file_8hpp" ],
+    [ "mapped_vector.hpp", "mapped__vector_8hpp.html", [
+      [ "iterator", "classxtd_1_1mapped__vector_1_1iterator.html", "classxtd_1_1mapped__vector_1_1iterator" ],
+      [ "mapped_vector", "classxtd_1_1mapped__vector.html", "classxtd_1_1mapped__vector" ],
+      [ "shift_erase_policy", "namespacextd.html#classxtd_1_1shift__erase__policy", null ]
     ] ],
     [ "memory.hpp", "memory_8hpp.html", "memory_8hpp" ],
     [ "meta.hpp", "meta_8hpp.html", "meta_8hpp" ],
     [ "moby.hpp", "moby_8hpp.html", [
-      [ "database", "classxtd_1_1nlp_1_1moby_1_1database.html", "classxtd_1_1nlp_1_1moby_1_1database" ],
-      [ "pos_file", "classxtd_1_1nlp_1_1moby_1_1pos__file.html", "classxtd_1_1nlp_1_1moby_1_1pos__file" ],
-      [ "record", "classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record.html", "classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record" ]
+      [ "database", "classxtd_1_1nlp_1_1moby_1_1database.html", "classxtd_1_1nlp_1_1moby_1_1database" ]
     ] ],
-    [ "nlp.hpp", "nlp_8hpp.html", [
-      [ "adjective", "classxtd_1_1nlp_1_1___1_1adjective.html", null ],
-      [ "adverb", "classxtd_1_1nlp_1_1___1_1adverb.html", null ],
-      [ "conjunction", "classxtd_1_1nlp_1_1___1_1conjunction.html", null ],
-      [ "determiner", "classxtd_1_1nlp_1_1___1_1determiner.html", null ],
-      [ "interjection", "classxtd_1_1nlp_1_1___1_1interjection.html", null ],
-      [ "lexical_category", "classxtd_1_1nlp_1_1lexical__category.html", "classxtd_1_1nlp_1_1lexical__category" ],
-      [ "lexical_category_impl", "classxtd_1_1nlp_1_1___1_1lexical__category__impl.html", "classxtd_1_1nlp_1_1___1_1lexical__category__impl" ],
-      [ "noun", "classxtd_1_1nlp_1_1___1_1noun.html", null ],
-      [ "opt", "classxtd_1_1nlp_1_1___1_1opt.html", null ],
-      [ "preposition", "classxtd_1_1nlp_1_1___1_1preposition.html", null ],
-      [ "pronoun", "classxtd_1_1nlp_1_1___1_1pronoun.html", null ],
-      [ "verb", "classxtd_1_1nlp_1_1___1_1verb.html", null ]
-    ] ],
+    [ "nlp.hpp", "nlp_8hpp.html", "nlp_8hpp" ],
     [ "parse.hpp", "parse_8hpp.html", "parse_8hpp" ],
-    [ "pos.hpp", "pos_8hpp.html", null ],
+    [ "pos.hpp", "pos_8hpp.html", [
+      [ "pos_tagger", "classxtd_1_1nlp_1_1pos__tagger.html", "classxtd_1_1nlp_1_1pos__tagger" ],
+      [ "tagged_word", "classxtd_1_1nlp_1_1pos__tagger_1_1tagged__word.html", null ]
+    ] ],
     [ "process.hpp", "process_8hpp.html", [
       [ "process", "classxtd_1_1process.html", "classxtd_1_1process" ]
     ] ],
@@ -103,6 +91,7 @@ var files =
     [ "socket.hpp", "socket_8hpp.html", "socket_8hpp" ],
     [ "source_location.hpp", "source__location_8hpp.html", "source__location_8hpp" ],
     [ "spin_lock.hpp", "spin__lock_8hpp.html", "spin__lock_8hpp" ],
+    [ "sqlite.hpp", "sqlite_8hpp.html", "sqlite_8hpp" ],
     [ "stack.hpp", "stack_8hpp.html", null ],
     [ "string.hpp", "string_8hpp.html", "string_8hpp" ],
     [ "tuple.hpp", "tuple_8hpp.html", [
@@ -110,7 +99,11 @@ var files =
       [ "tuple< _HeadT, _TailT...>", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4.html", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4" ],
       [ "tuple<>", "classxtd_1_1tuple_3_4.html", "classxtd_1_1tuple_3_4" ]
     ] ],
-    [ "unique_id.hpp", "unique__id_8hpp.html", null ],
+    [ "type_info.hpp", "type__info_8hpp.html", "type__info_8hpp" ],
+    [ "unique_id.hpp", "unique__id_8hpp.html", [
+      [ "unique_id", "classxtd_1_1unique__id.html", "classxtd_1_1unique__id" ],
+      [ "xstring_format< char, const unique_id & >", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01unique__id_01_6_01_4.html", "classxtd_1_1___1_1xstring__format_3_01char_00_01const_01unique__id_01_6_01_4" ]
+    ] ],
     [ "var.hpp", "var_8hpp.html", [
       [ "empty", "classxtd_1_1var_1_1empty.html", "classxtd_1_1var_1_1empty" ],
       [ "inner", "classxtd_1_1var_1_1inner.html", "classxtd_1_1var_1_1inner" ],
@@ -118,16 +111,10 @@ var files =
       [ "inner_base", "classxtd_1_1var_1_1inner__base.html", "classxtd_1_1var_1_1inner__base" ],
       [ "var", "classxtd_1_1var.html", "classxtd_1_1var" ]
     ] ],
-    [ "word.hpp", "word_8hpp.html", [
-      [ "word", "classxtd_1_1nlp_1_1word.html", null ]
-    ] ],
     [ "wordnet.hpp", "wordnet_8hpp.html", [
-      [ "data_file", "classxtd_1_1nlp_1_1wordnet_1_1data__file.html", null ],
-      [ "database", "classxtd_1_1nlp_1_1wordnet_1_1database.html", null ],
-      [ "file", "classxtd_1_1nlp_1_1wordnet_1_1file.html", "classxtd_1_1nlp_1_1wordnet_1_1file" ],
-      [ "index_file", "classxtd_1_1nlp_1_1wordnet_1_1index__file.html", null ],
-      [ "verb_data_file", "classxtd_1_1nlp_1_1wordnet_1_1verb__data__file.html", null ]
+      [ "database", "classwordnet_1_1database.html", null ]
     ] ],
+    [ "wrapped_type.hpp", "wrapped__type_8hpp.html", "wrapped__type_8hpp" ],
     [ "xtd.hpp", "xtd_8hpp.html", "xtd_8hpp" ],
     [ "xtl.cpp", "xtl_8cpp.html", null ]
 ];

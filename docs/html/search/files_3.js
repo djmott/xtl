@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['english_2ehpp',['english.hpp',['../english_8hpp.html',1,'']]],
   ['event_5ftrace_2ecpp',['event_trace.cpp',['../event__trace_8cpp.html',1,'']]],
   ['event_5ftrace_2ehpp',['event_trace.hpp',['../event__trace_8hpp.html',1,'']]],
   ['evt_5fgcc_2ecpp',['evt_gcc.cpp',['../evt__gcc_8cpp.html',1,'']]],

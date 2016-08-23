@@ -7,6 +7,5 @@ var searchData=
   ['branch',['branch',['../classxtd_1_1___1_1btree_1_1branch.html',1,'xtd::_::btree']]],
   ['btree',['btree',['../classxtd_1_1btree.html',1,'xtd']]],
   ['btree_2ehpp',['btree.hpp',['../btree_8hpp.html',1,'']]],
-  ['bytetochar',['ByteToChar',['../classxtd_1_1_byte_to_char.html',1,'xtd']]],
   ['boost_20software_20license_20_2d_20version_201_2e0_20_2d_20august_2017th_2c_202003',['Boost Software License - Version 1.0 - August 17th, 2003',['../md__src_github_xtl__l_i_c_e_n_s_e.html',1,'']]]
 ];

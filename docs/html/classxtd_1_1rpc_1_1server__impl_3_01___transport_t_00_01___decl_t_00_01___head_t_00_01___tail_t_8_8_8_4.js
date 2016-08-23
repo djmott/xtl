@@ -6,7 +6,6 @@ var classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___he
     [ "_attach", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html#acced93a9b9020791b8b08036b56a7c67", null ],
     [ "_attach", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html#afc56727167c4e582b03007681d6a928e", null ],
     [ "attach", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html#abe112758d071b660fc2edd934d9adb24", null ],
-    [ "call_handler", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html#aeea8f332ebdcb404eaf174e097efd458", null ],
-    [ "invoke", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html#a7f1456efcf76085058a961cc5ced5dd4", null ],
+    [ "call_handler", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html#a3e497427a4eeea3e870da5b24258d0ff", null ],
     [ "_Function", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html#a754207edc8bb86554cd18acc5acedb66", null ]
 ];

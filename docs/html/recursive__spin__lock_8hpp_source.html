@@ -116,59 +116,61 @@ $(document).ready(function(){initNavTree('recursive__spin__lock_8hpp_source.html
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="concurrent_8hpp.html">xtd/concurrent/concurrent.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>xtd{</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keyword">namespace </span>concurrent {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">namespace </span>_ {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;      <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _WaitPolicyT = null_wait_policy&gt;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">   14</a></span>&#160;      <span class="keyword">class </span><a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>{</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">using</span> wait_policy_type = _WaitPolicyT;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">using</span> hash_type = std::hash&lt;std::thread::id&gt;;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        std::atomic&lt;size_t&gt; _lock;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        hash_type _hash;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        uint32_t _lock_count;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        wait_policy_type _WaitPolicy;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;      <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">using</span> <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">scope_locker</a> = <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker&lt;recursive_spin_lock_base&lt;_WaitPolicyT&gt;</a>&gt;;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        ~<a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(wait_policy_type oWait = wait_policy_type()) : _lock(-1), _lock_count(0), _WaitPolicy(oWait) {};</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(<span class="keyword">const</span> <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a> &amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(<a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a> &amp;&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordtype">bool</span> try_lock() {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;          <span class="keywordtype">size_t</span> bad_id = -1;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;          <span class="keyword">auto</span> ThisID = _hash(std::this_thread::get_id());</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;          <span class="keywordflow">if</span> (!_lock.compare_exchange_strong(bad_id, ThisID) &amp;&amp; !(_lock.compare_exchange_strong(ThisID, ThisID))) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;          }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;          ++_lock_count;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;          <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">void</span> lock() {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;          <span class="keywordflow">while</span> (!try_lock()) {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            _WaitPolicy();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;          }</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">void</span> unlock() {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;          assert(_lock.load() == _hash(std::this_thread::get_id()));</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;          <span class="keywordflow">if</span> (0 == --_lock_count) {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            _lock.store(-1);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;          }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      };</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">using</span> <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock</a> = <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">_::recursive_spin_lock_base&lt;null_wait_policy&gt;</a>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  }</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="debug_8hpp.html">xtd/debug.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>xtd{</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="keyword">namespace </span>concurrent {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">namespace </span>_ {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;      <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _WaitPolicyT = null_wait_policy&gt;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">   15</a></span>&#160;      <span class="keyword">class </span><a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>{</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">using</span> wait_policy_type = _WaitPolicyT;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">using</span> hash_type = std::hash&lt;std::thread::id&gt;;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        std::atomic&lt;size_t&gt; _lock;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        hash_type _hash;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        uint32_t _lock_count;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        wait_policy_type _WaitPolicy;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;      <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">using</span> <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">scope_locker</a> = <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker&lt;recursive_spin_lock_base&lt;_WaitPolicyT&gt;</a>&gt;;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        ~<a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(wait_policy_type oWait = wait_policy_type()) : _lock(-1), _lock_count(0), _WaitPolicy(oWait) {};</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(<span class="keyword">const</span> <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a> &amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(<a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a> &amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordtype">bool</span> try_lock() {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;          <span class="keywordtype">size_t</span> bad_id = -1;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;          <span class="keyword">auto</span> ThisID = _hash(std::this_thread::get_id());</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;          <span class="keywordflow">if</span> (!_lock.compare_exchange_strong(bad_id, ThisID) &amp;&amp; !(_lock.compare_exchange_strong(ThisID, ThisID))) {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;          }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;          ++_lock_count;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;          <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">void</span> lock() {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;          <span class="keywordflow">while</span> (!try_lock()) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            _WaitPolicy();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;          }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> unlock() {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;          XTD_ASSERT(_lock.load() == _hash(std::this_thread::get_id()));</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;          <span class="keywordflow">if</span> (0 == --_lock_count) {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            _lock.store(-1);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;          }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;      };</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">using</span> <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock</a> = <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">_::recursive_spin_lock_base&lt;null_wait_policy&gt;</a>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  }</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
 <div class="ttc" id="classxtd_1_1concurrent_1_1scope__locker_html"><div class="ttname"><a href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker</a></div><div class="ttdoc">RAII pattern to automatically acquire and release the spin lock. </div><div class="ttdef"><b>Definition:</b> <a href="concurrent_8hpp_source.html#l00030">concurrent.hpp:30</a></div></div>
 <div class="ttc" id="concurrent_8hpp_html"><div class="ttname"><a href="concurrent_8hpp.html">concurrent.hpp</a></div><div class="ttdoc">shared declarations for the concurrent namespace </div></div>
-<div class="ttc" id="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base_html"><div class="ttname"><a href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">xtd::concurrent::_::recursive_spin_lock_base</a></div><div class="ttdef"><b>Definition:</b> <a href="recursive__spin__lock_8hpp_source.html#l00014">recursive_spin_lock.hpp:14</a></div></div>
+<div class="ttc" id="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base_html"><div class="ttname"><a href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">xtd::concurrent::_::recursive_spin_lock_base</a></div><div class="ttdef"><b>Definition:</b> <a href="recursive__spin__lock_8hpp_source.html#l00015">recursive_spin_lock.hpp:15</a></div></div>
+<div class="ttc" id="debug_8hpp_html"><div class="ttname"><a href="debug_8hpp.html">debug.hpp</a></div><div class="ttdoc">Debugging. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.11-->
@@ -176,7 +178,7 @@ $(document).ready(function(){initNavTree('recursive__spin__lock_8hpp_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="dir_4c1587fcaffef46e390d6a8bd47e9e0a.html">concurrent</a></li><li class="navelem"><a class="el" href="recursive__spin__lock_8hpp.html">recursive_spin_lock.hpp</a></li>
-    <li class="footer">Generated on Thu Aug 11 2016 07:59:57 for XTL by
+    <li class="footer">Generated on Tue Aug 23 2016 06:51:08 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

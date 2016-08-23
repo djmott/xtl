@@ -20,6 +20,8 @@ var group___sockets =
     ] ],
     [ "ipv4address", "classxtd_1_1socket_1_1ipv4address.html", [
       [ "ipv4address", "classxtd_1_1socket_1_1ipv4address.html#a7b26de5b4081b55014f7ac044c52090d", null ],
+      [ "ipv4address", "classxtd_1_1socket_1_1ipv4address.html#a2c43f12d17ea1dfac2dd1a0addbb1d54", null ],
+      [ "operator=", "classxtd_1_1socket_1_1ipv4address.html#a365bae6d16656af021832d23ea90e24c", null ],
       [ "address_family", "classxtd_1_1socket_1_1ipv4address.html#ae6f409f1ef6160524ebb07bb86724473", null ]
     ] ],
     [ "ipv6address", "classxtd_1_1socket_1_1ipv6address.html", [
@@ -40,7 +42,7 @@ var group___sockets =
     ] ],
     [ "selectable_socket", "classxtd_1_1socket_1_1selectable__socket.html", [
       [ "selectable_socket", "classxtd_1_1socket_1_1selectable__socket.html#aa8c0335bdbe6b13e632f328494b8155e", null ],
-      [ "select", "classxtd_1_1socket_1_1selectable__socket.html#a90af5ed8765e72866c1da00b4b2f8d30", null ],
+      [ "select", "classxtd_1_1socket_1_1selectable__socket.html#aaa12756ea60d6c046b3a1fa84da69137", null ],
       [ "onError", "classxtd_1_1socket_1_1selectable__socket.html#a25d6dc5f57faa33621f28cb935558def", null ],
       [ "onRead", "classxtd_1_1socket_1_1selectable__socket.html#ab8b15086adc6ad4be61be17af0d19fac", null ],
       [ "onWrite", "classxtd_1_1socket_1_1selectable__socket.html#a3c5190f93147ba86fecf4dbb5b19bcfd", null ]

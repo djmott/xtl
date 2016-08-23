@@ -117,15 +117,62 @@ $(document).ready(function(){initNavTree('pos_8hpp_source.html','');});
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="xtd_8hpp.html">xtd/xtd.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>xtd{</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="keyword">namespace </span>nlp{</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  }</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;}</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="meta_8hpp.html">xtd/meta.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="string_8hpp.html">xtd/string.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="nlp_8hpp.html">xtd/nlp/nlp.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="dynamic__object_8hpp.html">xtd/dynamic_object.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="moby_8hpp.html">xtd/nlp/moby.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>xtd{</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">namespace </span>nlp{</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classxtd_1_1nlp_1_1pos__tagger.html">   26</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classxtd_1_1nlp_1_1pos__tagger.html">pos_tagger</a>{</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classxtd_1_1nlp_1_1pos__tagger_1_1tagged__word.html">   29</a></span>&#160;      <span class="keyword">struct </span><a class="code" href="classxtd_1_1nlp_1_1pos__tagger_1_1tagged__word.html">tagged_word</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        part_of_speech _pos;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="classxtd_1_1xstring.html">xtd::string</a> _word;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;      };</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> tag_doc(xtd::dynamic_object::vector&amp; oDoc) {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">using</span> doc_type = xtd::dynamic_object::vector;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">auto</span> &amp; oMoby = moby::database::get();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        forever{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;          <span class="keyword">auto</span> oItem = std::find_if(oDoc.begin(), oDoc.end(), [](<span class="keyword">const</span> <a class="code" href="classxtd_1_1dynamic__object.html">xtd::dynamic_object</a>&amp; obj) { <span class="keywordflow">return</span> obj.has_item&lt;<a class="code" href="classxtd_1_1wrapped.html">xtd::nlp::raw_text</a>&gt;(); });</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;          <span class="keywordflow">if</span> (oDoc.end() == oItem) <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;          <span class="keyword">auto</span> sRawText = oItem-&gt;item&lt;<a class="code" href="classxtd_1_1wrapped.html">raw_text</a>&gt;();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;          <span class="keyword">auto</span> iPOS = moby::database::get().get_pos(sRawText);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;          DUMP(iPOS);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;          oItem-&gt;item&lt;tagged_word&gt;() = tagged_word{ iPOS, sRawText };</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;          oItem-&gt;remove_item&lt;raw_text&gt;();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      pos_tagger() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    };</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  }</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;}</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="ttc" id="meta_8hpp_html"><div class="ttname"><a href="meta_8hpp.html">meta.hpp</a></div><div class="ttdoc">template meta-programming utilities </div></div>
+<div class="ttc" id="moby_8hpp_html"><div class="ttname"><a href="moby_8hpp.html">moby.hpp</a></div><div class="ttdoc">c++ interface to moby databases </div></div>
+<div class="ttc" id="classxtd_1_1dynamic__object_html"><div class="ttname"><a href="classxtd_1_1dynamic__object.html">xtd::dynamic_object</a></div><div class="ttdef"><b>Definition:</b> <a href="dynamic__object_8hpp_source.html#l00018">dynamic_object.hpp:18</a></div></div>
+<div class="ttc" id="string_8hpp_html"><div class="ttname"><a href="string_8hpp.html">string.hpp</a></div><div class="ttdoc">specializations of std::basic_string for advanced and common string handling </div></div>
 <div class="ttc" id="xtd_8hpp_html"><div class="ttname"><a href="xtd_8hpp.html">xtd.hpp</a></div><div class="ttdoc">host, target and build configurations and settings Various components are purpose built for specific ...</div></div>
+<div class="ttc" id="classxtd_1_1wrapped_html"><div class="ttname"><a href="classxtd_1_1wrapped.html">xtd::wrapped</a></div><div class="ttdef"><b>Definition:</b> <a href="wrapped__type_8hpp_source.html#l00011">wrapped_type.hpp:11</a></div></div>
+<div class="ttc" id="classxtd_1_1xstring_html"><div class="ttname"><a href="classxtd_1_1xstring.html">xtd::xstring&lt; char &gt;</a></div></div>
+<div class="ttc" id="nlp_8hpp_html"><div class="ttname"><a href="nlp_8hpp.html">nlp.hpp</a></div><div class="ttdoc">natural language processing </div></div>
+<div class="ttc" id="dynamic__object_8hpp_html"><div class="ttname"><a href="dynamic__object_8hpp.html">dynamic_object.hpp</a></div><div class="ttdoc">an object with dynamic properties and values. </div></div>
+<div class="ttc" id="classxtd_1_1nlp_1_1pos__tagger_1_1tagged__word_html"><div class="ttname"><a href="classxtd_1_1nlp_1_1pos__tagger_1_1tagged__word.html">xtd::nlp::pos_tagger::tagged_word</a></div><div class="ttdef"><b>Definition:</b> <a href="pos_8hpp_source.html#l00029">pos.hpp:29</a></div></div>
+<div class="ttc" id="classxtd_1_1nlp_1_1pos__tagger_html"><div class="ttname"><a href="classxtd_1_1nlp_1_1pos__tagger.html">xtd::nlp::pos_tagger</a></div><div class="ttdef"><b>Definition:</b> <a href="pos_8hpp_source.html#l00026">pos.hpp:26</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.11-->
@@ -133,7 +180,7 @@ $(document).ready(function(){initNavTree('pos_8hpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="dir_5123dcec664fe6522b3b781480c8fe19.html">nlp</a></li><li class="navelem"><a class="el" href="pos_8hpp.html">pos.hpp</a></li>
-    <li class="footer">Generated on Thu Aug 11 2016 07:59:57 for XTL by
+    <li class="footer">Generated on Tue Aug 23 2016 06:51:08 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

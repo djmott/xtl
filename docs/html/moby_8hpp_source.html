@@ -117,62 +117,99 @@ $(document).ready(function(){initNavTree('moby_8hpp_source.html','');});
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="xtd_8hpp.html">xtd/xtd.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>xtd{</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keyword">namespace </span>nlp{</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">namespace </span>moby{</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classxtd_1_1nlp_1_1moby_1_1pos__file.html">   14</a></span>&#160;      <span class="keyword">class </span><a class="code" href="classxtd_1_1nlp_1_1moby_1_1pos__file.html">pos_file</a>{</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;      <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record.html">   16</a></span>&#160;        <span class="keyword">class </span><a class="code" href="classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record.html">record</a>{</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;          <span class="keyword">using</span> vector = std::vector&lt;record&gt;;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;          <span class="keyword">using</span> map = std::map&lt;std::string, record&gt;;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;          std::string <a class="code" href="classxtd_1_1nlp_1_1word.html">word</a>;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;          std::vector&lt;char&gt; pos;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;          <a class="code" href="classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record.html">record</a>(<span class="keyword">const</span> std::string&amp; sWord) : <a class="code" href="classxtd_1_1nlp_1_1word.html">word</a>(sWord){}</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        };</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <a class="code" href="classxtd_1_1nlp_1_1moby_1_1pos__file.html">pos_file</a>(<span class="keyword">const</span> <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a>&amp; oPath){</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;          std::ifstream in(oPath.string());</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;          in.exceptions( std::ios::badbit | std::ios::failbit );</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;          <a class="code" href="classxtd_1_1xstring.html">xtd::string</a> sFile((std::istreambuf_iterator&lt;char&gt;(in)), (std::istreambuf_iterator&lt;char&gt;()));</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;          <span class="keywordflow">for</span> (<span class="keyword">auto</span> sBegin = sFile.begin(); sBegin &lt; sFile.end() ; ++sBegin){</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            <span class="keywordflow">for</span>(;(<span class="charliteral">&#39;\r&#39;</span> == *sBegin || <span class="charliteral">&#39;\n&#39;</span> == *sBegin) &amp;&amp; sBegin &lt; sFile.end() ; ++sBegin);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keyword">auto</span> sEnd = sBegin;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <span class="keywordflow">for</span>(;(char)0xd7 != *sEnd &amp;&amp; sEnd &lt; sFile.end(); ++sEnd);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <a class="code" href="classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record.html">record</a> r(std::string(sBegin, sEnd));</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            records.insert(std::make_pair(r.word, r));</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">for</span>(++sEnd;<span class="charliteral">&#39;\r&#39;</span> != *sEnd &amp;&amp; <span class="charliteral">&#39;\n&#39;</span> != *sEnd &amp;&amp; sEnd &lt; sFile.end();++sEnd){</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;              r.pos.push_back(*sEnd);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            sBegin = sEnd;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;          }</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        record::map records;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      };</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classxtd_1_1nlp_1_1moby_1_1database.html">   50</a></span>&#160;      <span class="keyword">class </span><a class="code" href="classxtd_1_1nlp_1_1moby_1_1database.html">database</a>{</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classxtd_1_1nlp_1_1moby_1_1pos__file.html">pos_file</a> _pos_file;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classxtd_1_1nlp_1_1moby_1_1database.html">database</a>(<span class="keyword">const</span> <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a>&amp; oPath) : _pos_file(oPath + <span class="stringliteral">&quot;mpos/mobyposi.i&quot;</span>){}</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      };</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div>
-<div class="ttc" id="classxtd_1_1nlp_1_1word_html"><div class="ttname"><a href="classxtd_1_1nlp_1_1word.html">xtd::nlp::word</a></div><div class="ttdef"><b>Definition:</b> <a href="word_8hpp_source.html#l00010">word.hpp:10</a></div></div>
-<div class="ttc" id="classxtd_1_1filesystem_1_1path_html"><div class="ttname"><a href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a></div><div class="ttdef"><b>Definition:</b> <a href="filesystem_8hpp_source.html#l00076">filesystem.hpp:76</a></div></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="nlp_8hpp.html">xtd/nlp/nlp.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="filesystem_8hpp.html">xtd/filesystem.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>xtd {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="keyword">namespace </span>nlp {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">namespace </span>moby {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classxtd_1_1nlp_1_1moby_1_1database.html">   16</a></span>&#160;      <span class="keyword">class </span><a class="code" href="classxtd_1_1nlp_1_1moby_1_1database.html">database</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">class </span>record {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;          <span class="keyword">using</span> vector = std::vector&lt;record&gt;;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;          <span class="keyword">using</span> map = std::map&lt;std::string, record&gt;;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;          <a class="code" href="classxtd_1_1xstring.html">xtd::string</a> _word;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;          part_of_speech _pos;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;          record(<span class="keyword">const</span> std::string&amp; sWord) : _word(sWord), _pos(part_of_speech::unknown) {}</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        };</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        record::map records;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="code" href="classxtd_1_1nlp_1_1moby_1_1database.html">database</a>() {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;          <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a> oPath(XTD_ASSETS_DIR <span class="stringliteral">&quot;/mpos/mobyposi.i&quot;</span>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;          std::ifstream in(oPath.string());</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;          in.exceptions(std::ios::badbit | std::ios::failbit);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;          <a class="code" href="classxtd_1_1xstring.html">xtd::string</a> sFile((std::istreambuf_iterator&lt;char&gt;(in)), (std::istreambuf_iterator&lt;char&gt;()));</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;          <span class="keywordflow">for</span> (<span class="keyword">auto</span> sBegin = sFile.begin(); sBegin &lt; sFile.end(); ++sBegin) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keywordflow">for</span> (; (<span class="charliteral">&#39;\r&#39;</span> == *sBegin || <span class="charliteral">&#39;\n&#39;</span> == *sBegin) &amp;&amp; sBegin &lt; sFile.end(); ++sBegin);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="keyword">auto</span> sEnd = sBegin;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordflow">for</span> (; (char)0xd7 != *sEnd &amp;&amp; sEnd &lt; sFile.end(); ++sEnd);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            record r(std::string(sBegin, sEnd));</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            records.insert(std::make_pair(r._word, r));</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">for</span> (++sEnd; <span class="charliteral">&#39;\r&#39;</span> != *sEnd &amp;&amp; <span class="charliteral">&#39;\n&#39;</span> != *sEnd &amp;&amp; sEnd &lt; sFile.end(); ++sEnd) {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;              part_of_speech iPOS = part_of_speech::unknown;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;              <span class="keywordflow">switch</span> (*sEnd) {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;N&#39;</span>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                iPOS = part_of_speech::noun; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;p&#39;</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                iPOS = part_of_speech::noun_plural; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;h&#39;</span>:</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                iPOS = part_of_speech::noun_phrase; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;V&#39;</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                iPOS = part_of_speech::verb_participle; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;t&#39;</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                iPOS = part_of_speech::verb_transitive; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;i&#39;</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                iPOS = part_of_speech::verb_intransitive; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;A&#39;</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                iPOS = part_of_speech::adj; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                iPOS = part_of_speech::adv; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;C&#39;</span>:</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                iPOS = part_of_speech::conjunction; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;P&#39;</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                iPOS = part_of_speech::preposition; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;!&#39;</span>:</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                iPOS = part_of_speech::interjection; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;r&#39;</span>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                iPOS = part_of_speech::pronoun; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;D&#39;</span>:</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                iPOS = part_of_speech::definite_article; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;I&#39;</span>:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                iPOS = part_of_speech::indefinite_article; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;              <span class="keywordflow">case</span> <span class="charliteral">&#39;o&#39;</span>:</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                iPOS = part_of_speech::nominative; <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;              }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;              r._pos = <span class="keyword">static_cast&lt;</span>part_of_speech<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span>uint64_t<span class="keyword">&gt;</span>(iPOS) | static_cast&lt;uint64_t&gt;(r._pos));</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            sBegin = sEnd;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;          }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keyword">static</span> <a class="code" href="classxtd_1_1nlp_1_1moby_1_1database.html">database</a>&amp; <span class="keyword">get</span>() {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;          <span class="keyword">static</span> <a class="code" href="classxtd_1_1nlp_1_1moby_1_1database.html">database</a> _database;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;          <span class="keywordflow">return</span> _database;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        nlp::part_of_speech get_pos(<span class="keyword">const</span> <a class="code" href="classxtd_1_1xstring.html">xtd::string</a>&amp; sWord)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;          <span class="keyword">auto</span> oItem = records.find(sWord);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;          <span class="keywordflow">if</span> (records.end() == oItem) <span class="keywordflow">return</span> part_of_speech::unknown;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;          <span class="keywordflow">return</span> oItem-&gt;second._pos;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      };</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;}</div>
+<div class="ttc" id="classxtd_1_1filesystem_1_1path_html"><div class="ttname"><a href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a></div><div class="ttdef"><b>Definition:</b> <a href="filesystem_8hpp_source.html#l00088">filesystem.hpp:88</a></div></div>
 <div class="ttc" id="xtd_8hpp_html"><div class="ttname"><a href="xtd_8hpp.html">xtd.hpp</a></div><div class="ttdoc">host, target and build configurations and settings Various components are purpose built for specific ...</div></div>
 <div class="ttc" id="classxtd_1_1xstring_html"><div class="ttname"><a href="classxtd_1_1xstring.html">xtd::xstring&lt; char &gt;</a></div></div>
-<div class="ttc" id="classxtd_1_1nlp_1_1moby_1_1pos__file_html"><div class="ttname"><a href="classxtd_1_1nlp_1_1moby_1_1pos__file.html">xtd::nlp::moby::pos_file</a></div><div class="ttdef"><b>Definition:</b> <a href="moby_8hpp_source.html#l00014">moby.hpp:14</a></div></div>
-<div class="ttc" id="classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record_html"><div class="ttname"><a href="classxtd_1_1nlp_1_1moby_1_1pos__file_1_1record.html">xtd::nlp::moby::pos_file::record</a></div><div class="ttdef"><b>Definition:</b> <a href="moby_8hpp_source.html#l00016">moby.hpp:16</a></div></div>
-<div class="ttc" id="classxtd_1_1nlp_1_1moby_1_1database_html"><div class="ttname"><a href="classxtd_1_1nlp_1_1moby_1_1database.html">xtd::nlp::moby::database</a></div><div class="ttdef"><b>Definition:</b> <a href="moby_8hpp_source.html#l00050">moby.hpp:50</a></div></div>
+<div class="ttc" id="nlp_8hpp_html"><div class="ttname"><a href="nlp_8hpp.html">nlp.hpp</a></div><div class="ttdoc">natural language processing </div></div>
+<div class="ttc" id="filesystem_8hpp_html"><div class="ttname"><a href="filesystem_8hpp.html">filesystem.hpp</a></div><div class="ttdoc">handle necessary filesystem and path functionality until C++17 is finalized </div></div>
+<div class="ttc" id="classxtd_1_1nlp_1_1moby_1_1database_html"><div class="ttname"><a href="classxtd_1_1nlp_1_1moby_1_1database.html">xtd::nlp::moby::database</a></div><div class="ttdef"><b>Definition:</b> <a href="moby_8hpp_source.html#l00016">moby.hpp:16</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.11-->
@@ -180,7 +217,7 @@ $(document).ready(function(){initNavTree('moby_8hpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ff05759bdd3580fbc2d155f06ffbb7af.html">xtd</a></li><li class="navelem"><a class="el" href="dir_5123dcec664fe6522b3b781480c8fe19.html">nlp</a></li><li class="navelem"><a class="el" href="moby_8hpp.html">moby.hpp</a></li>
-    <li class="footer">Generated on Thu Aug 11 2016 07:59:57 for XTL by
+    <li class="footer">Generated on Tue Aug 23 2016 06:51:08 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

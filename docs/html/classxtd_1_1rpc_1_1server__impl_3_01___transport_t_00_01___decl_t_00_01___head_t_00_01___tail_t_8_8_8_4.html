@@ -140,16 +140,17 @@ $(document).ready(function(){initNavTree('classxtd_1_1rpc_1_1server__impl_3_01__
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aa6d7d22d59cc4158a468c3385f2c8a28"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa6d7d22d59cc4158a468c3385f2c8a28"></a>
+template&lt;typename... _XportCtorTs&gt; </td></tr>
+<tr class="memitem:aa6d7d22d59cc4158a468c3385f2c8a28"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>server_impl</b> (_XportCtorTs &amp;&amp;...oParams)</td></tr>
+<tr class="separator:aa6d7d22d59cc4158a468c3385f2c8a28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe112758d071b660fc2edd934d9adb24"><td class="memTemplParams" colspan="2"><a class="anchor" id="abe112758d071b660fc2edd934d9adb24"></a>
 template&lt;typename _CallT , typename _ParamT &gt; </td></tr>
 <tr class="memitem:abe112758d071b660fc2edd934d9adb24"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>attach</b> (_ParamT oCallImpl)</td></tr>
 <tr class="separator:abe112758d071b660fc2edd934d9adb24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeea8f332ebdcb404eaf174e097efd458"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeea8f332ebdcb404eaf174e097efd458"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>call_handler</b> (<a class="el" href="classxtd_1_1rpc_1_1payload.html">payload</a> &amp;oPayload)</td></tr>
-<tr class="separator:aeea8f332ebdcb404eaf174e097efd458"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f1456efcf76085058a961cc5ced5dd4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f1456efcf76085058a961cc5ced5dd4"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>invoke</b> (<a class="el" href="classxtd_1_1rpc_1_1payload.html">payload</a> &amp;oPayload)</td></tr>
-<tr class="separator:a7f1456efcf76085058a961cc5ced5dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e497427a4eeea3e870da5b24258d0ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e497427a4eeea3e870da5b24258d0ff"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>call_handler</b> (<a class="el" href="classxtd_1_1rpc_1_1payload.html">payload</a> &amp;oPayload) override</td></tr>
+<tr class="separator:a3e497427a4eeea3e870da5b24258d0ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
 Protected Types</h2></td></tr>
@@ -162,10 +163,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>function_type</b> = 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:aa6d7d22d59cc4158a468c3385f2c8a28"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa6d7d22d59cc4158a468c3385f2c8a28"></a>
-template&lt;typename... _XportCtorTs&gt; </td></tr>
-<tr class="memitem:aa6d7d22d59cc4158a468c3385f2c8a28"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>server_impl</b> (_XportCtorTs &amp;&amp;...oParams)</td></tr>
-<tr class="separator:aa6d7d22d59cc4158a468c3385f2c8a28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acced93a9b9020791b8b08036b56a7c67"><td class="memTemplParams" colspan="2"><a class="anchor" id="acced93a9b9020791b8b08036b56a7c67"></a>
 template&lt;typename _CallT , typename _Param &gt; </td></tr>
 <tr class="memitem:acced93a9b9020791b8b08036b56a7c67"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>_attach</b> (typename std::enable_if&lt; std::is_same&lt; _CallT, _HeadT &gt;::value, _Param &gt;::type oParam)</td></tr>
@@ -186,7 +183,7 @@ function_type&#160;</td><td class="memItemRight" valign="bottom"><b>_Function</b
 class xtd::rpc::server_impl&lt; _TransportT, _DeclT, _HeadT, _TailT...&gt;</h3>
 
 
-<p>Definition at line <a class="el" href="rpc_8hpp_source.html#l00380">380</a> of file <a class="el" href="rpc_8hpp_source.html">rpc.hpp</a>.</p>
+<p>Definition at line <a class="el" href="rpc_8hpp_source.html#l00417">417</a> of file <a class="el" href="rpc_8hpp_source.html">rpc.hpp</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="rpc_8hpp_source.html">rpc.hpp</a></li>
 </ul>
@@ -197,7 +194,7 @@ class xtd::rpc::server_impl&lt; _TransportT, _DeclT, _HeadT, _TailT...&gt;</h3>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><b>rpc</b></li><li class="navelem"><a class="el" href="classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html">server_impl< _TransportT, _DeclT, _HeadT, _TailT...></a></li>
-    <li class="footer">Generated on Thu Aug 11 2016 07:59:58 for XTL by
+    <li class="footer">Generated on Tue Aug 23 2016 06:51:09 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>
