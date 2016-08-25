@@ -1,4 +1,4 @@
-[submodule "scowl"]
+[submodule "assets/scowl"]
 	path = assets/scowl
 	url = https://github.com/en-wl/wordlist.git
 	
