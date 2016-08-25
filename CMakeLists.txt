@@ -278,10 +278,13 @@ endif()
 
 
 if(BUILD_TESTS)
-  set(BUILD_GTEST ON)
-  set(BUILD_GMOCK ON)
-  set(gtest_force_shared_crt ON)
-  add_subdirectory(${ASSET_DIR}/gtest)
+  find_package(GTest)
+  if(NOT GTEST_FOUND)
+    add_subdirectory(${ASSET_DIR}/gtest)
+    set(BUILD_GTEST ON)
+    set(BUILD_GMOCK ON)
+    set(gtest_force_shared_crt ON)
+  endif()
   add_subdirectory(tests)
 endif()
 
