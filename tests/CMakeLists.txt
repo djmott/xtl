@@ -1,7 +1,8 @@
 
 enable_testing()
+find_package(GTest)
 
-include_directories(${gtest_SOURCE_DIR}/include)
+include_directories(${ASSET_DIR}/gtest/googletest/include)
 
 add_library(dummy_library_test SHARED dummy_library.cpp)
 add_dependencies(dummy_library_test XTL)
