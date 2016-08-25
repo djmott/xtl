@@ -53,6 +53,17 @@ namespace xtd{
     xstring(_ArgsT&&...oArgs)
       : _super_t(std::forward<_ArgsT>(oArgs)...){}
 
+
+    bool ends_with(const xtd::string& suffix) const{
+      
+      auto sDest = _super_t::rbegin();
+      auto sSrc = suffix.rbegin();
+      for (; suffix.rend() != sSrc && sDest != _super_t::rend(); ++sSrc, ++sDest){
+        if (*sSrc != *sDest) return false;
+      }
+      return (sSrc == suffix.rend());
+    }
+
     /**
     Type safe formatting
     Appends each item in the parameter list together performing type-safe verification and printing

@@ -7,16 +7,27 @@
 
 #include <xtd/xtd.hpp>
 
-#include <iterator>
-#include <algorithm>
-#include <future>
-#include <iostream>
+#include <xtd/nlp/simple_SBD.hpp>
+#include <xtd/nlp/porter_stemmer.hpp>
+#include <xtd/nlp/ngram_stemmer.hpp>
+#include <xtd/nlp/simple_PBD.hpp>
+#include <xtd/nlp/document.hpp>
 
-#include <xtd/dynamic_object.hpp>
-#include <xtd/parse.hpp>
 
-#include <xtd/nlp/nlp.hpp>
+#if 1
 
+int main(){
+  using namespace xtd::nlp;
+  using doc_type = document<PBD::simple, SBD::simple, stemmer::trigram>;
+  doc_type oDoc(xtd::filesystem::path("c:/dev/dat/customer_unique.txt"));
+  for (auto & oParagraph : oDoc.paragraphs()){
+    for (auto & oSentence : oParagraph.sentences()){
+
+    }
+  }
+}
+
+#else
 
 namespace commands{
   using namespace xtd::parse;
@@ -44,6 +55,7 @@ namespace commands{
 int main(){
   using namespace xtd;
   using namespace xtd::nlp;
+  xtd::nlp::stemmer::porter oStemmer;
   auto oMoby = std::async(std::launch::async, [](){ moby::database::get(); });
   const char * sCathy = "Chatty Cathy >> ";
   using doc_type = std::vector<xtd::dynamic_object>;
@@ -70,6 +82,11 @@ int main(){
       oRet.item<xtd::nlp::raw_text>() = str;
       return oRet;
     });
+    for (auto& oWord : oDoc){
+      oWord.item<xtd::nlp::stem>() = oStemmer(oWord.item<xtd::nlp::raw_text>());
+      std::cout << *oWord.item<xtd::nlp::stem>() << " ";
+    }
+    std::cout << std::endl;
 
     xtd::nlp::pos_tagger::tag_doc(oDoc);
 
@@ -77,3 +94,4 @@ int main(){
 
   return 0;
 }
+#endif

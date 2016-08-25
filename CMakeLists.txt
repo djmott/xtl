@@ -277,8 +277,15 @@ execute_process(
 )
 endif()
 
-
-
+# http://pilotfiber.dl.sourceforge.net/project/wordlist/SCOWL/2016.06.26/scowl-2016.06.26.tar.gz
+#if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/scowl-2016.06.26.tar.gz)
+#message("Downloading Moby")
+#file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_CURRENT_SOURCE_DIR}/assets/scowl-2016.06.26.tar.gz)
+#execute_process(
+#  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/scowl-2016.06.26.tar.gz
+#  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+#)
+#endif()
 
 
 if(BUILD_TESTS AND NOT GTEST_FOUND)

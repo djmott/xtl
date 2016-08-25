@@ -36,6 +36,7 @@ docs/html
 !.drone.yml
 !.gitignore
 !.gitattributes
+!.gitmodules
 docs/Doxyfile
 include/xtd/xtd.hpp
 doxygen_sqlite3.db
