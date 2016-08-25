@@ -17,7 +17,7 @@ nlp document
 namespace xtd{
   namespace nlp{
 
-    enum category_t : uint64_t{
+    enum word_category_t : uint64_t{
       unknown_cat = 0,
       adj_all = 1,
       adj_pert = (adj_all << 1),
@@ -65,6 +65,7 @@ namespace xtd{
       verb_weather = (verb_stative << 1),
       adj_ppl = (verb_weather << 1),
     };
+
     enum part_of_speech_t : uint16_t{
       unknown_pos = 0,
       noun = 1,
@@ -91,7 +92,7 @@ namespace xtd{
       using stemmer_type = _StemmerT<_my_t>;
       using original_text = WRAPPED(xtd::string);
       using vector = std::vector<word>;
-      using category = WRAPPED(category_t);
+      using word_category = WRAPPED(word_category_t);
       using part_of_speech = WRAPPED(part_of_speech_t);
     };
 

@@ -186,7 +186,7 @@ namespace wordnet
           uint32_t synset_offset;
           using vector = std::vector<ptr>;
           ptr(const xtd::string& spointer_symbol, const xtd::string& ssynset_offset, SyntacticCategory spos, const xtd::string& ssource_target)
-            : pointer_symbol(spointer_symbol), synset_offset(atoi(ssynset_offset.c_str())), pos(spos), source_target(ssource_target){}
+            : pos(spos), pointer_symbol(spointer_symbol), source_target(ssource_target), synset_offset(atoi(ssynset_offset.c_str())){}
         };
 
         bool load(const xtd::string& sFile, size_t & i){
