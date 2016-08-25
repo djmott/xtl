@@ -37,7 +37,6 @@ namespace xtd {
             auto sEnd = sBegin;
             for (; (char)0xd7 != *sEnd && sEnd < sFile.end(); ++sEnd);
             record r(std::string(sBegin, sEnd));
-            records.insert(std::make_pair(r._word, r));
             for (++sEnd; '\r' != *sEnd && '\n' != *sEnd && sEnd < sFile.end(); ++sEnd) {
               part_of_speech iPOS = part_of_speech::unknown;
               switch (*sEnd) {
@@ -74,6 +73,7 @@ namespace xtd {
               }
               r._pos = static_cast<part_of_speech>(static_cast<uint64_t>(iPOS) | static_cast<uint64_t>(r._pos));
             }
+            records.insert(std::make_pair(r._word, r));
             sBegin = sEnd;
           }
         }
