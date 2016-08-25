@@ -4,6 +4,11 @@ simple sentence boundary detector
 */
 
 #pragma once
+
+#include <xtd/xtd.hpp>
+#include <vector>
+#include <xtd/string.hpp>
+
 namespace xtd{
   namespace nlp{
     namespace SBD{
@@ -11,7 +16,7 @@ namespace xtd{
       struct simple{
 
         void operator()(_DocumentT& oDoc){
-          const xtd::string& sOriginalText = oDoc.item<typename _DocumentT::original_text>();
+          const xtd::string& sOriginalText = oDoc.template item<typename _DocumentT::original_text>();
           std::vector<size_t> PositionScore(sOriginalText.size(), 0);
           //scan for question marks
           size_t iCurrPos=0;

@@ -13,10 +13,10 @@ namespace xtd{
         void operator()(_DocumentT& oDoc){
           TODO("Implement proper paragraph detector");
           using paragraph_type = typename _DocumentT::paragraph_type;
-          const xtd::string & oOriginalText = oDoc.item<_DocumentT::original_text>();
+          const xtd::string & oOriginalText = oDoc.template item<typename _DocumentT::original_text>();
           paragraph_type oParagraph;
-          oParagraph.item<typename paragraph_type::original_text>() = oOriginalText;
-          oDoc.item<paragraph_type>() = std::move(oParagraph);
+          oParagraph.template item<typename paragraph_type::original_text>() = oOriginalText;
+          oDoc.template item<paragraph_type>() = std::move(oParagraph);
           /*
           auto oStart = oOriginalText.begin();
           for (auto oCurrPos = oStart; oOriginalText.end() != oCurrPos; ++oCurrPos){
