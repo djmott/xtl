@@ -12,7 +12,7 @@ c++ interface to wordnet databases
 #include <fstream>
 
 #include <xtd/filesystem.hpp>
-
+#include <xtd/nlp/porter_stemmer.hpp>
 
 namespace wordnet
 {
@@ -70,6 +70,10 @@ namespace wordnet
       t8.get();
     }
     database(const database&) = delete;
+
+    std::string lemma(const std::string& src) const {
+      return src;
+    }
 
   private:
 
