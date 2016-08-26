@@ -12,9 +12,9 @@ simple sentence boundary detector
 namespace xtd{
   namespace nlp{
     namespace SBD{
+
       template <typename _DocumentT>
       struct simple{
-
         void operator()(_DocumentT& oDoc){
           const xtd::string& sOriginalText = oDoc.template item<typename _DocumentT::original_text>();
           std::vector<size_t> PositionScore(sOriginalText.size(), 0);
@@ -33,6 +33,7 @@ namespace xtd{
 
         }
       };
+
     }
   }
 }

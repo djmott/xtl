@@ -86,10 +86,10 @@ namespace xtd{
     };
 
     template <template <typename> class _StemmerT>
-    class word : public dynamic_object{
+    class word : private dynamic_object{
+      template <typename> friend class _StemmerT;
     public:
       using _my_t = word<_StemmerT>;
-      using stemmer_type = _StemmerT<_my_t>;
       using original_text = WRAPPED(xtd::string);
       using vector = std::vector<word>;
       using word_category = WRAPPED(word_category_t);
@@ -98,10 +98,10 @@ namespace xtd{
 
 
     template <template <typename> class _StemmerT>
-    class sentence : public dynamic_object{
+    class sentence : private dynamic_object{
+      template <typename> friend class _StemmerT;
     public:
       using _my_t = sentence<_StemmerT>;
-      using stemmer_type = _StemmerT<_my_t>;
       using word_type = word<_StemmerT>;
       using original_text = WRAPPED(xtd::string);
       using vector = std::vector<sentence>;
@@ -110,10 +110,11 @@ namespace xtd{
 
 
     template <template <typename> class _SBDT, template <typename> class _StemmerT>
-    class paragraph : public dynamic_object{
+    class paragraph : private dynamic_object{
+      template <typename> friend class _StemmerT;
+      template <typename> friend class _SBDT;
     public:
       using _my_t = paragraph<_SBDT, _StemmerT>;
-      using sentence_boundary_detector_type = _SBDT<_my_t>;
       using sentence_type = sentence<_StemmerT>;
 
       using original_text = WRAPPED(xtd::string);
@@ -138,7 +139,10 @@ namespace xtd{
 
 
     template <template <typename> class _PBDT, template <typename> class _SBDT, template <typename> class _StemmerT>
-    class document : public dynamic_object{
+    class document : private dynamic_object{
+      template <> friend class _PBDT<document>;
+      template <> friend class _SBDT<document>;
+      template <> friend class _StemmerT<document>;
     public:
       using _my_t = document<_PBDT, _SBDT, _StemmerT>;
 

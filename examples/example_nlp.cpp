@@ -3,18 +3,81 @@
  */
 
 
-
+struct IUnknown;
 
 #include <xtd/xtd.hpp>
 
+#include <xtd/decorated_object.hpp>
+
+#include <xtd/string.hpp>
+
+
+namespace xtd{
+  namespace nlp{
+
+    template <typename _SuperT> struct sentence;
+    template <typename _SuperT> struct word;
+
+    template <typename _SuperT> struct word : _SuperT{
+      int squeegy(){
+        return 0;
+//        _SuperT::template policy<sentence>().fnord();
+      }
+    };
+
+    template <typename _SuperT> struct sentence : _SuperT{
+      void fnord(){
+        _SuperT::template policy<word>().squeegy();
+      }
+    };
+
+    template <typename _SuperT> struct paragraph : _SuperT{
+
+    };
+
+    template <typename _SuperT> struct chapter : _SuperT{
+
+    };
+
+    template <typename _SuperT> struct book : _SuperT{
+
+    };
+
+    template <typename _SuperT> struct corpus : _SuperT{
+
+    };
+
+    template <typename _SuperT> struct library : _SuperT{
+
+    };
+
+
+    using text_process = decorated_object<sentence, word>;
+
+  }
+}
+
+
+
+int main(){
+  using namespace xtd::nlp;
+  text_process oProcess;
+  oProcess.fnord();
+  auto& oWord = oProcess.policy<word>();
+  oWord.squeegy();
+//   using _temp_t = typename text_process::AwesomeReturnType<word>;
+//   std::cout << typeid(_temp_t).name() << std::endl;
+}
+
+
+#if 1
+#elif 1
 #include <xtd/nlp/simple_SBD.hpp>
 #include <xtd/nlp/porter_stemmer.hpp>
 #include <xtd/nlp/ngram_stemmer.hpp>
 #include <xtd/nlp/simple_PBD.hpp>
 #include <xtd/nlp/document.hpp>
-
-
-#if 1
+#elif 1
 
 int main(){
   using namespace xtd::nlp;
@@ -27,7 +90,7 @@ int main(){
   }
 }
 
-#else
+#elif 1
 
 namespace commands{
   using namespace xtd::parse;

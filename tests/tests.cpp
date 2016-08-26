@@ -2,19 +2,20 @@
 main system and unit test entry point 
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
+#include <xtd/xtd.hpp>
 
+#include <string>
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(push, 0)
 #endif
 
+#include "gtest/gtest.h"
+
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(pop)
 #endif
 
-#include <string>
-
-#include "gtest/gtest.h"
 
 #if (ON==TEST_BTREE)
   #include "test_btree.hpp"
