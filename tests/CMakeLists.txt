@@ -1,10 +1,22 @@
 
 enable_testing()
 
-include_directories(${gtest_SOURCE_DIR}/include)
+if(NOT GTEST_FOUND)
+  include_directories(${ASSET_DIR}/gtest/googletest/include)
+endif()
 
 add_library(dummy_library_test SHARED dummy_library.cpp)
 add_dependencies(dummy_library_test XTL)
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+  if(MINGW)
+    option(BUILD_TEST_COVERAGE "profile test coverage" ON)
+  else()
+    set(BUILD_TEST_COVERAGE OFF)
+  endif()
+else()
+  option(BUILD_TEST_COVERAGE "profile test coverage" ON)
+endif()
 
 set(TEST_SOURCE tests.cpp
   test_btree.hpp
@@ -77,23 +89,22 @@ build_option(TEST_VAR "test xtd::var")
 
 add_executable(unit_tests ${TEST_SOURCE})
 add_dependencies(unit_tests dummy_library_test)
-if(GTEST_FOUND)
-  target_link_libraries(unit_tests gcov ${GTEST_BOTH_LIBRARIES})
-else()
-  target_link_libraries(unit_tests gtest)
-  target_link_libraries(unit_tests gtest_main)
-endif()
-#add_test(NAME unit_tests COMMAND unit_tests)
-GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  add_executable(coverage_tests ${TEST_SOURCE})
-  target_compile_options(coverage_tests PRIVATE -coverage -fprofile-arcs -ftest-coverage)
-  add_dependencies(coverage_tests dummy_library_test)
-  if(GTEST_FOUND)
-    target_link_libraries(coverage_tests gcov ${GTEST_BOTH_LIBRARIES})
-  else()
-    target_link_libraries(coverage_tests gtest)
-    target_link_libraries(coverage_tests gtest_main)
-  endif()
+if(BUILD_TEST_COVERAGE)
+  target_compile_options(unit_tests PRIVATE -coverage -fprofile-arcs -ftest-coverage)
+  target_link_libraries(unit_tests gcov)
 endif()
+
+if(GTEST_FOUND)
+  GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
+else()
+  add_test(unit_tests "" ${TEST_SOURCE})
+  add_dependencies(unit_tests gtest)
+  add_dependencies(unit_tests gtest_main)
+  add_dependencies(unit_tests gmock)
+  add_dependencies(unit_tests gmock_main)
+endif()
+
+link_libraries(gtest gtest_main gmock gmock_main)
+
+

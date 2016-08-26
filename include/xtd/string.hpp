@@ -53,6 +53,17 @@ namespace xtd{
     xstring(_ArgsT&&...oArgs)
       : _super_t(std::forward<_ArgsT>(oArgs)...){}
 
+
+    bool ends_with(const xtd::string& suffix) const{
+      
+      auto sDest = _super_t::rbegin();
+      auto sSrc = suffix.rbegin();
+      for (; suffix.rend() != sSrc && sDest != _super_t::rend(); ++sSrc, ++sDest){
+        if (*sSrc != *sDest) return false;
+      }
+      return (sSrc == suffix.rend());
+    }
+
     /**
     Type safe formatting
     Appends each item in the parameter list together performing type-safe verification and printing
@@ -133,11 +144,11 @@ namespace xtd{
     }
 
     //replaces all occurances of the characters in the oItems list with a specified character
-    xstring& replace(std::initializer_list<_ChT> oItems, _ChT chReplace){
-      for (auto & oCh : *this){
+    xstring& replace(std::initializer_list<_ChT> oItems, _ChT chReplace) {
+      for (auto & oCh : *this) {
         bool bFound = false;
-        for (const auto & oFind : oItems){
-          if (oFind == oCh){
+        for (const auto & oFind : oItems) {
+          if (oFind == oCh) {
             bFound = true;
             break;
           }
@@ -186,7 +197,7 @@ namespace xtd{
     }
 
     ///splits the string by the specified delmiters into constituent elements
-    std::vector<xstring<_ChT>> split(const std::initializer_list<_ChT>& delimiters, bool trimEmpty = false) const{
+    std::vector<xstring<_ChT>> split(const std::initializer_list<_ChT>& delimiters, bool trimEmpty = false) const {
       using container_t = std::vector<xstring<_ChT>>;
       container_t oRet;
       using _my_t = xstring<_ChT>;
@@ -197,13 +208,14 @@ namespace xtd{
 
       forever{
         pos = find_first_of(delimiters, lastPos);
-        if (pos == _my_t::npos){
+      if (pos == _my_t::npos) {
         pos = _super_t::length();
         if (pos != lastPos || !trimEmpty) {
           oRet.push_back(value_type(_super_t::data() + lastPos, (pos - lastPos)));
         }
         break;
-        } else if (pos != lastPos || !trimEmpty){
+      }
+      else if (pos != lastPos || !trimEmpty) {
         oRet.push_back(value_type(_super_t::data() + lastPos , (pos - lastPos)));
       }
 

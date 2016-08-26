@@ -36,9 +36,12 @@ docs/html
 !.drone.yml
 !.gitignore
 !.gitattributes
+!.gitmodules
 docs/Doxyfile
 include/xtd/xtd.hpp
 doxygen_sqlite3.db
+assets/gtest
+assets/scowl
 assets/mpos
 assets/mpos.tar.Z
 assets/sqlite-autoconf-3140100

@@ -64,8 +64,6 @@ namespace xtd{
           return "error";
         case xtd::log::type::warning:
           return "warning";
-        case xtd::log::type::info:
-          return "info";
         case xtd::log::type::debug:
           return "debug";
         case xtd::log::type::enter:
@@ -73,7 +71,7 @@ namespace xtd{
         case xtd::log::type::leave:
           return "leave";
         default:
-          break;
+          return "info";
       }
     }
 

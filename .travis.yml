@@ -19,11 +19,9 @@ before_install:
   - mkdir -p      $TRAVIS_BUILD_DIR/docs/html                   $TRAVIS_BUILD_DIR/3rdparty                 $TRAVIS_BUILD_DIR/build
   - pip install --user cpp-coveralls
   - sudo apt-get update -qq
-  - sudo apt-get install -y -qq lcov gcovr curl libgtest-dev unzip valgrind rats cppcheck vera++ uuid-dev
-  - cd /usr/src/gtest
-  - sudo cmake .
-  - sudo cmake --build .
-  - sudo mv libg* /usr/local/lib/
+  - sudo apt-get install -y -qq lcov gcovr curl unzip valgrind rats cppcheck vera++ uuid-dev
+  - git submodule init
+  - git submodule update
   - cd $TRAVIS_BUILD_DIR/3rdparty
   - wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-2.6.1.zip
   - wget https://sonarqube.com/static/cpp/build-wrapper-linux-x86.zip
@@ -33,10 +31,10 @@ before_install:
 script:
   - cd $TRAVIS_BUILD_DIR/build
   - cmake -DBUILD_TESTS:BOOLEAN=ON -DBUILD_EXAMPLES:BOOLEAN=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DXTD_CI_BUILD=TRUE .. 2>&1 | tee ../docs/reports/make/cmake.log
-  - build-wrapper-linux-x86-64 --out-dir . make clean all coverage_tests examples
-  - $TRAVIS_BUILD_DIR/build/tests/coverage_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest
+  - build-wrapper-linux-x86-64 --out-dir . make clean all unit_tests examples
+  - $TRAVIS_BUILD_DIR/build/tests/unit_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest
   - cd $TRAVIS_BUILD_DIR/
-  - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/coverage_tests.memcheck.xml $TRAVIS_BUILD_DIR/build/tests/coverage_tests
+  - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/unit_tests.memcheck.xml $TRAVIS_BUILD_DIR/build/tests/unit_tests
   - for item in $(find src -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
   - for item in $(find include -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
   - for item in $(find include -name *.hpp); do cppcheck --inline-suppr --suppressions-list=assets/cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done

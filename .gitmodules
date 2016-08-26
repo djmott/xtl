@@ -1,0 +1,10 @@
+[submodule "assets/scowl"]
+	path = assets/scowl
+	url = https://github.com/en-wl/wordlist.git
+	branch = master
+
+[submodule "assets/gtest"]	
+	path = assets/gtest
+	url = https://github.com/google/googletest.git
+	branch = master
+	

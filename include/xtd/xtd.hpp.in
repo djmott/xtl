@@ -68,9 +68,37 @@
 
 /** @name XTD_COMPILER
     @{*/
-#define XTD_COMPILER_MSVC 1
-#define XTD_COMPILER_GCC 2
-#define XTD_COMPILER @XTD_COMPILER@
+  #define XTD_COMPILER_MSVC 1
+  #define XTD_COMPILER_GCC 2
+  #define XTD_COMPILER_CLANG 4
+  #define XTD_COMPILER_INTEL 8
+  #define XTD_COMPILER_DMC 16
+  #define XTD_COMPILER_WATCOM 32
+  #define XTD_COMPILER_XCODE 64
+
+	#if defined(__clang__)	&& !defined(__XTD_COMPILER__)
+		#define XTD_COMPILER XTD_COMPILER_CLANG
+	#endif
+
+	#if defined(__DMC__) && !defined(XTD_COMPILER)
+		#define XTD_COMPILER XTD_COMPILER_DMC
+	#endif
+
+	#if defined(__GNUC__) && !defined(XTD_COMPILER)
+		#define XTD_COMPILER XTD_COMPILER_GCC
+	#endif
+
+	#if defined(_MSC_VER) && !defined(XTD_COMPILER)
+		#define XTD_COMPILER XTD_COMPILER_MSVC
+	#endif
+
+	#if defined(__ICL) && !defined(XTD_COMPILER)
+		#define XTD_COMPILER XTD_COMPILER_INTEL
+	#endif
+
+	#if !(XTD_COMPILER)
+		#error "Unsupported Compiler Configuration"
+	#endif
     ///@}
 
 /** @name XTD_CPU
@@ -176,43 +204,38 @@
 #endif
 
 
-//__SONAR_OFF__
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-  #if !defined(_WIN32_WINNT)
-    #define _WIN32_WINNT 0x600
-  #endif
-#endif
-//__SONAR_ON__
+
+
 
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
-  #define PACK_PUSH(n) __pragma(pack(push, n))
-  #define PACK_POP() __pragma(pack(pop))
+  #define PRAGMA_(x) __pragma(x)
   #define FORCEINLINE __forceinline
   #define NOVTABLE __declspec(novtable)
   #define NORETURN __declspec(noreturn)
   #define MULTIPLE __declspec(selectany)
   #define ALIGN(val) __declspec(align(val))
   #define EXPORT __declspec(dllexport)
-  #define TODO( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : TODO : " x  ))
-  #define NOTE( x ) __pragma(message ( __FILE__ "(" QUOTE(__LINE__) ") : NOTE : " x  ))
 #elif (XTD_COMPILER_GCC & XTD_COMPILER)
   #define PRAGMA_(x) _Pragma( #x )
-  #define PACK_PUSH(n) PRAGMA_(pack(push, n))
-  #define PACK_POP() PRAGMA_(pack(pop))
   #define FORCEINLINE __attribute__((always_inline))
   #define NOVTABLE
   #define NORETURN __attribute__((noreturn))
   #define MULTIPLE __attribute__ ((weak))
   #define ALIGN(val) __attribute__ ((aligned (val)))
   #define EXPORT __attribute__ ((visibility ("default")))
-  #if XTD_COLOR_MESSAGES
-    #define TODO( x ) PRAGMA_(message ("\e[31mTODO : " x "\e[0m" ))
-    #define NOTE( x ) PRAGMA_(message ("\e[32mNOTE : " x  "\e[0m"))
-  #else
-    #define TODO( x ) PRAGMA_(message ("TODO : " x ))
-    #define NOTE( x ) PRAGMA_(message ("NOTE : " x ))
-  #endif
+
+#endif
+
+#define PACK_PUSH(n) PRAGMA_(pack(push, n))
+#define PACK_POP() PRAGMA_(pack(pop))
+
+#if XTD_COLOR_MESSAGES
+  #define TODO( x ) PRAGMA_(message ("\e[31mTODO : " x "\e[0m" ))
+  #define NOTE( x ) PRAGMA_(message ("\e[32mNOTE : " x  "\e[0m"))
+#else
+  #define TODO( x ) PRAGMA_(message ("TODO : " x ))
+  #define NOTE( x ) PRAGMA_(message ("NOTE : " x ))
 #endif
 
 #if !defined(XTD_VERBOSE_BUILD)
@@ -227,7 +250,6 @@
 #endif
 
 #if (XTD_OS_MINGW & XTD_OS)
-  TODO("Enabled sealed keyword when available in mingw");
   #define sealed
 #endif
 
@@ -290,7 +312,11 @@ namespace xtd{
 #endif
 
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
-    #include <winsock2.h>
-    #include <windows.h>
-    #include <Shlobj.h>
+  #if !defined(_WIN32_WINNT)
+    #define _WIN32_WINNT 0x600
+  #endif
+
+  #include <winsock2.h>
+  #include <windows.h>
+  #include <Shlobj.h>
 #endif

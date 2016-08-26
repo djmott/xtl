@@ -18,7 +18,6 @@ project(XTL)
 
 find_package(Threads)
 find_package(Doxygen)
-find_package(GTest)
 
 include(CheckIncludeFileCXX)
 include(CheckLibraryExists)
@@ -26,6 +25,7 @@ include(CheckCXXSourceCompiles)
 include(FeatureSummary)
 include(ExternalProject)
 
+set(ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
 
@@ -163,7 +163,6 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/concurrent/spin_lock.hpp
   include/xtd/concurrent/stack.hpp
   include/xtd/nlp/moby.hpp
-  include/xtd/nlp/nlp.hpp
   include/xtd/nlp/pos.hpp
   include/xtd/nlp/wordnet.hpp
   include/xtd/windows/dbghelp.hpp
@@ -278,29 +277,19 @@ execute_process(
 endif()
 
 
-
-
-
-if(BUILD_TESTS AND NOT GTEST_FOUND)
-  message("Google test framework will be downloaded")
-  # lifted from https://crascit.com/2015/07/25/cmake-gtest/
-  # Download and unpack googletest at configure time
-  configure_file(CMakeLists.txt.gtest googletest-download/CMakeLists.txt)
-  set(BUILD_GTEST ON CACHE BOOLEAN "")
-  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -D BUILD_GTEST:BOOLEAN=${BUILD_GTEST} . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
-  execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
-
-  # Prevent GoogleTest from overriding our compiler/linker options
-  # when building with Visual Studio
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-  # Add googletest directly to our build. This adds
-  # the following targets: gtest, gtest_main, gmock
-  # and gmock_main
-  add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src ${CMAKE_BINARY_DIR}/googletest-build)
-endif()
-
 if(BUILD_TESTS)
+  find_package(GTest)
+  if(NOT GTEST_FOUND)
+    if(MINGW)
+      set(gtest_disable_pthreads ON CACHE BOOL "" FORCE)
+    endif()
+    if(MINGW OR MSVC)
+      set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    endif()
+    set(BUILD_GTEST ON CACHE BOOL "" FORCE)
+    set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
+    add_subdirectory(${ASSET_DIR}/gtest)
+  endif()
   add_subdirectory(tests)
 endif()
 

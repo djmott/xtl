@@ -6,8 +6,9 @@ c++ interface to moby databases
 
 #include <xtd/xtd.hpp>
 #include <fstream>
-#include <xtd/nlp/nlp.hpp>
+
 #include <xtd/filesystem.hpp>
+#include <xtd/nlp/document.hpp>
 
 namespace xtd {
   namespace nlp {
@@ -20,8 +21,8 @@ namespace xtd {
           using vector = std::vector<record>;
           using map = std::map<std::string, record>;
           xtd::string _word;
-          part_of_speech _pos;
-          record(const std::string& sWord) : _word(sWord), _pos(part_of_speech::unknown) {}
+          part_of_speech_t _pos;
+          record(const std::string& sWord) : _word(sWord), _pos(part_of_speech_t::unknown_pos) {}
         };
 
         record::map records;
@@ -37,43 +38,43 @@ namespace xtd {
             auto sEnd = sBegin;
             for (; (char)0xd7 != *sEnd && sEnd < sFile.end(); ++sEnd);
             record r(std::string(sBegin, sEnd));
-            records.insert(std::make_pair(r._word, r));
             for (++sEnd; '\r' != *sEnd && '\n' != *sEnd && sEnd < sFile.end(); ++sEnd) {
-              part_of_speech iPOS = part_of_speech::unknown;
+              part_of_speech_t iPOS = part_of_speech_t::unknown_pos;
               switch (*sEnd) {
               case 'N':
-                iPOS = part_of_speech::noun; break;
+                iPOS = part_of_speech_t::noun; break;
               case 'p':
-                iPOS = part_of_speech::noun_plural; break;
+                iPOS = part_of_speech_t::plural; break;
               case 'h':
-                iPOS = part_of_speech::noun_phrase; break;
+                iPOS = part_of_speech_t::noun_phrase; break;
               case 'V':
-                iPOS = part_of_speech::verb_participle; break;
+                iPOS = part_of_speech_t::verb_participle; break;
               case 't':
-                iPOS = part_of_speech::verb_transitive; break;
+                iPOS = part_of_speech_t::verb_transitive; break;
               case 'i':
-                iPOS = part_of_speech::verb_intransitive; break;
+                iPOS = part_of_speech_t::verb_intransitive; break;
               case 'A':
-                iPOS = part_of_speech::adj; break;
+                iPOS = part_of_speech_t::adjective; break;
               case 'v':
-                iPOS = part_of_speech::adv; break;
+                iPOS = part_of_speech_t::adverb; break;
               case 'C':
-                iPOS = part_of_speech::conjunction; break;
+                iPOS = part_of_speech_t::conjunction; break;
               case 'P':
-                iPOS = part_of_speech::preposition; break;
+                iPOS = part_of_speech_t::preposition; break;
               case '!':
-                iPOS = part_of_speech::interjection; break;
+                iPOS = part_of_speech_t::interjection; break;
               case 'r':
-                iPOS = part_of_speech::pronoun; break;
+                iPOS = part_of_speech_t::pronoun; break;
               case 'D':
-                iPOS = part_of_speech::definite_article; break;
+                iPOS = part_of_speech_t::definite_article; break;
               case 'I':
-                iPOS = part_of_speech::indefinite_article; break;
+                iPOS = part_of_speech_t::indefinite_article; break;
               case 'o':
-                iPOS = part_of_speech::nominative; break;
+                iPOS = part_of_speech_t::nominative; break;
               }
-              r._pos = static_cast<part_of_speech>(static_cast<uint64_t>(iPOS) | static_cast<uint64_t>(r._pos));
+              r._pos = static_cast<part_of_speech_t>(static_cast<uint64_t>(iPOS) | static_cast<uint64_t>(r._pos));
             }
+            records.insert(std::make_pair(r._word, r));
             sBegin = sEnd;
           }
         }
@@ -83,9 +84,9 @@ namespace xtd {
           return _database;
         }
 
-        nlp::part_of_speech get_pos(const xtd::string& sWord) const {
+        nlp::part_of_speech_t get_pos(const xtd::string& sWord) const {
           auto oItem = records.find(sWord);
-          if (records.end() == oItem) return part_of_speech::unknown;
+          if (records.end() == oItem) return part_of_speech_t::unknown_pos;
           return oItem->second._pos;
         }
 

@@ -14,7 +14,7 @@ pos tagging
 #include <xtd/meta.hpp>
 #include <xtd/string.hpp>
 
-#include <xtd/nlp/nlp.hpp>
+
 #include <xtd/dynamic_object.hpp>
 
 #include <xtd/nlp/moby.hpp>
@@ -27,11 +27,12 @@ namespace xtd{
     public:
 
       struct tagged_word {
-        part_of_speech _pos;
+        part_of_speech_t _pos;
         xtd::string _word;
       };
 
-      static void tag_doc(xtd::dynamic_object::vector& oDoc) {
+      static void tag_doc(xtd::dynamic_object::vector& ) {
+        /*
         using doc_type = xtd::dynamic_object::vector;
         auto & oMoby = moby::database::get();
         forever{
@@ -43,6 +44,7 @@ namespace xtd{
           oItem->item<tagged_word>() = tagged_word{ iPOS, sRawText };
           oItem->remove_item<raw_text>();
         }
+         */
       }
 
       pos_tagger() = default;
