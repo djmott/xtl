@@ -149,6 +149,30 @@ namespace xtd{
       return *this;
     }
 
+    xstring& replace(const xstring& src, _ChT chReplace) {
+      forever{
+        auto i = _super_t::find(src.c_str());
+        if (_super_t::npos == i) break;
+        _super_t::erase(i, src.size() - 1);
+        (*this)[i] = chReplace;
+      }
+      return *this;
+    }
+
+    xstring& remove(const std::initializer_list<_ChT>& chars) {
+      forever{
+        bool found = false;
+        for (_ChT ch : chars) {
+          auto i = _super_t::find(ch);
+          if (_super_t::npos == i) continue;
+          found = true;
+          _super_t::erase(i, size_t(1));
+        }
+        if (!found) break;
+      }
+      return *this;
+    }
+
     ///finds the first occurance of any item
     size_type find_first_of(const std::initializer_list<_ChT>& delimiters, size_type pos = 0) const{
       size_type sRet = _super_t::npos;
@@ -174,16 +198,44 @@ namespace xtd{
       forever{
         pos = find_first_of(delimiters, lastPos);
         if (pos == _my_t::npos){
-          pos = _super_t::length();
-          if (pos != lastPos || !trimEmpty){
-            oRet.push_back(value_type(_super_t::data() + lastPos, (pos - lastPos)));
-          }
-          break;
-        } else if (pos != lastPos || !trimEmpty){
-          oRet.push_back(value_type(_super_t::data() + lastPos , (pos - lastPos)));
+        pos = _super_t::length();
+        if (pos != lastPos || !trimEmpty) {
+          oRet.push_back(value_type(_super_t::data() + lastPos, (pos - lastPos)));
         }
+        break;
+        } else if (pos != lastPos || !trimEmpty){
+        oRet.push_back(value_type(_super_t::data() + lastPos , (pos - lastPos)));
+      }
 
-        lastPos = pos + 1;
+      lastPos = pos + 1;
+      }
+      return oRet;
+    }
+
+    ///splits the string by the specified string into constituent elements
+    std::vector<xstring<_ChT>> split(const xstring<_ChT>& delim, bool trimEmpty = false) const {
+      using container_t = std::vector<xstring<_ChT>>;
+      container_t oRet;
+      using _my_t = xstring<_ChT>;
+      size_type pos;
+      size_type lastPos = 0;
+
+      using value_type = typename container_t::value_type;
+
+      forever{
+        pos = find(delim, lastPos);
+      if (pos == _my_t::npos) {
+        pos = _super_t::length();
+        if (pos != lastPos || !trimEmpty) {
+          oRet.push_back(value_type(_super_t::data() + lastPos, (pos - lastPos)));
+        }
+        break;
+        }
+      else if (pos != lastPos || !trimEmpty) {
+        oRet.push_back(value_type(_super_t::data() + lastPos , (pos - lastPos)));
+      }
+
+      lastPos = pos + 1;
       }
       return oRet;
     }
