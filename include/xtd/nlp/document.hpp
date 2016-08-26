@@ -11,80 +11,156 @@ nlp document
 #include <ios>
 
 #include <xtd/dynamic_object.hpp>
-#include <xtd/wrapped_type.hpp>
+#include <xtd/decorated_object.hpp>
 
 
 namespace xtd{
   namespace nlp{
 
-    enum word_category_t : uint64_t{
-      unknown_cat = 0,
-      adj_all = 1,
-      adj_pert = (adj_all << 1),
-      adv_all = (adj_pert << 1),
-      noun_Tops = (adv_all << 1),
-      noun_act = (noun_Tops << 1),
-      noun_animal = (noun_act << 1),
-      noun_artifact = (noun_animal << 1),
-      noun_attribute = (noun_artifact << 1),
-      noun_body = (noun_attribute << 1),
-      noun_cognition = (noun_body << 1),
-      noun_communication = (noun_cognition << 1),
-      noun_event = (noun_communication << 1),
-      noun_feeling = (noun_event << 1),
-      noun_food = (noun_feeling << 1),
-      noun_group = (noun_food << 1),
-      noun_location = (noun_group << 1),
-      noun_motive = (noun_location << 1),
-      noun_object = (noun_motive << 1),
-      noun_person = (noun_object << 1),
-      noun_phenomenon = (noun_person << 1),
-      noun_plant = (noun_phenomenon << 1),
-      noun_possession = (noun_plant << 1),
-      noun_process = (noun_possession << 1),
-      noun_quantity = (noun_process << 1),
-      noun_relation = (noun_quantity << 1),
-      noun_shape = (noun_relation << 1),
-      noun_state = (noun_shape << 1),
-      noun_substance = (noun_state << 1),
-      noun_time = (noun_substance << 1),
-      verb_body = (noun_time << 1),
-      verb_change = (verb_body << 1),
-      verb_cognition = (verb_change << 1),
-      verb_communication = (verb_cognition << 1),
-      verb_competition = (verb_communication << 1),
-      verb_consumption = (verb_competition << 1),
-      verb_contact = (verb_consumption << 1),
-      verb_creation = (verb_contact << 1),
-      verb_emotion = (verb_creation << 1),
-      verb_motion = (verb_emotion << 1),
-      verb_perception = (verb_motion << 1),
-      verb_possession = (verb_perception << 1),
-      verb_social = (verb_possession << 1),
-      verb_stative = (verb_social << 1),
-      verb_weather = (verb_stative << 1),
-      adj_ppl = (verb_weather << 1),
+    /// unstructured and unformatted
+    struct raw_document : dynamic_object{};
+
+
+    struct tokenized_document : raw_document{};
+
+    struct tagged_document : tokenized_document{};
+
+    struct chunked_document : tagged_document{};
+
+
+
+
+    struct word : dynamic_object{
+      enum category_t : uint64_t{
+        unknown_cat = 0,
+        adj_all = 1,
+        adj_pert = (adj_all << 1),
+        adv_all = (adj_pert << 1),
+        noun_Tops = (adv_all << 1),
+        noun_act = (noun_Tops << 1),
+        noun_animal = (noun_act << 1),
+        noun_artifact = (noun_animal << 1),
+        noun_attribute = (noun_artifact << 1),
+        noun_body = (noun_attribute << 1),
+        noun_cognition = (noun_body << 1),
+        noun_communication = (noun_cognition << 1),
+        noun_event = (noun_communication << 1),
+        noun_feeling = (noun_event << 1),
+        noun_food = (noun_feeling << 1),
+        noun_group = (noun_food << 1),
+        noun_location = (noun_group << 1),
+        noun_motive = (noun_location << 1),
+        noun_object = (noun_motive << 1),
+        noun_person = (noun_object << 1),
+        noun_phenomenon = (noun_person << 1),
+        noun_plant = (noun_phenomenon << 1),
+        noun_possession = (noun_plant << 1),
+        noun_process = (noun_possession << 1),
+        noun_quantity = (noun_process << 1),
+        noun_relation = (noun_quantity << 1),
+        noun_shape = (noun_relation << 1),
+        noun_state = (noun_shape << 1),
+        noun_substance = (noun_state << 1),
+        noun_time = (noun_substance << 1),
+        verb_body = (noun_time << 1),
+        verb_change = (verb_body << 1),
+        verb_cognition = (verb_change << 1),
+        verb_communication = (verb_cognition << 1),
+        verb_competition = (verb_communication << 1),
+        verb_consumption = (verb_competition << 1),
+        verb_contact = (verb_consumption << 1),
+        verb_creation = (verb_contact << 1),
+        verb_emotion = (verb_creation << 1),
+        verb_motion = (verb_emotion << 1),
+        verb_perception = (verb_motion << 1),
+        verb_possession = (verb_perception << 1),
+        verb_social = (verb_possession << 1),
+        verb_stative = (verb_social << 1),
+        verb_weather = (verb_stative << 1),
+        adj_ppl = (verb_weather << 1),
+      };
+
+      enum part_of_speech_t : uint16_t{
+        unknown_pos = 0,
+        noun = 1,
+        plural = (noun << 1),
+        noun_phrase = (plural << 1),
+        verb_participle = (noun_phrase << 1),
+        verb_transitive = (verb_participle << 1),
+        verb_intransitive = (verb_transitive << 1),
+        adjective = (verb_intransitive << 1),
+        adverb = (adjective << 1),
+        conjunction = (adverb << 1),
+        preposition = (conjunction << 1),
+        interjection = (preposition << 1),
+        pronoun = (interjection << 1),
+        definite_article = (pronoun << 1),
+        indefinite_article = (definite_article << 1),
+        nominative = (indefinite_article << 1),
+      };
+
+      using vector_t = std::vector<word>;
+
+      using vector = PROPERTY(vector_t);
+      using category = PROPERTY(category_t);
+      using part_of_speech = PROPERTY(part_of_speech_t);
+      using text = PROPERTY(xtd::string);
+
     };
 
-    enum part_of_speech_t : uint16_t{
-      unknown_pos = 0,
-      noun = 1,
-      plural = (noun << 1),
-      noun_phrase = (plural << 1),
-      verb_participle = (noun_phrase << 1),
-      verb_transitive = (verb_participle << 1),
-      verb_intransitive = (verb_transitive << 1),
-      adjective = (verb_intransitive << 1),
-      adverb = (adjective << 1),
-      conjunction = (adverb << 1),
-      preposition = (conjunction << 1),
-      interjection = (preposition << 1),
-      pronoun = (interjection << 1),
-      definite_article = (pronoun << 1),
-      indefinite_article = (definite_article << 1),
-      nominative = (indefinite_article << 1),
+    struct sentence : dynamic_object{
+      enum structure_t{
+        simple=0,
+        compound=1,
+        complex=(compound<<1),
+        compound_complex = (compound | complex),
+      };
+      enum category_t{
+        declarative,
+        interrogative,
+        exclamatory,
+        imperative,
+      };
+
+      using vector_t = std::vector<sentence>;
+
+      using structure = PROPERTY(structure_t);
+      using category = PROPERTY(category_t);
+      using vector = PROPERTY(vector_t);
+      using text = PROPERTY(xtd::string);
+      
+      virtual word::vector_t& words() = 0;
     };
 
+    struct paragraph : dynamic_object{
+      enum category_t{
+        narrative,
+        exposition,
+        definition,
+        description,
+        comparison,
+        analysis,
+        persuasion,
+      };
+      using vector_t = std::vector<paragraph>;
+
+      using category = PROPERTY(category_t);
+      using vector = PROPERTY(vector_t);
+      
+      virtual sentence::vector& sentences() = 0;
+    };
+
+    struct chapter : dynamic_object{
+      using vector_t = std::vector<chapter>;
+      using vector = PROPERTY(vector_t);
+       virtual paragraph::vector_t& paragraphs() = 0;
+    };
+
+    struct corpus : dynamic_object{
+       virtual chapter::vector_t& chapters() = 0;
+    };
+
+    /*
     template <template <typename> class _StemmerT>
     class word : private dynamic_object{
       template <typename> friend class _StemmerT;
@@ -174,34 +250,34 @@ namespace xtd{
       }
 
     };
-
+    */
   }
 
 
 
   namespace _{
     template<>
-    class xstring_format<char, const nlp::part_of_speech_t &>{
+    class xstring_format<char, const nlp::word::part_of_speech_t &>{
     public:
-      inline static string format(const nlp::part_of_speech_t &iPOS){
+      inline static string format(const nlp::word::part_of_speech_t &iPOS){
         using namespace xtd::nlp;
         xtd::string sRet = "(";
-        if (part_of_speech_t::unknown_pos == iPOS) sRet += "unknown   ";
-        if (part_of_speech_t::noun & iPOS) sRet += "noun | ";
-        if (part_of_speech_t::plural & iPOS) sRet += "plural | ";
-        if (part_of_speech_t::noun_phrase & iPOS) sRet += "noun_phrase | ";
-        if (part_of_speech_t::verb_participle & iPOS) sRet += "verb_participle | ";
-        if (part_of_speech_t::verb_transitive & iPOS) sRet += "verb_transitive | ";
-        if (part_of_speech_t::verb_intransitive & iPOS) sRet += "verb_intransitive | ";
-        if (part_of_speech_t::adjective & iPOS) sRet += "adjective | ";
-        if (part_of_speech_t::adverb & iPOS) sRet += "adverb | ";
-        if (part_of_speech_t::conjunction & iPOS) sRet += "conjunction | ";
-        if (part_of_speech_t::preposition & iPOS) sRet += "preposition | ";
-        if (part_of_speech_t::interjection & iPOS) sRet += "interjection | ";
-        if (part_of_speech_t::pronoun & iPOS) sRet += "pronoun | ";
-        if (part_of_speech_t::definite_article & iPOS) sRet += "definite_article | ";
-        if (part_of_speech_t::indefinite_article & iPOS) sRet += "indefinite_article | ";
-        if (part_of_speech_t::nominative & iPOS) sRet += "nominative | ";
+        if (word::unknown_pos == iPOS) sRet += "unknown   ";
+        if (word::noun & iPOS) sRet += "noun | ";
+        if (word::plural & iPOS) sRet += "plural | ";
+        if (word::noun_phrase & iPOS) sRet += "noun_phrase | ";
+        if (word::verb_participle & iPOS) sRet += "verb_participle | ";
+        if (word::verb_transitive & iPOS) sRet += "verb_transitive | ";
+        if (word::verb_intransitive & iPOS) sRet += "verb_intransitive | ";
+        if (word::adjective & iPOS) sRet += "adjective | ";
+        if (word::adverb & iPOS) sRet += "adverb | ";
+        if (word::conjunction & iPOS) sRet += "conjunction | ";
+        if (word::preposition & iPOS) sRet += "preposition | ";
+        if (word::interjection & iPOS) sRet += "interjection | ";
+        if (word::pronoun & iPOS) sRet += "pronoun | ";
+        if (word::definite_article & iPOS) sRet += "definite_article | ";
+        if (word::indefinite_article & iPOS) sRet += "indefinite_article | ";
+        if (word::nominative & iPOS) sRet += "nominative | ";
         sRet.resize(sRet.size() - 3);
         sRet += ")";
         return sRet;

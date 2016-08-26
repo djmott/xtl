@@ -320,3 +320,7 @@ namespace xtd{
   #include <windows.h>
   #include <Shlobj.h>
 #endif
+
+#if !defined(interface)
+  #define interface struct
+#endif
