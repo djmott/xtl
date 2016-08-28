@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <functional>
 
 #if (XTD_HAS_CODECVT)
   #include <codecvt>
@@ -184,7 +185,7 @@ namespace xtd{
       return *this;
     }
 
-    ///finds the first occurance of any item
+    ///finds the first occurrence of any item
     size_type find_first_of(const std::initializer_list<_ChT>& delimiters, size_type pos = 0) const{
       size_type sRet = _super_t::npos;
       for (const _ChT ch : delimiters){
@@ -194,6 +195,13 @@ namespace xtd{
         }
       }
       return sRet;
+    }
+    ///finds the first occurrence of an item from a user-defined visitor
+    size_type find_first_of(const std::function<bool(_ChT)>& VisitorFN, size_type pos = 0) const{
+      for (size_type i = pos; i < _super_t::size(); ++i){
+        if (VisitorFN(_super_t::at(i))) return i;
+      }
+      return _super_t::npos;
     }
 
     ///splits the string by the specified delmiters into constituent elements
@@ -208,7 +216,7 @@ namespace xtd{
 
       forever{
         pos = find_first_of(delimiters, lastPos);
-      if (pos == _my_t::npos) {
+        if (pos == _my_t::npos) {
         pos = _super_t::length();
         if (pos != lastPos || !trimEmpty) {
           oRet.push_back(value_type(_super_t::data() + lastPos, (pos - lastPos)));
@@ -248,6 +256,33 @@ namespace xtd{
       }
 
       lastPos = pos + 1;
+      }
+      return oRet;
+    }
+
+    ///splits the string by the user supplied unary function
+
+    std::vector<xstring<_ChT>> split(const std::function<bool(_ChT)>& VisitorFN) const{
+      using container_t = std::vector<xstring<_ChT>>;
+      using value_type = typename container_t::value_type;
+      container_t oRet;
+      using _my_t = xstring<_ChT>;
+      size_t iLast = 0;
+      for (size_t iCurr = iLast; iCurr < _my_t::size(); ){
+        if (!VisitorFN((*this)[iCurr])){
+          ++iCurr;
+          continue;
+        }
+        auto iLen = iCurr - iLast;
+        if (!iLen) ++iLen;
+        oRet.push_back(value_type(_super_t::data() + iLast, iLen));
+        if (iCurr != iLast){
+          oRet.push_back(value_type(_super_t::data() + iCurr, 1));
+        }
+        iLast = ++iCurr;
+      }
+      if (iLast < _my_t::size()){
+        oRet.push_back(value_type(_super_t::data() + iLast, _my_t::size() - iLast));
       }
       return oRet;
     }

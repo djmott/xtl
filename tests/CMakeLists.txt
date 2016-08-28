@@ -95,9 +95,9 @@ if(BUILD_TEST_COVERAGE)
   target_link_libraries(unit_tests gcov)
 endif()
 
-if(GTEST_FOUND)
   GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
-else()
+
+if(NOT GTEST_FOUND)
   add_test(unit_tests "" ${TEST_SOURCE})
   add_dependencies(unit_tests gtest)
   add_dependencies(unit_tests gtest_main)
@@ -105,6 +105,6 @@ else()
   add_dependencies(unit_tests gmock_main)
 endif()
 
-link_libraries(gtest gtest_main gmock gmock_main)
+target_link_libraries(unit_tests gtest gtest_main gmock gmock_main)
 
 

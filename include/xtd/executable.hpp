@@ -33,7 +33,7 @@ namespace xtd {
       if (0 != sRet.string().size()){
         return sRet;
       }
-      std::string sTemp(MAX_PATH, 0);
+      xtd::tstring sTemp(MAX_PATH, 0);
       forever {
         auto iLen = xtd::crt_exception::throw_if(GetModuleFileName(nullptr, &sTemp[0], static_cast<DWORD>(sTemp.size())), [](DWORD ret){ return (0==ret); });
         if (iLen >= sTemp.size()){

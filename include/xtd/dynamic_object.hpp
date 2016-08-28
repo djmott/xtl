@@ -1,6 +1,6 @@
 /** @file
- * an object with dynamic properties and values.  The shape of the object is constructed at run time
- * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+* an object with dynamic properties and values.  The shape of the object is constructed at run time
+* @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 #pragma once
 
@@ -13,17 +13,24 @@
 #include <xtd/var.hpp>
 #include <xtd/debug.hpp>
 
+#define PROPERTY(_type) xtd::dynamic_object::property_type<_type, __COUNTER__>
+
 namespace xtd{
 
-  struct dynamic_object{
+  namespace _{
+    template <typename> struct isa_dynamic_object_property_type : std::false_type{}; //default to false...true specialization is after the declaration at the end of this file
+
+  }
+
+  struct dynamic_object : private std::map<size_t, xtd::var>{
 
     template <typename _Ty> bool has() const{
-      auto oItem = _map.find(typeid(_Ty).hash_code());
-      return (_map.end() != oItem);
+      auto oItem = map_type::find(typeid(_Ty).hash_code());
+      return (map_type::end() != oItem);
     }
 
     template <typename _Ty> void remove(){
-      _map.erase(typeid(_Ty).hash_code());
+      map_type::erase(typeid(_Ty).hash_code());
     }
 
 
@@ -32,32 +39,42 @@ namespace xtd{
     };
 
 
-    template <typename _Ty> typename _Ty::value_type& property(){
-      auto oItem = _map.find(typeid(_Ty).hash_code());
-      if (_map.end() != oItem){
+    template <typename _Ty> typename _Ty::value_type& value(){
+      static_assert(_::isa_dynamic_object_property_type<_Ty>::value, "Invalid parameter. Expecting a dynamic_object::property_type template parameter");
+      auto oItem = map_type::find(typeid(_Ty).hash_code());
+      if (map_type::end() != oItem){
         return oItem->second.as<typename _Ty::value_type>();
       }
       var oRet = typename _Ty::value_type();
-      auto oTmp = _map.emplace(typeid(_Ty).hash_code(), oRet);
+      auto oTmp = map_type::emplace(typeid(_Ty).hash_code(), oRet);
       XTD_ASSERT(oTmp.second);
       return oTmp.first->second.as<typename _Ty::value_type>();
     }
-    template <typename _Ty> const typename _Ty::value_type& property() const {
-      auto oItem = _map.find(typeid(_Ty).hash_code());
-      if (_map.end() != oItem) {
+    template <typename _Ty> const typename _Ty::value_type& value() const{
+      static_assert(_::isa_dynamic_object_property_type<_Ty>::value, "Invalid parameter. Expecting a dynamic_object::property_type template parameter");
+      auto oItem = map_type::find(typeid(_Ty).hash_code());
+      if (map_type::end() != oItem){
         return oItem->second.as<typename _Ty::value_type>();
       }
       throw std::runtime_error("Attempt to modify a const object");
     }
-      template <typename ... _ArgTs> dynamic_object(_ArgTs&&...oArgs) : _map(std::forward<_ArgTs>(oArgs)...){}
 
-    private:
 
-      using map_type = std::map<size_t, xtd::var>;
-      using pair = std::pair<size_t, xtd::var>;
-      map_type _map;
+
+
+    template <typename ... _ArgTs> dynamic_object(_ArgTs&&...oArgs) : map_type(std::forward<_ArgTs>(oArgs)...){}
+
+  private:
+
+    using map_type = std::map<size_t, xtd::var>;
+    using pair = std::pair<size_t, xtd::var>;
+//     map_type _map;
 
   };
 
+  namespace _{
+    //true specialization is after the declaration
+    template <typename _Ty, size_t _ctr> struct isa_dynamic_object_property_type<dynamic_object::property_type<_Ty, _ctr>> : std::true_type{};
+  }
 
 }

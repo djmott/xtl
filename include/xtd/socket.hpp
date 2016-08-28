@@ -6,11 +6,6 @@ general purpose socket communication
 #pragma once
 #include <xtd/xtd.hpp>
 
-#define DUMP_DEFINE2(prefix, x) PRAGMA_(message( prefix QUOTE(x)))
-#define DUMP_DEFINE(x) DUMP_DEFINE2("#define " # x " ", x)
-
-DUMP_DEFINE(_WIN32_WINNT);
-
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
   #include <Ws2ipdef.h>
   #include <ws2tcpip.h>

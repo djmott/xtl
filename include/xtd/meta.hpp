@@ -27,6 +27,8 @@ namespace xtd{
 
   }
 
+  template <typename...> using void_t = void;
+
   template <typename _Ty> constexpr uint32_t hidword(_Ty value){
     static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
     return ((uint32_t)(((value) >> 32) & 0xffffffff));
@@ -35,6 +37,7 @@ namespace xtd{
     static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
     return ((uint32_t)((value) & 0xffffffff));
   }
+
 
   /** meta-function to get the intrinsic of a specified size
   @tparam _Size size
@@ -127,6 +130,25 @@ namespace xtd{
     using type = typename get_parameter<_ParamNum-1, _ReturnT(_TailT...)>::type;
   };
 
+
+  //test for t::type member
+  template <typename, typename = void> struct has_type_member : std::false_type{};
+  template <typename _Ty> struct has_type_member<_Ty, void_t<typename _Ty::type>> : std::true_type{};
+
+  //test for copy assignment
+  template <typename _Ty> using copy_assignment_t = decltype(std::declval<_Ty&>() = std::declval<_Ty const&>());
+  template <typename, typename = void> struct is_copy_assignable : std::false_type{};
+  template <typename _Ty> struct is_copy_assignable<_Ty, void_t<copy_assignment_t<_Ty>>> : std::is_same<copy_assignment_t<_Ty>, _Ty&>{};
+
+  //test for move assignment
+  template <typename _Ty> using move_assignment_t = decltype(std::declval<_Ty&>() = std::declval<_Ty&&>());
+  template <typename, typename = void> struct is_move_assignable : std::false_type{};
+  template <typename _Ty> struct is_move_assignable<_Ty, void_t<move_assignment_t<_Ty>>> : std::is_same<move_assignment_t<_Ty>, _Ty&&>{};
+
+  //test for invocation operator
+  template <typename _Ty> using invokation_operator_t = decltype(std::declval<_Ty&>()());
+  template <typename, typename = void> struct is_invokable : std::false_type{};
+  template <typename _Ty> struct is_invokable<_Ty, void_t<invokation_operator_t<_Ty>>> : std::true_type{};
 
   /**
     meta-function to convert a static upper case ascii character to lower case
