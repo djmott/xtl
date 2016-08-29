@@ -86,8 +86,14 @@ namespace xtd{
       };
 
       template <> struct sqlite_field_loader<std::vector<uint8_t>>{
-        template <int Index> static std::vector<uint8_t> get(sqlite3_stmt* st){ 
+        template <int Index> static std::vector<uint8_t>& get(sqlite3_stmt* st){ 
           return reinterpret_cast<const char *>(sqlite3_column_text(st, Index)); 
+        }
+      };
+
+      template <> struct sqlite_field_loader<xtd::string>{
+        template <int Index> static const char * get(sqlite3_stmt* st){
+          return reinterpret_cast<const char *>(sqlite3_column_text(st, Index));
         }
       };
 
@@ -121,6 +127,7 @@ namespace xtd{
     };
 
     template <typename _HeadT, typename ... _TailT> class result_set<_HeadT, _TailT...> : public result_set<_TailT...>{
+    protected:
       friend class database;
       using _super_t = result_set<_TailT...>;
       result_set(sqlite3 * pDB, sqlite3_stmt * pStatement) : _super_t(pDB, pStatement){}
@@ -161,6 +168,9 @@ namespace xtd{
         template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const std::vector<uint8_t>& val){ exception::throw_if(pDB, sqlite3_bind_blob(st, Index, &val[0], val.size(), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; }); }
       };
 
+      template <> struct sqlite_field_binder<xtd::string>{
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val){ exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), val.size(), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; }); }
+      };
 
       template <int, typename ...> struct sqlite_command_params;
 

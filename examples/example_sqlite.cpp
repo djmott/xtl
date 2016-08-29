@@ -20,23 +20,23 @@ int main(){
 
     {
       auto oTransaction = oDB->begin_transaction();
-      oDB->execute("Create Table Fnord (Age Int);");
+      oDB->execute("Create Table Fnord (Age Int primary key, Name String);");
 
       oTransaction.commit();
     }
     {
       auto oTransaction = oDB->begin_transaction();
-      auto oCmd = oDB->prepare<int>("Insert Into Fnord (Age) Values (?);");
-      (*oCmd)(123);
-      (*oCmd)(234);
-      (*oCmd)(345);
-      (*oCmd)(456);
+      auto oCmd = oDB->prepare<int, xtd::string>("Insert Into Fnord (Age, Name) Values (?, ?);");
+      (*oCmd)(123, "Charlie Brown");
+      (*oCmd)(234, "Homer Simpson");
+      (*oCmd)(345, "George Bush");
+      (*oCmd)(456, "Donald Trump");
       oTransaction.commit();
     }
     {
-      auto oRS = oDB->execute_reader<int>("Select Age From Fnord;");
+      auto oRS = oDB->execute_reader<int, xtd::string>("Select Age, Name From Fnord;");
       while (oRS->next()){
-        DUMP(oRS->get<0>());
+        INFO(oRS->get<0>(), " ", oRS->get<1>());
       }
     }
     return 0;
