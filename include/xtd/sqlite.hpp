@@ -180,7 +180,7 @@ namespace xtd{
 
       template <int idx, typename _HeadT, typename ... _TailT> struct sqlite_command_params<idx, _HeadT, _TailT...>{
         static void set(sqlite3 * pDB, sqlite3_stmt * st, const _HeadT& oHead, _TailT&&...oTail){
-          sqlite_field_binder<_HeadT>::set<idx>(pDB, st, oHead);
+          sqlite_field_binder<_HeadT>::template set<idx>(pDB, st, oHead);
           sqlite_command_params<1 + idx, _TailT...>::set(pDB, st, std::forward<_TailT>(oTail)...);
         }
       };
@@ -192,7 +192,7 @@ namespace xtd{
       friend class database;
       sqlite3 * _pDatabase;
       sqlite3_stmt * _pStatement;
-      command(sqlite3 * pDB, sqlite3_stmt * pStatement) : _pStatement(nullptr), _pDatabase(pDB){}
+      command(sqlite3 * pDB, sqlite3_stmt * pStatement) : _pDatabase(pDB), _pStatement(pStatement){}
     public:
       using pointer = std::shared_ptr<command>;
       ~command(){ if (_pStatement) sqlite3_finalize(_pStatement); }
