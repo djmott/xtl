@@ -60,6 +60,11 @@ namespace xtd{
     }
 
 
+	template <typename ... _ArgTs> static dynamic_object make(_ArgTs&&...oArgs) {
+		dynamic_object oRet;
+		oRet.add_items(std::forward<_ArgTs>(oArgs)...);
+		return oRet;
+	}
 
 
     template <typename ... _ArgTs> dynamic_object(_ArgTs&&...oArgs) : map_type(std::forward<_ArgTs>(oArgs)...){}
@@ -68,7 +73,14 @@ namespace xtd{
 
     using map_type = std::map<size_t, xtd::var>;
     using pair = std::pair<size_t, xtd::var>;
-//     map_type _map;
+
+	void add_items(){}
+
+	template <typename _HeadT, typename ... _TailT>
+	void add_items(_HeadT oHead, _TailT...oTail) {
+		map_type::insert(pair(typeid(_HeadT).hash_code(), xtd::var(oHead)));
+		add_items(std::forward<_TailT>(oTail)...);
+	}
 
   };
 

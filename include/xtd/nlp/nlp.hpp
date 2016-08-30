@@ -1,5 +1,7 @@
 #pragma once
 
+#include <xtd/dynamic_object.hpp>
+
 namespace xtd{
   namespace nlp{
 
