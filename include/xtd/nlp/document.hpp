@@ -88,6 +88,7 @@ namespace xtd{
         verb_participle = (noun_phrase << 1),
         verb_transitive = (verb_participle << 1),
         verb_intransitive = (verb_transitive << 1),
+        verb = (verb_transitive | verb_intransitive),
         adjective = (verb_intransitive << 1),
         adverb = (adjective << 1),
         conjunction = (adverb << 1),

@@ -163,7 +163,6 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/concurrent/spin_lock.hpp
   include/xtd/concurrent/stack.hpp
   include/xtd/nlp/moby.hpp
-  include/xtd/nlp/pos.hpp
   include/xtd/nlp/wordnet.hpp
   include/xtd/windows/dbghelp.hpp
   include/xtd/callback.hpp
@@ -308,4 +307,5 @@ endif()
 
 if(BUILD_UTILS)
   add_subdirectory(utils/wordnet_importer)
+  add_subdirectory(utils/scowl_importer)
 endif()

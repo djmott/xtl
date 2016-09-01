@@ -152,23 +152,23 @@ namespace xtd{
     namespace _{
       template <typename> struct sqlite_field_binder;
 
-      template <> struct sqlite_field_binder<double>{
+      template <> struct sqlite_field_binder<const double &>{
         template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const double& val){ exception::throw_if(pDB, sqlite3_bind_double(st, Index, val), [](int i){return SQLITE_OK != i; }); }
       };
 
-      template <> struct sqlite_field_binder<int>{
+      template <> struct sqlite_field_binder<const int &>{
         template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const int& val){ exception::throw_if(pDB, sqlite3_bind_int(st, Index, val), [](int i){return SQLITE_OK != i; }); }
       };
 
-      template <> struct sqlite_field_binder<sqlite3_int64>{
+      template <> struct sqlite_field_binder<const sqlite3_int64 &>{
         template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const sqlite3_int64& val){ exception::throw_if(pDB, sqlite3_bind_int64(st, Index, val), [](int i){return SQLITE_OK != i; }); }
       };
 
-      template <> struct sqlite_field_binder<std::vector<uint8_t>>{
+      template <> struct sqlite_field_binder<const std::vector<uint8_t>&>{
         template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const std::vector<uint8_t>& val){ exception::throw_if(pDB, sqlite3_bind_blob(st, Index, &val[0], val.size(), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; }); }
       };
 
-      template <> struct sqlite_field_binder<xtd::string>{
+      template <> struct sqlite_field_binder<const xtd::string &>{
         template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val){ exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), val.size(), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; }); }
       };
 
@@ -207,8 +207,8 @@ namespace xtd{
         std::swap(_pStatement, src._pStatement);
         return *this;
       }
-      int operator()(_ArgTs&&...oArgs){
-        _::sqlite_command_params<1, _ArgTs...>::set(_pDatabase, _pStatement, std::forward<_ArgTs>(oArgs)...);
+      int operator()(const _ArgTs&...oArgs){
+        _::sqlite_command_params<1, const _ArgTs& ...>::set(_pDatabase, _pStatement, std::forward<const _ArgTs &>(oArgs)...);
         exception::throw_if(_pDatabase, sqlite3_step(_pStatement), [](int i){ return !(i == SQLITE_OK || i == SQLITE_DONE || i == SQLITE_ROW);  });
         exception::throw_if(_pDatabase, sqlite3_reset(_pStatement), [](int i){return SQLITE_OK != i; });
         return sqlite3_changes(_pDatabase);
