@@ -6,7 +6,39 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #pragma once
 
+namespace xtd{
+    namespace filesystem{
 
+
+#if (XTD_HAS_EXP_FILESYSTEM || XTD_HAS_FILESYSTEM)
+    using path_base = std::experimental::filesystem::path;
+#else
+#endif
+
+    struct path : path_base{
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+      static const value_type seperator = __('\\');
+#else
+      static const value_type seperator = '/';
+#endif
+      template<typename ... _Ty>
+      path(_Ty &&... src) : path_base(std::forward<_Ty>(src)...) {}
+
+    };
+
+
+    template <typename _Ty>
+    path operator+(const path& lhs, _Ty rhs){
+      path oRet(lhs);
+      oRet += rhs;
+      return oRet;
+    }
+
+    }
+}
+
+
+#if 0
 
 namespace xtd{
 
@@ -68,7 +100,7 @@ namespace xtd{
       }
 
       template<typename _Ty>
-      path_base &append(const _Ty &src) {
+      path_base & append(const _Ty &src) {
         //add a seperator only if absent from the end of the current path and beginning of the appended item
         if (seperator != back() && seperator != src[0]) {
           *this += seperator;
@@ -164,7 +196,7 @@ namespace xtd{
     }
 
     inline path operator+(const path& lhs, const path& addend){
-      auto oRet = lhs;
+      path oRet = lhs;
       oRet.append(addend);
       return oRet;
     }
@@ -176,3 +208,4 @@ namespace xtd{
 
   }
 }
+#endif

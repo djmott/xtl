@@ -1,11 +1,11 @@
 #pragma once
 
 TEST(test_process, initialization){
-  ASSERT_NO_THROW(auto & oProc = xtd::process::this_process());
+  ASSERT_NO_THROW(xtd::process::this_process());
 }
 
 TEST(test_process, DISABLED_system_processes){
-  ASSERT_NO_THROW(auto & oProc = xtd::process::this_process());
+  ASSERT_NO_THROW(xtd::process::this_process());
   auto oSystemProcesses = xtd::process::system_processes();
   ASSERT_GT(oSystemProcesses.size(), 1);
 }
