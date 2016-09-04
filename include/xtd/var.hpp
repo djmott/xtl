@@ -6,6 +6,12 @@
 
 #pragma once
 
+#include <xtd/xtd.hpp>
+
+#include <memory>
+
+#include <xtd/string.hpp>
+
 namespace xtd {
 
   /** The var class implements a minimal type erasure idiom.

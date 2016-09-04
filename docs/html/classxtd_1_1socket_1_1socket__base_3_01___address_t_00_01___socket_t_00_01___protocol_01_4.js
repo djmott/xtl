@@ -18,6 +18,6 @@ var classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01__
     [ "set_blocking", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a6a2e835383c4a8f35cbeef3a71ae97c1", null ],
     [ "write", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a88c001bb4b1b1ba81139a5614d1b28b3", null ],
     [ "_Socket", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3f2efdeebba6a86c2e8b534e76746fe4", null ],
-    [ "protocol", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a77b710afee8f56319d0325ad027caabf", null ],
-    [ "type", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a899cd2e06f30fdfef69d1e964a855218", null ]
+    [ "protocol", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#aef6747ca74bff04e1b630f988e12c17d", null ],
+    [ "type", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3bce247106dfaac57ac70c2f10e56bdd", null ]
 ];

@@ -6,7 +6,11 @@ generic and special purpose exceptions
 
 #pragma once
 
+#include <xtd/xtd.hpp>
 
+#include <exception>
+#include <xtd/source_location.hpp>
+#include <xtd/string.hpp>
 /**
 @def throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
 
@@ -97,6 +101,8 @@ Throws exception if the test expression returns true. _throw_if methods are pres
       return ret;
     }
 
+    /// constructors
+    /// @{
     crt_exception(const source_location& Source, const std::string& What) : xtd::exception(Source, What){
       if (!_errnum){
         return;
@@ -113,10 +119,15 @@ Throws exception if the test expression returns true. _throw_if methods are pres
     }
     crt_exception(const crt_exception& ex) : xtd::exception(ex){}
     crt_exception(crt_exception&& ex) : xtd::exception(std::move(ex)){}
+    /// @}
+    /**
+     * Error number associated with the CRT exception
+     * @return thread local _errnum that caused the exception
+     */
     int errnum() const { return _errnum; }
   };
 
-#if (XTD_OS_WINDOWS & XTD_OS)
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
   namespace windows{
     struct exception : xtd::exception{
     public:
@@ -128,7 +139,12 @@ Throws exception if the test expression returns true. _throw_if methods are pres
         return ret;
       }
 
-      exception(const xtd::source_location& source, const char * expression);
+      exception(const xtd::source_location& source, const std::string&) :xtd::exception(source, ""), _last_error(GetLastError()){
+        const char * sTemp = nullptr;
+        FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, _last_error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&sTemp), 0, nullptr);
+        _what = sTemp;
+        LocalFree((HLOCAL)sTemp);
+      }
     private:
       DWORD _last_error;
     };

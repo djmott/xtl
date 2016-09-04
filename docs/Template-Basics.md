@@ -177,7 +177,7 @@ Partial specializations have the following form:
 The output parameters of specializations must match the order of inputs on the generic form but the input parameters don't have to.
 
 Here's an example of partial specialization:
-```{.cpp}
+~~~{.cpp}
 struct Widget{
   static const int Cost = 3;
 };
@@ -202,19 +202,19 @@ int main(int argc, char * argv[]){
   std::cout << "Order<Fizzbang, 10>::Total : " << Order<Fizzbang, 10>::Total << std::endl;
   return oConfig.Total;
 }
-```
+~~~
 This app calculates the total cost of an order. The partial specialization produces a $5 discount when 10 items are ordered. The first three outputs are:
-```
+~~~
 Order<Widget, 5>::Total : 15
 Order<Snafoo, 5>::Total : 25
 Order<Fizzbang, 5>::Total : 35
-```
+~~~
 The last three outputs are:
-```
+~~~
 Order<Widget, 10>::Total : 25
 Order<Snafoo, 10>::Total : 45
 Order<Fizzbang, 10>::Total : 65
-```
+~~~
 During the type deduction phase, the compiler chooses the _most specialized_ variation of a template to instantiate and expand. Order<Widget, 10>, Order<Snafoo, 10> and Order<Fizzbang, 10> match both form of the Order templates but the partial specialization is _more specialized_ than the generic form so the compiler chooses it to instantiate during type deduction.
 
 

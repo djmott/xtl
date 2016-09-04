@@ -2,7 +2,9 @@
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
+#define XTD_VERBOSE_BUILD 1
 #include <xtd/xtd.hpp>
+
 
 
 #if (XTD_COMPILER & XTD_COMPILER_GCC)
@@ -14,40 +16,28 @@ NOTE("Compiler : MSVC");
 NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
 #endif
 
+#define DUMP_DEFINE2(prefix, x) PRAGMA_(message( prefix QUOTE(x)))
+#define DUMP_DEFINE(x) DUMP_DEFINE2("#define " # x " ", x)
 
-#if (XTD_OS & XTD_OS_ANDROID)
-NOTE("OS : Android");
-#endif
-#if (XTD_OS & XTD_OS_BAREMETAL)
-NOTE("OS : Bare Metal");
-#endif
-#if (XTD_OS & XTD_OS_IOS)
-NOTE("OS : IOS");
-#endif
-#if (XTD_OS & XTD_OS_LINUX)
-NOTE("OS : Linux");
-#endif
-#if (XTD_OS & XTD_OS_WINDOWS)
-NOTE("OS : Windows");
-#endif
-#if (XTD_OS & XTD_OS_CYGWIN)
-NOTE("OS : Cygwin");
-#endif
-#if (XTD_OS & XTD_OS_MSYS)
-NOTE("OS : MSYS")
-#endif
-#if (XTD_OS & XTD_OS_MINGW)
-NOTE("OS : MinGW");
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+DUMP_DEFINE(_WIN32_WINNT);
 #endif
 
-#if (XTD_CHARSET & XTD_CHARSET_MBCS)
-NOTE("Character Set : Multibyte");
-#else
-NOTE("Character Set : Unicode");
-#endif
-
-#if (XTD_CONFIG & XTD_CONFIG_RELEASE)
-NOTE("Configuration : Release");
-#else
-NOTE("Configuration : Debug");
-#endif
+DUMP_DEFINE(XTD_OS);
+DUMP_DEFINE(XTD_CHARSET);
+DUMP_DEFINE(XTD_CONFIG);
+DUMP_DEFINE(DOXY_INVOKED);
+DUMP_DEFINE(XTD_ASSETS_DIR);
+DUMP_DEFINE(XTD_HAS_LIBUUID);
+DUMP_DEFINE(XTD_COLOR_MESSAGES);
+DUMP_DEFINE(XTD_HAS_CODECVT);
+DUMP_DEFINE(XTD_HAS_EXP_CODECVT);
+DUMP_DEFINE(XTD_HAS_ICONV);
+DUMP_DEFINE(XTD_HAS_FILESYSTEM);
+DUMP_DEFINE(XTD_HAS_EXP_FILESYSTEM);
+DUMP_DEFINE(XTD_USE_DBGHELP);
+DUMP_DEFINE(XTD_LOG_TARGET_SYSLOG);
+DUMP_DEFINE(XTD_LOG_TARGET_WINDBG);
+DUMP_DEFINE(XTD_LOG_TARGET_CSV);
+DUMP_DEFINE(XTD_LOG_TARGET_COUT);
+DUMP_DEFINE(XTD_LOG_TARGET_XML);

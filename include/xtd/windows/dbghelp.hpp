@@ -2,10 +2,21 @@
 object oriented access to the dbghelp library
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
+#pragma once
+
+#include <xtd/xtd.hpp>
+#include <dbghelp.h>
+#include <mutex>
+#include <map>
+#include <xtd/debug.hpp>
+#include <xtd/exception.hpp>
 
 namespace xtd{
   namespace windows{
 
+    /**
+     * Represents a debug symbol
+     */
     class debug_symbol{
       friend class debug_help;
       std::unique_ptr<SYMBOL_INFO> _symbol_info;
@@ -15,13 +26,20 @@ namespace xtd{
     };
 
 
+    /**
+     * C++ interface to the dbghelp library
+     */
     class debug_help{
     public:
+      /// the default pointer type used by the library
       using pointer = std::shared_ptr<debug_help>;
 
+      /// ctor
       debug_help(){}
+      /// dtor
       ~debug_help(){}
 
+      /// constructs a new debug_help and returns a pointer type
       static pointer make(){ return pointer(new debug_help); }
 
     private:
@@ -34,7 +52,7 @@ namespace xtd{
         initializer(){
           SymSetOptions(SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS);
           xtd::windows::exception::throw_if(SymInitialize(GetCurrentProcess(), nullptr, TRUE), [](BOOL b){return FALSE == b; });
-          xtd::windows::exception::throw_if(SymRegisterCallback64(GetCurrentProcess(), SymCallback, NULL), [](BOOL b){return FALSE == b; });
+          xtd::windows::exception::throw_if(SymRegisterCallback64(GetCurrentProcess(), SymCallback, 0), [](BOOL b){return FALSE == b; });
         }
         ~initializer(){
           SymCleanup(GetCurrentProcess());

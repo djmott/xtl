@@ -9,5 +9,5 @@ var classxtd_1_1concurrent_1_1spin__lock__base =
     [ "lock", "classxtd_1_1concurrent_1_1spin__lock__base.html#a5a05c4bace41d2d173c572de66ef2604", null ],
     [ "try_lock", "classxtd_1_1concurrent_1_1spin__lock__base.html#aa603f847c0a1b00f66433e47ef686880", null ],
     [ "unlock", "classxtd_1_1concurrent_1_1spin__lock__base.html#a26363f61f5285ed48956d480d7508523", null ],
-    [ "LockedValue", "classxtd_1_1concurrent_1_1spin__lock__base.html#abbbde459992bf232b9914c02f18d303d", null ]
+    [ "LockedValue", "classxtd_1_1concurrent_1_1spin__lock__base.html#a8c56cc2710c65b742c5b11454cbf45e0", null ]
 ];

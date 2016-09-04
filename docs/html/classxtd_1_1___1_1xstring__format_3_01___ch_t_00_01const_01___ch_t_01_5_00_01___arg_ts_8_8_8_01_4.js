@@ -1,4 +1,0 @@
-var classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5_00_01___arg_ts_8_8_8_01_4 =
-[
-    [ "format", "classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5_00_01___arg_ts_8_8_8_01_4.html#ad92c7ebe16026ef7d5f12044fb4eda61", null ]
-];

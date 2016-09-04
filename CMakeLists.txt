@@ -18,7 +18,6 @@ project(XTL)
 
 find_package(Threads)
 find_package(Doxygen)
-find_package(GTest)
 
 include(CheckIncludeFileCXX)
 include(CheckLibraryExists)
@@ -26,6 +25,7 @@ include(CheckCXXSourceCompiles)
 include(FeatureSummary)
 include(ExternalProject)
 
+set(ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
 
@@ -79,8 +79,10 @@ option(XTD_LOG_TARGET_COUT "write log output to std::cout" NO)
 option(XTD_LOG_TARGET_XML "write log output to XML file" NO)
 option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
 option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
-option(BUILD_EXAMPLES "Build examples" YES)
-option(BUILD_TESTS "Build tests" YES)
+option(BUILD_EXAMPLES "Build examples" NO)
+option(BUILD_TESTS "Build tests" NO)
+option(BUILD_DOCS "Build documentation" NO)
+option(BUILD_UTILS "Build utilities" NO)
 
 option(XTD_LINK_TO_FS_TS "link to the c++ filesystem TS" NO)
 
@@ -138,25 +140,43 @@ else()
   message(FATAL_ERROR "event trace not supported for compiler")
 endif()
 
+
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
+  message("Downloading sqlite")
+  file(DOWNLOAD https://www.sqlite.org/2016/sqlite-autoconf-3140100.tar.gz ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+  )
+endif()
+set(SQLITE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100/sqlite3.c)
+
 add_library(XTL STATIC ${EVT_TRACE_SRC}
+  ${SQLITE_SRC}
   src/xtl.cpp
   src/event_trace/event_trace.cpp
-  include/xtd/callback.hpp
   include/xtd/concurrent/concurrent.hpp
   include/xtd/concurrent/hash_map.hpp
   include/xtd/concurrent/queue.hpp
-  include/xtd/concurrent/stack.hpp
+  include/xtd/concurrent/recursive_spin_lock.hpp
   include/xtd/concurrent/rw_lock.hpp
   include/xtd/concurrent/spin_lock.hpp
-  include/xtd/concurrent/recursive_spin_lock.hpp
+  include/xtd/concurrent/stack.hpp
+  include/xtd/nlp/moby.hpp
+  include/xtd/nlp/wordnet.hpp
+  include/xtd/windows/dbghelp.hpp
+  include/xtd/callback.hpp
   include/xtd/debug.hpp
   include/xtd/dynamic_library.hpp
+  include/xtd/dynamic_object.hpp
   include/xtd/event_trace.hpp
   include/xtd/exception.hpp
   include/xtd/executable.hpp
   include/xtd/filesystem.hpp
+  include/xtd/lru_cache.hpp
   include/xtd/memory.hpp
   include/xtd/mapped_file.hpp
+  include/xtd/mapped_vector.hpp
   include/xtd/btree.hpp
   include/xtd/log.hpp
   include/xtd/meta.hpp
@@ -166,22 +186,18 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/shared_mem_obj.hpp
   include/xtd/socket.hpp
   include/xtd/source_location.hpp
+  include/xtd/sqlite.hpp
   include/xtd/string.hpp
   include/xtd/tuple.hpp
   include/xtd/unique_id.hpp
   include/xtd/var.hpp
-  include/xtd/windows/dbghelp.hpp
-  include/xtd/exception.inl
-  include/xtd/nlp/nlp.hpp
-  include/xtd/nlp/english.hpp
-  include/xtd/nlp/moby.hpp
-  include/xtd/nlp/pos.hpp
-  include/xtd/nlp/wordnet.hpp
+  include/xtd/wrapped_type.hpp
 
   include/xtd/xtd.hpp.in
   )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100)
 
 if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
   target_compile_options(XTL PUBLIC -std=c++11 -Wall -Wextra)
@@ -239,42 +255,44 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp)
 
-file(DOWNLOAD http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2 ${CMAKE_BINARY_DIR}/WordNet-3.0.tar.bz2)
+# download assets
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
+message("Downloading Wordnet")
+file(DOWNLOAD http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2 ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_BINARY_DIR}/WordNet-3.0.tar.bz2
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/
+  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
 )
-
-file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_BINARY_DIR}/mpos.tar.Z)
-execute_process(
-  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_BINARY_DIR}/mpos.tar.Z
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/
-)
-
-
-if(NOT GTEST_FOUND)
-  message("Google test framework will be downloaded")
-  # lifted from https://crascit.com/2015/07/25/cmake-gtest/
-  # Download and unpack googletest at configure time
-  configure_file(CMakeLists.txt.gtest googletest-download/CMakeLists.txt)
-  set(BUILD_GTEST ON CACHE BOOLEAN "")
-  execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" -D BUILD_GTEST:BOOLEAN=${BUILD_GTEST} . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
-  execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
-
-  # Prevent GoogleTest from overriding our compiler/linker options
-  # when building with Visual Studio
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-  # Add googletest directly to our build. This adds
-  # the following targets: gtest, gtest_main, gmock
-  # and gmock_main
-  add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src ${CMAKE_BINARY_DIR}/googletest-build)
 endif()
 
-add_subdirectory(tests)
+
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
+message("Downloading Moby")
+file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+)
+endif()
 
 
-if(DOXYGEN_FOUND)
+if(BUILD_TESTS)
+  find_package(GTest)
+  if(NOT GTEST_FOUND)
+    if(MINGW)
+      set(gtest_disable_pthreads ON CACHE BOOL "" FORCE)
+    endif()
+    if(MINGW OR MSVC)
+      set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    endif()
+    set(BUILD_GTEST ON CACHE BOOL "" FORCE)
+    set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
+    add_subdirectory(${ASSET_DIR}/gtest)
+  endif()
+  add_subdirectory(tests)
+endif()
+
+if(BUILD_DOCS AND DOXYGEN_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
   add_custom_target(
     docs COMMAND "${DOXYGEN_EXECUTABLE}" Doxyfile
@@ -283,10 +301,11 @@ if(DOXYGEN_FOUND)
   )
 endif()
 
-
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
-
-
+if(BUILD_UTILS)
+  add_subdirectory(utils/wordnet_importer)
+  add_subdirectory(utils/scowl_importer)
+endif()

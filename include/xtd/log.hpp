@@ -6,7 +6,35 @@
 
 #pragma once
 
-#include "process.hpp"
+
+#include <xtd/xtd.hpp>
+
+#include <chrono>
+#include <thread>
+#include <condition_variable>
+#include <mutex>
+#include <future>
+#include <deque>
+
+#if (XTD_LOG_TARGET_CSV | XTD_LOG_TARGET_XML)
+  #include <fstream>
+#endif
+
+#if XTD_LOG_TARGET_SYSLOG
+  #include <syslog.h>
+#endif
+
+#if XTD_LOG_TARGET_COUT
+  #include <iostream>
+#endif
+
+
+#include <xtd/string.hpp>
+#include <xtd/source_location.hpp>
+#include <xtd/filesystem.hpp>
+#include <xtd/process.hpp>
+#include <xtd/executable.hpp>
+#include <xtd/meta.hpp>
 
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
@@ -27,6 +55,25 @@ namespace xtd{
       enter,
       leave,
     };
+
+    static const char * type_string(type oType){
+      switch (oType){
+        case xtd::log::type::fatal:
+          return "fatal";
+        case xtd::log::type::error:
+          return "error";
+        case xtd::log::type::warning:
+          return "warning";
+        case xtd::log::type::debug:
+          return "debug";
+        case xtd::log::type::enter:
+          return "enter";
+        case xtd::log::type::leave:
+          return "leave";
+        default:
+          return "info";
+      }
+    }
 
   private:
     
@@ -75,30 +122,30 @@ namespace xtd{
       ~syslog_target() override { closelog(); }
       void operator()(const message::pointer_type& oMessage) override {
         int iFacility = LOG_MAKEPRI(LOG_USER, LOG_DEBUG);
-        switch (oMessage->type){
-          case message::type::fatal:
+        switch (oMessage->_type){
+          case type::fatal:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_CRIT); 
             break;
           }
-          case message::type::error:
+          case type::error:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_ERR); 
             break;
           }
-          case message::type::warning:
+          case type::warning:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_WARNING); 
             break;
           }
-          case message::type::info:
+          case type::info:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_INFO); 
             break;
           }
-          case message::type::debug:
-          case message::type::enter:
-          case message::type::leave:
+          case type::debug:
+          case type::enter:
+          case type::leave:
           {
             iFacility = LOG_MAKEPRI(LOG_USER, LOG_DEBUG); 
             break;
@@ -132,24 +179,29 @@ namespace xtd{
 
 #if (XTD_LOG_TARGET_CSV)
     class csv_target : public log_target{
-
-      static std::ofstream& File(){
-        static thread_local std::ofstream _File;
-        return _File;
-      }
-
-      xtd::filesystem::path _LogPath;
+      std::ofstream _LogFile;
+      std::mutex _FileLock;
     public:
-      void operator()(const message::pointer_type&) override{
-        auto & oFile = File();
-        if (!oFile.is_open()){
 
-        }
+
+
+      void operator()(const message::pointer_type& oMsg) override{
+        static thread_local size_t _StackDepth = 1;
+        if (type::leave == oMsg->_type) --_StackDepth;
+        std::string sMsgPrefix(_StackDepth, ',');
+        std::hash<std::thread::id> oHash;
+        auto sMsg = xtd::string::format(oHash(oMsg->_tid), ",", oMsg->_time.time_since_epoch().count(), ",", type_string(oMsg->_type), ",", oMsg->_location.file(), ",", oMsg->_location.line(), sMsgPrefix, oMsg->_text);
+        if (type::enter == oMsg->_type) ++_StackDepth;
+        std::unique_lock<std::mutex> oLock(_FileLock);
+        _LogFile << sMsg << std::endl;
       }
-      csv_target(){
-        _LogPath = xtd::filesystem::path::home_directory();
-        _LogPath /= xtd::executable::this_executable().path().filename();
-        _LogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()));
+
+      csv_target() : _LogFile(), _FileLock(){
+        auto oLogPath = xtd::filesystem::home_directory_path();
+        oLogPath /= xtd::executable::this_executable().path().filename();
+        oLogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()));
+        oLogPath.append(".csv");
+        _LogFile.open(oLogPath.string(), std::ios::out);
       }
     };
 #endif

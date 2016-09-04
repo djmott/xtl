@@ -6,11 +6,28 @@ load and invoke methods in a dynamic library
 
 #pragma once
 
+#include <xtd/xtd.hpp>
 
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+  #include <dlfcn.h>
+#endif
+
+#include <memory>
+#include <map>
+
+#include <xtd/exception.hpp>
+#include <xtd/filesystem.hpp>
 
 namespace xtd{
 
-  class dynamic_library_exception : public xtd::exception{
+  class dynamic_library_exception
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+    : public xtd::windows::exception{
+      using _super_t = xtd::windows::exception;
+#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+    : public xtd::exception{
+      using _super_t = xtd::exception;
+#endif
   public:
 
     template <typename _ReturnT, typename _ExpressionT>
@@ -25,9 +42,9 @@ namespace xtd{
       return ret;
     }
 
-    dynamic_library_exception(const source_location& Source, const std::string& What) : xtd::exception(Source, What){}
-    dynamic_library_exception(const dynamic_library_exception& src) : xtd::exception(src){}
-    dynamic_library_exception(dynamic_library_exception&& src) : xtd::exception(std::move(src)){}
+    dynamic_library_exception(const source_location& Source, const std::string& What) : _super_t(Source, What){}
+    dynamic_library_exception(const dynamic_library_exception& src) : _super_t(src){}
+    dynamic_library_exception(dynamic_library_exception&& src) : _super_t(std::move(src)){}
 
   };
 
@@ -42,8 +59,7 @@ namespace xtd{
     using pointer = std::shared_ptr<dynamic_library>;
     using map = std::map<xtd::filesystem::path, pointer>;
 
-    static inline pointer make(const char * spath){ return pointer(new dynamic_library(spath)); }
-    static inline pointer make(const xtd::filesystem::path& spath){ return pointer(new dynamic_library(spath.string().c_str())); }
+    static inline pointer make(const xtd::filesystem::path& spath){ return pointer(new dynamic_library(spath)); }
 
     native_handle_type handle() const{ return _Handle; }
 
@@ -117,15 +133,13 @@ namespace xtd{
     friend class process;
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-    explicit dynamic_library(const tchar * sPath) : _Handle(xtd::exception::throw_if(LoadLibrary(sPath), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
+    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::exception::throw_if(LoadLibraryA(sPath.string().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
 #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
-    explicit dynamic_library(const char * sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath, RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
+    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.string().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif
 
     explicit dynamic_library(native_handle_type hHandle) : _Handle(hHandle){}
 
     native_handle_type _Handle;
   };
-
-
 }

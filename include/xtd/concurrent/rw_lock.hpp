@@ -2,6 +2,9 @@
 Simple multi reader/single writer spin lock
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
+#pragma once
+
+#include <xtd/concurrent/concurrent.hpp>
 
 namespace xtd{
   namespace concurrent{
@@ -12,8 +15,8 @@ namespace xtd{
     template <typename _WaitPolicyT>
     class rw_lock_base{
       std::atomic<uint32_t> _lock;
-      static const uint32_t write_lock_bit = 0x80000000;
-      static const uint32_t read_bits_mask = ~write_lock_bit;
+      static constexpr uint32_t write_lock_bit = 0x80000000;
+      static constexpr uint32_t read_bits_mask = ~write_lock_bit;
       _WaitPolicyT _WaitPolicy;
     public:
       using wait_policy_type = _WaitPolicyT;

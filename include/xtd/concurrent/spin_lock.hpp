@@ -2,7 +2,11 @@
 simple user mode spin lock based on std::atomic
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
+#pragma once
 
+#include <xtd/concurrent/concurrent.hpp>
+
+#include <atomic>
 
 namespace xtd{
   namespace concurrent{
@@ -12,7 +16,7 @@ namespace xtd{
       std::atomic < uint32_t > _lock;
     public:
       using wait_policy_type = _WaitPolicyT;
-      static const uint32_t LockedValue = 0x80000000;
+      static constexpr uint32_t LockedValue = 0x80000000;
       using scope_locker = xtd::concurrent::scope_locker<spin_lock_base<_WaitPolicyT>>;
 
       ~spin_lock_base() = default;

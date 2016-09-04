@@ -1,5 +1,7 @@
 #pragma once
 
+#include <xtd/process.hpp>
+
 TEST(test_process, initialization){
   ASSERT_NO_THROW(xtd::process::this_process());
 }

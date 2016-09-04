@@ -2,9 +2,9 @@
 main system and unit test entry point 
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
-
 #include <xtd/xtd.hpp>
 
+#include <string>
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(push, 0)
@@ -16,8 +16,10 @@ main system and unit test entry point
   #pragma warning(pop)
 #endif
 
-#undef XTD_ASSERT
-#define XTD_ASSERT ASSERT_TRUE
+
+#if (ON==TEST_BTREE)
+  #include "test_btree.hpp"
+#endif
 
 #if (ON==TEST_CALLBACK)
   #include "test_callback.hpp"
@@ -55,12 +57,16 @@ main system and unit test entry point
   #include "test_logging.hpp"
 #endif
 
-#if (ON==TEST_LOGGING)
+#if (ON==TEST_META)
+  #include "test_meta.hpp"
+#endif
+
+#if (ON==TEST_MAPPED_FILE)
   #include "test_mapped_file.hpp"
 #endif
 
-#if (ON==TEST_META)
-  #include "test_meta.hpp"
+#if (ON==TEST_MAPPED_VECTOR)
+  #include "test_mapped_vector.hpp"
 #endif
 
 #if (ON==TEST_PARSE)

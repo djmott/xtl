@@ -6,6 +6,25 @@
 
 #pragma once
 
+#include <xtd/xtd.hpp>
+
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+  #include <sys/types.h>
+  #include <unistd.h>
+  #include <dirent.h>
+#endif
+
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+  #include <Psapi.h>
+#endif
+
+#include <regex>
+#include <memory>
+#include <map>
+
+#include <xtd/dynamic_library.hpp>
+
+
 namespace xtd{
 
 
@@ -64,7 +83,7 @@ namespace xtd{
 
     }
   };
-#elif (XTD_OS_WINDOWS & XTD_OS)
+#elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
   class process{
   public:
 
@@ -82,11 +101,8 @@ namespace xtd{
       map oRet;
       std::vector<DWORD> pids(10, 0);
       DWORD dwNeeded;
-      BOOL bRet;
-      DWORD dwLastError;
       forever{
-        bRet = EnumProcesses(&pids[0], static_cast<DWORD>(pids.size() * sizeof(DWORD)), &dwNeeded);
-        dwLastError = GetLastError();
+        xtd::windows::exception::throw_if(EnumProcesses(&pids[0], static_cast<DWORD>(pids.size() * sizeof(DWORD)), &dwNeeded), [](BOOL b){ return FALSE==b; });
         if ((dwNeeded / sizeof(DWORD)) < pids.size()){
           break;
         }
@@ -112,11 +128,8 @@ namespace xtd{
       dynamic_library::map oRet;
       std::vector<HMODULE> modules(10, 0);
       DWORD dwNeeded;
-      BOOL bRet;
-      DWORD dwLastError;
       forever{
-        bRet = EnumProcessModules(*this, &modules[0], static_cast<DWORD>(modules.size() * sizeof(HMODULE)), &dwNeeded);
-        dwLastError = GetLastError();
+        xtd::windows::exception::throw_if(EnumProcessModules(*this, &modules[0], static_cast<DWORD>(modules.size() * sizeof(HMODULE)), &dwNeeded), [](BOOL b){return FALSE==b;});
         if ((dwNeeded / sizeof(HMODULE)) < modules.size()){
           break;
         }

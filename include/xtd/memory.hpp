@@ -3,6 +3,13 @@
  * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
  */
 #pragma once
+#include <xtd/xtd.hpp>
+
+#if ((XTD_OS_LINUX|XTD_OS_MSYS|XTD_OS_CYGWIN) & XTD_OS)
+  #include <unistd.h>
+#endif
+
+#include <xtd/debug.hpp>
 
 namespace xtd{
 
@@ -14,11 +21,18 @@ namespace xtd{
     }
   #elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     static inline size_t page_size(){
-      SYSTEM_INFO oSysInfo;
-      GetSystemInfo(&oSysInfo);
+      static bool bInit = false;
+      static SYSTEM_INFO oSysInfo;
+      if (!bInit){
+        bInit = true;
+        GetSystemInfo(&oSysInfo);
+      }
       return oSysInfo.dwAllocationGranularity;
     }
   #endif
   }
+
+  template <typename _Ty, typename _ParamT> static inline std::unique_ptr<_Ty> make_unique(_ParamT&& src){ return std::unique_ptr<_Ty>(new _Ty(std::forward<_ParamT>(src))); }
+  template <typename _Ty, typename _ParamT> static inline std::unique_ptr<_Ty> make_unique(const _ParamT& src){ return std::unique_ptr<_Ty>(new _Ty(src)); }
 
 }

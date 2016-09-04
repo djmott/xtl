@@ -2,6 +2,8 @@
 
 #include <xtd/concurrent/recursive_spin_lock.hpp>
 
+#include <future>
+
 TEST(test_recursive_spin_lock, initialize){
   EXPECT_NO_THROW(xtd::concurrent::recursive_spin_lock oLock);
 }

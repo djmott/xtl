@@ -4,6 +4,7 @@ creates or loads singleton objects in shared memory regions
 
 */
 #pragma once
+#include <xtd/xtd.hpp>
 
 namespace xtd{
   template <typename _Ty> class shared_mem_obj{

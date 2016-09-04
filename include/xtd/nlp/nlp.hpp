@@ -1,86 +1,86 @@
-/** @file
-natural language processing
-@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
-*/
+#pragma once
+
+#include <xtd/dynamic_object.hpp>
 
 namespace xtd{
   namespace nlp{
 
 
 
-    namespace _ {
-      struct noun;
-      struct adjective;
-      struct verb;
-      struct adverb;
-      struct pronoun;
-      struct preposition;
-      struct determiner;
-      struct interjection;
-      struct conjunction;
-    }
+    //unstructured, unformatted and unanalyzed text
+    struct raw_document : dynamic_object{
+      using text = PROPERTY(xtd::string);
 
+      template <typename..._ParamTs> raw_document(_ParamTs&&...oParams) : dynamic_object(std::forward<_ParamTs>(oParams)...){}
 
-    class lexical_category{
-    public:
-      using vector = std::vector<lexical_category>;
-      virtual ~lexical_category(){}
-      virtual const std::type_info& type() const { return typeid(lexical_category); }
-      virtual bool is_a(const std::type_info& oType) const { return type() == oType; }
-
-      using noun = _::noun;
-      using adjective = _::adjective;
-      using verb = _::verb;
-      using adverb = _::adverb;
-      using pronoun = _::pronoun;
-      using preposition = _::preposition;
-      using determiner = _::determiner;
-      using interjection = _::interjection;
-      using conjunction = _::conjunction;
     };
 
-    namespace _{
 
 
+    struct document_factory : dynamic_object{
 
-      template <typename _Ty> class lexical_category_impl : public lexical_category{
-      public:
-        virtual const std::type_info& type() const override { return typeid(_Ty); }
-        virtual bool is_a(const std::type_info& oType) const override { return (type() == oType); }
-        const std::string& value() const { return _value; }
-      protected:
-        std::string _value;
+      using locale = PROPERTY(std::locale);
+
+      raw_document operator()(const xtd::string& src) const {
+        raw_document oRet;
+        oRet.value<raw_document::text>() = src;
+        return oRet;
+      }
+    };
+
+    struct itokenizer{
+
+      struct document : raw_document{
+        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
+
+        using tokens = PROPERTY(std::vector<xtd::string>);
+
       };
 
+    };
 
-      struct noun : lexical_category_impl<noun>{};
-      struct adjective : lexical_category_impl<adjective>{};
-      struct verb : lexical_category_impl<verb>{};
-      struct adverb : lexical_category_impl<adverb>{};
-      struct pronoun : lexical_category_impl<pronoun>{};
-      struct preposition : lexical_category_impl<preposition>{};
-      struct determiner : lexical_category_impl<determiner>{};
-      struct interjection : lexical_category_impl<interjection>{};
-      struct conjunction : lexical_category_impl<conjunction>{};
+    struct istemmer{
 
-      struct sentence;
-      struct noun_phrase;
-      struct prepositional_phrase;
-      struct verb_phrase;
-
-      template <typename _Ty> struct opt{
-        using type = _Ty;
+      struct document : raw_document{
+        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
       };
-    }
+
+    };
+
+    
+    struct isentence_boundary_detector{
+
+      struct document : raw_document{
+        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
+      };
+
+    };
+
+
+    template <typename ...> struct document_process;
+
+    template <> struct document_process<>{
+      template <typename _ParamT>
+      _ParamT operator()(_ParamT&& src) const { return src; }
+    };
+
+
+
+    template <typename _HeadT, typename ... _TailT> struct document_process<_HeadT, _TailT...> : document_process<_TailT...>{
+      using _super_t = document_process<_TailT...>;
+
+      //template <typename _ParamT> using _return_t = decltype(std::declval<_HeadT>()(_ParamT()));
+      template <typename _ParamT> using _return_t = typename  std::result_of<_HeadT(_ParamT&&)>::type;
+
+      template <typename _ParamT>
+      _return_t<_ParamT> operator()(_ParamT&& src) const {
+        _HeadT oHead;
+        const auto& oSuper = static_cast<const _super_t&>(*this);
+        return oHead(std::move(oSuper(std::move(src))));
+      }
+
+    };
+
 
   }
 }
-
-
-
-#include "wordnet.hpp"
-#include "moby.hpp"
-#include "pos.hpp"
-#include "english.hpp"
-
-#include "document.hpp"

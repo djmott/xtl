@@ -7,6 +7,15 @@
 
 #pragma once
 
+#include <xtd/xtd.hpp>
+
+#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+  #include <limits.h>
+  #include <unistd.h>
+#endif
+
+#include <xtd/filesystem.hpp>
+#include <xtd/exception.hpp>
 
 namespace xtd {
 
@@ -24,7 +33,7 @@ namespace xtd {
       if (0 != sRet.string().size()){
         return sRet;
       }
-      std::string sTemp(MAX_PATH, 0);
+      xtd::tstring sTemp(MAX_PATH, 0);
       forever {
         auto iLen = xtd::crt_exception::throw_if(GetModuleFileName(nullptr, &sTemp[0], static_cast<DWORD>(sTemp.size())), [](DWORD ret){ return (0==ret); });
         if (iLen >= sTemp.size()){

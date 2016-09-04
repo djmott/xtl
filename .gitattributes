@@ -1,0 +1,6 @@
+* text=lf
+
+*.jpg   binary
+*.png   binary
+*.gif   binary
+include/xtd/xtd.hpp.in  ident

@@ -2,8 +2,10 @@
 add_custom_target(examples)
 
 add_library(dummy_library_example SHARED dummy_library.cpp)
+
 add_dependencies(dummy_library_example XTL)
 add_dependencies(examples dummy_library_example)
+add_dependencies(examples XTL)
 
 
 function(build_example target)
@@ -22,10 +24,12 @@ build_example(event_trace)
 build_example(exception)
 build_example(logging)
 build_example(mapped_file)
+build_example(mapped_vector)
 build_example(nlp)
 build_example(parse1)
 build_example(parse2)
-build_example(rpc)
+#build_example(rpc)
+build_example(sqlite)
 build_example(string)
 
 if(BUILD_event_trace_EXAMPLE)

@@ -3,7 +3,7 @@ xtd::string system and unit tests
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
-
+#include <xtd/string.hpp>
 
 TEST(test_string, initialization){
   xtd::string s("abcdefghijklmnopqrstuvwxyz");
@@ -88,9 +88,10 @@ TEST(test_string, string_from_wchar_ptr){
 }
 
 TEST(test_string, wstring_from_char_ptr){
-  auto s = xtd::wstring::format("123456789");
-  ASSERT_EQ(9, s.size());
-  ::testing::StaticAssertTypeEq<decltype(s)::value_type, wchar_t>();
+  xtd::string s = "12345";
+  auto ws = xtd::wstring::format(s.c_str());
+  ASSERT_EQ(ws.size(), s.size());
+  ::testing::StaticAssertTypeEq<decltype(ws)::value_type, wchar_t>();
 }
 
 TEST(test_string, wstring_from_string){

@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['what',['what',['../classxtd_1_1exception.html#a6bdf3889d84de602af13b15534a67843',1,'xtd::exception']]],
-  ['whitespace',['whitespace',['../namespacextd_1_1parse.html#classxtd_1_1parse_1_1whitespace',1,'xtd::parse']]]
+  ['var',['var',['../classxtd_1_1var.html',1,'xtd']]],
+  ['var',['var',['../classxtd_1_1var.html#a866c2ae1babbf8d25a593745ccaaff94',1,'xtd::var']]],
+  ['var_2ehpp',['var.hpp',['../var_8hpp.html',1,'']]],
+  ['verb',['verb',['../classxtd_1_1nlp_1_1___1_1verb.html',1,'xtd::nlp::_']]],
+  ['verb_5fdata_5ffile',['verb_data_file',['../classxtd_1_1nlp_1_1wordnet_1_1verb__data__file.html',1,'xtd::nlp::wordnet']]]
 ];

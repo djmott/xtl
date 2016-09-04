@@ -4,6 +4,9 @@
  */
 
 #pragma once
+#include <xtd/xtd.hpp>
+
+#include <functional>
 
 /// @def RAII general purpose Resource Acquisition Is Initialization idiom to perform exception safe cleanup by executing arbitrary code when a scope exits
 #define RAII(...) xtd::_::_RAII UNIQUE_IDENTIFIER(raii_object)([&](){ __VA_ARGS__ ; });
@@ -24,6 +27,8 @@ namespace xtd{
 
   }
 
+  template <typename...> using void_t = void;
+
   template <typename _Ty> constexpr uint32_t hidword(_Ty value){
     static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
     return ((uint32_t)(((value) >> 32) & 0xffffffff));
@@ -32,6 +37,7 @@ namespace xtd{
     static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
     return ((uint32_t)((value) & 0xffffffff));
   }
+
 
   /** meta-function to get the intrinsic of a specified size
   @tparam _Size size
@@ -71,6 +77,43 @@ namespace xtd{
     return reinterpret_cast<typename processor_intrinsic<_Ty>::type>(src);
   }
 
+  /// gets the last element of a parameter pack
+  namespace _{
+    template <size_t, typename ...> struct last_t;
+    template <size_t _index, typename _HeadT, typename ... _TailT> struct last_t<_index, _HeadT, _TailT...>{
+      using type = typename last_t<_index - 1, _TailT...>::type;
+    };
+    template <typename _HeadT> struct last_t<1, _HeadT>{
+      using type = _HeadT;
+    };
+  }
+  template <typename ... _Tys> struct last{
+    using type = typename _::last_t<sizeof...(_Tys), _Tys...>::type;
+  };
+
+  
+  /// chains together multiple methods in a single task
+
+  template <typename ...> struct task;
+  template <> struct task<>{
+    template <typename _Ty> _Ty&& operator()(_Ty&& src){ return std::move(src); }
+  };
+
+  template <typename _HeadT, typename ... _TailT> struct task<_HeadT, _TailT...>{
+    using final_task = typename last<_HeadT, _TailT...>::type;
+    using return_type = decltype( typename std::decay<final_task>::type() );
+
+    template <typename _ParamT>
+    return_type operator()(_ParamT oParam) const{
+      _HeadT oHead;
+      task<_TailT...> oTail;
+      return oTail(oHead(oParam));
+    }
+
+  };
+
+
+
   /// Determine if a type is specified in a list
   template <typename, typename...> struct is_a;
   template <typename _Ty> struct is_a<_Ty> : std::false_type {};
@@ -87,112 +130,85 @@ namespace xtd{
     using type = typename get_parameter<_ParamNum-1, _ReturnT(_TailT...)>::type;
   };
 
-  /**
-   \struct nibble_hex_char
-   meta-function to convert a static nibble to an ascii hex value
-   \tparam char nibble to convert
-   */
-  template <typename _ChT, _ChT> struct nibble_hex_char;
-#if (!DOXY_INVOKED)
-  template <> struct nibble_hex_char <char, 0 > { static const char value = '0'; };
-  template <> struct nibble_hex_char <char, 1 > { static const char value = '1'; };
-  template <> struct nibble_hex_char <char, 2 > { static const char value = '2'; };
-  template <> struct nibble_hex_char <char, 3 > { static const char value = '3'; };
-  template <> struct nibble_hex_char <char, 4 > { static const char value = '4'; };
-  template <> struct nibble_hex_char <char, 5 > { static const char value = '5'; };
-  template <> struct nibble_hex_char <char, 6 > { static const char value = '6'; };
-  template <> struct nibble_hex_char <char, 7 > { static const char value = '7'; };
-  template <> struct nibble_hex_char <char, 8 > { static const char value = '8'; };
-  template <> struct nibble_hex_char <char, 9 > { static const char value = '9'; };
-  template <> struct nibble_hex_char <char, 10 > { static const char value = 'a'; };
-  template <> struct nibble_hex_char <char, 11 > { static const char value = 'b'; };
-  template <> struct nibble_hex_char <char, 12 > { static const char value = 'c'; };
-  template <> struct nibble_hex_char <char, 13 > { static const char value = 'd'; };
-  template <> struct nibble_hex_char <char, 14 > { static const char value = 'e'; };
-  template <> struct nibble_hex_char <char, 15 > { static const char value = 'f'; };
-#endif
 
-  template <typename _ChT, unsigned char _val> struct ByteToChar {
-    typedef nibble_hex_char<_ChT, _val & 0x0f> LoNibble;
-    typedef nibble_hex_char<_ChT, ((_val & 0xf0) >> 4)> HiNibble;
-  };
+  //test for t::type member
+  template <typename, typename = void> struct has_type_member : std::false_type{};
+  template <typename _Ty> struct has_type_member<_Ty, void_t<typename _Ty::type>> : std::true_type{};
 
-  template <typename _ChT, unsigned short _val> struct ShortToChar {
-    typedef ByteToChar<_ChT, _val & 0x00ff> LoByte;
-    typedef ByteToChar<_ChT,((_val & 0xff00) >> 8)> HiByte;
-  };
+  //test for copy assignment
+  template <typename _Ty> using copy_assignment_t = decltype(std::declval<_Ty&>() = std::declval<_Ty const&>());
+  template <typename, typename = void> struct is_copy_assignable : std::false_type{};
+  template <typename _Ty> struct is_copy_assignable<_Ty, void_t<copy_assignment_t<_Ty>>> : std::is_same<copy_assignment_t<_Ty>, _Ty&>{};
 
-  template <typename _ChT, unsigned int _val> struct IntToChar {
-    typedef ShortToChar<_ChT, _val & 0x0000ffff> LoWord;
-    typedef ShortToChar<_ChT, ((_val & 0xffff0000) >> 16)> HiWord;
-  };
+  //test for move assignment
+  template <typename _Ty> using move_assignment_t = decltype(std::declval<_Ty&>() = std::declval<_Ty&&>());
+  template <typename, typename = void> struct is_move_assignable : std::false_type{};
+  template <typename _Ty> struct is_move_assignable<_Ty, void_t<move_assignment_t<_Ty>>> : std::is_same<move_assignment_t<_Ty>, _Ty&&>{};
 
-  template <typename _ChT, unsigned long long _val> struct LongLongToChar {
-    typedef IntToChar<_ChT, _val & 0x00000000ffffffff> LoWord;
-    typedef IntToChar<_ChT, ((_val & 0xffffffff00000000) >> 32)> HiWord;
-  };
-
+  //test for invocation operator
+  template <typename _Ty> using invokation_operator_t = decltype(std::declval<_Ty&>()());
+  template <typename, typename = void> struct is_invokable : std::false_type{};
+  template <typename _Ty> struct is_invokable<_Ty, void_t<invokation_operator_t<_Ty>>> : std::true_type{};
 
   /**
-    \struct nibble_hex_char
     meta-function to convert a static upper case ascii character to lower case
     \tparam _ChT character type
     \tparam _val value of type _ChT to convert
    */
   template <typename _ChT, _ChT _val> struct lower_case { static const _ChT value = _val; };
 #if (!DOXY_INVOKED)
-  template <> struct lower_case < char, 'A' > { static const char value = 'a'; };
-  template <> struct lower_case < char, 'B' > { static const char value = 'b'; };
-  template <> struct lower_case < char, 'C' > { static const char value = 'c'; };
-  template <> struct lower_case < char, 'D' > { static const char value = 'd'; };
-  template <> struct lower_case < char, 'E' > { static const char value = 'e'; };
-  template <> struct lower_case < char, 'F' > { static const char value = 'f'; };
-  template <> struct lower_case < char, 'G' > { static const char value = 'g'; };
-  template <> struct lower_case < char, 'H' > { static const char value = 'h'; };
-  template <> struct lower_case < char, 'I' > { static const char value = 'i'; };
-  template <> struct lower_case < char, 'J' > { static const char value = 'j'; };
-  template <> struct lower_case < char, 'K' > { static const char value = 'k'; };
-  template <> struct lower_case < char, 'L' > { static const char value = 'l'; };
-  template <> struct lower_case < char, 'M' > { static const char value = 'm'; };
-  template <> struct lower_case < char, 'N' > { static const char value = 'n'; };
-  template <> struct lower_case < char, 'O' > { static const char value = 'o'; };
-  template <> struct lower_case < char, 'P' > { static const char value = 'p'; };
-  template <> struct lower_case < char, 'Q' > { static const char value = 'q'; };
-  template <> struct lower_case < char, 'R' > { static const char value = 'r'; };
-  template <> struct lower_case < char, 'S' > { static const char value = 's'; };
-  template <> struct lower_case < char, 'T' > { static const char value = 't'; };
-  template <> struct lower_case < char, 'U' > { static const char value = 'u'; };
-  template <> struct lower_case < char, 'V' > { static const char value = 'v'; };
-  template <> struct lower_case < char, 'W' > { static const char value = 'w'; };
-  template <> struct lower_case < char, 'X' > { static const char value = 'x'; };
-  template <> struct lower_case < char, 'Y' > { static const char value = 'y'; };
-  template <> struct lower_case < char, 'Z' > { static const char value = 'z'; };
+  template <> struct lower_case < char, 'A' > { static constexpr char value = 'a'; };
+  template <> struct lower_case < char, 'B' > { static constexpr char value = 'b'; };
+  template <> struct lower_case < char, 'C' > { static constexpr char value = 'c'; };
+  template <> struct lower_case < char, 'D' > { static constexpr char value = 'd'; };
+  template <> struct lower_case < char, 'E' > { static constexpr char value = 'e'; };
+  template <> struct lower_case < char, 'F' > { static constexpr char value = 'f'; };
+  template <> struct lower_case < char, 'G' > { static constexpr char value = 'g'; };
+  template <> struct lower_case < char, 'H' > { static constexpr char value = 'h'; };
+  template <> struct lower_case < char, 'I' > { static constexpr char value = 'i'; };
+  template <> struct lower_case < char, 'J' > { static constexpr char value = 'j'; };
+  template <> struct lower_case < char, 'K' > { static constexpr char value = 'k'; };
+  template <> struct lower_case < char, 'L' > { static constexpr char value = 'l'; };
+  template <> struct lower_case < char, 'M' > { static constexpr char value = 'm'; };
+  template <> struct lower_case < char, 'N' > { static constexpr char value = 'n'; };
+  template <> struct lower_case < char, 'O' > { static constexpr char value = 'o'; };
+  template <> struct lower_case < char, 'P' > { static constexpr char value = 'p'; };
+  template <> struct lower_case < char, 'Q' > { static constexpr char value = 'q'; };
+  template <> struct lower_case < char, 'R' > { static constexpr char value = 'r'; };
+  template <> struct lower_case < char, 'S' > { static constexpr char value = 's'; };
+  template <> struct lower_case < char, 'T' > { static constexpr char value = 't'; };
+  template <> struct lower_case < char, 'U' > { static constexpr char value = 'u'; };
+  template <> struct lower_case < char, 'V' > { static constexpr char value = 'v'; };
+  template <> struct lower_case < char, 'W' > { static constexpr char value = 'w'; };
+  template <> struct lower_case < char, 'X' > { static constexpr char value = 'x'; };
+  template <> struct lower_case < char, 'Y' > { static constexpr char value = 'y'; };
+  template <> struct lower_case < char, 'Z' > { static constexpr char value = 'z'; };
 
-  template <> struct lower_case < wchar_t, L'A' > { static const wchar_t value = L'a'; };
-  template <> struct lower_case < wchar_t, L'B' > { static const wchar_t value = L'b'; };
-  template <> struct lower_case < wchar_t, L'C' > { static const wchar_t value = L'c'; };
-  template <> struct lower_case < wchar_t, L'D' > { static const wchar_t value = L'd'; };
-  template <> struct lower_case < wchar_t, L'E' > { static const wchar_t value = L'e'; };
-  template <> struct lower_case < wchar_t, L'F' > { static const wchar_t value = L'f'; };
-  template <> struct lower_case < wchar_t, L'G' > { static const wchar_t value = L'g'; };
-  template <> struct lower_case < wchar_t, L'H' > { static const wchar_t value = L'h'; };
-  template <> struct lower_case < wchar_t, L'I' > { static const wchar_t value = L'i'; };
-  template <> struct lower_case < wchar_t, L'J' > { static const wchar_t value = L'j'; };
-  template <> struct lower_case < wchar_t, L'K' > { static const wchar_t value = L'k'; };
-  template <> struct lower_case < wchar_t, L'L' > { static const wchar_t value = L'l'; };
-  template <> struct lower_case < wchar_t, L'M' > { static const wchar_t value = L'm'; };
-  template <> struct lower_case < wchar_t, L'N' > { static const wchar_t value = L'n'; };
-  template <> struct lower_case < wchar_t, L'O' > { static const wchar_t value = L'o'; };
-  template <> struct lower_case < wchar_t, L'P' > { static const wchar_t value = L'p'; };
-  template <> struct lower_case < wchar_t, L'Q' > { static const wchar_t value = L'q'; };
-  template <> struct lower_case < wchar_t, L'R' > { static const wchar_t value = L'r'; };
-  template <> struct lower_case < wchar_t, L'S' > { static const wchar_t value = L's'; };
-  template <> struct lower_case < wchar_t, L'T' > { static const wchar_t value = L't'; };
-  template <> struct lower_case < wchar_t, L'U' > { static const wchar_t value = L'u'; };
-  template <> struct lower_case < wchar_t, L'V' > { static const wchar_t value = L'v'; };
-  template <> struct lower_case < wchar_t, L'W' > { static const wchar_t value = L'w'; };
-  template <> struct lower_case < wchar_t, L'X' > { static const wchar_t value = L'x'; };
-  template <> struct lower_case < wchar_t, L'Y' > { static const wchar_t value = L'y'; };
-  template <> struct lower_case < wchar_t, L'Z' > { static const wchar_t value = L'z'; };
+  template <> struct lower_case < wchar_t, L'A' > { static constexpr wchar_t value = L'a'; };
+  template <> struct lower_case < wchar_t, L'B' > { static constexpr wchar_t value = L'b'; };
+  template <> struct lower_case < wchar_t, L'C' > { static constexpr wchar_t value = L'c'; };
+  template <> struct lower_case < wchar_t, L'D' > { static constexpr wchar_t value = L'd'; };
+  template <> struct lower_case < wchar_t, L'E' > { static constexpr wchar_t value = L'e'; };
+  template <> struct lower_case < wchar_t, L'F' > { static constexpr wchar_t value = L'f'; };
+  template <> struct lower_case < wchar_t, L'G' > { static constexpr wchar_t value = L'g'; };
+  template <> struct lower_case < wchar_t, L'H' > { static constexpr wchar_t value = L'h'; };
+  template <> struct lower_case < wchar_t, L'I' > { static constexpr wchar_t value = L'i'; };
+  template <> struct lower_case < wchar_t, L'J' > { static constexpr wchar_t value = L'j'; };
+  template <> struct lower_case < wchar_t, L'K' > { static constexpr wchar_t value = L'k'; };
+  template <> struct lower_case < wchar_t, L'L' > { static constexpr wchar_t value = L'l'; };
+  template <> struct lower_case < wchar_t, L'M' > { static constexpr wchar_t value = L'm'; };
+  template <> struct lower_case < wchar_t, L'N' > { static constexpr wchar_t value = L'n'; };
+  template <> struct lower_case < wchar_t, L'O' > { static constexpr wchar_t value = L'o'; };
+  template <> struct lower_case < wchar_t, L'P' > { static constexpr wchar_t value = L'p'; };
+  template <> struct lower_case < wchar_t, L'Q' > { static constexpr wchar_t value = L'q'; };
+  template <> struct lower_case < wchar_t, L'R' > { static constexpr wchar_t value = L'r'; };
+  template <> struct lower_case < wchar_t, L'S' > { static constexpr wchar_t value = L's'; };
+  template <> struct lower_case < wchar_t, L'T' > { static constexpr wchar_t value = L't'; };
+  template <> struct lower_case < wchar_t, L'U' > { static constexpr wchar_t value = L'u'; };
+  template <> struct lower_case < wchar_t, L'V' > { static constexpr wchar_t value = L'v'; };
+  template <> struct lower_case < wchar_t, L'W' > { static constexpr wchar_t value = L'w'; };
+  template <> struct lower_case < wchar_t, L'X' > { static constexpr wchar_t value = L'x'; };
+  template <> struct lower_case < wchar_t, L'Y' > { static constexpr wchar_t value = L'y'; };
+  template <> struct lower_case < wchar_t, L'Z' > { static constexpr wchar_t value = L'z'; };
 #endif
 }

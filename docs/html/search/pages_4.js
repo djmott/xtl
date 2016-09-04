@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sockets',['Sockets',['../md__src_github_xtl_docs_Sockets.html',1,'']]],
-  ['spin_20locks',['Spin Locks',['../md__src_github_xtl_docs_SpinLock.html',1,'']]]
+  ['template_20basics',['Template Basics',['../md__src_github_xtl_docs__template-_basics.html',1,'']]],
+  ['tmp_20techniques',['TMP Techniques',['../md__src_github_xtl_docs__t_m_p-_techniques.html',1,'']]]
 ];

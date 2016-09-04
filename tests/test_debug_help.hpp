@@ -5,6 +5,8 @@ xtd::windows::debug_help related system and unit tests
 
 #pragma once
 
+#include <xtd/windows/dbghelp.hpp>
+
 TEST(test_debug_help, initialization){
   auto x = xtd::windows::debug_help::make();
 }
