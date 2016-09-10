@@ -84,7 +84,13 @@ namespace xtd{
       return sRet;
     }
 
-
+    xstring& reverse(){
+      size_t iEnd = _super_t::size();
+      for (size_t i=0 ; i<iEnd /2; ++i){
+        std::swap((*this)[i], (*this)[iEnd - i - 1]);
+      }
+      return *this;
+    }
     /**
     Converts the string to lower case
     @param loc The locale to use during conversion

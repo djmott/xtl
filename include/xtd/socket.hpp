@@ -300,13 +300,20 @@ namespace xtd{
         _Socket = -1;
       }
 
-      /**
-       * sets the blocking mode of the socket
+      /** sets the blocking mode of the socket
        * @param blocking true to set to blocking mode
        */
       void set_blocking(bool blocking){
-        uint32_t val = (blocking ? 0 : 1);
+        u_long val = (blocking ? 0 : 1);
         xtd::crt_exception::throw_if(ioctlsocket(_Socket, FIONBIO, &val), [](int i){ return i < 0; });
+      }
+
+      /** gets the number of bytes waiting in the read buffer
+       */
+      u_long bytes_available(){
+        u_long iRet=0;
+        xtd::crt_exception::throw_if(ioctlsocket(_Socket, FIONREAD, &iRet), [](int i){ return i < 0; });
+        return iRet;
       }
 
       /**

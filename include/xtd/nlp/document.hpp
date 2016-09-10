@@ -17,19 +17,6 @@ nlp document
 namespace xtd{
   namespace nlp{
 
-    /// unstructured and unformatted
-    struct raw_document : dynamic_object{};
-
-
-    struct tokenized_document : raw_document{};
-
-    struct tagged_document : tokenized_document{};
-
-    struct chunked_document : tagged_document{};
-
-
-
-
     struct word : dynamic_object{
       enum category_t : uint64_t{
         unknown_cat = 0,
