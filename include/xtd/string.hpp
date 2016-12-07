@@ -84,6 +84,19 @@ namespace xtd{
       return sRet;
     }
 
+    static xstring from_resource(UINT resid) {
+      xstring sRet(10, 0);
+      for(;;) {
+        auto iRet = LoadString(GetModuleHandle(nullptr), resid, &sRet[0], sRet.size());
+        if (!iRet) return xstring();
+        if (sRet.size() < iRet) {
+          sRet.resize(iRet);
+          return sRet;
+        }
+        sRet.resize(2 * sRet.size());
+      }
+    }
+
     xstring& reverse(){
       size_t iEnd = _super_t::size();
       for (size_t i=0 ; i<iEnd /2; ++i){
