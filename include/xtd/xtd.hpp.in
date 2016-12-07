@@ -215,7 +215,7 @@
   #define NORETURN __declspec(noreturn)
   #define MULTIPLE __declspec(selectany)
   #define ALIGN(val) __declspec(align(val))
-  #define EXPORT __declspec(dllexport)
+  #define XTD_EXPORT __declspec(dllexport)
 #elif (XTD_COMPILER_GCC & XTD_COMPILER)
   #define PRAGMA_(x) _Pragma( #x )
   #define FORCEINLINE __attribute__((always_inline))
@@ -223,7 +223,7 @@
   #define NORETURN __attribute__((noreturn))
   #define MULTIPLE __attribute__ ((weak))
   #define ALIGN(val) __attribute__ ((aligned (val)))
-  #define EXPORT __attribute__ ((visibility ("default")))
+  #define XTD_EXPORT __attribute__ ((visibility ("default")))
 
 #endif
 
