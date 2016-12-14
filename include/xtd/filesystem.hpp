@@ -13,56 +13,64 @@ handle necessary filesystem and path functionality until C++17 is finalized
   #include <sys/stat.h>
   #include <paths.h>
 #else
-  #include <xtd/exception.hpp>
-  #include <xtd/meta.hpp>
+#include <xtd/exception.hpp>
+#include <xtd/meta.hpp>
 #endif
 
 #if (XTD_HAS_FILESYSTEM)
-  #include <filesystem>
+#include <filesystem>
 #elif (XTD_HAS_EXP_FILESYSTEM)
   #include <experimental/filesystem>
 #endif
 
-namespace xtd{
-  namespace filesystem{
+namespace xtd {
+  namespace filesystem {
 
-    namespace _{
-      template <typename, typename> struct path_adder;
+    namespace _ {
+      template <typename, typename>
+      struct path_adder;
     }
   }
 }
 
 #if (XTD_HAS_EXP_FILESYSTEM)
-namespace xtd{
-  namespace filesystem{
+namespace xtd {
+  namespace filesystem {
 
-    struct path : std::experimental::filesystem::path{
+    struct path : std::experimental::filesystem::path {
       using _super_t = std::experimental::filesystem::path;
-      template <typename ... _ArgTs> path(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...){}
 
-      template <typename _Ty> inline path operator+(const _Ty& src) const{
+      template <typename ... _ArgTs>
+      path(_ArgTs&&...oArgs) : _super_t(std::forward<_ArgTs>(oArgs)...) {}
+
+      template <typename _Ty>
+      inline path operator+(const _Ty& src) const {
         path oRet(*this);
         oRet /= src;
         return oRet;
       }
 
-      path filename() const{ return path(_super_t::filename()); }
+      path filename() const { return path(_super_t::filename()); }
 
     };
 
-    static inline bool remove(const path& src){ return std::experimental::filesystem::remove(src); }
+    static inline bool create_directories(const path& src) { return std::experimental::filesystem::create_directories(src); }
 
-    static inline path temp_directory_path(){ return path(std::experimental::filesystem::temp_directory_path()); }
-  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-    static inline path home_directory_path(){ 
+    static inline bool exists(const path& src) { return std::experimental::filesystem::exists(src); }
+
+    static inline bool remove(const path& src) { return std::experimental::filesystem::remove(src); }
+
+    static inline path temp_directory_path() { return path(std::experimental::filesystem::temp_directory_path()); }
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+    static inline path home_directory_path() {
       PWSTR sTemp;
       xtd::windows::exception::throw_if(SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &sTemp), [](HRESULT hr){ return FAILED(hr); });
       RAII(CoTaskMemFree(sTemp));
       return xtd::string::format(static_cast<const wchar_t*>(sTemp));
     }
-  #else
+#else
     static inline path home_directory_path() { return path(getenv("HOME")); }
-  #endif
+#endif
 
   }
 }
@@ -200,41 +208,47 @@ namespace xtd{
 #endif
 
 
-namespace xtd{
-  namespace filesystem{
-    namespace _{
+namespace xtd {
+  namespace filesystem {
+    namespace _ {
 
 
-      template <typename _ValueT, typename _Ch2, size_t _Dims> struct path_adder<_ValueT, const _Ch2(&)[_Dims]>{
-        inline static path add(const path& dest, const _Ch2(&src)[_Dims]){
+      template <typename _ValueT, typename _Ch2, size_t _Dims>
+      struct path_adder<_ValueT, const _Ch2(&)[_Dims]> {
+        inline static path add(const path& dest, const _Ch2 (&src)[_Dims]) {
           auto str = xtd::xstring<_ValueT>::format(src);
           path oRet(dest);
           oRet.append(str);
           return oRet;
         }
       };
-      template <typename _ValueT, typename _Ch2> struct path_adder<_ValueT, const _Ch2*>{
-        inline static path add(const path& dest, const _Ch2* src){
+
+      template <typename _ValueT, typename _Ch2>
+      struct path_adder<_ValueT, const _Ch2*> {
+        inline static path add(const path& dest, const _Ch2* src) {
           auto str = xtd::xstring<_ValueT>::format(src);
           path oRet(dest);
           oRet.append(str);
           return oRet;
         }
       };
-      template <typename _ValueT> struct path_adder<_ValueT, const path&>{
-        inline static path add(const path& dest, const path& src){
+
+      template <typename _ValueT>
+      struct path_adder<_ValueT, const path&> {
+        inline static path add(const path& dest, const path& src) {
           path oRet(dest);
           oRet.append(src);
           return oRet;
         }
       };
-      template <typename _ValueT> struct path_adder<_ValueT, const xtd::xstring<_ValueT>&>{
-        inline static path add(const path& dest, const xtd::xstring<_ValueT>& src){
+
+      template <typename _ValueT>
+      struct path_adder<_ValueT, const xtd::xstring<_ValueT>&> {
+        inline static path add(const path& dest, const xtd::xstring<_ValueT>& src) {
           return path_adder<_ValueT, const _ValueT*>::add(dest, src.c_str());
         }
       };
     }
-
 
 
   }

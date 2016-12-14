@@ -8,13 +8,12 @@
 #pragma intrinsic(_ReturnAddress)
 
 
+extern "C" {
 
-extern "C"{
+  void __xtd_EventEnter(void* addr);
+  void __xtd_EventLeave(void* addr);
 
-  void __xtd_EventEnter(void * addr);
-  void __xtd_EventLeave(void * addr);
-
-  void __declspec(naked) _cdecl _penter(){
+  void __declspec(naked, dllexport) _cdecl _penter() {
     __asm {
       PUSH EBP
       MOV EBP, ESP
@@ -30,7 +29,7 @@ extern "C"{
     }
   }
 
-  void __declspec(naked) _cdecl _pexit(){
+  void __declspec(naked, dllexport) _cdecl _pexit() {
     __asm {
       PUSH EBP
       MOV EBP, ESP

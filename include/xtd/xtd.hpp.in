@@ -204,10 +204,6 @@
 #endif
 
 
-
-
-
-
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #define PRAGMA_(x) __pragma(x)
   #define FORCEINLINE __forceinline
@@ -224,18 +220,17 @@
   #define MULTIPLE __attribute__ ((weak))
   #define ALIGN(val) __attribute__ ((aligned (val)))
   #define XTD_EXPORT __attribute__ ((visibility ("default")))
-
 #endif
 
 #define PACK_PUSH(n) PRAGMA_(pack(push, n))
 #define PACK_POP() PRAGMA_(pack(pop))
 
 #if XTD_COLOR_MESSAGES
-  #define TODO( x ) PRAGMA_(message ("\e[31mTODO : " x "\e[0m" ))
-  #define NOTE( x ) PRAGMA_(message ("\e[32mNOTE : " x  "\e[0m"))
+  #define TODO( x ) PRAGMA_(message ( __FILE__ ":" QUOTE(__LINE__) " : \e[31mTODO : " x "\e[0m" ))
+  #define NOTE( x ) PRAGMA_(message ( __FILE__ ":" QUOTE(__LINE__) " : \e[32mNOTE : " x  "\e[0m"))
 #else
-  #define TODO( x ) PRAGMA_(message ("TODO : " x ))
-  #define NOTE( x ) PRAGMA_(message ("NOTE : " x ))
+  #define TODO( x ) PRAGMA_(message ( __FILE__ ":" QUOTE(__LINE__) " : TODO : " x ))
+  #define NOTE( x ) PRAGMA_(message ( __FILE__ ":" QUOTE(__LINE__) " : NOTE : " x ))
 #endif
 
 #if !defined(XTD_VERBOSE_BUILD)
