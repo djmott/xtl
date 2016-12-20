@@ -286,9 +286,6 @@ namespace xtd {
     template <typename ... _ArgTs>
     inline void write(type mesageType, const source_location& location, _ArgTs&&...oArgs) {
       auto sMessage = xtd::string::format(std::forward<_ArgTs>(oArgs)...);
-      if ('\n' != sMessage.back()) {
-        sMessage += '\n';
-      }
       auto oMessage = std::make_shared<message>(mesageType, location, std::move(sMessage)); {
         std::lock_guard<std::mutex> oLock(_CallbackLock);
         _Callbacks.push_back([oMessage, this]() {
