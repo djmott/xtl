@@ -196,7 +196,7 @@ namespace xtd {
         auto sMsg = xtd::string::format(oHash(oMsg->_tid), ",", oMsg->_time.time_since_epoch().count(), ",", type_string(oMsg->_type), ",", oMsg->_location.file(), ",", oMsg->_location.line(), sMsgPrefix, oMsg->_text);
         if (type::enter == oMsg->_type) ++_StackDepth;
         std::unique_lock<std::mutex> oLock(_FileLock);
-        _LogFile << sMsg << std::endl;
+        _LogFile << sMsg << '\n';
       }
 
       csv_target() : _LogFile(), _FileLock() {
@@ -259,8 +259,10 @@ namespace xtd {
           });
         _CallbackCheck.notify_one();
       }
-      _CallbackThread.join();
-      _CallbackThreadFinished.get_future().get();
+      if (_CallbackThread.joinable()) {
+        _CallbackThread.join();
+        _CallbackThreadFinished.get_future().get();
+      }
     }
 
     using callback_type = std::function<void()>;
