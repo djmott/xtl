@@ -61,14 +61,20 @@ namespace xtd {
     static inline bool remove(const path& src) { return std::experimental::filesystem::remove(src); }
 
     static inline path temp_directory_path() { return path(std::experimental::filesystem::temp_directory_path()); }
+
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-    static inline path home_directory_path() {
+    template <REFKNOWNFOLDERID _FolderID>
+    static inline path known_path() {
       PWSTR sTemp;
-      xtd::windows::exception::throw_if(SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &sTemp), [](HRESULT hr){ return FAILED(hr); });
+      xtd::windows::exception::throw_if(SHGetKnownFolderPath(_FolderID, 0, nullptr, &sTemp), [](HRESULT hr) { return FAILED(hr); });
       RAII(CoTaskMemFree(sTemp));
       return xtd::string::format(static_cast<const wchar_t*>(sTemp));
     }
-#else
+
+    static inline path home_directory_path() {
+      return known_path<FOLDERID_Profile>();
+    }
+  #else
     static inline path home_directory_path() { return path(getenv("HOME")); }
 #endif
 
