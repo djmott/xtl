@@ -75,7 +75,6 @@ namespace xtd {
       }
     }
 
-  private:
 
     class message {
     public:
@@ -115,6 +114,20 @@ namespace xtd {
       using vector_type = std::vector<pointer_type>;
       virtual void operator()(const message::pointer_type&) = 0;
     };
+
+
+
+    template <typename _Ty>
+    void AddTarget() {
+      std::lock_guard<std::mutex> oLock(_CallbackLock);
+      _LogTargets.emplace_back(new _Ty);
+    }
+
+    void AddTarget(log_target::pointer_type oTarget) {
+      std::lock_guard<std::mutex> oLock(_CallbackLock);
+      _LogTargets.emplace_back(oTarget);
+    }
+  private:
 
 #if (XTD_LOG_TARGET_SYSLOG)
     class syslog_target : public log_target{
@@ -164,7 +177,7 @@ namespace xtd {
       ~win_dbg_target() override = default;
 
       void operator()(const message::pointer_type& oMessage) override {
-        OutputDebugStringA(oMessage->_text.c_str());
+        OutputDebugStringA(xtd::string::format(oMessage->_text, "\n").c_str());
       }
     };
 #endif

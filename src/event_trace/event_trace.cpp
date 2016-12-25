@@ -5,6 +5,8 @@
 #include <xtd/process.hpp>
 #include <xtd/executable.hpp>
 #include <xtd/log.hpp>
+#include <xtd/windows/debug_help.hpp>
+#include <xtd/windows/image_help.hpp>
 #include <string>
 #include <stack>
 #include <dbghelp.h>

@@ -134,15 +134,15 @@ Throws exception if the test expression returns true. _throw_if methods are pres
       template <typename _ReturnT, typename _ExpressionT>
       inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
         if (exp(ret)){
-          throw exception(source, expstr);
+          throw exception(source, expstr, GetLastError());
         }
         return ret;
       }
 
-      exception(const xtd::source_location& source, const std::string&) :xtd::exception(source, ""), _last_error(GetLastError()){
+      exception(const xtd::source_location& source, const std::string& exp, DWORD last_err) :xtd::exception(source, ""), _last_error(last_err){
         const char * sTemp = nullptr;
         FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, _last_error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&sTemp), 0, nullptr);
-        _what = sTemp;
+        _what = xtd::string::format(sTemp, " : ", exp);
         LocalFree((HLOCAL)sTemp);
       }
     private:

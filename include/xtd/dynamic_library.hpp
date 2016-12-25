@@ -34,15 +34,15 @@ namespace xtd{
     inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
       if (exp(ret)){
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-          throw dynamic_library_exception(source, expstr);
+          throw dynamic_library_exception(source, expstr, GetLastError());
 #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
-          throw dynamic_library_exception(source, std::string(dlerror()) + " " + expstr);
+          throw dynamic_library_exception(source, std::string(dlerror()) + " " + expstr, dlerror());
 #endif
       }
       return ret;
     }
 
-    dynamic_library_exception(const source_location& Source, const std::string& What) : _super_t(Source, What){}
+    dynamic_library_exception(const source_location& Source, const std::string& What, DWORD last_err) : _super_t(Source, What, last_err){}
     dynamic_library_exception(const dynamic_library_exception& src) : _super_t(src){}
     dynamic_library_exception(dynamic_library_exception&& src) : _super_t(std::move(src)){}
 

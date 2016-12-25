@@ -62,6 +62,8 @@ namespace xtd {
 
     static inline path temp_directory_path() { return path(std::experimental::filesystem::temp_directory_path()); }
 
+    static inline bool is_directory(const path& oPath) { return FILE_ATTRIBUTE_DIRECTORY & GetFileAttributes(oPath.string().c_str()) ? true : false; }
+
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     template <REFKNOWNFOLDERID _FolderID>
     static inline path known_path() {
@@ -71,9 +73,7 @@ namespace xtd {
       return xtd::string::format(static_cast<const wchar_t*>(sTemp));
     }
 
-    static inline path home_directory_path() {
-      return known_path<FOLDERID_Profile>();
-    }
+    static inline path home_directory_path() { return known_path<FOLDERID_Profile>(); }
   #else
     static inline path home_directory_path() { return path(getenv("HOME")); }
 #endif
@@ -99,6 +99,7 @@ namespace xtd{
       const xtd::string& string() const { return static_cast<const xtd::string&>(*this);}
       template <typename ... _ArgTs> path_base(_ArgTs&&...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
     };
+
     class path : public path_base{
     public:
 #if ((XTD_OS_MINGW|XTD_OS_WINDOWS) & XTD_OS)
