@@ -30,7 +30,7 @@ build_example(parse1)
 build_example(parse2)
 build_example(pdf)
 build_example(rfc2229)
-#build_example(rpc)
+build_example(rpc)
 build_example(sqlite)
 build_example(string)
 

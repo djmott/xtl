@@ -89,7 +89,7 @@ namespace xtd{
       for(;;) {
         auto iRet = LoadString(GetModuleHandle(nullptr), resid, &sRet[0], sRet.size());
         if (!iRet) return xstring();
-        if (sRet.size() < iRet) {
+        if (sRet.size() < static_cast<size_t>(iRet)) {
           sRet.resize(iRet);
           return sRet;
         }
