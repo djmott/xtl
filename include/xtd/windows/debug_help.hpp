@@ -12,6 +12,7 @@ object oriented access to the dbghelp library
 #include <xtd/exception.hpp>
 #include <xtd/process.hpp>
 #include <xtd/callback.hpp>
+#include <xtd/meta.hpp>
 
 namespace xtd {
   namespace windows {
@@ -29,19 +30,28 @@ namespace xtd {
         callback<void(const TCHAR*)> on_debug_info;
 
       private:
+
+        using sym_callback_fn_type = typename xtd::get_parameter<1, decltype(SymRegisterCallback)>::type;
+
+
         initializer() {
           xtd::windows::exception::throw_if(SymInitialize(xtd::process::this_process(), nullptr, TRUE), [](BOOL b) { return !b; });
-          xtd::windows::exception::throw_if(SymRegisterCallback(xtd::process::this_process(), &sym_callback, this), [](BOOL b) { return !b; });
+          TODO("Fix me")
+//           xtd::windows::exception::throw_if(SymRegisterCallback(xtd::process::this_process(), &sym_callback, this), [](BOOL b) { return !b; });
 
         }
-
-        static BOOL CALLBACK sym_callback(HANDLE hProcess, ULONG ActionCode, PVOID CallbackData, PVOID UserContext) {
+        TODO("Fix me")
+/*
+        static BOOL CALLBACK sym_callback(HANDLE hProcess, ULONG ActionCode, 
+          typename xtd::get_parameter<2, sym_callback_fn_type>::type CallbackData,
+          PVOID UserContext) {
           auto pThis = reinterpret_cast<initializer*>(UserContext);
           if (CBA_DEBUG_INFO == ActionCode) {
             pThis->on_debug_info(reinterpret_cast<const TCHAR*>(CallbackData));
           }
           return TRUE;
         }
+*/
       };
 
       struct source_file : xtd::filesystem::path {
@@ -79,7 +89,8 @@ namespace xtd {
 
         static vector get_all() {
           vector oRet;
-          xtd::windows::exception::throw_if(SymEnumerateModules(xtd::process::this_process(), &enum_modules_callback, &oRet), [](BOOL b) { return !b; });
+          TODO("Fix me")
+          //xtd::windows::exception::throw_if(SymEnumerateModules(xtd::process::this_process(), &enum_modules_callback, &oRet), [](BOOL b) { return !b; });
           return oRet;
         }
 
@@ -114,18 +125,3 @@ namespace xtd {
   }
 }
 
-/*
-int main() {
-  auto oModules = xtd::windows::debug_help::module::get_all();
-  for (auto& oModule : oModules) {
-    auto pDos = oModule->dos_header();
-    auto pNT = oModule->nt_headers();
-    auto pSection = oModule->section_header();
-    auto oFiles = oModule->source_files();
-    for (auto& oFile : oFiles) {
-      DBG(oFile.string().c_str());
-    }
-  }
-  return 0;
-}
-*/

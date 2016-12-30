@@ -85,13 +85,14 @@ namespace {
 
     event_trace() {
       SymSetOptions(SYMOPT_DEBUG|SYMOPT_UNDNAME|SYMOPT_DEFERRED_LOADS|SYMOPT_LOAD_LINES);
-      if (
+      TODO("Fix me")
+        if (
         !SymInitialize(xtd::process::this_process(), nullptr, TRUE) ||
-        !SymRegisterCallback(xtd::process::this_process(), &sym_callback, this) ||
+//        !SymRegisterCallback(xtd::process::this_process(), &sym_callback, this) ||
         !SymLoadModuleEx(xtd::process::this_process(), nullptr, xtd::executable::this_executable().path().string().c_str(), nullptr, 0, 0, nullptr, 0)
          ) 
       {
-        auto sErr = xtd::tstring::format("Unable to initialize symbol handler.\nGetLastError returned: ", GetLastError());
+        auto sErr = xtd::tstring::format("Unable to initialize symbol handler.\nGetLastError returned: ", static_cast<uint32_t>(GetLastError()));
         MessageBox(nullptr, sErr.c_str(), __("Error"), MB_OK | MB_ICONERROR);
       }
       

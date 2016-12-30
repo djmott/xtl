@@ -62,7 +62,7 @@ namespace xtd {
 
     static inline path temp_directory_path() { return path(std::experimental::filesystem::temp_directory_path()); }
 
-    static inline bool is_directory(const path& oPath) { return FILE_ATTRIBUTE_DIRECTORY & GetFileAttributes(oPath.string().c_str()) ? true : false; }
+    static inline bool is_directory(const path& oPath) { return FILE_ATTRIBUTE_DIRECTORY & GetFileAttributes(xtd::tstring::format(oPath.string().c_str()).c_str()) ? true : false; }
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
     template <REFKNOWNFOLDERID _FolderID>

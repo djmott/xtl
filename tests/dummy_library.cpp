@@ -5,6 +5,6 @@
 #include <xtd/xtd.hpp>
 
 extern "C" {
-  EXPORT int Add(int x, int y){ return x + y; }
-  EXPORT const char *Echo(const char *src){ return src; }
+  XTD_EXPORT int Add(int x, int y){ return x + y; }
+  XTD_EXPORT const char *Echo(const char *src){ return src; }
 }

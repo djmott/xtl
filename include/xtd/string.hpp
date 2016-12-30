@@ -503,6 +503,55 @@ namespace xtd{
       }
     };
 
+
+
+
+
+    template <> class xstring_format<wchar_t, const void * const &> {
+    public:
+      inline static wstring format(const void * const & value) {
+        return std::to_wstring(reinterpret_cast<size_t>(value));
+      }
+    };
+
+
+    template <> class xstring_format<wchar_t, const int32_t &> {
+    public:
+      inline static wstring format(const int32_t & value) {
+        return std::to_wstring(value);
+      }
+    };
+
+    template <> class xstring_format<wchar_t, const uint32_t &> {
+    public:
+      inline static wstring format(const uint32_t & value) {
+        return std::to_wstring(value);
+      }
+    };
+
+    template <> class xstring_format<wchar_t, const int64_t &> {
+    public:
+      inline static wstring format(const int64_t & value) {
+        return std::to_wstring(value);
+      }
+    };
+
+    template <> class xstring_format<wchar_t, const uint64_t &> {
+    public:
+      inline static wstring format(const uint64_t & value) {
+        return std::to_wstring(value);
+      }
+    };
+
+
+    template <> class xstring_format<wchar_t, void * const &> {
+    public:
+      inline static wstring format(const void * const & value) {
+        return std::to_wstring(reinterpret_cast<size_t>(value));
+      }
+    };
+
+
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     template <> class xstring_format<char, const DWORD &>{
     public:
