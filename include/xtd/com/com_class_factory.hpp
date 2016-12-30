@@ -1,10 +1,13 @@
-#ifndef __COMCLASSFACTORY_HPP_INCLUDED__
-#define __COMCLASSFACTORY_HPP_INCLUDED__
+/** @file
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+*/
+
+#pragma once
 
 namespace xtd {
-	namespace COM {
-		template <typename _ObjectT> struct ClassFactory : COM::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > {
-			using _super_t = COM::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > ;
+	namespace com {
+		template <typename _ObjectT> struct ClassFactory : com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > {
+			using _super_t = com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > ;
 
 			virtual HRESULT __stdcall CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppvObject) final {
 				DUMP(riid);
@@ -24,5 +27,3 @@ namespace xtd {
 		};
 	}
 }
-
-#endif // __COMCLASSFACTORY_HPP_INCLUDED__

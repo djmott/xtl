@@ -156,6 +156,14 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   ${SQLITE_SRC}
   src/xtl.cpp
   src/event_trace/event_trace.cpp
+  include/xtd/com/com.hpp
+  include/xtd/com/com_class_factory.hpp
+  include/xtd/com/com_data_object.hpp
+  include/xtd/com/com_dll.hpp
+  include/xtd/com/com_exception.hpp
+  include/xtd/com/com_object.hpp
+  include/xtd/com/com_initializer.hpp
+  include/xtd/com/com_pointer.hpp
   include/xtd/concurrent/concurrent.hpp
   include/xtd/concurrent/hash_map.hpp
   include/xtd/concurrent/queue.hpp

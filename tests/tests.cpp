@@ -16,6 +16,9 @@ main system and unit test entry point
   #pragma warning(pop)
 #endif
 
+#if (ON==TEST_COM)
+  #include "test_com.hpp"
+#endif
 
 #if (ON==TEST_BTREE)
   #include "test_btree.hpp"

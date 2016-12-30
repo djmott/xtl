@@ -1,8 +1,11 @@
-#ifndef __COMDLL_HPP_INCLUDED__
-#define __COMDLL_HPP_INCLUDED__
+/** @file
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+*/
+
+#pragma once
 
 namespace xtd {
-	namespace COM {
+	namespace com {
 		enum class ThreadingModel {
 			Single,
 			Apartment,
@@ -11,10 +14,10 @@ namespace xtd {
 		};
 
 		template <ThreadingModel> struct ThreadingModelName;
-		template <> struct ThreadingModelName < ThreadingModel::Single > { static tstring Value() { return _T("Single"); } };
-		template <> struct ThreadingModelName < ThreadingModel::Apartment > { static tstring Value() { return _T("Apartment"); } };
-		template <> struct ThreadingModelName < ThreadingModel::Free > { static tstring Value() { return _T("Free"); } };
-		template <> struct ThreadingModelName < ThreadingModel::Both > { static tstring Value() { return _T("Both"); } };
+		template <> struct ThreadingModelName < ThreadingModel::Single > { static tstring Value() { return __("Single"); } };
+		template <> struct ThreadingModelName < ThreadingModel::Apartment > { static tstring Value() { return __("Apartment"); } };
+		template <> struct ThreadingModelName < ThreadingModel::Free > { static tstring Value() { return __("Free"); } };
+		template <> struct ThreadingModelName < ThreadingModel::Both > { static tstring Value() { return __("Both"); } };
 
 		template <typename _DLLDecl, ThreadingModel _ThreadingModel, LPCTSTR _Name, typename ... _Objects> struct DLL;
 
@@ -62,7 +65,7 @@ namespace xtd {
 					DUMP(riid);
 					*ppv = nullptr;
 					if (IsEqualGUID(rclsid, __uuidof(_COMObjDecl))) {
-						auto pFactory = new COM::ClassFactory < _COMObjDecl > ;
+						auto pFactory = new com::ClassFactory < _COMObjDecl > ;
 						if (!pFactory) return E_OUTOFMEMORY;
 						pFactory->AddRef();
 						auto hRet = pFactory->QueryInterface(riid, ppv);
@@ -146,5 +149,3 @@ namespace xtd {
 		};
 	}
 }
-
-#endif // __COMDLL_HPP_INCLUDED__

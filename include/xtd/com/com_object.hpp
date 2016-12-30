@@ -1,8 +1,13 @@
-#ifndef __COMOBJECT_HPP_INCLUDED__
-#define __COMOBJECT_HPP_INCLUDED__
+/** @file
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+*/
+
+#pragma once
+
+#include <atomic>
 
 namespace xtd{
-	namespace COM {
+	namespace com {
 		template <typename _DeclT, LPCTSTR _Name, typename ... _Interfaces> struct Object;
 
 		template <typename _DeclT, LPCTSTR _Name> struct Object <_DeclT, _Name > : IUnknown{
@@ -32,7 +37,7 @@ namespace xtd{
 			static void Register(){}
 			static void Unregister(){}
 		protected:
-			Concurrent::Atomic<int> _ThisRefCnt;
+			std::atomic<int> _ThisRefCnt;
 		};
 
 		template <typename _DeclT, LPCTSTR _Name, typename _HeadT, typename ... _TailT>
@@ -68,5 +73,3 @@ namespace xtd{
 		};
 	}
 }
-
-#endif // __COMOBJECT_HPP_INCLUDED__
