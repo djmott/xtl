@@ -153,7 +153,7 @@ namespace xtd{
       return *this < static_cast<const uuid_t&>(rhs);
     }
     static unique_id nullid(){
-      uuid_t oRet = { 0, 0, 0,{ 0, 0, 0, 0, 0, 0, 0, 0 } };
+      uuid_t oRet{ 0, 0, 0,{ 0, 0, 0, 0, 0, 0, 0, 0 } };
       return oRet;
     }
   };

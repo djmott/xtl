@@ -220,6 +220,7 @@
   #define MULTIPLE __attribute__ ((weak))
   #define ALIGN(val) __attribute__ ((aligned (val)))
   #define XTD_EXPORT __attribute__ ((visibility ("default")))
+
 #endif
 
 #define PACK_PUSH(n) PRAGMA_(pack(push, n))

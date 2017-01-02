@@ -5,10 +5,10 @@ xtd::windows::debug_help related system and unit tests
 
 #pragma once
 
-#include <xtd/windows/dbghelp.hpp>
+#include <xtd/windows/debug_help.hpp>
 
 TEST(test_debug_help, initialization){
-  auto x = xtd::windows::debug_help::make();
+
 }
 
 TEST(test_debug_help, enum_binaries){

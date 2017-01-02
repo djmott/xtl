@@ -84,6 +84,19 @@ namespace xtd{
       return sRet;
     }
 
+    static xstring from_resource(UINT resid) {
+      xstring sRet(10, 0);
+      for(;;) {
+        auto iRet = LoadString(GetModuleHandle(nullptr), resid, &sRet[0], sRet.size());
+        if (!iRet) return xstring();
+        if (sRet.size() < static_cast<size_t>(iRet)) {
+          sRet.resize(iRet);
+          return sRet;
+        }
+        sRet.resize(2 * sRet.size());
+      }
+    }
+
     xstring& reverse(){
       size_t iEnd = _super_t::size();
       for (size_t i=0 ; i<iEnd /2; ++i){
@@ -509,6 +522,55 @@ namespace xtd{
         return std::to_string(reinterpret_cast<size_t>(value));
       }
     };
+
+
+
+
+
+    template <> class xstring_format<wchar_t, const void * const &> {
+    public:
+      inline static wstring format(const void * const & value) {
+        return std::to_wstring(reinterpret_cast<size_t>(value));
+      }
+    };
+
+
+    template <> class xstring_format<wchar_t, const int32_t &> {
+    public:
+      inline static wstring format(const int32_t & value) {
+        return std::to_wstring(value);
+      }
+    };
+
+    template <> class xstring_format<wchar_t, const uint32_t &> {
+    public:
+      inline static wstring format(const uint32_t & value) {
+        return std::to_wstring(value);
+      }
+    };
+
+    template <> class xstring_format<wchar_t, const int64_t &> {
+    public:
+      inline static wstring format(const int64_t & value) {
+        return std::to_wstring(value);
+      }
+    };
+
+    template <> class xstring_format<wchar_t, const uint64_t &> {
+    public:
+      inline static wstring format(const uint64_t & value) {
+        return std::to_wstring(value);
+      }
+    };
+
+
+    template <> class xstring_format<wchar_t, void * const &> {
+    public:
+      inline static wstring format(const void * const & value) {
+        return std::to_wstring(reinterpret_cast<size_t>(value));
+      }
+    };
+
 
 #if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
     template <> class xstring_format<char, const DWORD &>{

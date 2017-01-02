@@ -19,6 +19,7 @@ else()
 endif()
 
 set(TEST_SOURCE tests.cpp
+  test_com.hpp
   test_btree.hpp
   test_callback.hpp
   test_concurrent_stack.hpp
@@ -54,6 +55,7 @@ function(build_option NAME DESC)
   add_definitions(-D${NAME}=${${NAME}})
 endfunction()
 
+build_option(TEST_COM "test xtd::com")
 build_option(TEST_BTREE "test xtd::btree")
 build_option(TEST_CALLBACK "test xtd::callback")
 build_option(TEST_CONCURRENT_HASH_MAP "test xtd::concurrent::hash_map")

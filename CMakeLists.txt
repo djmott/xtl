@@ -55,6 +55,7 @@ check_cxx_source_compiles("
   #include <iconv.h>
   int main(){ return 0; }
   " XTD_HAS_ICONV_H)
+
 check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
 
 check_include_file_cxx(dbghelp.h XTD_HAS_DBGHLP_H CACHE BOOLEAN FALSE)
@@ -155,6 +156,14 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   ${SQLITE_SRC}
   src/xtl.cpp
   src/event_trace/event_trace.cpp
+  include/xtd/com/com.hpp
+  include/xtd/com/com_class_factory.hpp
+  include/xtd/com/com_data_object.hpp
+  include/xtd/com/com_dll.hpp
+  include/xtd/com/com_exception.hpp
+  include/xtd/com/com_object.hpp
+  include/xtd/com/com_initializer.hpp
+  include/xtd/com/com_pointer.hpp
   include/xtd/concurrent/concurrent.hpp
   include/xtd/concurrent/hash_map.hpp
   include/xtd/concurrent/queue.hpp
@@ -164,7 +173,7 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/concurrent/stack.hpp
   include/xtd/nlp/moby.hpp
   include/xtd/nlp/wordnet.hpp
-  include/xtd/windows/dbghelp.hpp
+  include/xtd/windows/debug_help.hpp
   include/xtd/callback.hpp
   include/xtd/debug.hpp
   include/xtd/dynamic_library.hpp

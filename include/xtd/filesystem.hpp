@@ -62,13 +62,13 @@ namespace xtd {
 
     static inline path temp_directory_path() { return path(std::experimental::filesystem::temp_directory_path()); }
 
-    static inline bool is_directory(const path& oPath) { return FILE_ATTRIBUTE_DIRECTORY & GetFileAttributes(oPath.string().c_str()) ? true : false; }
+    static inline bool is_directory(const path& oPath) { return FILE_ATTRIBUTE_DIRECTORY & GetFileAttributes(xtd::tstring::format(oPath.string().c_str()).c_str()) ? true : false; }
 
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
-    template <REFKNOWNFOLDERID _FolderID>
+    template <const KNOWNFOLDERID & _id>
     static inline path known_path() {
       PWSTR sTemp;
-      xtd::windows::exception::throw_if(SHGetKnownFolderPath(_FolderID, 0, nullptr, &sTemp), [](HRESULT hr) { return FAILED(hr); });
+      xtd::windows::exception::throw_if(SHGetKnownFolderPath(_id, 0, nullptr, &sTemp), [](HRESULT hr) { return FAILED(hr); });
       RAII(CoTaskMemFree(sTemp));
       return xtd::string::format(static_cast<const wchar_t*>(sTemp));
     }
