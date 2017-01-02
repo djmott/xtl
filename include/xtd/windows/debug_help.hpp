@@ -31,7 +31,8 @@ namespace xtd {
 
       private:
 
-        using sym_callback_fn_type = typename xtd::get_parameter<1, decltype(SymRegisterCallback)>::type;
+        TODO("fix me");
+//        using sym_callback_fn_type = typename xtd::get_parameter<1, decltype(SymRegisterCallback)>::type;
 
 
         initializer() {
