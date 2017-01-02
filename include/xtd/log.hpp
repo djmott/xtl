@@ -115,6 +115,19 @@ namespace xtd {
       virtual void operator()(const message::pointer_type&) = 0;
     };
 
+    void Exit() {
+      {
+        std::lock_guard<std::mutex> oLock(_CallbackLock);
+        _Callbacks.push_back([this]() {
+          _CallbackThreadExit = true;
+        });
+        _CallbackCheck.notify_one();
+      }
+      if (_CallbackThread.joinable()) {
+        _CallbackThread.join();
+        _CallbackThreadFinished.get_future().get();
+      }
+    }
 
 
     template <typename _Ty>
@@ -125,7 +138,7 @@ namespace xtd {
 
     void AddTarget(log_target::pointer_type oTarget) {
       std::lock_guard<std::mutex> oLock(_CallbackLock);
-      _LogTargets.emplace_back(oTarget);
+      _LogTargets.push_back(oTarget);
     }
   private:
 
@@ -264,19 +277,7 @@ namespace xtd {
       _CallbackThreadStarted.get_future().get();
     }
 
-    ~log() { 
-      {
-        std::lock_guard<std::mutex> oLock(_CallbackLock);
-        _Callbacks.push_back([this]() {
-            _CallbackThreadExit = true;
-          });
-        _CallbackCheck.notify_one();
-      }
-      if (_CallbackThread.joinable()) {
-        _CallbackThread.join();
-        _CallbackThreadFinished.get_future().get();
-      }
-    }
+    ~log() { Exit(); }
 
     using callback_type = std::function<void()>;
     using callback_deque = std::deque<callback_type>;

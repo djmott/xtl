@@ -27,8 +27,10 @@ namespace xtd{
       return *this;
     }
     const char * file() const{ return _file; }
+    void file(const char * newval) { _file = newval; }
 
     int line() const{ return _line; }
+    void line(int newval) { _line = newval; }
 
     bool operator==(const source_location& src) const{
       if (_line != src._line){

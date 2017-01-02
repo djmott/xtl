@@ -431,9 +431,16 @@ namespace xtd{
 
   #endif
 
-    template <typename _ChT> class xstring_format<_ChT, const _ChT * const &>{
+    template <typename _ChT> class xstring_format<_ChT, const _ChT * const &> {
     public:
-      inline static xstring<_ChT> format(const _ChT * const & src){
+      inline static xstring<_ChT> format(const _ChT * const & src) {
+        return xstring<_ChT>(src);
+      }
+    };
+
+    template <typename _ChT> class xstring_format<_ChT, const _ChT * > {
+    public:
+      inline static xstring<_ChT> format(const _ChT *) {
         return xstring<_ChT>(src);
       }
     };
