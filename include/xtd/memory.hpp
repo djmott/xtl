@@ -19,7 +19,7 @@ namespace xtd{
       static auto iRet = sysconf(_SC_PAGESIZE);
       return iRet;
     }
-  #elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+  #elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
     static inline size_t page_size(){
       static bool bInit = false;
       static SYSTEM_INFO oSysInfo;

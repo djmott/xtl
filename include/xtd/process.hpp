@@ -14,7 +14,7 @@
   #include <dirent.h>
 #endif
 
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
 #include <Psapi.h>
 #endif
 
@@ -83,7 +83,7 @@ namespace xtd {
 
     }
   };
-#elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+#elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
   class process {
   public:
 

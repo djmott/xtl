@@ -27,6 +27,7 @@ include(ExternalProject)
 
 set(ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
+#[[
 check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
 
 
@@ -72,6 +73,7 @@ if(XTD_HAS_DBGHLP_H OR XTD_HAS_DBGHELP_LIB)
 else()
   option(XTD_USE_DBGHELP "use dbghelp library" NO)
 endif()
+]]
 
 option(XTD_VERBOSE_BUILD "print detailed compile messages")
 option(XTD_COLOR_MESSAGES "use color escape sequences in console compiler output" NO)
@@ -84,8 +86,10 @@ option(BUILD_EXAMPLES "Build examples" NO)
 option(BUILD_TESTS "Build tests" NO)
 option(BUILD_DOCS "Build documentation" NO)
 option(BUILD_UTILS "Build utilities" NO)
+option(BUILD_NLP "Build NLP" NO)
+option(BUILD_SQLITE "Build SQLite" NO)
 
-option(XTD_LINK_TO_FS_TS "link to the c++ filesystem TS" NO)
+#option(XTD_LINK_TO_FS_TS "link to the c++ filesystem TS" NO)
 
 ### detect OS
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
@@ -141,16 +145,20 @@ else()
   message(FATAL_ERROR "event trace not supported for compiler")
 endif()
 
-
-if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
-  message("Downloading sqlite")
-  file(DOWNLOAD https://www.sqlite.org/2016/sqlite-autoconf-3140100.tar.gz ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
-  execute_process(
-    COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
-  )
+if(BUILD_NLP)
+	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
+	  message("Downloading sqlite")
+	  file(DOWNLOAD https://www.sqlite.org/2016/sqlite-autoconf-3140100.tar.gz ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
+	  execute_process(
+		COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+	  )
+	endif()
 endif()
-set(SQLITE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100/sqlite3.c)
+
+if(BUILD_SQLITE)
+	set(SQLITE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100/sqlite3.c)
+endif()
 
 add_library(XTL STATIC ${EVT_TRACE_SRC}
   ${SQLITE_SRC}
@@ -202,11 +210,14 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/var.hpp
   include/xtd/wrapped_type.hpp
 
-  include/xtd/xtd.hpp.in
+  include/xtd/xtd.hpp
   )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100)
+
+if(BUILD_SQLITE)
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100)
+endif()
 
 if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
   target_compile_options(XTL PUBLIC -std=c++11 -Wall -Wextra)
@@ -261,29 +272,26 @@ if(XTD_HAS_DBGHLP_H AND XTD_HAS_DBGHELP_LIB)
 endif()
 
 
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp)
-
 # download assets
-if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
-message("Downloading Wordnet")
-file(DOWNLOAD http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2 ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
-execute_process(
-  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
-)
+if(BUILD_NLP)
+	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
+	message("Downloading Wordnet")
+	file(DOWNLOAD http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2 ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
+	execute_process(
+	  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2
+	  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+	)
+	endif()
+
+	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
+	message("Downloading Moby")
+	file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
+	execute_process(
+	  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z
+	  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+	)
+	endif()
 endif()
-
-
-if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
-message("Downloading Moby")
-file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
-execute_process(
-  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
-)
-endif()
-
 
 if(BUILD_TESTS)
   find_package(GTest)
@@ -314,7 +322,7 @@ if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
-if(BUILD_UTILS)
+if(BUILD_UTILS AND BUILD_NLP)
   add_subdirectory(utils/wordnet_importer)
   add_subdirectory(utils/scowl_importer)
 endif()

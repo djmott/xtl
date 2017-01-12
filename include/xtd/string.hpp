@@ -84,7 +84,7 @@ namespace xtd{
       return sRet;
     }
 
-    static xstring from_resource(UINT resid) {
+    static xstring from_resource(uint32_t resid) {
       xstring sRet(10, 0);
       for(;;) {
         auto iRet = LoadString(GetModuleHandle(nullptr), resid, &sRet[0], sRet.size());
@@ -407,7 +407,8 @@ namespace xtd{
         size_t srclen = wcslen(src);
         string sRet(srclen, 0);
         forever{
-          srclen = wcstombs(&sRet[0], src, sRet.size());
+          //srclen = wcstombs_s(&sRet[0], sRet.size(), src, sRet.size());
+          wcstombs_s(&srclen, &sRet[0], sRet.size(), src, sRet.size());
         if (static_cast<size_t>(-1) == srclen){
           throw std::runtime_error("A string conversion error occurred");
         }
@@ -428,7 +429,8 @@ namespace xtd{
         size_t srclen = strlen(src);
         wstring sRet(1+srclen, '\0');
         forever{
-          srclen = mbstowcs(&sRet[0], src, sRet.size());
+          //srclen = mbstowcs_s(&sRet[0], sRet.size(), src, sRet.size());
+          mbstowcs_s(&srclen , &sRet[0], sRet.size(), src, sRet.size());
         if (static_cast<size_t>(-1) == srclen){
           throw std::runtime_error("A string conversion error occurred");
         }

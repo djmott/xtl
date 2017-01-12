@@ -23,6 +23,8 @@ handle necessary filesystem and path functionality until C++17 is finalized
   #include <experimental/filesystem>
 #endif
 
+#include <stdlib.h>
+
 namespace xtd {
   namespace filesystem {
 
@@ -186,22 +188,40 @@ namespace xtd{
     }
 
     static inline bool exists(const path& oPath){
-      FILE * pFile = fopen(oPath.string().c_str(), "r");
+      FILE * pFile;
+      fopen_s(&pFile, oPath.string().c_str(), "r");
       if (pFile) fclose(pFile);
       return (pFile ? true : false);
     }
 
-    static inline path home_directory_path(){ return path(getenv("HOME")); }
+    static inline path home_directory_path(){
+      char * sRet;
+      size_t len;
+      _dupenv_s(&sRet, &len, "HOME");
+      xtd::tstring sTemp(sRet);
+      free(sRet);
+      return path(sTemp);
+    }
 
 
     inline path temp_directory_path(){
-      const char * cTempEnv = getenv("TMPDIR");
-      if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = getenv("TEMP");
+      char * cTempEnv;
+      size_t len;
+      _dupenv_s(&cTempEnv, &len, "TMPDIR");
+      xtd::string sTemp(cTempEnv);
+      free(cTempEnv);
+      if (!cTempEnv || 0 == strlen(cTempEnv)) {
+        _dupenv_s(&cTempEnv, &len, "TEMP");
+        sTemp = cTempEnv;
+        free(cTempEnv);
+      }
 #if defined(P_tmpdir)
-      if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = P_tmpdir;
+      if (!cTempEnv || 0==strlen(cTempEnv)) sTemp = P_tmpdir;
 #endif
-      if (!cTempEnv || 0==strlen(cTempEnv)) cTempEnv = _PATH_TMP;
-      return path(cTempEnv);
+    #if (XTD_COMPILER_GCC & XTD_COMPILER)
+      if (!cTempEnv || 0==strlen(cTempEnv)) sTemp = _PATH_TMP;
+    #endif
+      return path(sTemp);
     }
 #endif
 

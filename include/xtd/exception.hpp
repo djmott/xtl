@@ -127,7 +127,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
     int errnum() const { return _errnum; }
   };
 
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
   namespace windows{
     struct exception : xtd::exception{
     public:
@@ -139,14 +139,14 @@ Throws exception if the test expression returns true. _throw_if methods are pres
         return ret;
       }
 
-      exception(const xtd::source_location& source, const std::string& exp, DWORD last_err) :xtd::exception(source, ""), _last_error(last_err){
+      exception(const xtd::source_location& source, const std::string& exp, uint32_t last_err) :xtd::exception(source, ""), _last_error(last_err){
         const char * sTemp = nullptr;
         FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, _last_error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&sTemp), 0, nullptr);
         _what = xtd::string::format(sTemp, " : ", exp);
         LocalFree((HLOCAL)sTemp);
       }
     private:
-      DWORD _last_error;
+      uint32_t _last_error;
     };
   }
 #endif

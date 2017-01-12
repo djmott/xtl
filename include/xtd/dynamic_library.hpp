@@ -21,10 +21,10 @@ load and invoke methods in a dynamic library
 namespace xtd{
 
   class dynamic_library_exception
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
     : public xtd::windows::exception{
       using _super_t = xtd::windows::exception;
-#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+#else
     : public xtd::exception{
       using _super_t = xtd::exception;
 #endif
@@ -33,7 +33,7 @@ namespace xtd{
     template <typename _ReturnT, typename _ExpressionT>
     inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
       if (exp(ret)){
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
           throw dynamic_library_exception(source, expstr, GetLastError());
 #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
           throw dynamic_library_exception(source, std::string(dlerror()) + " " + expstr, dlerror());
@@ -42,7 +42,12 @@ namespace xtd{
       return ret;
     }
 
-    dynamic_library_exception(const source_location& Source, const std::string& What, DWORD last_err) : _super_t(Source, What, last_err){}
+    dynamic_library_exception(const source_location& Source, const std::string& What, uint32_t last_err)
+    #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
+      : _super_t(Source, What, last_err) {}
+  #else
+      : _super_t(Source, What) {}
+  #endif
     dynamic_library_exception(const dynamic_library_exception& src) : _super_t(src){}
     dynamic_library_exception(dynamic_library_exception&& src) : _super_t(std::move(src)){}
 
@@ -50,9 +55,9 @@ namespace xtd{
 
   class dynamic_library : public std::enable_shared_from_this<dynamic_library>{
   public:
-  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
     using native_handle_type = HMODULE;
-  #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+  #else
     using native_handle_type = void *;
   #endif
 
@@ -104,7 +109,7 @@ namespace xtd{
       src._Handle = nullptr;
       return *this;
     }
-  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+  #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
     ~dynamic_library(){
       if (_Handle){
         FreeLibrary(_Handle);
@@ -132,9 +137,9 @@ namespace xtd{
 
     friend class process;
 
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
     explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::exception::throw_if(LoadLibraryA(sPath.string().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
-#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+#else
     explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.string().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif
 
