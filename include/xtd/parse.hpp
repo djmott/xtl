@@ -391,7 +391,7 @@ namespace xtd{
 
           static std::regex oRE(_str, iFlags);
           std::match_results<std::string::iterator> oMatch;
-          if (!std::regex_match(oCurr, end, oMatch, oRE, std::regex_constants::match_continuous | std::regex_constants::format_first_only)){
+          if (!std::regex_search(oCurr, end, oMatch, oRE, std::regex_constants::match_continuous)){
             return rule_base::pointer_type(nullptr);
           }
           oCurr += oMatch[0].length();
