@@ -36,7 +36,7 @@ namespace xtd{
 #if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
           throw dynamic_library_exception(source, expstr, GetLastError());
 #elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
-          throw dynamic_library_exception(source, std::string(dlerror()) + " " + expstr, dlerror());
+          throw dynamic_library_exception(source, std::string(dlerror()) + " " + expstr, errno);
 #endif
       }
       return ret;

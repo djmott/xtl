@@ -15,8 +15,9 @@
 
 #if (XTD_HAS_CODECVT)
   #include <codecvt>
-#elif (XTD_HAS_EXP_CODECVT)
+#elif XTD_HAS_EXP_CODECVT
   #include <experimental/codecvt>
+
 #elif (XTD_HAS_ICONV)
   #include <iconv.h>
 #endif
@@ -84,6 +85,8 @@ namespace xtd{
       return sRet;
     }
 
+
+#if (XTD_OS_WINDOWS & XTD_OS)
     static xstring from_resource(uint32_t resid) {
       xstring sRet(10, 0);
       for(;;) {
@@ -96,6 +99,7 @@ namespace xtd{
         sRet.resize(2 * sRet.size());
       }
     }
+#endif
 
     xstring& reverse(){
       size_t iEnd = _super_t::size();
@@ -348,7 +352,7 @@ namespace xtd{
       }
     };
 
-  #elif (XTD_HAS_ICONV)
+#elif (!(XTD_HAS_CODECVT | XTD_HAS_EXP_CODECVT)) && (XTD_HAS_ICONV)
 
     template <> class xstring_format<char, const wchar_t * const &>{
     public:
@@ -455,7 +459,7 @@ namespace xtd{
 
     template <typename _ChT> class xstring_format<_ChT, const _ChT * > {
     public:
-      inline static xstring<_ChT> format(const _ChT *) {
+      inline static xstring<_ChT> format(const _ChT * src) {
         return xstring<_ChT>(src);
       }
     };

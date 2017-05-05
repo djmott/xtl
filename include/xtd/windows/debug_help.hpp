@@ -4,6 +4,8 @@ object oriented access to the dbghelp library
 */
 #pragma once
 
+#if (XTD_USE_DBGHELP)
+
 #include <xtd/xtd.hpp>
 #include <dbghelp.h>
 #include <mutex>
@@ -126,3 +128,4 @@ namespace xtd {
   }
 }
 
+#endif
