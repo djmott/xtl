@@ -25,6 +25,12 @@ include(CheckCXXSourceCompiles)
 include(FeatureSummary)
 include(ExternalProject)
 
+get_directory_property(hasParent PARENT_DIRECTORY)
+if(hasParent)
+  set(XTL_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+  set(XTL_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
+endif()
+
 set(ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 #[[
