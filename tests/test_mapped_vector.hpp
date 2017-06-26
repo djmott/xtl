@@ -20,7 +20,7 @@ TEST(test_mapped_vector, insert){
   auto oPath = xtd::filesystem::temp_directory_path() + xtd::string::format(xtd::unique_id());
   {
     xtd::mapped_vector<double> oDoubles(oPath);
-    for (int i = 1; i < 0x10000; i++){
+    for (size_t i = 1; i < 0x10000; i++){
       oDoubles.push_back(i);
       ASSERT_EQ(oDoubles.size(), i);
     }
@@ -34,14 +34,14 @@ TEST(test_mapped_vector, iterate){
   {
     using vector_t = xtd::mapped_vector<uint64_t>;
     vector_t oLongs(oPath);
-    for (int i = 1; i < 20; i++){
+    for (uint64_t i = 1; i < 20; i++){
       oLongs.push_back(i);
     }
     size_t x = 0;
     for (vector_t::iterator oItem = oLongs.begin(); oItem != oLongs.end(); ++oItem){
       x++;
       auto t = *oItem;
-      ASSERT_GT(t, 0);
+      ASSERT_GT(t, static_cast<uint64_t>(0));
     }
     ASSERT_EQ(x, oLongs.size());
   }

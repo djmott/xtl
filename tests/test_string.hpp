@@ -7,12 +7,12 @@ xtd::string system and unit tests
 
 TEST(test_string, initialization){
   xtd::string s("abcdefghijklmnopqrstuvwxyz");
-  ASSERT_EQ(s.size(), 26);
+  ASSERT_EQ(s.size(), static_cast<size_t>(26));
 }
 
 TEST(test_string, format){
   auto s = xtd::string::format("abcdefghijklmnopqrstuvwxyz");
-  ASSERT_EQ(s.size(), 26);
+  ASSERT_EQ(s.size(), static_cast<size_t>(26));
 }
 
 TEST(test_string, to_lower){
@@ -31,32 +31,32 @@ TEST(test_string, to_upper){
 TEST(test_string, ltrim){
   xtd::string s = "        a";
   s.ltrim();
-  ASSERT_EQ(s.size(), 1);
+  ASSERT_EQ(s.size(), static_cast<size_t>(1));
   s = ".   .";
-  ASSERT_EQ(5, s.ltrim().size());
+  ASSERT_EQ(static_cast<size_t>(5), s.ltrim().size());
 }
 
 TEST(test_string, rtrim){
   xtd::string s = "a     ";
   s.rtrim();
-  ASSERT_EQ(s.size(), 1);
+  ASSERT_EQ(s.size(), static_cast<size_t>(1));
   s = ".   .";
-  ASSERT_EQ(5, s.rtrim().size());
+  ASSERT_EQ(static_cast<size_t>(5), s.rtrim().size());
 }
 
 TEST(test_string, trim){
   xtd::string s = "   a     ";
   s.trim();
-  ASSERT_EQ(s.size(), 1);
+  ASSERT_EQ(s.size(), static_cast<size_t>(1));
   s = "    .   .    ";
-  ASSERT_EQ(5, s.trim().size());
+  ASSERT_EQ(static_cast<size_t>(5), s.trim().size());
 }
 
 TEST(test_string, find_first_in_initializer_list){
   xtd::string s = "This is a test X";
-  ASSERT_EQ(0, s.find_first_of({ 'T' }));
-  ASSERT_EQ(2, s.find_first_of({ 'i' }));
-  ASSERT_EQ(4, s.find_first_of({ 'a', 'e', ' ' }));
+  ASSERT_EQ(static_cast<size_t>(0), s.find_first_of({ 'T' }));
+  ASSERT_EQ(static_cast<size_t>(2), s.find_first_of({ 'i' }));
+  ASSERT_EQ(static_cast<size_t>(4), s.find_first_of({ 'a', 'e', ' ' }));
   ASSERT_EQ(s.size() - 1, s.find_first_of({ 'X', 'Y', 'Z' }));
 }
 
@@ -67,23 +67,23 @@ TEST(test_string, replace){
   ASSERT_FALSE(s.size());
   s = "AAAaaaAAA";
   s.replace({ 'A' }, 'a');
-  ASSERT_EQ(9, s.size());
+  ASSERT_EQ(static_cast<size_t>(9), s.size());
   s.replace({ 'a' }, ' ');
-  ASSERT_EQ(9, s.size());
+  ASSERT_EQ(static_cast<size_t>(9), s.size());
   s.trim();
-  ASSERT_EQ(0, s.size());
+  ASSERT_EQ(static_cast<size_t>(0), s.size());
 }
 
 TEST(test_string, split){
   xtd::string s = "this is a test";
-  ASSERT_EQ(4, s.split({ ' ' }).size());
+  ASSERT_EQ(static_cast<size_t>(4), s.split({ ' ' }).size());
   s = "1 2 3 4 5 6 7 8 9";
-  ASSERT_EQ(9, s.split({ ' ' }).size());
+  ASSERT_EQ(static_cast<size_t>(9), s.split({ ' ' }).size());
 }
 
 TEST(test_string, string_from_wchar_ptr){
   auto s = xtd::string::format(L"123456789");
-  ASSERT_EQ(9, s.size());
+  ASSERT_EQ(static_cast<size_t>(9), s.size());
   ::testing::StaticAssertTypeEq<decltype(s)::value_type, char>();
 }
 

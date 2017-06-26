@@ -6,7 +6,6 @@ Recursive spin lock
 #pragma once
 
 #include <xtd/concurrent/concurrent.hpp>
-#include <xtd/debug.hpp>
 
 namespace xtd{
   namespace concurrent {
@@ -47,7 +46,6 @@ namespace xtd{
         }
 
         void unlock() {
-          XTD_ASSERT(_lock.load() == _hash(std::this_thread::get_id()));
           if (0 == --_lock_count) {
             _lock.store(-1);
           }

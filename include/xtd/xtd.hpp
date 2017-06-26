@@ -8,8 +8,11 @@
 
 #pragma once
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cerrno>
 #include <cstddef>
+#include <cstring>
 
 #define XTD_GIT_IDENT "$Id: f267349cb36e69c940125fd88a8c2611c9ae4f94 $"
 
@@ -73,12 +76,11 @@ The build/target/host OS selected by cmake configure
     #define XTD_COMPILER XTD_COMPILER_CLANG
 #endif
 
-#if defined(__DMC__) && !defined(XTD_COMPILER)
-    #define XTD_COMPILER XTD_COMPILER_DMC
+#if !defined(XTD_COMPILER) && defined(__GNUC__)
+  #define XTD_COMPILER XTD_COMPILER_GCC
 #endif
 
-#if !defined(XTD_COMPILER) && defined(__GNUC__) //gcc
-    #define XTD_COMPILER XTD_COMPILER_GCC
+#if ((XTD_COMPILER_CLANG | XTD_COMPILER_GCC) & XTD_COMPILER)
 
     #if defined(__linux) || defined(__linux__)
         #define XTD_OS XTD_OS_LINUX
@@ -89,26 +91,37 @@ The build/target/host OS selected by cmake configure
     #define XTD_HAS_ICONV 1
     #define XTD_USE_DBGHELP 0
 
-    #if (__GNUC__ < 6)
+    #if (__GNUC__ > 6)
         #define XTD_HAS_CODECVT 1
         #define XTD_HAS_EXP_CODECVT 0
-        #define XTD_HAS_FILESYSTEM 1
-        #define XTD_HAS_EXP_FILESYSTEM 0
+        #define XTD_HAS_FILESYSTEM 0
+        #define XTD_HAS_EXP_FILESYSTEM 1
     #else
         #define XTD_HAS_CODECVT 1
         #define XTD_HAS_EXP_CODECVT 0
         #define XTD_HAS_FILESYSTEM 0
-        #define XTD_HAS_EXP_FILESYSTEM 0
+        #define XTD_HAS_EXP_FILESYSTEM 1
     #endif
 
-#define fopen_s( retfile , spath, smode ) *retfile = fopen(spath, smode)
+  #define fopen_s( retfile , spath, smode ) *retfile = fopen(spath, smode)
 
-auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *varname) -> int{
-  auto sVal = getenv(varname);
-  return 0;
-  //*ret = strndup(getenv(name), len);
-};
+  auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *varname) -> int{
+    if (!buffer) return EINVAL;
+    if (numberOfElements) *numberOfElements=0;
+    *buffer= nullptr;
+    size_t iLen=strlen(getenv(varname));
+    if (0 != errno) return errno;
+    if (numberOfElements) *numberOfElements=1+iLen;
+    *buffer=new char[1+iLen];
+    strcpy(*buffer, getenv(varname));
+    return errno;
+  };
 
+#endif
+
+
+#if defined(__DMC__) && !defined(XTD_COMPILER)
+  #define XTD_COMPILER XTD_COMPILER_DMC
 #endif
 
 #if defined(_MSC_VER) && !defined(XTD_COMPILER)

@@ -589,3 +589,7 @@ namespace xtd{
   }
 #endif
 }
+
+namespace std{
+  template <typename _ChT> struct iterator_traits<xtd::xstring<_ChT>> : std::iterator_traits<std::basic_string<_ChT>>{};
+}

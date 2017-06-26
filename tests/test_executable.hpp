@@ -6,7 +6,7 @@ xtd::executable and xtd::this_executable system and unit tests
 #include <xtd/executable.hpp>
 
 TEST(test_executable, initialization) {
-  ASSERT_NO_THROW(auto & oExec = xtd::executable::this_executable());
+  ASSERT_NO_THROW(xtd::executable::this_executable());
 }
 
 TEST(test_executable, path) {

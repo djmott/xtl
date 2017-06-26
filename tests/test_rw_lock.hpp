@@ -17,33 +17,33 @@ TEST(test_rw_lock, initialization){
 TEST(test_rw_lock, readers){
   xtd::concurrent::rw_lock oLock;
   oLock.lock_read();
-  ASSERT_EQ(oLock.readers(), 1);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(1));
   oLock.lock_read();
-  ASSERT_EQ(oLock.readers(), 2);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(2));
   oLock.lock_read();
-  ASSERT_EQ(oLock.readers(), 3);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(3));
   oLock.unlock();
-  ASSERT_EQ(oLock.readers(), 2);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(2));
   oLock.unlock();
-  ASSERT_EQ(oLock.readers(), 1);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(1));
   oLock.unlock();
-  ASSERT_EQ(oLock.readers(), 0);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(0));
 }
 
 TEST(test_rw_lock, try_read){
   xtd::concurrent::rw_lock oLock;
   oLock.try_lock_read();
-  ASSERT_EQ(oLock.readers(), 1);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(1));
   oLock.try_lock_read();
-  ASSERT_EQ(oLock.readers(), 2);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(2));
   oLock.try_lock_read();
-  ASSERT_EQ(oLock.readers(), 3);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(3));
   oLock.unlock();
-  ASSERT_EQ(oLock.readers(), 2);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(2));
   oLock.unlock();
-  ASSERT_EQ(oLock.readers(), 1);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(1));
   oLock.unlock();
-  ASSERT_EQ(oLock.readers(), 0);
+  ASSERT_EQ(oLock.readers(), static_cast<uint32_t>(0));
 }
 
 TEST(test_rw_lock, scope_read){
@@ -54,13 +54,13 @@ TEST(test_rw_lock, scope_read){
       xtd::concurrent::rw_lock::scope_read oLock(rw);
       {
         xtd::concurrent::rw_lock::scope_read oLock(rw);
-        ASSERT_EQ(rw.readers(), 3);
+        ASSERT_EQ(rw.readers(), static_cast<uint32_t>(3));
       }
-      ASSERT_EQ(rw.readers(), 2);
+      ASSERT_EQ(rw.readers(), static_cast<uint32_t>(2));
     }
-    ASSERT_EQ(rw.readers(), 1);
+    ASSERT_EQ(rw.readers(), static_cast<uint32_t>(1));
   }
-  ASSERT_EQ(rw.readers(), 0);
+  ASSERT_EQ(rw.readers(), static_cast<uint32_t>(0));
 }
 
 TEST(test_rw_lock, writer){
