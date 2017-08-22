@@ -8,13 +8,13 @@
 
 #include <xtd/xtd.hpp>
 
-#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+#if (XTD_OS_UNIX & XTD_OS)
   #include <sys/types.h>
   #include <unistd.h>
   #include <dirent.h>
 #endif
 
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
+#if (XTD_OS_WINDOWS & XTD_OS)
 #include <Psapi.h>
 #endif
 
@@ -28,7 +28,7 @@
 namespace xtd {
 
 
-#if ((XTD_OS_LINUX | XTD_OS_MSYS | XTD_OS_CYGWIN) & XTD_OS)
+#if (XTD_OS_UNIX & XTD_OS)
   class process {
   public:
 
@@ -49,20 +49,12 @@ namespace xtd {
       }
       return oRet;
     }
-#if (XTD_OS_LINUX & XTD_OS)
-    dynamic_library::map libraries() {
 
+    dynamic_library::map libraries() {
       dynamic_library::map oRet;
-  /*
-  for (auto pMap = reinterpret_cast<const struct link_map *>(dlopen(0, RTLD_LAZY)); pMap; pMap = pMap->l_next) {
-    if (pMap->l_name) {
-      std::cout << pMap->l_name << std::endl;
-    }
-  }
-   */
       return oRet;
     }
-#endif
+
     pid_type id() const { return _pid; }
 
     static process &this_process() {
@@ -83,7 +75,7 @@ namespace xtd {
 
     }
   };
-#elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
+#elif (XTD_OS_WINDOWS & XTD_OS)
   class process {
   public:
 

@@ -20,7 +20,7 @@
 #endif
 
 namespace xtd{
-#if ((XTD_OS_MSYS|XTD_OS_LINUX|XTD_OS_CYGWIN) & XTD_OS)
+#if (XTD_OS_UNIX & XTD_OS)
   #if (XTD_HAS_LIBUUID)
     class unique_id{
     public:
@@ -110,7 +110,7 @@ namespace xtd{
     };
   }
 
-#elif ((XTD_OS_WINDOWS & XTD_OS) || (XTD_OS_MINGW & XTD_OS))
+#elif (XTD_OS_WINDOWS & XTD_OS)
 
   class unique_id : uuid_t{
     template <typename, typename> friend class _::xstring_format;

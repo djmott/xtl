@@ -5,7 +5,7 @@
 #pragma once
 #include <xtd/xtd.hpp>
 
-#if ((XTD_OS_LINUX|XTD_OS_MSYS|XTD_OS_CYGWIN) & XTD_OS)
+#if (XTD_OS_UNIX & XTD_OS)
   #include <unistd.h>
 #endif
 
@@ -14,12 +14,12 @@
 namespace xtd{
 
   namespace memory{
-  #if ((XTD_OS_CYGWIN | XTD_OS_LINUX | XTD_OS_MSYS) & XTD_OS)
+  #if (XTD_OS_UNIX & XTD_OS)
     static inline size_t page_size(){
       static auto iRet = sysconf(_SC_PAGESIZE);
       return iRet;
     }
-  #elif ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
+  #elif (XTD_OS_WINDOWS & XTD_OS)
     static inline size_t page_size(){
       static bool bInit = false;
       static SYSTEM_INFO oSysInfo;

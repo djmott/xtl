@@ -1,8 +1,7 @@
 ### cmake config
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0.2)
 
-set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 set(CMAKE_CXX_STANDARD 11)
 
 if(POLICY CMP0054)
@@ -25,10 +24,81 @@ include(CheckCXXSourceCompiles)
 include(FeatureSummary)
 include(ExternalProject)
 
-set(ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
-#[[
-check_library_exists(uuid uuid_generate "" XTD_HAS_LIBUUID)
+
+option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
+option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
+option(XTD_LOG_TARGET_CSV "write log output to CSV file" NO)
+option(XTD_LOG_TARGET_COUT "write log output to std::cout" NO)
+option(XTD_LOG_TARGET_XML "write log output to XML file" NO)
+option(XTD_VERBOSE_BUILD "print detailed compile messages")
+option(XTD_COLOR_MESSAGES "print messages in color" NO)
+option(BUILD_EXAMPLES "Build examples" YES)
+option(BUILD_TESTS "Build tests" YES)
+option(BUILD_DOCS "Build documentation" NO)
+option(BUILD_UTILS "Build utilities" NO)
+option(BUILD_NLP "Build NLP" NO)
+option(BUILD_SQLITE "Build SQLite" NO)
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -DNDEBUG")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(XTD_CONFIG XTD_CONFIG_DEBUG)
+else()
+  set(XTD_CONFIG XTD_CONFIG_RELEASE)
+endif()
+
+### some defaults
+set(XTD_HAS_LIBUUID NO)
+set(XTD_COLOR_MESSAGES NO)
+set(XTD_HAS_CODECVT NO)
+set(XTD_HAS_EXP_CODECVT NO)
+set(XTD_HAS_ICONV NO)
+set(XTD_HAS_FILESYSTEM NO)
+set(XTD_HAS_EXP_FILESYSTEM NO)
+set(XTD_USE_DBGHELP NO)
+
+### detect OS
+if(APPLE)
+  set(XTD_OS XTD_OS_OSX)
+elseif(UNIX OR CYGWIN)
+  set(XTD_OS XTD_OS_UNIX)
+elseif(MINGW OR WIN32)
+  set(XTD_OS XTD_OS_WINDOWS)
+else()
+  message(FATAL_ERROR "Platform not supported")
+endif()
+
+
+### detect compiler
+if(MSVC)
+  set(XTD_COMPILER XTD_COMPILER_MSVC)
+elseif(BORLAND)
+  set(XTD_COMPILER XTD_COMPILER_BCC)
+elseif(WATCOM)
+  set(XTD_COMPILER XTD_COMPILER_WCL)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  set(XTD_COMPILER XTD_COMPILER_GCC)
+else()
+  message(FATAL_ERROR "Compiler not supported : ${CMAKE_CXX_COMPILER_ID}")
+endif()
+
+
+### character encoding
+set(XTD_CHARSET "XTD_CHARSET_MBCS" CACHE STRING "default character set")
+set_property(CACHE XTD_CHARSET PROPERTY STRINGS XTD_CHARSET_MBCS XTD_CHARSET_UNICODE)
+
+if(XTD_CHARSET STREQUAL "XTD_CHARSET_MBCS")
+  add_definitions(-DMBCS)
+else()
+  add_definitions(-DUNICODE)
+endif()
+
+
+set(ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
 
 check_cxx_source_compiles("
@@ -52,89 +122,68 @@ check_cxx_source_compiles("
   " XTD_HAS_EXP_FILESYSTEM)
 
 
-check_cxx_source_compiles("
-  #include <iconv.h>
-  int main(){ return 0; }
-  " XTD_HAS_ICONV_H)
+#linux specifics
+if(XTD_OS STREQUAL "XTD_OS_LINUX")
+  check_library_exists(uuid uuid_generate "" XTD_HAS_UUID_LIB)
 
-check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
+  check_cxx_source_compiles("
+    #include <uuid.h>
+    int main(){ return 0; }
+    " XTD_HAS_UUID_H)
 
-check_include_file_cxx(dbghelp.h XTD_HAS_DBGHLP_H CACHE BOOLEAN FALSE)
-check_library_exists(dbghelp.lib SymInitialize "" XTD_HAS_DBGHELP_LIB)
+  if(XTD_HAS_UUID_LIB AND XTD_HAS_UUID_H)
+    set(XTD_HAS_UUID YES)
+    link_libraries(uuid)
+  endif()  
 
-if(XTD_HAS_ICONV_LIB AND XTD_HAS_ICONV_H)
-  set(XTD_HAS_ICONV 1)
-else()
-  set(XTD_HAS_ICONV 0)
-endif()
+  check_cxx_source_compiles("
+    #include <iconv.h>
+    int main(){ return 0; }
+    " XTD_HAS_ICONV_H)
 
-if(XTD_HAS_DBGHLP_H OR XTD_HAS_DBGHELP_LIB)
-  option(XTD_USE_DBGHELP "use dbghelp library" YES)
-else()
-  option(XTD_USE_DBGHELP "use dbghelp library" NO)
-endif()
-]]
+  check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
 
-option(XTD_VERBOSE_BUILD "print detailed compile messages")
-option(XTD_COLOR_MESSAGES "use color escape sequences in console compiler output" NO)
-option(XTD_LOG_TARGET_CSV "write log output to CSV file" NO)
-option(XTD_LOG_TARGET_COUT "write log output to std::cout" NO)
-option(XTD_LOG_TARGET_XML "write log output to XML file" NO)
-option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
-option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
-option(BUILD_EXAMPLES "Build examples" NO)
-option(BUILD_TESTS "Build tests" NO)
-option(BUILD_DOCS "Build documentation" NO)
-option(BUILD_UTILS "Build utilities" NO)
-option(BUILD_NLP "Build NLP" NO)
-option(BUILD_SQLITE "Build SQLite" NO)
-
-#option(XTD_LINK_TO_FS_TS "link to the c++ filesystem TS" NO)
-
-### detect OS
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-  set(XTD_OS XTD_OS_OSX)
-elseif(CMAKE_SYSTEM_NAME MATCHES "MSYS")
-  set(XTD_OS XTD_OS_MSYS)
-elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
-  set(XTD_OS XTD_OS_LINUX)
-elseif(CMAKE_SYSTEM_NAME MATCHES "CYGWIN")
-  set(XTD_OS XTD_OS_CYGWIN)
-elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  if(MINGW)
-    set(XTD_OS XTD_OS_MINGW)
+  if(XTD_HAS_ICONV_LIB AND XTD_HAS_ICONV_H)
+    set(XTD_HAS_ICONV YES)
   else()
-    set(XTD_OS XTD_OS_WINDOWS)
+    set(XTD_HAS_ICONV NO)
   endif()
-else()
-  message(FATAL_ERROR "Platform not supported")
-endif()
 
-### detect compiler
-if(MSVC)
-  set(XTD_COMPILER XTD_COMPILER_MSVC)
-elseif(BORLAND)
-  set(XTD_COMPILER XTD_COMPILER_BCC)
-elseif(WATCOM)
-  set(XTD_COMPILER XTD_COMPILER_WCL)
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  set(XTD_COMPILER XTD_COMPILER_GCC)
-  set(XTD_HAS_LIBUUID on)
-else()
-  message(FATAL_ERROR "Compiler not supported : ${CMAKE_CXX_COMPILER_ID}")
+  link_libraries(dl pthread stdc++)  
+
 endif()
 
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
-set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -DNDEBUG")
+#windows specifics
+if(XTD_OS STREQUAL "XTD_OS_WINDOWS")
+
+  check_include_file_cxx(dbghelp.h XTD_HAS_DBGHLP_H CACHE BOOLEAN FALSE)
+  check_library_exists(dbghelp.lib SymInitialize "" XTD_HAS_DBGHELP_LIB)
+
+  if(XTD_HAS_DBGHLP_H AND XTD_HAS_DBGHELP_LIB)
+    option(XTD_USE_DBGHELP "use dbghelp library" YES)
+  else()
+    set(XTD_USE_DBGHELP NO)
+  endif()
+
+  if(XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM)
+    link_libraries(stdc++fs)
+  endif()
+
+  link_libraries(rpcrt4 psapi ws2_32 dbghelp)
+  
+endif()
 
 
-### set event trace compiler backend
+#gcc specfics
 if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
   set(EVT_TRACE_SRC src/event_trace/evt_gcc.cpp)
-elseif(XTD_COMPILER MATCHES "XTD_COMPILER_MSVC")
+  add_compile_options(-std=c++11 -Wall -Wextra)
+endif()
+
+
+### MSVC specifics
+if(XTD_COMPILER MATCHES "XTD_COMPILER_MSVC")
   if(CMAKE_CL_64)
     enable_language(ASM_MASM)
     set(EVT_TRACE_SRC src/event_trace/evt_vc64.asm)
@@ -142,10 +191,14 @@ elseif(XTD_COMPILER MATCHES "XTD_COMPILER_MSVC")
   else()
     set(EVT_TRACE_SRC src/event_trace/evt_vc32.cpp)
   endif()
-else()
-  message(FATAL_ERROR "event trace not supported for compiler")
 endif()
 
+### MINGW specifics
+if(XTD_COMPILER MATCHES "XTD_COMPILER_MINGW")
+  link_libraries(pthread stdc++)
+endif()
+
+#[[
 if(BUILD_NLP)
 	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
 	  message("Downloading sqlite")
@@ -159,9 +212,22 @@ endif()
 
 if(BUILD_SQLITE)
 	set(SQLITE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100/sqlite3.c)
+else()
+  set(SQLITE_SRC "")
 endif()
+]]
 
-add_library(XTL STATIC ${EVT_TRACE_SRC}
+### set default character set and conversion
+set(XTD_STR_CONVERT XTD_STR_CONVERT_GENERIC CACHE STRING "default string conversion backend")
+set_property(CACHE XTD_STR_CONVERT PROPERTY STRINGS XTD_STR_CONVERT_GENERIC XTD_STR_CONVERT_CODECVT XTD_STR_CONVERT_ICONV)
+
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/xtd/xtd.hpp @ONLY)
+
+include_directories(include)
+
+add_library(XTL STATIC 
+  ${EVT_TRACE_SRC}
   ${SQLITE_SRC}
   src/xtl.cpp
   src/event_trace/event_trace.cpp
@@ -210,69 +276,27 @@ add_library(XTL STATIC ${EVT_TRACE_SRC}
   include/xtd/unique_id.hpp
   include/xtd/var.hpp
   include/xtd/wrapped_type.hpp
-
   include/xtd/xtd.hpp
   )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-if(BUILD_SQLITE)
+  link_libraries(XTL)
+
+
+
+#[[
+  if(BUILD_SQLITE)
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100)
 endif()
+]]
 
-if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
-  target_compile_options(XTL PUBLIC -std=c++11 -Wall -Wextra)
-endif()
+install(TARGETS XTL
+  RUNTIME DESTINATION bin
+  ARCHIVE DESTINATION  lib
+)
+install(DIRECTORY include DESTINATION include)
 
-link_libraries(XTL)
-
-if(XTD_HAS_LIBUUID)
-  link_libraries(uuid)
-endif()
-
-### set default character set and conversion
-set(XTD_STR_CONVERT XTD_STR_CONVERT_GENERIC CACHE STRING "default string conversion backend")
-set_property(CACHE XTD_STR_CONVERT PROPERTY STRINGS XTD_STR_CONVERT_GENERIC XTD_STR_CONVERT_CODECVT XTD_STR_CONVERT_ICONV)
-
-if(XTD_HAS_CODECVT OR XTD_HAS_EXP_CODECVT)
-elseif(XTD_HAS_ICONV)
-  link_libraries(iconv)
-endif()
-
-set(XTD_CHARSET "XTD_CHARSET_MBCS" CACHE STRING "default character set")
-set_property(CACHE XTD_CHARSET PROPERTY STRINGS XTD_CHARSET_MBCS XTD_CHARSET_UNICODE)
-
-if(XTD_CHARSET STREQUAL "XTD_CHARSET_MBCS")
-  add_definitions(-DMBCS)
-else()
-  add_definitions(-DUNICODE)
-endif()
-
-if(XTD_LINK_TO_FS_TS)
-  link_libraries(stdc++fs)
-endif()
-
-### link libraries
-if(XTD_OS MATCHES "XTD_OS_CYGWIN")
-  link_libraries(dl pthread stdc++)
-elseif(XTD_OS MATCHES "XTD_OS_MINGW")
-  link_libraries(rpcrt4 ws2_32 pthread stdc++ psapi)
-elseif(XTD_OS MATCHES "XTD_OS_LINUX")
-  link_libraries(dl pthread stdc++)
-  if(XTD_LINK_TO_FS_TS)
-    link_libraries(stdc++fs)
-  endif()
-elseif(XTD_OS MATCHES "XTD_OS_WINDOWS")
-  link_libraries(rpcrt4 psapi)
-endif()
-
-
-if(XTD_HAS_DBGHLP_H AND XTD_HAS_DBGHELP_LIB)
-  set(XTD_HAS_DBGHELP 1)
-  link_libraries(dbghelp)
-endif()
-
-
+#[[
 # download assets
 if(BUILD_NLP)
 	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
@@ -293,8 +317,10 @@ if(BUILD_NLP)
 	)
 	endif()
 endif()
+]]
 
 if(BUILD_TESTS)
+  #[[
   find_package(GTest)
   if(NOT GTEST_FOUND)
     if(MINGW)
@@ -307,6 +333,7 @@ if(BUILD_TESTS)
     set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
     add_subdirectory(${ASSET_DIR}/gtest)
   endif()
+  ]]
   add_subdirectory(tests)
 endif()
 
@@ -322,8 +349,10 @@ endif()
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
-
+#[[
 if(BUILD_UTILS AND BUILD_NLP)
   add_subdirectory(utils/wordnet_importer)
   add_subdirectory(utils/scowl_importer)
 endif()
+]]
+

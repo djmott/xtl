@@ -22,7 +22,7 @@ TEST(test_socket, socket_options){
 
 TEST(test_socket, ip_options){
   xtd::socket::ipv4_tcp_stream oSocket;
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+#if (XTD_OS_WINDOWS & XTD_OS)
   ASSERT_NO_THROW(oSocket.dont_fragment());
   ASSERT_NO_THROW(oSocket.dont_fragment(true));
   ASSERT_NO_THROW(oSocket.dont_fragment(false));
@@ -38,7 +38,7 @@ TEST(test_socket, tcp_options){
 
 TEST(test_socket, udp_options){
   xtd::socket::ipv4_udp_socket oSocket;
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+#if (XTD_OS_WINDOWS & XTD_OS)
   ASSERT_NO_THROW(oSocket.no_checksum());
   ASSERT_NO_THROW(oSocket.no_checksum(true));
   ASSERT_NO_THROW(oSocket.no_checksum(false));

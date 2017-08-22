@@ -2,7 +2,12 @@
 enable_testing()
 
 if(NOT GTEST_FOUND)
-  include_directories(${ASSET_DIR}/gtest/googletest/include)
+  #include_directories(${ASSET_DIR}/gtest/googletest/include)
+  ExternalProject_ADD(gtest
+          GIT_REPOSITORY https://github.com/google/googletest.git
+          INSTALL_COMMAND ""
+          )
+  link_libraries(gtest_main)
 endif()
 
 add_library(dummy_library_test SHARED dummy_library.cpp)
@@ -97,16 +102,13 @@ if(BUILD_TEST_COVERAGE)
   target_link_libraries(unit_tests gcov)
 endif()
 
-  GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
 
-if(NOT GTEST_FOUND)
+if(GTEST_FOUND)
+  GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
+else()
   add_test(unit_tests "" ${TEST_SOURCE})
   add_dependencies(unit_tests gtest)
-  add_dependencies(unit_tests gtest_main)
-  add_dependencies(unit_tests gmock)
-  add_dependencies(unit_tests gmock_main)
 endif()
 
-target_link_libraries(unit_tests gtest gtest_main gmock gmock_main)
 
 

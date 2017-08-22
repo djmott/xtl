@@ -53,7 +53,7 @@ namespace xtd{
     static void Dump(const _Ty& value, const char * name, const source_location& location){ _::DebugDump<const _Ty&>::Dump(value, name, location); }
 
 
-  #if ((XTD_OS_MINGW|XTD_OS_WINDOWS) & XTD_OS)
+  #if (XTD_OS_WINDOWS & XTD_OS)
     template <typename ... _ArgTs>
     static bool Assert(const source_location& location, bool test, const char * test_str, _ArgTs&&...oArgs){
       if (test) return true;

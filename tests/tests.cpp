@@ -36,7 +36,7 @@ main system and unit test entry point
   #include "test_concurrent_stack.hpp"
 #endif
 
-#if (ON==TEST_DEBUG_HELP && ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS))
+#if (ON==TEST_DEBUG_HELP && (XTD_OS_WINDOWS & XTD_OS))
   #include "test_debug_help.hpp"
 #endif
 

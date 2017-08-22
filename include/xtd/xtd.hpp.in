@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <cstddef>
 
-#define XTD_GIT_IDENT "$Id: f267349cb36e69c940125fd88a8c2611c9ae4f94 $"
+#define XTD_GIT_IDENT "$Id$"
 
 #if !defined(ON)
   #define ON    1
@@ -51,7 +51,7 @@ The build/target/host OS selected by cmake configure
 #define XTD_OS_UNIX      0x08
 #define XTD_OS_WINDOWS    0x10
 #if !defined(XTD_OS)
-    #define XTD_OS XTD_OS_WINDOWS
+    #define XTD_OS @XTD_OS@
 #endif
 ///@}
 
@@ -67,7 +67,7 @@ The build/target/host OS selected by cmake configure
 #define XTD_COMPILER_XCODE 64
 #define XTD_COMPILER_MINGW 128
 #if !defined(XTD_COMPILER)
-    #define XTD_COMPILER XTD_COMPILER_GCC
+    #define XTD_COMPILER @XTD_COMPILER@
 #endif
 
 
@@ -90,7 +90,7 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #define XTD_CHARSET_MBCS      1
 #define XTD_CHARSET_UNICODE   2
 #if !defined(XTD_CHARSET)
-    #define XTD_CHARSET XTD_CHARSET_MBCS
+    #define XTD_CHARSET @XTD_CHARSET@
 #endif
 
 
@@ -112,7 +112,7 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #define XTD_CONFIG_DEBUG      1
 #define XTD_CONFIG_RELEASE    2
 #if !defined(XTD_CONFIG)
-    #define XTD_CONFIG XTD_CONFIG_DEBUG
+    #define XTD_CONFIG @XTD_CONFIG@
 #endif
 
 #if (XTD_CONFIG_RELEASE & XTD_CONFIG)
@@ -126,55 +126,55 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 
 
 #if !defined(XTD_LOG_TARGET_SYSLOG)
-    #define XTD_LOG_TARGET_SYSLOG OFF
+    #define XTD_LOG_TARGET_SYSLOG @XTD_LOG_TARGET_SYSLOG@
 #endif
 
 #if !defined(XTD_LOG_TARGET_WINDBG)
-    #define XTD_LOG_TARGET_WINDBG OFF
+    #define XTD_LOG_TARGET_WINDBG @XTD_LOG_TARGET_WINDBG@
 #endif
 
 #if !defined(XTD_LOG_TARGET_CSV)
-    #define XTD_LOG_TARGET_CSV OFF
+    #define XTD_LOG_TARGET_CSV @XTD_LOG_TARGET_CSV@
 #endif
 
 #if !defined(XTD_LOG_TARGET_COUT)
-    #define XTD_LOG_TARGET_COUT OFF
+    #define XTD_LOG_TARGET_COUT @XTD_LOG_TARGET_COUT@
 #endif
 
 #if !defined(XTD_LOG_TARGET_XML)
-    #define XTD_LOG_TARGET_XML OFF
+    #define XTD_LOG_TARGET_XML @XTD_LOG_TARGET_XML@
 #endif
 
 #if !defined(XTD_HAS_LIBUUID)
-    #define XTD_HAS_LIBUUID NO
+    #define XTD_HAS_LIBUUID @XTD_HAS_LIBUUID@
 #endif
 
 #if !defined(XTD_COLOR_MESSAGES)
-    #define XTD_COLOR_MESSAGES NO
+    #define XTD_COLOR_MESSAGES @XTD_COLOR_MESSAGES@
 #endif
 
 #if !defined(XTD_HAS_CODECVT)
-    #define XTD_HAS_CODECVT NO
+    #define XTD_HAS_CODECVT @XTD_HAS_CODECVT@
 #endif
 
 #if !defined(XTD_HAS_EXP_CODECVT)
-    #define XTD_HAS_EXP_CODECVT NO
+    #define XTD_HAS_EXP_CODECVT @XTD_HAS_EXP_CODECVT@
 #endif
 
 #if !defined(XTD_HAS_ICONV)
-    #define XTD_HAS_ICONV NO
+    #define XTD_HAS_ICONV @XTD_HAS_ICONV@
 #endif
 
 #if !defined(XTD_HAS_FILESYSTEM)
-    #define XTD_HAS_FILESYSTEM NO
+    #define XTD_HAS_FILESYSTEM @XTD_HAS_FILESYSTEM@
 #endif
 
 #if !defined(XTD_HAS_EXP_FILESYSTEM)
-    #define XTD_HAS_EXP_FILESYSTEM NO
+    #define XTD_HAS_EXP_FILESYSTEM @XTD_HAS_EXP_FILESYSTEM@
 #endif
 
 #if !defined(XTD_USE_DBGHELP)
-    #define XTD_USE_DBGHELP NO
+    #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
 #endif
 
 
@@ -225,7 +225,7 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #define PACK_POP() PRAGMA_(pack(pop))
 
 #if !defined(XTD_VERBOSE_BUILD)
-    #define XTD_VERBOSE_BUILD OFF
+    #define XTD_VERBOSE_BUILD @XTD_VERBOSE_BUILD@
 #endif
 
 #if (!XTD_VERBOSE_BUILD)

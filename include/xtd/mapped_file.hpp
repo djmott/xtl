@@ -6,7 +6,7 @@ memory mapped files
 
 #include <xtd/xtd.hpp>
 
-#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+#if (XTD_OS_UNIX & XTD_OS)
   #include <sys/mman.h>
   #include <sys/stat.h>
   #include <fcntl.h>
@@ -38,7 +38,7 @@ namespace xtd{
     };
   }
 
-#if ((XTD_OS_CYGWIN|XTD_OS_MSYS|XTD_OS_LINUX) & XTD_OS)
+#if (XTD_OS_UNIX & XTD_OS)
 
 
   template <typename _Ty> class mapped_page : public std::shared_ptr <_Ty>{
@@ -109,7 +109,7 @@ namespace xtd{
         [](_Ty*addr){ munmap(addr, _::mapped_file_base<_page_size>::page_size()); });
     }
   };
-#elif ((XTD_OS_MINGW|XTD_OS_WINDOWS) & XTD_OS)
+#elif (XTD_OS_WINDOWS & XTD_OS)
 
 
 

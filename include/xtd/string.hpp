@@ -578,7 +578,7 @@ namespace xtd{
     };
 
 
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+#if (XTD_OS_WINDOWS & XTD_OS)
     template <> class xstring_format<char, const DWORD &>{
     public:
       inline static string format(const DWORD & value){

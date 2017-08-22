@@ -9,7 +9,7 @@
 
 #include <xtd/xtd.hpp>
 
-#if ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+#if (XTD_OS_UNIX & XTD_OS)
   #include <limits.h>
   #include <unistd.h>
 #endif
@@ -27,7 +27,7 @@ namespace xtd {
 
     explicit executable(const xtd::filesystem::path& oPath) : _Path(oPath){}
 
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS) || ((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL) & XTD_COMPILER)
+#if (XTD_OS_WINDOWS & XTD_OS)
     static inline xtd::filesystem::path get_path(){
       static xtd::filesystem::path sRet="";
       if (0 != sRet.string().size()){
@@ -46,7 +46,7 @@ namespace xtd {
       sRet = sTemp;
       return sRet;
     }
-#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) & XTD_OS)
+#elif (XTD_OS_UNIX & XTD_OS)
 
     static inline xtd::filesystem::path get_path() {
       static std::string sRet(PATH_MAX, 0);

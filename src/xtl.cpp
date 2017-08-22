@@ -19,7 +19,7 @@ NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
 #define DUMP_DEFINE2(prefix, x) PRAGMA_(message( prefix QUOTE(x)))
 #define DUMP_DEFINE(x) DUMP_DEFINE2("#define " # x " ", x)
 
-#if ((XTD_OS_MINGW | XTD_OS_WINDOWS) & XTD_OS)
+#if (XTD_OS_WINDOWS & XTD_OS)
 DUMP_DEFINE(_WIN32_WINNT);
 #endif
 

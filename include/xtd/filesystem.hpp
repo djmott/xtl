@@ -9,7 +9,7 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #include <xtd/string.hpp>
 
-#if ((XTD_OS_CYGWIN | XTD_OS_MSYS | XTD_OS_LINUX) & XTD_OS)
+#if (XTD_OS_UNIX & XTD_OS)
   #include <sys/stat.h>
   #include <paths.h>
 #else
@@ -18,7 +18,7 @@ handle necessary filesystem and path functionality until C++17 is finalized
 #endif
 
 #if (XTD_HAS_FILESYSTEM)
-#include <filesystem>
+  #include <filesystem>
 #elif (XTD_HAS_EXP_FILESYSTEM)
   #include <experimental/filesystem>
 #endif
@@ -66,7 +66,7 @@ namespace xtd {
 
     static inline bool is_directory(const path& oPath) { return FILE_ATTRIBUTE_DIRECTORY & GetFileAttributes(xtd::tstring::format(oPath.string().c_str()).c_str()) ? true : false; }
 
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+#if (XTD_OS_WINDOWS & XTD_OS)
     template <const KNOWNFOLDERID & _id>
     static inline path known_path() {
       PWSTR sTemp;
@@ -104,7 +104,7 @@ namespace xtd{
 
     class path : public path_base{
     public:
-#if ((XTD_OS_MINGW|XTD_OS_WINDOWS) & XTD_OS)
+#if (XTD_OS_WINDOWS & XTD_OS)
       static constexpr value_type preferred_separator  = '\\';
       static constexpr value_type non_preferred_separator  = '/';
 #else
@@ -171,7 +171,7 @@ namespace xtd{
     };
 
 
-#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+#if (XTD_OS_WINDOWS & XTD_OS)
     inline path temp_directory_path() {
       xtd::string sTemp(1 + MAX_PATH, 0);
       sTemp.resize(xtd::windows::exception::throw_if(GetTempPath(MAX_PATH, &sTemp[0]), [](DWORD d){return 0 == d;}));
