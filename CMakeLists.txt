@@ -24,6 +24,15 @@ include(CheckCXXSourceCompiles)
 include(FeatureSummary)
 include(ExternalProject)
 
+get_directory_property(hasParent PARENT_DIRECTORY)
+set(XTL_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(XTL_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
+if(hasParent)
+  set(XTL_SOURCE_DIR ${XTL_SOURCE_DIR} PARENT_SCOPE)
+  set(XTL_BINARY_DIR ${XTL_BINARY_DIR} PARENT_SCOPE)
+endif()
+
 
 
 option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)

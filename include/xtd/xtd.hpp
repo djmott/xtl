@@ -8,8 +8,11 @@
 
 #pragma once
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cerrno>
 #include <cstddef>
+#include <cstring>
 
 #define XTD_GIT_IDENT "$Id: f267349cb36e69c940125fd88a8c2611c9ae4f94 $"
 

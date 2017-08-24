@@ -73,7 +73,6 @@ namespace xtd{
       template <size_t _PageSize, size_t _CacheSize>
       class lru_cache : public xtd::lru_cache<size_t, typename data_page<_PageSize>::pointer, _CacheSize, page_loader<_PageSize> >{
         using _super_t = xtd::lru_cache<size_t, typename data_page<_PageSize>::pointer, _CacheSize, page_loader<_PageSize> >;
-
       public:
         using value_type = typename data_page<_PageSize>::pointer;
         static const size_t cache_size = _CacheSize;
@@ -83,7 +82,7 @@ namespace xtd{
           if (_super_t::size() >= cache_size){
             _super_t::pop_back();
           }
-          _super_t::push_front(std::make_pair(newpage, _loader._File.template append<data_page<_PageSize>>(newpage)));
+          _super_t::push_front(std::make_pair(newpage, _super_t::_loader._File.template append<data_page<_PageSize>>(newpage)));
           return _super_t::front().second;
         }
       };
@@ -276,7 +275,8 @@ namespace xtd{
    * @tparam _KeyT the key type
    * @tparam _ValueT the value type
    */
-  template <typename _KeyT, typename _ValueT, size_t _PageSize = -1, size_t _CacheSize = 20> class btree{
+  template <typename _KeyT, typename _ValueT, size_t _PageSize = -1, size_t _CacheSize = 20>
+  class btree{
   public:
     using key_type = _KeyT;
     using value_type = _ValueT;

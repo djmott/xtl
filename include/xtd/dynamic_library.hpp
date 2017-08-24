@@ -42,10 +42,12 @@ namespace xtd{
       return ret;
     }
 
-    dynamic_library_exception(const source_location& Source, const std::string& What, uint32_t last_err)
+    dynamic_library_exception(const source_location& Source, const std::string& What, uint32_t
 #if (XTD_OS_WINDOWS & XTD_OS)
+      last_err)
     : _super_t(Source, What, last_err) {}
 #else
+      )
       : _super_t(Source, What) {}
 #endif
     dynamic_library_exception(const dynamic_library_exception& src) : _super_t(src){}

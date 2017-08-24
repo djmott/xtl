@@ -35,7 +35,7 @@ TEST(test_dynamic_library, invocation){
 
   ASSERT_EQ(3, Add(1, 2));
   xtd::string s(Echo("hello"));
-  ASSERT_EQ(5, s.size());
+  ASSERT_EQ(static_cast<size_t>(5), s.size());
 }
 #endif
 

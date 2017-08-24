@@ -23,6 +23,8 @@ NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
 DUMP_DEFINE(_WIN32_WINNT);
 #endif
 
+DUMP_DEFINE(__GNUC__);
+
 DUMP_DEFINE(XTD_OS);
 DUMP_DEFINE(XTD_CHARSET);
 DUMP_DEFINE(XTD_CONFIG);

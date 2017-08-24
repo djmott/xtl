@@ -39,6 +39,7 @@ namespace xtd {
 namespace xtd {
   namespace filesystem {
 
+
     struct path : std::experimental::filesystem::path {
       using _super_t = std::experimental::filesystem::path;
 
@@ -64,6 +65,9 @@ namespace xtd {
 
     static inline path temp_directory_path() { return path(std::experimental::filesystem::temp_directory_path()); }
 
+
+#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) & XTD_OS)
+
     static inline bool is_directory(const path& oPath) { return FILE_ATTRIBUTE_DIRECTORY & GetFileAttributes(xtd::tstring::format(oPath.string().c_str()).c_str()) ? true : false; }
 
 #if (XTD_OS_WINDOWS & XTD_OS)
@@ -83,11 +87,13 @@ namespace xtd {
   }
 }
 #elif (XTD_HAS_FILESYSTEM)
+
 namespace xtd{
   namespace filesystem{
     using namespace std::filesystem;
   }
 }
+
 #else
 
 namespace xtd{
@@ -121,7 +127,8 @@ namespace xtd{
         return *this;
       }
 
-      template <typename _Ty> inline path operator+(const _Ty& src) const{
+      template <typename _Ty>
+      inline path operator+(const _Ty& src) const{
         path oRet(*this);
         oRet /= src;
         return oRet;
@@ -264,7 +271,7 @@ namespace xtd {
       struct path_adder<_ValueT, const path&> {
         inline static path add(const path& dest, const path& src) {
           path oRet(dest);
-          oRet.append(src);
+          oRet /= src;
           return oRet;
         }
       };
@@ -276,7 +283,5 @@ namespace xtd {
         }
       };
     }
-
-
   }
 }
