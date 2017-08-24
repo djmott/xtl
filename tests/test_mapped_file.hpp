@@ -11,7 +11,7 @@ public:
   static void SetUpTestCase(){}
 
   static void TearDownTestCase() {
-    xtd::filesystem::remove(xtd::filesystem::temp_directory_path() + "test_mapped_file.dat");
+    xtd::filesystem::remove(xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat");
   }
 };
 
@@ -23,7 +23,7 @@ struct mapped_file_test_struct{
 };
 
 TEST_F(test_mapped_file, initialization){
-  auto oPath = xtd::filesystem::temp_directory_path() + "test_mapped_file.dat";
+  auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
   {
     EXPECT_NO_THROW(xtd::mapped_file<-1> oFile(oPath));
   }
@@ -31,7 +31,7 @@ TEST_F(test_mapped_file, initialization){
 }
 
 TEST_F(test_mapped_file, page_initialization){
-  auto oPath = xtd::filesystem::temp_directory_path() + "test_mapped_file.dat";
+  auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
   {
     xtd::mapped_file<-1> oFile(oPath);
     EXPECT_NO_THROW(auto oPage = oFile.get<mapped_file_test_struct>(0));
@@ -42,7 +42,7 @@ TEST_F(test_mapped_file, page_initialization){
 }
 
 TEST_F(test_mapped_file, read){
-  auto oPath = xtd::filesystem::temp_directory_path() + "test_mapped_file.dat";
+  auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
   {
     xtd::mapped_file<-1> oFile(oPath);
     auto oPage = oFile.get<mapped_file_test_struct>(0);
@@ -53,7 +53,7 @@ TEST_F(test_mapped_file, read){
 }
 
 TEST_F(test_mapped_file, write){
-  auto oPath = xtd::filesystem::temp_directory_path() + "test_mapped_file.dat";
+  auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
   {
     xtd::mapped_file<-1> oFile(oPath);
     {

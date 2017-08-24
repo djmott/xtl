@@ -412,7 +412,8 @@ namespace xtd{
         string sRet(srclen, 0);
         forever{
           //srclen = wcstombs_s(&sRet[0], sRet.size(), src, sRet.size());
-          wcstombs_s(&srclen, &sRet[0], sRet.size(), src, sRet.size());
+          //wcstombs_s(&srclen, &sRet[0], sRet.size(), src, sRet.size());
+          std::wcstombs(&sRet[0], src, sRet.size());
         if (static_cast<size_t>(-1) == srclen){
           throw std::runtime_error("A string conversion error occurred");
         }
@@ -434,7 +435,8 @@ namespace xtd{
         wstring sRet(1+srclen, '\0');
         forever{
           //srclen = mbstowcs_s(&sRet[0], sRet.size(), src, sRet.size());
-          mbstowcs_s(&srclen , &sRet[0], sRet.size(), src, sRet.size());
+          //mbstowcs_s(&srclen , &sRet[0], sRet.size(), src, sRet.size());
+          std::mbstowcs(&sRet[0], src, sRet.size());
         if (static_cast<size_t>(-1) == srclen){
           throw std::runtime_error("A string conversion error occurred");
         }

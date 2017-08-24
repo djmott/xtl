@@ -19,10 +19,23 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #if (XTD_HAS_FILESYSTEM)
   #include <filesystem>
+  namespace xtd{
+    namespace filesystem{
+      using namespace std::filesystem;
+    }
+  }
 #elif (XTD_HAS_EXP_FILESYSTEM)
   #include <experimental/filesystem>
+  namespace xtd{
+    namespace filesystem{
+      using namespace std::experimental::filesystem;
+    }
+  }
+#else
+
 #endif
 
+/*
 #include <stdlib.h>
 
 namespace xtd {
@@ -34,7 +47,8 @@ namespace xtd {
     }
   }
 }
-
+*/
+#if 0
 #if (XTD_HAS_EXP_FILESYSTEM)
 namespace xtd {
   namespace filesystem {
@@ -285,3 +299,5 @@ namespace xtd {
     }
   }
 }
+#endif
+#endif

@@ -25,7 +25,7 @@ TEST(test_path, append){
   ASSERT_PATH_EQ(oPath, path("/a/b/c"));
   oPath /= "d";
   ASSERT_PATH_EQ(oPath, path("/a/b/c/d"));
-  auto oPath2 = path("/a/b/c") + path("d");
+  auto oPath2 = path("/a/b/c") /= path("d");
   ASSERT_PATH_EQ(oPath, oPath2);
 }
 
@@ -46,7 +46,7 @@ TEST(test_path, remove_filename){
 TEST(test_path, filename){
   using namespace xtd::filesystem;
   auto s = xtd::xstring<path::value_type>::format("fnord");
-  auto p1 = temp_directory_path() + s;
+  auto p1 = temp_directory_path() /= s;
   ASSERT_PATH_EQ(p1.filename(), path(s));
 }
 
@@ -61,7 +61,7 @@ TEST(test_path, operator_plus){
   using namespace xtd::filesystem;
   path p1("/a/b");
   path p2("/c/d");
-  auto p3 = p1 + p2;
+  auto p3 = p1 /= p2;
   ASSERT_PATH_EQ(p3, path("/a/b/c/d"));
 }
 
@@ -75,7 +75,7 @@ TEST(test_path, operator_diveq){
 
 TEST(test_path, remove){
   using namespace xtd::filesystem;
-  auto oTmpFile = temp_directory_path() + "test_path_remove";
+  auto oTmpFile = temp_directory_path() /= "test_path_remove";
   {
     std::ofstream of;
     of.open(oTmpFile.string());

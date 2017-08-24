@@ -15,13 +15,13 @@
   #pragma comment(lib, "rpcrt4")
 #endif
 
-#if (XTD_HAS_LIBUUID)
+#if (XTD_HAS_UUID)
   #include <uuid/uuid.h>
 #endif
 
 namespace xtd{
 #if (XTD_OS_UNIX & XTD_OS)
-  #if (XTD_HAS_LIBUUID)
+  #if (XTD_HAS_UUID)
     class unique_id{
     public:
       unique_id(){

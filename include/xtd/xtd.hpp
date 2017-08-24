@@ -8,13 +8,10 @@
 
 #pragma once
 
-#include <cstdlib>
-#include <cstdio>
-#include <cerrno>
+#include <stdlib.h>
 #include <cstddef>
-#include <cstring>
 
-#define XTD_GIT_IDENT "$Id: f267349cb36e69c940125fd88a8c2611c9ae4f94 $"
+#define XTD_GIT_IDENT "$Id: 3e527cf86e87551bc8e554098816217c728dc7f7 $"
 
 #if !defined(ON)
   #define ON    1
@@ -54,7 +51,7 @@ The build/target/host OS selected by cmake configure
 #define XTD_OS_UNIX      0x08
 #define XTD_OS_WINDOWS    0x10
 #if !defined(XTD_OS)
-    #define XTD_OS XTD_OS_WINDOWS
+    #define XTD_OS XTD_OS_UNIX
 #endif
 ///@}
 
@@ -149,15 +146,15 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #endif
 
 #if !defined(XTD_HAS_LIBUUID)
-    #define XTD_HAS_LIBUUID NO
+    #define XTD_HAS_LIBUUID 
 #endif
 
 #if !defined(XTD_COLOR_MESSAGES)
-    #define XTD_COLOR_MESSAGES NO
+    #define XTD_COLOR_MESSAGES OFF
 #endif
 
 #if !defined(XTD_HAS_CODECVT)
-    #define XTD_HAS_CODECVT NO
+    #define XTD_HAS_CODECVT 1
 #endif
 
 #if !defined(XTD_HAS_EXP_CODECVT)
@@ -173,7 +170,7 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #endif
 
 #if !defined(XTD_HAS_EXP_FILESYSTEM)
-    #define XTD_HAS_EXP_FILESYSTEM NO
+    #define XTD_HAS_EXP_FILESYSTEM 1
 #endif
 
 #if !defined(XTD_USE_DBGHELP)

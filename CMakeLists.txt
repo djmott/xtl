@@ -33,8 +33,6 @@ if(hasParent)
   set(XTL_BINARY_DIR ${XTL_BINARY_DIR} PARENT_SCOPE)
 endif()
 
-
-
 option(XTD_LOG_TARGET_SYSLOG "write log output to syslog file" NO)
 option(XTD_LOG_TARGET_WINDBG "write log output to attached debugger" NO)
 option(XTD_LOG_TARGET_CSV "write log output to CSV file" NO)
@@ -60,15 +58,6 @@ else()
   set(XTD_CONFIG XTD_CONFIG_RELEASE)
 endif()
 
-### some defaults
-set(XTD_HAS_LIBUUID NO)
-set(XTD_COLOR_MESSAGES NO)
-set(XTD_HAS_CODECVT NO)
-set(XTD_HAS_EXP_CODECVT NO)
-set(XTD_HAS_ICONV NO)
-set(XTD_HAS_FILESYSTEM NO)
-set(XTD_HAS_EXP_FILESYSTEM NO)
-set(XTD_USE_DBGHELP NO)
 
 ### detect OS
 if(APPLE)
@@ -114,31 +103,52 @@ check_cxx_source_compiles("
   #include <codecvt>
   int main(){return 0;}
   " XTD_HAS_CODECVT)
+  if(NOT XTD_HAS_CODECVT)
+    set(XTD_HAS_CODECVT NO)
+  endif()
 
 check_cxx_source_compiles("
   #include <experimental/codecvt>
   int main(){return 0;}
   " XTD_HAS_EXP_CODECVT)
+  if(NOT XTD_HAS_EXP_CODECVT)
+    set(XTD_HAS_EXP_CODECVT NO)
+  endif()
 
 check_cxx_source_compiles("
   #include <filesystem>
   int main(){ return 0; }
   " XTD_HAS_FILESYSTEM)
+  if(NOT XTD_HAS_FILESYSTEM)
+    set(XTD_HAS_FILESYSTEM NO)
+  endif()
 
 check_cxx_source_compiles("
   #include <experimental/filesystem>
   int main(){ return 0; }
   " XTD_HAS_EXP_FILESYSTEM)
-
+  if(NOT XTD_HAS_EXP_FILESYSTEM)
+    set(XTD_HAS_EXP_FILESYSTEM NO)
+  endif()
 
 #linux specifics
-if(XTD_OS STREQUAL "XTD_OS_LINUX")
+if(NOT XTD_OS STREQUAL "XTD_OS_UNIX")
+  set(XTD_HAS_UUID_LIB NO)
+  set(XTD_HAS_UUID_H NO)
+  set(XTD_HAS_UUID NO)
+  set(XTD_HAS_ICONV_LIB NO)
+  set(XTD_HAS_ICONV_H NO)
+  set(XTD_HAS_ICONV NO)
+else()
   check_library_exists(uuid uuid_generate "" XTD_HAS_UUID_LIB)
 
   check_cxx_source_compiles("
     #include <uuid.h>
     int main(){ return 0; }
     " XTD_HAS_UUID_H)
+    if(NOT XTD_HAS_UUID_H)
+      set(XTD_HAS_UUID_H NO)
+    endif()
 
   if(XTD_HAS_UUID_LIB AND XTD_HAS_UUID_H)
     set(XTD_HAS_UUID YES)
@@ -149,6 +159,9 @@ if(XTD_OS STREQUAL "XTD_OS_LINUX")
     #include <iconv.h>
     int main(){ return 0; }
     " XTD_HAS_ICONV_H)
+    if(NOT XTD_HAS_ICONV_H)
+      set(XTD_HAS_ICONV_H NO)
+    endif()
 
   check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
 
@@ -164,7 +177,11 @@ endif()
 
 
 #windows specifics
-if(XTD_OS STREQUAL "XTD_OS_WINDOWS")
+if(NOT XTD_OS STREQUAL "XTD_OS_WINDOWS")
+  set(XTD_HAS_DBGHLP_H NO)
+  set(XTD_HAS_DBGHELP_LIB NO)
+  set(XTD_USE_DBGHELP NO)
+else()
 
   check_include_file_cxx(dbghelp.h XTD_HAS_DBGHLP_H CACHE BOOLEAN FALSE)
   check_library_exists(dbghelp.lib SymInitialize "" XTD_HAS_DBGHELP_LIB)
