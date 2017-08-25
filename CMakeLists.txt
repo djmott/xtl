@@ -23,7 +23,7 @@ include(CheckLibraryExists)
 include(CheckCXXSourceCompiles)
 include(FeatureSummary)
 include(ExternalProject)
-
+include(GoogleTest)
 get_directory_property(hasParent PARENT_DIRECTORY)
 set(XTL_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(XTL_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
