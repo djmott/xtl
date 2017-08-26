@@ -18,23 +18,128 @@ handle necessary filesystem and path functionality until C++17 is finalized
 #endif
 
 #if (XTD_HAS_FILESYSTEM)
+
+
   #include <filesystem>
   namespace xtd{
     namespace filesystem{
       using namespace std::filesystem;
     }
   }
+
+
 #elif (XTD_HAS_EXP_FILESYSTEM)
+
+
   #include <experimental/filesystem>
   namespace xtd{
     namespace filesystem{
       using namespace std::experimental::filesystem;
     }
   }
+
+
 #else
+
+
+namespace xtd{
+  namespace filesystem{
+
+    struct path : xtd::xstring<char> {
+
+#if(XTD_OS_WINDOWS & XTD_OS)
+      static const char preferred_separator = '\\';
+      static const char not_preferred_separator = '/';
+#else
+      static const char preferred_separator = '/';
+      static const char not_preferred_separator = '\\';
+#endif
+
+      template <typename ... _ArgTs> path(_ArgTs&&...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
+
+      xtd::string& string() { return *this; }
+      const xtd::string& string() const { return *this; }
+
+      ///appends a perferred separator and path element
+      path& operator/=(const path& src){
+        if (preferred_separator != back() && not_preferred_separator != back()
+            && preferred_separator != src.front() && not_preferred_separator != src.front())
+        {
+          append(1, preferred_separator);
+        }
+        append(src.string().c_str());
+        trim();
+        return *this;
+      }
+
+      //replaces all non-preferred separators with preferred separators
+      path& make_preferred(){
+        if (!length()) return *this;
+        replace({not_preferred_separator}, preferred_separator);
+        return *this;
+      }
+
+      //removes the last path element if it doesn't end in a separator
+      path& remove_filename(){
+        if (!length()) return *this;
+        if (preferred_separator == back() || not_preferred_separator==back()) return *this;
+        auto isep = find_last_of({preferred_separator, not_preferred_separator});
+        if (xtd::string::npos != isep) erase(isep+1);
+        return *this;
+      }
+
+      path& replace_filename(const path& replacement){
+        remove_filename();
+        return operator/=(replacement);
+      }
+    };
+
+
+    inline bool remove(const path& oPath) { return (0==std::remove(oPath.c_str())); }
+
+//temp_directory_path
+#if (XTD_OS_WINDOWS & XTD_OS)
+    inline path temp_directory_path() {
+      xtd::string sTemp(1 + MAX_PATH, 0);
+      sTemp.resize(xtd::windows::exception::throw_if(GetTempPath(MAX_PATH, &sTemp[0]), [](DWORD d){return 0 == d;}));
+      return path(sTemp);
+    }
+#elif (XTD_OS_UNIX & XTD_OS)
+
+    inline path temp_directory_path(){
+      size_t len;
+      auto sTemp = getenv("TMPDIR");
+      if (!sTemp || 0 == strlen(sTemp)) sTemp = getenv("TEMP");
+#if defined(P_tmpdir)
+      if (!sTemp || 0==strlen(sTemp)) sTemp = P_tmpdir;
+#endif
+#if defined(_PATH_TMP)
+      if (!sTemp || 0==strlen(sTemp)) sTemp = _PATH_TMP;
+#endif
+      return path(sTemp);
+    }
+#endif
+
+
+
+  }
+}
 
 #endif
 
+
+//Custom extensions to std::filesystem
+
+namespace xtd{
+  namespace filesystem{
+
+  }
+}
+
+
+
+
+#if 0
 /*
 #include <stdlib.h>
 
@@ -48,7 +153,7 @@ namespace xtd {
   }
 }
 */
-#if 0
+
 #if (XTD_HAS_EXP_FILESYSTEM)
 namespace xtd {
   namespace filesystem {

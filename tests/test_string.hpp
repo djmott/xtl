@@ -57,7 +57,17 @@ TEST(test_string, find_first_in_initializer_list){
   ASSERT_EQ(static_cast<size_t>(0), s.find_first_of({ 'T' }));
   ASSERT_EQ(static_cast<size_t>(2), s.find_first_of({ 'i' }));
   ASSERT_EQ(static_cast<size_t>(4), s.find_first_of({ 'a', 'e', ' ' }));
+  ASSERT_EQ(static_cast<size_t>(3), s.find_first_of({'s'}));
   ASSERT_EQ(s.size() - 1, s.find_first_of({ 'X', 'Y', 'Z' }));
+}
+
+TEST(test_string, find_last_in_initializer_list){
+  xtd::string s = "This is a test X";
+  ASSERT_EQ(static_cast<size_t>(0), s.find_last_of({'T'}));
+  ASSERT_EQ(static_cast<size_t>(13), s.find_last_of({'t'}));
+  ASSERT_EQ(static_cast<size_t>(5), s.find_last_of({'i'}));
+  ASSERT_EQ(static_cast<size_t>(12), s.find_last_of({'s'}));
+  ASSERT_EQ(s.size() - 1, s.find_last_of({ 'X', 'Y', 'Z' }));
 }
 
 TEST(test_string, replace){

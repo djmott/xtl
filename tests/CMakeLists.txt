@@ -8,6 +8,12 @@ if(GTEST_FOUND)
   include_directories(${GTEST_INCLUDE_DIRS})
 else()
   #include_directories(${ASSET_DIR}/gtest/googletest/include)
+  if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
+    set(gtest_disable_pthreads ON CACHE BOOL "" FORCE)
+  endif()
+  if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC")
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  endif()
   ExternalProject_ADD(gtest
     GIT_REPOSITORY https://github.com/google/googletest.git
     PREFIX gtest
@@ -23,8 +29,8 @@ endif()
 add_library(dummy_library_test SHARED dummy_library.cpp)
 add_dependencies(dummy_library_test XTL)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  if(MINGW)
+if(XTD_OS STREQUAL "XTD_OS_WINDOWS")
+  if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
     option(BUILD_TEST_COVERAGE "profile test coverage" ON)
   else()
     set(BUILD_TEST_COVERAGE OFF)
@@ -98,7 +104,7 @@ build_option(TEST_SPIN_LOCK "test xtd::concurrent::spin_lock")
 build_option(TEST_STACK "test xtd::concurrent::stack")
 build_option(TEST_STRING "test xtd::string")
 
-if(XTD_HAS_UUID OR XTD_OS MATCHES "XTD_OS_WINDOWS")
+if(XTD_HAS_UUID OR XTD_OS STREQUAL "XTD_OS_WINDOWS")
   build_option(TEST_UNIQUE_ID "test xtd::unique_id")
 endif()
 
@@ -120,5 +126,6 @@ else()
   add_dependencies(unit_tests gtest)
 endif()
 
-
-
+if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" AND (XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM))
+    target_link_libraries(unit_tests stdc++fs)
+endif()

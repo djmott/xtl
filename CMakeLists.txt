@@ -188,7 +188,7 @@ endif()
 
 
 #gcc specfics
-if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
+if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC")
   set(EVT_TRACE_SRC src/event_trace/evt_gcc.cpp)
   add_compile_options(-std=c++11 -Wall -Wextra)
 
@@ -200,7 +200,7 @@ endif()
 
 
 ### MSVC specifics
-if(XTD_COMPILER MATCHES "XTD_COMPILER_MSVC")
+if(XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC")
   if(CMAKE_CL_64)
     enable_language(ASM_MASM)
     set(EVT_TRACE_SRC src/event_trace/evt_vc64.asm)
@@ -211,28 +211,10 @@ if(XTD_COMPILER MATCHES "XTD_COMPILER_MSVC")
 endif()
 
 ### MINGW specifics
-if(XTD_COMPILER MATCHES "XTD_COMPILER_MINGW")
+if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
   link_libraries(pthread stdc++)
 endif()
 
-#[[
-if(BUILD_NLP)
-	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
-	  message("Downloading sqlite")
-	  file(DOWNLOAD https://www.sqlite.org/2016/sqlite-autoconf-3140100.tar.gz ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz)
-	  execute_process(
-		COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100.tar.gz
-		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
-	  )
-	endif()
-endif()
-
-if(BUILD_SQLITE)
-	set(SQLITE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100/sqlite3.c)
-else()
-  set(SQLITE_SRC "")
-endif()
-]]
 
 ### set default character set and conversion
 set(XTD_STR_CONVERT XTD_STR_CONVERT_GENERIC CACHE STRING "default string conversion backend")
@@ -296,16 +278,7 @@ add_library(XTL STATIC
   include/xtd/xtd.hpp
   )
 
-
-  link_libraries(XTL)
-
-
-
-#[[
-  if(BUILD_SQLITE)
-	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/assets/sqlite-autoconf-3140100)
-endif()
-]]
+link_libraries(XTL)
 
 install(TARGETS XTL
   RUNTIME DESTINATION bin
@@ -313,45 +286,12 @@ install(TARGETS XTL
 )
 install(DIRECTORY include DESTINATION include)
 
-#[[
-# download assets
-if(BUILD_NLP)
-	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
-	message("Downloading Wordnet")
-	file(DOWNLOAD http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2 ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2)
-	execute_process(
-	  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/WordNet-3.0.tar.bz2
-	  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
-	)
-	endif()
-
-	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
-	message("Downloading Moby")
-	file(DOWNLOAD http://www.dcs.shef.ac.uk/research/ilash/Moby/mpos.tar.Z ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z)
-	execute_process(
-	  COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/assets/mpos.tar.Z
-	  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
-	)
-	endif()
-endif()
-]]
-
 if(BUILD_TESTS)
-  #[[
-  find_package(GTest)
-  if(NOT GTEST_FOUND)
-    if(MINGW)
-      set(gtest_disable_pthreads ON CACHE BOOL "" FORCE)
-    endif()
-    if(MINGW OR MSVC)
-      set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    endif()
-    set(BUILD_GTEST ON CACHE BOOL "" FORCE)
-    set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
-    add_subdirectory(${ASSET_DIR}/gtest)
-  endif()
-  ]]
   add_subdirectory(tests)
+endif()
+
+if(BUILD_EXAMPLES)
+  add_subdirectory(examples)
 endif()
 
 if(BUILD_DOCS AND DOXYGEN_FOUND)
@@ -362,14 +302,4 @@ if(BUILD_DOCS AND DOXYGEN_FOUND)
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs"
   )
 endif()
-
-if(BUILD_EXAMPLES)
-  add_subdirectory(examples)
-endif()
-#[[
-if(BUILD_UTILS AND BUILD_NLP)
-  add_subdirectory(utils/wordnet_importer)
-  add_subdirectory(utils/scowl_importer)
-endif()
-]]
 

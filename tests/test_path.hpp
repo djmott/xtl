@@ -20,12 +20,12 @@ TEST(test_path, append){
   using namespace xtd::filesystem;
   path oPath = "/a";
   ASSERT_NO_THROW(oPath.append("b"));
-  ASSERT_PATH_EQ(oPath, path("/a/b"));
+  ASSERT_PATH_EQ(oPath, path("/ab"));
   oPath /= "c";
-  ASSERT_PATH_EQ(oPath, path("/a/b/c"));
+  ASSERT_PATH_EQ(oPath, path("/ab/c"));
   oPath /= "d";
-  ASSERT_PATH_EQ(oPath, path("/a/b/c/d"));
-  auto oPath2 = path("/a/b/c") /= path("d");
+  ASSERT_PATH_EQ(oPath, path("/ab/c/d"));
+  auto oPath2 = path("/ab/c") /= path("d");
   ASSERT_PATH_EQ(oPath, oPath2);
 }
 
