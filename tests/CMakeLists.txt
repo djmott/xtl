@@ -1,14 +1,24 @@
 
+include(FindGTest)
+
 enable_testing()
 
-if(NOT GTEST_FOUND)
+if(GTEST_FOUND)
+  link_libraries(${GTEST_BOTH_LIBRARIES})
+  include_directories(${GTEST_INCLUDE_DIRS})
+else()
   #include_directories(${ASSET_DIR}/gtest/googletest/include)
   ExternalProject_ADD(gtest
-          GIT_REPOSITORY https://github.com/google/googletest.git
-          INSTALL_COMMAND ""
-          )
-  link_libraries(gtest_main)
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    PREFIX gtest
+    INSTALL_COMMAND ""
+  )
+  link_directories(${CMAKE_CURRENT_BINARY_DIR}/gtest/src/gtest-build/googlemock/gtest)
+  include_directories(${CMAKE_CURRENT_BINARY_DIR}/gtest/src/gtest/googletest/include)
+  link_libraries(gtest gtest_main)
 endif()
+
+
 
 add_library(dummy_library_test SHARED dummy_library.cpp)
 add_dependencies(dummy_library_test XTL)

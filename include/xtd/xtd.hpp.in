@@ -72,6 +72,7 @@ The build/target/host OS selected by cmake configure
 
 
 #if (XTD_COMPILER_GCC & XTD_COMPILER) && (XTD_OS_UNIX & XTD_OS)
+
 #define fopen_s( retfile , spath, smode ) *retfile = fopen(spath, smode)
 
 auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *varname) -> int{
@@ -145,8 +146,8 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
     #define XTD_LOG_TARGET_XML @XTD_LOG_TARGET_XML@
 #endif
 
-#if !defined(XTD_HAS_LIBUUID)
-    #define XTD_HAS_LIBUUID @XTD_HAS_LIBUUID@
+#if !defined(XTD_HAS_UUID)
+    #define XTD_HAS_UUID @XTD_HAS_UUID@
 #endif
 
 #if !defined(XTD_COLOR_MESSAGES)
@@ -177,6 +178,11 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
     #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
 #endif
 
+
+
+#if (XTD_HAS_UUID)
+  #include "@XTD_UUID_H@"
+#endif
 
 
 

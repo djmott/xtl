@@ -40,7 +40,7 @@ TEST(test_path, append_fail){
 TEST(test_path, remove_filename){
   using namespace xtd::filesystem;
   path oPath="/a/b/cdef";
-  ASSERT_PATH_EQ(oPath.remove_filename(),  path("/a/b"));
+  ASSERT_PATH_EQ(oPath.remove_filename(),  path("/a/b/"));
 }
 
 /*

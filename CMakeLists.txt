@@ -23,7 +23,7 @@ include(CheckLibraryExists)
 include(CheckCXXSourceCompiles)
 include(FeatureSummary)
 include(ExternalProject)
-include(GoogleTest)
+
 get_directory_property(hasParent PARENT_DIRECTORY)
 set(XTL_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(XTL_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
@@ -95,41 +95,29 @@ else()
   add_definitions(-DUNICODE)
 endif()
 
-
 set(ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
 
+#find some libraries
+check_include_file_cxx(codecvt XTD_HAS_CODECVT)
+if(NOT XTD_HAS_CODECVT)
+  set(XTD_HAS_CODECVT NO)
+endif()
 
-check_cxx_source_compiles("
-  #include <codecvt>
-  int main(){return 0;}
-  " XTD_HAS_CODECVT)
-  if(NOT XTD_HAS_CODECVT)
-    set(XTD_HAS_CODECVT NO)
-  endif()
+check_include_file_cxx("experimental/codecvt" XTD_HAS_EXP_CODECVT)
+if(NOT XTD_HAS_EXP_CODECVT)
+  set(XTD_HAS_EXP_CODECVT NO)
+endif()
 
-check_cxx_source_compiles("
-  #include <experimental/codecvt>
-  int main(){return 0;}
-  " XTD_HAS_EXP_CODECVT)
-  if(NOT XTD_HAS_EXP_CODECVT)
-    set(XTD_HAS_EXP_CODECVT NO)
-  endif()
+check_include_file_cxx("filesystem" XTD_HAS_FILESYSTEM)
+if(NOT XTD_HAS_FILESYSTEM)
+  set(XTD_HAS_FILESYSTEM NO)
+endif()
 
-check_cxx_source_compiles("
-  #include <filesystem>
-  int main(){ return 0; }
-  " XTD_HAS_FILESYSTEM)
-  if(NOT XTD_HAS_FILESYSTEM)
-    set(XTD_HAS_FILESYSTEM NO)
-  endif()
+check_include_file_cxx("experimental/filesystem" XTD_HAS_EXP_FILESYSTEM)
+if(NOT XTD_HAS_EXP_FILESYSTEM)
+  set(XTD_HAS_EXP_FILESYSTEM NO)
+endif()
 
-check_cxx_source_compiles("
-  #include <experimental/filesystem>
-  int main(){ return 0; }
-  " XTD_HAS_EXP_FILESYSTEM)
-  if(NOT XTD_HAS_EXP_FILESYSTEM)
-    set(XTD_HAS_EXP_FILESYSTEM NO)
-  endif()
 
 #linux specifics
 if(NOT XTD_OS STREQUAL "XTD_OS_UNIX")
@@ -140,33 +128,35 @@ if(NOT XTD_OS STREQUAL "XTD_OS_UNIX")
   set(XTD_HAS_ICONV_H NO)
   set(XTD_HAS_ICONV NO)
 else()
-  check_library_exists(uuid uuid_generate "" XTD_HAS_UUID_LIB)
 
-  check_cxx_source_compiles("
-    #include <uuid.h>
-    int main(){ return 0; }
-    " XTD_HAS_UUID_H)
-    if(NOT XTD_HAS_UUID_H)
-      set(XTD_HAS_UUID_H NO)
-    endif()
+  check_library_exists(uuid uuid_generate "" XTD_HAS_UUID_LIB)
+  check_include_file_cxx("uuid.h" XTD_HAS_UUID_H)
+  check_include_file_cxx("uuid/uuid.h" XTD_HAS_UUID_UUID_H)
+  check_include_file_cxx("linux/uuid.h" XTD_HAS_LINUX_UUID_H)
+  if(XTD_HAS_UUID_UUID_H)
+    set(XTD_HAS_UUID_H YES)
+    set(XTD_UUID_H "uuid/uuid.h")
+  elseif(XTD_HAS_LINUX_UUID_H)
+    set(XTD_HAS_UUID_H YES)
+    set(XTD_UUID_H "linux/uuid.h")
+  endif()
 
   if(XTD_HAS_UUID_LIB AND XTD_HAS_UUID_H)
     set(XTD_HAS_UUID YES)
     link_libraries(uuid)
-  endif()  
+  else()
+    set(XTD_HAS_UUID_H NO)
+  endif()
 
-  check_cxx_source_compiles("
-    #include <iconv.h>
-    int main(){ return 0; }
-    " XTD_HAS_ICONV_H)
-    if(NOT XTD_HAS_ICONV_H)
-      set(XTD_HAS_ICONV_H NO)
-    endif()
 
-  check_library_exists(iconv iconv_open "" XTD_HAS_ICONV_LIB)
-
+  find_library(XTD_LIB_ICONV_PATH iconv)
+  if(XTD_LIB_ICONV_PATH)
+    set(XTD_HAS_ICONV_LIB YES)
+  endif()
+  check_include_file_cxx("iconv.h" XTD_HAS_ICONV_H)
   if(XTD_HAS_ICONV_LIB AND XTD_HAS_ICONV_H)
     set(XTD_HAS_ICONV YES)
+    link_libraries(iconv)
   else()
     set(XTD_HAS_ICONV NO)
   endif()
@@ -192,10 +182,6 @@ else()
     set(XTD_USE_DBGHELP NO)
   endif()
 
-  if(XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM)
-    link_libraries(stdc++fs)
-  endif()
-
   link_libraries(rpcrt4 psapi ws2_32 dbghelp)
   
 endif()
@@ -205,6 +191,11 @@ endif()
 if(XTD_COMPILER MATCHES "XTD_COMPILER_GCC")
   set(EVT_TRACE_SRC src/event_trace/evt_gcc.cpp)
   add_compile_options(-std=c++11 -Wall -Wextra)
+
+  if(XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM)
+    link_libraries(stdc++fs)
+  endif()
+
 endif()
 
 
@@ -318,7 +309,7 @@ endif()
 
 install(TARGETS XTL
   RUNTIME DESTINATION bin
-  ARCHIVE DESTINATION  lib
+  ARCHIVE DESTINATION lib
 )
 install(DIRECTORY include DESTINATION include)
 

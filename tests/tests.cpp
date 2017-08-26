@@ -128,8 +128,3 @@ main system and unit test entry point
   #include "test_var.hpp"
 #endif
 
-int main(int argc, char *argv[]){
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
-
