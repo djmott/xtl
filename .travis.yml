@@ -46,7 +46,7 @@ script:
   - for item in $( find -name '*.gcda' ); do gcovr -x -r .  > $TRAVIS_BUILD_DIR/docs/reports/gcov/$(basename $item).xml; done
   - cd $TRAVIS_BUILD_DIR/
   - cp assets/sonar* .
-  - sonar-scanner -e -X -Dsonar.host.url=https://sonarcloud.com -Dsonar.login=$SONAR_TOKEN
+  - sonar-scanner -e -X -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
 success:
   - cd $TRAVIS_BUILD_DIR/docs/html
   - git init
