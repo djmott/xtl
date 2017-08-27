@@ -97,25 +97,34 @@ namespace xtd{
 
 //temp_directory_path
 #if (XTD_OS_WINDOWS & XTD_OS)
+
+
     inline path temp_directory_path() {
       xtd::string sTemp(1 + MAX_PATH, 0);
       sTemp.resize(xtd::windows::exception::throw_if(GetTempPath(MAX_PATH, &sTemp[0]), [](DWORD d){return 0 == d;}));
       return path(sTemp);
     }
+
+
 #elif (XTD_OS_UNIX & XTD_OS)
+
 
     inline path temp_directory_path(){
       size_t len;
       auto sTemp = getenv("TMPDIR");
-      if (!sTemp || 0 == strlen(sTemp)) sTemp = getenv("TEMP");
+      if (sTemp && strlen(sTemp)) return path(sTemp);
+      sTemp = getenv("TEMP");
+      if (sTemp && strlen(sTemp)) return path(sTemp);
 #if defined(P_tmpdir)
-      if (!sTemp || 0==strlen(sTemp)) sTemp = P_tmpdir;
+      return path(P_tmpdir);
 #endif
 #if defined(_PATH_TMP)
-      if (!sTemp || 0==strlen(sTemp)) sTemp = _PATH_TMP;
+      return path(_PATH_TMP);
 #endif
-      return path(sTemp);
+      throw xtd::exception(here(), "Unable to determine temp path");
     }
+
+
 #endif
 
 
