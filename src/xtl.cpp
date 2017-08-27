@@ -5,16 +5,24 @@
 #define XTD_VERBOSE_BUILD 1
 #include <xtd/xtd.hpp>
 
+#if (XTD_OS_UNIX & XTD_OS)
+  NOTE("OS: UNIX")
+#elif (XTD_OS_WINDOWS & XTD_OS)
+  NOTE("OS: Windows")
+#endif
 
-#if(XTD_COMPILER_MINGW & XTD_COMPILER)
-  NOTE("Compiler : MinGW")
-  NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
+#if (XTD_COMPILER_MSVC & XTD_COMPILER)
+  NOTE("Compiler : MSVC")
+  NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
 #elif (XTD_COMPILER_GCC & XTD_COMPILER)
   NOTE("Compiler : GCC");
   NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
-#elif (XTD_COMPILER_MSVC & XTD_COMPILER)
-  NOTE("Compiler : MSVC")
-  NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
+#elif (XTD_COMPILER_CLANG & XTD_COMPILER)
+  NOTE("Compiler : CLANG");
+  NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
+#elif (XTD_COMPILER_MINGW & XTD_COMPILER)
+  NOTE("Compiler : MinGW")
+  NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
 #endif
 
 #define DUMP_DEFINE2(prefix, x) PRAGMA_(message( prefix QUOTE(x)))
@@ -24,13 +32,9 @@
 DUMP_DEFINE(_WIN32_WINNT);
 #endif
 
-DUMP_DEFINE(__GNUC__);
-
-DUMP_DEFINE(XTD_OS);
 DUMP_DEFINE(XTD_CHARSET);
 DUMP_DEFINE(XTD_CONFIG);
 DUMP_DEFINE(DOXY_INVOKED);
-DUMP_DEFINE(XTD_ASSETS_DIR);
 DUMP_DEFINE(XTD_HAS_UUID);
 DUMP_DEFINE(XTD_COLOR_MESSAGES);
 DUMP_DEFINE(XTD_HAS_CODECVT);

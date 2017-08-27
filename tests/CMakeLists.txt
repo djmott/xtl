@@ -11,10 +11,10 @@ else()
   if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
     set(gtest_disable_pthreads ON CACHE BOOL "" FORCE)
   endif()
-  if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC")
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-  endif()
-  ExternalProject_ADD(gtest
+#  if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC")
+#    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+#  endif()
+  ExternalProject_Add(gtest
     GIT_REPOSITORY https://github.com/google/googletest.git
     PREFIX gtest
     INSTALL_COMMAND ""

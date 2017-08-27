@@ -19,19 +19,17 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #if (XTD_HAS_FILESYSTEM)
 
-
-  #include <filesystem>
-  namespace xtd{
-    namespace filesystem{
-      using namespace std::filesystem;
-    }
-  }
-
+#include <filesystem>
 
 #elif (XTD_HAS_EXP_FILESYSTEM)
 
+#include <experimental/filesystem>
 
-  #include <experimental/filesystem>
+#endif
+
+#if (XTD_HAS_FILESYSTEM || XTD_HAS_EXP_FILESYSTEM)
+
+
   namespace xtd{
     namespace filesystem{
       using namespace std::experimental::filesystem;
