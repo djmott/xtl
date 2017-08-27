@@ -2,6 +2,9 @@
 main system and unit test entry point 
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
+
+#define _WIN32_WINNT 0x600
+
 #include <xtd/xtd.hpp>
 
 #include <string>
@@ -16,7 +19,7 @@ main system and unit test entry point
   #pragma warning(pop)
 #endif
 
-#if (ON==TEST_COM)
+#if (ON==TEST_COM) && (XTD_COMPILER_MSVC & XTD_COMPILER)
   #include "test_com.hpp"
 #endif
 

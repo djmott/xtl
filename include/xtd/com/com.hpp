@@ -4,13 +4,7 @@
 
 #pragma once
 
-#include "com_initializer.hpp"
-#include "com_exception.hpp"
-#include "com_pointer.hpp"
-#include "com_data_object.hpp"
-#include "com_object.hpp"
-#include "com_class_factory.hpp"
-#include "com_dll.hpp"
+#include <atomic>
 
 namespace xtd {
 	namespace com {
@@ -22,3 +16,11 @@ namespace xtd {
 
 	}
 }
+
+#include "com_initializer.hpp"
+#include "com_pointer.hpp"
+#include "com_exception.hpp"
+#include "com_data_object.hpp"
+#include "com_object.hpp"
+#include "com_class_factory.hpp"
+#include "com_dll.hpp"

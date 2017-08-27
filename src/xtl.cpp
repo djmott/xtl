@@ -6,14 +6,15 @@
 #include <xtd/xtd.hpp>
 
 
-
-#if (XTD_COMPILER & XTD_COMPILER_GCC)
-NOTE("Compiler : GCC");
-NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
-#endif
-#if (XTD_COMPILER & XTD_COMPILER_MSVC)
-NOTE("Compiler : MSVC");
-NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
+#if(XTD_COMPILER_MINGW & XTD_COMPILER)
+  NOTE("Compiler : MinGW")
+  NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
+#elif (XTD_COMPILER_GCC & XTD_COMPILER)
+  NOTE("Compiler : GCC");
+  NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
+#elif (XTD_COMPILER_MSVC & XTD_COMPILER)
+  NOTE("Compiler : MSVC")
+  NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
 #endif
 
 #define DUMP_DEFINE2(prefix, x) PRAGMA_(message( prefix QUOTE(x)))

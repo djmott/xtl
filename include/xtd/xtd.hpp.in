@@ -178,12 +178,9 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
     #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
 #endif
 
-
-
 #if (XTD_HAS_UUID)
   #include "@XTD_UUID_H@"
 #endif
-
 
 
 /** @name Misc macros
@@ -208,6 +205,9 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
   #define UNIQUE_IDENTIFIER(_prefix) CONCAT(_prefix, __LINE__)
 #endif
 
+#if (XTD_COMPILER_MINGW & XTD_COMPILER)
+  #define sealed
+#endif
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #define PRAGMA_(x) __pragma(x)
@@ -217,7 +217,7 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
   #define MULTIPLE __declspec(selectany)
   #define ALIGN(val) __declspec(align(val))
   #define XTD_EXPORT __declspec(dllexport)
-#elif (XTD_COMPILER_GCC & XTD_COMPILER)
+#elif ((XTD_COMPILER_GCC | XTD_COMPILER_MINGW) & XTD_COMPILER)
   #define PRAGMA_(x) _Pragma( #x )
   #define FORCEINLINE __attribute__((always_inline))
   #define NOVTABLE

@@ -9,6 +9,7 @@
 #include <xtd/string.hpp>
 #include <ios>
 #include <fstream>
+#include <cstring>
 #include "exception.hpp"
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)

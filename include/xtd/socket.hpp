@@ -9,7 +9,7 @@ general purpose socket communication
 #if (XTD_OS_WINDOWS & XTD_OS)
   #include <Ws2ipdef.h>
   #include <ws2tcpip.h>
-  static_assert(_WIN32_WINNT >= 0x600, "unsupported target Windows version");
+  static_assert(_WIN32_WINNT >= 0x500, "unsupported target Windows version");
   #define poll WSAPoll
 #endif
 
@@ -47,9 +47,9 @@ namespace xtd{
     /// @{
 #if (!DOXY_INVOKED)
 #if (XTD_COMPILER_MINGW & XTD_COMPILER)
-  using POLLFD = WSAPOLLFD;
+    using POLLFD=WSAPOLLFD;
 #elif (XTD_OS_UNIX & XTD_OS)
-    using SOCKET = int;
+  using SOCKET = int;
   #define closesocket close
   #define ioctlsocket ioctl
 #elif (XTD_OS_WINDOWS & XTD_OS)
