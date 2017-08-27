@@ -95,6 +95,10 @@ endif()
 
 build_option(TEST_VAR "test xtd::var")
 
+if(XTD_OS STREQUAL "XTD_OS_WINDOWS" AND (XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW" ))
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Wall -O3 -Wa,-mbig-obj -std=gnu++11" )
+endif()
+
 add_executable(unit_tests ${TEST_SOURCE})
 add_test(unit_tests "" ${TEST_SOURCE})
 add_dependencies(unit_tests dummy_library_test)
@@ -104,9 +108,7 @@ if(BUILD_TEST_COVERAGE)
   target_link_libraries(unit_tests gcov)
 endif()
 
-if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW" )
-  target_compile_options(unit_tests PRIVATE "-Wa,-mbig-obj")
-endif()
+
 
 if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" AND (XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM))
   target_link_libraries(unit_tests stdc++fs)
