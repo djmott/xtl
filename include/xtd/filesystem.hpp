@@ -17,6 +17,8 @@ handle necessary filesystem and path functionality until C++17 is finalized
 #include <xtd/meta.hpp>
 #endif
 
+#include <xtd/exception.hpp>
+
 #if (XTD_HAS_FILESYSTEM)
 
 #include <filesystem>
