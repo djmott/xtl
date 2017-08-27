@@ -94,6 +94,8 @@ namespace xtd{
         remove_filename();
         return operator/=(replacement);
       }
+    private:
+      xtd::string _str;
     };
 
 
