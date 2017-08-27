@@ -20,12 +20,12 @@ TEST(test_path, append){
   using namespace xtd::filesystem;
   path oPath = "/a";
   ASSERT_NO_THROW(oPath.append("b"));
-  ASSERT_PATH_EQ(oPath, path("/ab"));
+  ASSERT_PATH_EQ(oPath, path("/a/b"));
   oPath /= "c";
-  ASSERT_PATH_EQ(oPath, path("/ab/c"));
+  ASSERT_PATH_EQ(oPath, path("/a/b/c"));
   oPath /= "d";
-  ASSERT_PATH_EQ(oPath, path("/ab/c/d"));
-  auto oPath2 = path("/ab/c") /= path("d");
+  ASSERT_PATH_EQ(oPath, path("/a/b/c/d"));
+  auto oPath2 = path("/a/b/c") /= path("d");
   ASSERT_PATH_EQ(oPath, oPath2);
 }
 
@@ -40,7 +40,7 @@ TEST(test_path, append_fail){
 TEST(test_path, remove_filename){
   using namespace xtd::filesystem;
   path oPath="/a/b/cdef";
-  ASSERT_PATH_EQ(oPath.remove_filename(),  path("/a/b/"));
+  ASSERT_PATH_EQ(oPath.remove_filename(),  path("/a/b"));
 }
 
 /*

@@ -19,7 +19,7 @@ namespace xtd{
 
   };
 
-  template <typename _Ty, size_t _page_size = -1, template <typename> class _ErasePolicyT = shift_erase_policy>
+  template <typename _Ty, size_t _page_size = ((size_t)(-1)), template <typename> class _ErasePolicyT = shift_erase_policy>
   class mapped_vector {
     friend class iterator;
     template <typename> friend class shift_erase_policy;

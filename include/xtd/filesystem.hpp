@@ -61,7 +61,7 @@ namespace xtd{
       const xtd::string& string() const { return *this; }
 
       ///appends a perferred separator and path element
-      path& operator/=(const path& src){
+      path& append(const path& src){
         if (preferred_separator != back() && not_preferred_separator != back()
             && preferred_separator != src.front() && not_preferred_separator != src.front())
         {
@@ -71,6 +71,8 @@ namespace xtd{
         trim();
         return *this;
       }
+
+      path& operator/=(const path& src) { return append(src); }
 
       //replaces all non-preferred separators with preferred separators
       path& make_preferred(){

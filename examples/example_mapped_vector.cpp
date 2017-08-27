@@ -15,7 +15,7 @@ struct person{
 
 int main(){
   try{
-    xtd::filesystem::path oFile = xtd::filesystem::temp_directory_path() + "tmp_mapped_vector.dat";
+    xtd::filesystem::path oFile = xtd::filesystem::temp_directory_path() /= "tmp_mapped_vector.dat";
 
     xtd::mapped_vector<int> oInts(oFile);
 

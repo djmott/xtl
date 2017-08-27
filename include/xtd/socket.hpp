@@ -83,9 +83,11 @@ namespace xtd{
         using value_type = _Ty;
         static value_type get(SOCKET s){
           value_type iRet;
-          using get_param_t = xtd::template get_parameter<4, decltype(getsockopt)>;
-          using socket_size_type = typename get_param_t::type;
-          std::remove_pointer<socket_size_type>::type iSize = sizeof(value_type);
+#if  (XTD_COMPILER_MSVC & XTD_COMPILER)
+          int iSize = sizeof(value_type);
+#else
+          std::remove_pointer<typename xtd::template get_parameter<4, decltype(getsockopt)>::type>::type iSize = sizeof(value_type);
+#endif
           socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
           return iRet;
         }
@@ -343,7 +345,7 @@ namespace xtd{
       callback<void()> error_event;
       /// begins polling the socket for events for a period of Timeout
       void poll(int Timeout){
-        class pollfd oPoll;
+        struct pollfd oPoll;
         oPoll.events = POLLIN | POLLOUT;
         oPoll.fd = _SuperT::_Socket;
         oPoll.revents = 0;

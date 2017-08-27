@@ -29,7 +29,7 @@ namespace xtd{
 
     /// dynamic page size uses system page size
     template <>
-    class mapped_file_base<-1>{
+    class mapped_file_base<((size_t)-1)>{
     public:
       static size_t page_size(){
         static size_t iRet = xtd::memory::page_size();

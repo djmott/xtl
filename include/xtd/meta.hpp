@@ -126,17 +126,17 @@ namespace xtd{
 
   /// Gets the type of a parameter in a method declaration
   namespace _ {
-    template <int _ParamNum, typename _Ty> struct _get_parameter;
+    template <uint8_t _ParamNum, typename _Ty> struct _get_parameter;
     template <typename _ReturnT, typename _HeadT, typename ... _TailT> struct _get_parameter<0, _ReturnT(_HeadT, _TailT...)> {
       using type = _HeadT;
     };
-    template <int _ParamNum, typename _ReturnT, typename _HeadT, typename ... _TailT> struct _get_parameter<_ParamNum, _ReturnT(_HeadT, _TailT...)> {
+    template <uint8_t _ParamNum, typename _ReturnT, typename _HeadT, typename ... _TailT> struct _get_parameter<_ParamNum, _ReturnT(_HeadT, _TailT...)> {
       using type = typename _::template _get_parameter<_ParamNum - 1, _ReturnT(_TailT...)>::type;
     };
   }
   
-  template <int _ParamNum, typename _Ty> struct get_parameter;
-  template <int _ParamNum, typename _ReturnT, typename ... _ArgTs> struct get_parameter<_ParamNum, _ReturnT(_ArgTs...)> {
+  template <uint8_t _ParamNum, typename _Ty> struct get_parameter;
+  template <uint8_t _ParamNum, typename _ReturnT, typename ... _ArgTs> struct get_parameter<_ParamNum, _ReturnT(_ArgTs...)> {
     static_assert(sizeof...(_ArgTs) >= _ParamNum, "Specified parameter index exceeds number of parameters in function");
     using type = typename _::template _get_parameter<_ParamNum, _ReturnT(_ArgTs...)>::type;
   };

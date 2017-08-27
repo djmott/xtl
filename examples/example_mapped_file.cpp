@@ -17,7 +17,7 @@ struct person{
 
 int main(){
   try{
-    xtd::filesystem::path oFile = xtd::filesystem::temp_directory_path() + "tmp_mapped_file.dat";
+    xtd::filesystem::path oFile = xtd::filesystem::temp_directory_path() /= "tmp_mapped_file.dat";
 
     {
       xtd::mapped_file<-1> oMappedFile(oFile);

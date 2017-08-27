@@ -25,7 +25,7 @@ struct mapped_file_test_struct{
 TEST_F(test_mapped_file, initialization){
   auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
   {
-    EXPECT_NO_THROW(xtd::mapped_file<-1> oFile(oPath));
+    EXPECT_NO_THROW(xtd::mapped_file<((size_t)-1)> oFile(oPath));
   }
   xtd::filesystem::remove(oPath);
 }
@@ -33,7 +33,7 @@ TEST_F(test_mapped_file, initialization){
 TEST_F(test_mapped_file, page_initialization){
   auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
   {
-    xtd::mapped_file<-1> oFile(oPath);
+    xtd::mapped_file<((size_t)-1)> oFile(oPath);
     EXPECT_NO_THROW(auto oPage = oFile.get<mapped_file_test_struct>(0));
     EXPECT_NO_THROW(auto oPage2 = oFile.get<mapped_file_test_struct>(1));
     EXPECT_NO_THROW(auto oPage3 = oFile.get<mapped_file_test_struct>(2));
@@ -44,7 +44,7 @@ TEST_F(test_mapped_file, page_initialization){
 TEST_F(test_mapped_file, read){
   auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
   {
-    xtd::mapped_file<-1> oFile(oPath);
+    xtd::mapped_file<((size_t)-1)> oFile(oPath);
     auto oPage = oFile.get<mapped_file_test_struct>(0);
     mapped_file_test_struct s;
     memcpy(&s, oPage.get(), sizeof(mapped_file_test_struct));
@@ -55,7 +55,7 @@ TEST_F(test_mapped_file, read){
 TEST_F(test_mapped_file, write){
   auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
   {
-    xtd::mapped_file<-1> oFile(oPath);
+    xtd::mapped_file<((size_t)-1)> oFile(oPath);
     {
       auto oPage = oFile.get<mapped_file_test_struct>(0);
       oPage->age = 123;
