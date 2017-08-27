@@ -66,7 +66,7 @@ TEST(test_parser, DISABLED_regex_no_case){
 }
 
 
-TEST(test_parser, regex_case){
+TEST(test_parser, DISABLED_regex_case){
   using test_parse = xtd::parser<test_grammar::Alphabet, false>;
   std::string s = "ABC1";
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));

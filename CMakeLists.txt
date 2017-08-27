@@ -180,15 +180,17 @@ if(NOT XTD_OS STREQUAL "XTD_OS_WINDOWS")
 else()
 
   check_include_file_cxx(dbghelp.h XTD_HAS_DBGHLP_H CACHE BOOLEAN FALSE)
-  check_library_exists(dbghelp.lib SymInitialize "" XTD_HAS_DBGHELP_LIB)
-
   if(XTD_HAS_DBGHLP_H AND XTD_HAS_DBGHELP_LIB)
     option(XTD_USE_DBGHELP "use dbghelp library" YES)
   else()
     set(XTD_USE_DBGHELP NO)
   endif()
 
-  link_libraries(rpcrt4 psapi ws2_32 dbghelp)
+  if(XTD_USE_DBGHELP)
+    link_libraries(dbghelp)
+  endif()
+
+  link_libraries(rpcrt4 psapi ws2_32)
   
 endif()
 
@@ -206,7 +208,7 @@ endif()
 
 
 ### MSVC specifics
-if(XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC")
+if( XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC")
   if(CMAKE_CL_64)
     enable_language(ASM_MASM)
     set(EVT_TRACE_SRC src/event_trace/evt_vc64.asm)
@@ -216,9 +218,21 @@ if(XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC")
   endif()
 endif()
 
+
 ### MINGW specifics
 if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
   link_libraries(pthread stdc++)
+endif()
+
+
+### MINGW and MSVC specifics
+if(NOT XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC" AND NOT XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
+  set(XTD_STATIC_CRT NO)
+else()
+  option(XTD_STATIC_CRT "Use static CRT" YES)
+  if(XTD_STATIC_CRT)
+    set(USE_STATIC_RT ON)
+  endif()  
 endif()
 
 
