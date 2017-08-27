@@ -27,7 +27,5 @@ TEST(test_unique_id, assign){
 }
 
 TEST(test_unique_id, nullid){
-  ASSERT_NO_THROW(auto oID = xtd::unique_id::nullid());
+  ASSERT_NO_THROW(xtd::unique_id::nullid());
 }
-
-

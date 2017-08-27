@@ -9,11 +9,12 @@ main system and unit test entry point
 
 #include <string>
 
+#include "gtest/gtest.h"
+
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(push, 0)
 #endif
 
-#include "gtest/gtest.h"
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma warning(pop)
@@ -131,3 +132,10 @@ main system and unit test entry point
   #include "test_var.hpp"
 #endif
 
+#undef forever
+#include "src/gtest-all.cc"
+
+int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

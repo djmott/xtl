@@ -6,9 +6,9 @@
 #include <xtd/xtd.hpp>
 
 #if (XTD_OS_UNIX & XTD_OS)
-  NOTE("OS: UNIX")
+  NOTE("OS : UNIX")
 #elif (XTD_OS_WINDOWS & XTD_OS)
-  NOTE("OS: Windows")
+  NOTE("OS : Windows")
 #endif
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)

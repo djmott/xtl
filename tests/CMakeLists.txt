@@ -1,34 +1,14 @@
 
-include(FindGTest)
-
 enable_testing()
 
-if(GTEST_FOUND)
-  link_libraries(${GTEST_BOTH_LIBRARIES})
-  include_directories(${GTEST_INCLUDE_DIRS})
-else()
-  #include_directories(${ASSET_DIR}/gtest/googletest/include)
-  if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
-    set(gtest_disable_pthreads ON CACHE BOOL "" FORCE)
-  endif()
-  if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MSVC")
-    if(XTD_STATIC_CRT)
-      set(gtest_force_shared_crt NO CACHE BOOL "" FORCE)
-    else()
-      set(gtest_force_shared_crt YES CACHE BOOL "" FORCE)
-    endif()
-  endif()
-  ExternalProject_Add(gtest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    PREFIX gtest
-    INSTALL_COMMAND ""
+file(DOWNLOAD https://github.com/google/googletest/archive/release-1.8.0.tar.gz ${CMAKE_CURRENT_BINARY_DIR}/gtest/gtest.tar.gz)
+execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf gtest.tar.gz WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/gtest)
+file(GLOB GTEST_FILES ${CMAKE_CURRENT_BINARY_DIR}/gtest/**/*)
+file(COPY ${GTEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/gtest)
+include_directories(
+  "${CMAKE_CURRENT_BINARY_DIR}/gtest/googletest/"
+  "${CMAKE_CURRENT_BINARY_DIR}/gtest/googletest/include"
   )
-  link_directories(${CMAKE_CURRENT_BINARY_DIR}/gtest/src/gtest-build/googlemock/gtest)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/gtest/src/gtest/googletest/include)
-  link_libraries(gtest gtest_main)
-endif()
-
-
 
 add_library(dummy_library_test SHARED dummy_library.cpp)
 add_dependencies(dummy_library_test XTL)
@@ -43,7 +23,8 @@ else()
   option(BUILD_TEST_COVERAGE "profile test coverage" ON)
 endif()
 
-set(TEST_SOURCE tests.cpp
+set(TEST_SOURCE
+  tests.cpp
   test_com.hpp
   test_btree.hpp
   test_callback.hpp
@@ -100,7 +81,7 @@ build_option(TEST_PATH "test xtd::filesystem::path")
 build_option(TEST_PROCESS "test xtd::process")
 build_option(TEST_READ_WRITE_LOCK "test xtd::concurrent::rw_lock")
 build_option(TEST_RECURSIVE_SPIN_LOCK "test xtd::concurrent::recursive_spin_lock")
-#build_option(TEST_RPC "test xtd::rpc")
+build_option(TEST_RPC "test xtd::rpc")
 build_option(TEST_SHARED_MEM_OBJ "test xtd::shared_mem_obj")
 build_option(TEST_SOCKET "test xtd::socket")
 build_option(TEST_SOURCE_LOCATION "test xtd::source_location")
@@ -115,6 +96,7 @@ endif()
 build_option(TEST_VAR "test xtd::var")
 
 add_executable(unit_tests ${TEST_SOURCE})
+add_test(unit_tests "" ${TEST_SOURCE})
 add_dependencies(unit_tests dummy_library_test)
 
 if(BUILD_TEST_COVERAGE)
@@ -122,14 +104,12 @@ if(BUILD_TEST_COVERAGE)
   target_link_libraries(unit_tests gcov)
 endif()
 
-
-if(GTEST_FOUND)
-  GTEST_ADD_TESTS(unit_tests "" ${TEST_SOURCE})
-else()
-  add_test(unit_tests "" ${TEST_SOURCE})
-  add_dependencies(unit_tests gtest)
+if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW" )
+  target_compile_options(unit_tests PRIVATE "-Wa,-mbig-obj")
 endif()
 
 if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" AND (XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM))
-    target_link_libraries(unit_tests stdc++fs)
+  target_link_libraries(unit_tests stdc++fs)
 endif()
+
+

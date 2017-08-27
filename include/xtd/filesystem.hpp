@@ -112,7 +112,6 @@ namespace xtd{
 
 
     inline path temp_directory_path(){
-      size_t len;
       auto sTemp = getenv("TMPDIR");
       if (sTemp && strlen(sTemp)) return path(sTemp);
       sTemp = getenv("TEMP");
