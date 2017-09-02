@@ -304,7 +304,7 @@ install(TARGETS XTL
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib
 )
-install(DIRECTORY include DESTINATION include)
+install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.hpp")
 
 if(BUILD_TESTS)
   add_subdirectory(tests)

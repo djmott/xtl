@@ -1,6 +1,8 @@
 
 enable_testing()
 
+option(XTD_INSTALL_TESTS "Install tests?" YES)
+
 file(DOWNLOAD https://github.com/google/googletest/archive/release-1.8.0.tar.gz ${CMAKE_CURRENT_BINARY_DIR}/gtest/gtest.tar.gz)
 execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf gtest.tar.gz WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/gtest)
 file(GLOB GTEST_FILES ${CMAKE_CURRENT_BINARY_DIR}/gtest/**/*)
