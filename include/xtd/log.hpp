@@ -255,7 +255,9 @@ namespace xtd {
       _CallbackThreadFinished.set_value();
     }
 
-    log() : _Messages(), _Callbacks(), _CallbackThread(), _CallbackLock(), _CallbackCheck(), _LogTargets() {
+    log() : _Messages(), _Callbacks(), _CallbackThread(), _CallbackLock(), _CallbackCheck(), _LogTargets()
+        ,_CallbackThreadStarted(), _CallbackThreadFinished()
+    {
 
 #if (XTD_LOG_TARGET_SYSLOG)
       _LogTargets.emplace_back(new syslog_target);

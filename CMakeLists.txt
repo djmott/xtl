@@ -198,7 +198,7 @@ endif()
 #gcc specfics
 if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC")
   set(EVT_TRACE_SRC src/event_trace/evt_gcc.cpp)
-  add_compile_options(-std=c++11 -Wall -Wextra)
+  add_compile_options(-std=c++11 -Wall -Wextra -Weffc++)
 
   if(XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM)
     link_libraries(stdc++fs)
@@ -221,7 +221,11 @@ endif()
 
 ### MINGW specifics
 if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
+  add_compile_options(-std=c++11 -Wall -Wextra -Weffc++ -enable-libstdcxx-filesystem-ts)
   link_libraries(pthread stdc++)
+  if(XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM)
+    link_libraries(stdc++fs)
+  endif()
 endif()
 
 

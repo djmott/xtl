@@ -72,6 +72,8 @@ namespace xtd{
       using _name = xtd::parse::regex< decltype(_::_name), _::_name>;
 
 
+
+
     /** Base class of both rules and terminals
      Though rules and terminals are technically different they share the rule_base ancestor in XTL to have a cleaner object model and simpler parsing algorithms.
      Its an abstract interface of parsable text or containers of same satisfying various rules (one or more, zero or more, exactly one, etc).
@@ -295,6 +297,7 @@ namespace xtd{
     };
 #endif
 
+    struct EndOfFile {};
 
 
 #if (!DOXY_INVOKED)
@@ -643,8 +646,9 @@ namespace xtd{
         static rule_base::pointer_type parse(_IteratorT& begin, _IteratorT& end){
           rule_base::vector_type oChildRules;
           _IteratorT oBegin = begin;
+          _IteratorT oEnd = end;
           forever{
-            auto oItem = parse_helper<_Ty, typename _Ty::impl_type, _IgnoreCase, _WhitespaceT>::parse(oBegin, end);
+            auto oItem = parse_helper<_Ty, typename _Ty::impl_type, _IgnoreCase, _WhitespaceT>::parse(oBegin, oEnd);
             if (oItem){
               oChildRules.push_back(oItem);
             }else{

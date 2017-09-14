@@ -45,7 +45,7 @@ handle necessary filesystem and path functionality until C++17 is finalized
 namespace xtd{
   namespace filesystem{
 
-    struct path : xtd::xstring<char> {
+    struct path  {
 
 #if(XTD_OS_WINDOWS & XTD_OS)
       static const char preferred_separator = '\\';
@@ -55,51 +55,73 @@ namespace xtd{
       static const char not_preferred_separator = '\\';
 #endif
 
-      template <typename ... _ArgTs> path(_ArgTs&&...oArgs) : xtd::string(std::forward<_ArgTs>(oArgs)...){}
-
-      xtd::string& string() { return *this; }
-      const xtd::string& string() const { return *this; }
-
-      ///appends a perferred separator and path element
-      path& append(const path& src){
-        if (preferred_separator != back() && not_preferred_separator != back()
-            && preferred_separator != src.front() && not_preferred_separator != src.front())
-        {
-          append(1, preferred_separator);
-        }
-        append(src.string().c_str());
-        trim();
+      //template <typename ... _ArgTs> path(_ArgTs&&...oArgs) : _str(std::forward<_ArgTs>(oArgs)...){}
+      path() : _str() {}
+      path(const xtd::string& src) : _str(src){}
+      path(const path& src) : _str(src._str){}
+      path(path&& src) : _str(std::move(src._str)){}
+      path& operator=(const path& src){
+        _str = src._str;
+        return *this;
+      }
+      path& operator=(path&& src){
+        std::swap(_str, src._str);
+        return *this;
+      }
+      path& operator=(const xtd::string& src){
+        _str = src;
         return *this;
       }
 
+      const xtd::string& string() const { return _str; }
+
+      ///appends a perferred separator and path element
+      path& append(const xtd::string& src) {
+        if (preferred_separator != _str.back() && not_preferred_separator != _str.back()
+          && preferred_separator != src.front() && not_preferred_separator != src.front())
+        {
+          _str.append(1, preferred_separator);
+        }
+        _str.append(src);
+        _str.trim();
+        return *this;
+      }
+      path& append(const path& src) { return append(src._str); }
+
       path& operator/=(const path& src) { return append(src); }
+      path& operator/=(const xtd::string& src) { return append(src); }
+      path& operator+=(const path& src) { _str.append(src._str); return *this; }
+      path& operator+=(const xtd::string& src) { _str.append(src); return *this; }
 
       //replaces all non-preferred separators with preferred separators
       path& make_preferred(){
-        if (!length()) return *this;
-        replace({not_preferred_separator}, preferred_separator);
+        if (!_str.length()) return *this;
+        _str.replace({not_preferred_separator}, preferred_separator);
         return *this;
       }
 
       //removes the last path element if it doesn't end in a separator
       path& remove_filename(){
-        if (!length()) return *this;
-        if (preferred_separator == back() || not_preferred_separator==back()) return *this;
-        auto isep = find_last_of({preferred_separator, not_preferred_separator});
-        if (xtd::string::npos != isep) erase(isep+1);
+        if (!_str.length()) return *this;
+        if (preferred_separator == _str.back() || not_preferred_separator==_str.back()) return *this;
+        auto isep = _str.find_last_of({preferred_separator, not_preferred_separator});
+        if (xtd::string::npos != isep) _str.erase(isep);
         return *this;
       }
 
-      path& replace_filename(const path& replacement){
+      path& replace_filename(const xtd::string& replacement){
         remove_filename();
         return operator/=(replacement);
       }
+      path& replace_filename(const path& replacement) { return replace_filename(replacement._str); }
+
+      bool operator<(const path& src) const { return _str<src._str; }
     private:
       xtd::string _str;
     };
 
 
-    inline bool remove(const path& oPath) { return (0==std::remove(oPath.c_str())); }
+    inline bool remove(const path& oPath) { return (0==std::remove(oPath.string().c_str())); }
 
 //temp_directory_path
 #if (XTD_OS_WINDOWS & XTD_OS)

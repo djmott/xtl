@@ -108,13 +108,37 @@ namespace xtd {
       return oRet;
     }
 
-    explicit process(pid_type hPid) : _pid(hPid), _hProcess(nullptr) {}
-    process(pid_type hPid, handle_type hProc) : _pid(hPid), _hProcess(hProc) {}
-
     ~process() {
       if (_hProcess) {
         CloseHandle(_hProcess);
       }
+    }
+
+    explicit process(pid_type hPid) : _pid(hPid), _hProcess(nullptr) {}
+    process(pid_type hPid, handle_type hProc) : _pid(hPid), _hProcess(hProc) {}
+
+    process(const process& src) : _pid(src._pid), _hProcess(nullptr){
+      if (src._hProcess){
+        xtd::windows::exception::throw_if(DuplicateHandle(GetCurrentProcess(), src._hProcess, GetCurrentProcess(), &_hProcess, 0, TRUE, DUPLICATE_SAME_ACCESS), [](BOOL b){ return FALSE==b;});
+      }
+    }
+
+    process(process&& src) : _pid(src._pid), _hProcess(src._hProcess){
+      src._pid = 0;
+      src._hProcess = nullptr;
+    }
+    process& operator=(const process& src){
+      _pid = src._pid;
+      _hProcess = nullptr;
+      if (src._hProcess){
+        xtd::windows::exception::throw_if(DuplicateHandle(GetCurrentProcess(), src._hProcess, GetCurrentProcess(), &_hProcess, 0, TRUE, DUPLICATE_SAME_ACCESS), [](BOOL b){ return FALSE==b;});
+      }
+      return *this;
+    }
+    process& operator=(process&& src){
+      std::swap(_pid, src._pid);
+      std::swap(_hProcess, src._hProcess);
+      return *this;
     }
 
     pid_type id() const { return _pid; }

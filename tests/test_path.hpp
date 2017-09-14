@@ -18,15 +18,46 @@ TEST(test_path, Initialization){
 
 TEST(test_path, append){
   using namespace xtd::filesystem;
-  path oPath = "/a";
-  ASSERT_NO_THROW(oPath.append("b"));
-  ASSERT_PATH_EQ(oPath, path("/a/b"));
-  oPath /= "c";
-  ASSERT_PATH_EQ(oPath, path("/a/b/c"));
-  oPath /= "d";
-  ASSERT_PATH_EQ(oPath, path("/a/b/c/d"));
-  auto oPath2 = path("/a/b/c") /= path("d");
-  ASSERT_PATH_EQ(oPath, oPath2);
+  {
+    path p1 = "/a";
+    ASSERT_NO_THROW(p1.append("/b"));
+    ASSERT_PATH_EQ(p1, path("/a/b"));
+  }
+  {
+    path p1 = "/a";
+    ASSERT_NO_THROW(p1.append("b/c"));
+    ASSERT_PATH_EQ(p1, path("/a/b/c"));
+  }
+  {
+    path p1 = "/a/b";
+    p1 /= "c";
+    ASSERT_PATH_EQ(p1, path("/a/b/c"));
+  }
+  {
+    path p1 = "/a/b";
+    p1 /= "/c";
+    ASSERT_PATH_EQ(p1, path("/a/b/c"));
+  }
+  {
+    path p1 = "/a/b";
+    p1 += "/c";
+    ASSERT_PATH_EQ(p1, path("/a/b/c"));
+  }
+  {
+    path p1 = "/a/b";
+    p1 += "c";
+    ASSERT_PATH_EQ(p1, path("/a/bc"));
+  }
+  {
+    path p1 = "/a/b";
+    p1 += "/c/d";
+    ASSERT_PATH_EQ(p1, path("/a/b/c/d"));
+  }
+  {
+    path p1 = "/a/b";
+    p1 += "c/d";
+    ASSERT_PATH_EQ(p1, path("/a/bc/d"));
+  }
 }
 
 TEST(test_path, append_fail){
