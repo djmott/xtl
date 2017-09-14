@@ -30,10 +30,10 @@ namespace xtd{
 
 #if (!DOXY_INVOKED)
   namespace _{
-    template <typename _Ty> class DebugDump{
+    template <typename _ty> class DebugDump{
     public: 
-      static void Dump(const _Ty& value, const char * name, const source_location& location){
-        xtd::log::get().write(xtd::log::type::debug, location, "Dumping ", name, " type ", typeid(_Ty).name(), " at ", static_cast<const void*>(&value), " : ", value);
+      static void Dump(const _ty& value, const char * name, const source_location& location){
+        xtd::log::get().write(xtd::log::type::debug, location, "Dumping ", name, " type ", typeid(_ty).name(), " at ", static_cast<const void*>(&value), " : ", value);
       }
     };
   }
@@ -49,24 +49,24 @@ namespace xtd{
      * @param name name of the item to dump
      * @param location location of the call site
      */
-    template <typename _Ty>
-    static void Dump(const _Ty& value, const char * name, const source_location& location){ _::DebugDump<const _Ty&>::Dump(value, name, location); }
+    template <typename _ty>
+    static void Dump(const _ty& value, const char * name, const source_location& location){ _::DebugDump<const _ty&>::Dump(value, name, location); }
 
 
   #if (XTD_OS_WINDOWS & XTD_OS)
-    template <typename ... _ArgTs>
-    static bool Assert(const source_location& location, bool test, const char * test_str, _ArgTs&&...oArgs){
+    template <typename ... _arg_ts>
+    static bool Assert(const source_location& location, bool test, const char * test_str, _arg_ts&&...oArgs){
       if (test) return true;
-      auto sMsg = xtd::string::format(location.file(), " line ", location.line(), "\nThe expression evaluated to false.\n\n\t", test_str, "\n", std::forward<_ArgTs>(oArgs)...);
+      auto sMsg = xtd::string::format(location.file(), " line ", location.line(), "\nThe expression evaluated to false.\n\n\t", test_str, "\n", std::forward<_arg_ts>(oArgs)...);
       auto iRet = MessageBoxA(nullptr, sMsg.c_str(), "Debug Assertion Failed", MB_ABORTRETRYIGNORE | MB_ICONERROR | MB_SYSTEMMODAL);
       if (IDABORT == iRet) std::abort();
       return (IDIGNORE == iRet);
     }
   #else
-    template <typename ... _ArgTs>
-    static bool Assert(const source_location& location, bool test, const char * test_str, _ArgTs&&...oArgs){
+    template <typename ... _arg_ts>
+    static bool Assert(const source_location& location, bool test, const char * test_str, _arg_ts&&...oArgs){
       if (test) return true;
-      auto sMsg = xtd::string::format(location.file(), " line ", location.line(), "\nThe expression evaluated to false.\n\n\t", test_str, "\n", std::forward<_ArgTs>(oArgs)...);
+      auto sMsg = xtd::string::format(location.file(), " line ", location.line(), "\nThe expression evaluated to false.\n\n\t", test_str, "\n", std::forward<_arg_ts>(oArgs)...);
       std::cout << sMsg.c_str();
       abort();
     }

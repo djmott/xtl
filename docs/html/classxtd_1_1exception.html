@@ -148,8 +148,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a04f02f8e4f65891b621ed3a0e28cf451"><td class="memTemplParams" colspan="2">template&lt;typename _ReturnT , typename _ExpressionT &gt; </td></tr>
-<tr class="memitem:a04f02f8e4f65891b621ed3a0e28cf451"><td class="memTemplItemLeft" align="right" valign="top">static _ReturnT&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1exception.html#a04f02f8e4f65891b621ed3a0e28cf451">_throw_if</a> (const <a class="el" href="classxtd_1_1source__location.html">xtd::source_location</a> &amp;source, _ReturnT ret, _ExpressionT exp, const char *expstr)</td></tr>
+<tr class="memitem:a04f02f8e4f65891b621ed3a0e28cf451"><td class="memTemplParams" colspan="2">template&lt;typename _return_t , typename _expression_t &gt; </td></tr>
+<tr class="memitem:a04f02f8e4f65891b621ed3a0e28cf451"><td class="memTemplItemLeft" align="right" valign="top">static _return_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1exception.html#a04f02f8e4f65891b621ed3a0e28cf451">_throw_if</a> (const <a class="el" href="classxtd_1_1source__location.html">xtd::source_location</a> &amp;source, _return_t ret, _expression_t exp, const char *expstr)</td></tr>
 <tr class="memdesc:a04f02f8e4f65891b621ed3a0e28cf451"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function template to test for an expression and throw an exception Throws exception if the test expression returns true.  <a href="#a04f02f8e4f65891b621ed3a0e28cf451">More...</a><br/></td></tr>
 <tr class="separator:a04f02f8e4f65891b621ed3a0e28cf451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e5cd571f89df3d1da6a04571b117589"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e5cd571f89df3d1da6a04571b117589"></a>
@@ -193,13 +193,13 @@ virtual const <a class="el" href="classxtd_1_1source__location.html">source_loca
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _ReturnT , typename _ExpressionT &gt; </div>
+template&lt;typename _return_t , typename _expression_t &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static _ReturnT xtd::exception::_throw_if </td>
+          <td class="memname">static _return_t xtd::exception::_throw_if </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classxtd_1_1source__location.html">xtd::source_location</a> &amp;&#160;</td>
           <td class="paramname"><em>source</em>, </td>
@@ -207,13 +207,13 @@ template&lt;typename _ReturnT , typename _ExpressionT &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">_ReturnT&#160;</td>
+          <td class="paramtype">_return_t&#160;</td>
           <td class="paramname"><em>ret</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">_ExpressionT&#160;</td>
+          <td class="paramtype">_expression_t&#160;</td>
           <td class="paramname"><em>exp</em>, </td>
         </tr>
         <tr>
@@ -239,8 +239,8 @@ template&lt;typename _ReturnT , typename _ExpressionT &gt; </div>
 <p>_throw_if methods are present in many XTL exception classes. Typically, the throw_if macro will be used as in exception::throw_if to properly fill parameters </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">_ReturnT</td><td>The return type of the function and type of the expression to evaluate. Implicitly deduced at compile time. </td></tr>
-    <tr><td class="paramname">_ExpressionT</td><td>the type of expression tester that evaluates _ReturnT, normally a lambda. </td></tr>
+    <tr><td class="paramname">_return_t</td><td>The return type of the function and type of the expression to evaluate. Implicitly deduced at compile time. </td></tr>
+    <tr><td class="paramname">_expression_t</td><td>the type of expression tester that evaluates _return_t, normally a lambda. </td></tr>
   </table>
   </dd>
 </dl>
@@ -248,7 +248,7 @@ template&lt;typename _ReturnT , typename _ExpressionT &gt; </div>
   <table class="params">
     <tr><td class="paramname">source</td><td>The location in source code where called. </td></tr>
     <tr><td class="paramname">ret</td><td>The return value of _throw_if and parameter to exp used to test for success or failure </td></tr>
-    <tr><td class="paramname">exp</td><td>Expression used to evaluate ret. Expression is in the form of: bool (_ReturnT). The exception is thrown if this expression evaluates to true. </td></tr>
+    <tr><td class="paramname">exp</td><td>Expression used to evaluate ret. Expression is in the form of: bool (_return_t). The exception is thrown if this expression evaluates to true. </td></tr>
     <tr><td class="paramname">expstr</td><td>String value passed to the exceptions constructor when thrown </td></tr>
   </table>
   </dd>

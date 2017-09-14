@@ -18,8 +18,8 @@ int main(){
 ~~~
 Neither Cat nor Mouse are used in run-time code but it won't compile because Cat reference Mouse before it's declared and forward declarations won't help. However, consider the following:
 ~~~{.cpp}
-template <typename _MemberT> struct Cat{
-  _MemberT m_Mouse;
+template <typename _member_t> struct Cat{
+  _member_t m_Mouse;
 };
 struct Mouse{
   int m_Cheese;

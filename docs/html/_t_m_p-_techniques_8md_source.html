@@ -132,8 +132,8 @@ $(document).ready(function(){initNavTree('_t_m_p-_techniques_8md.html','');});
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">```</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">Neither Cat nor Mouse are used in run-time code but it won&#39;</span>t compile because Cat reference Mouse before it<span class="stringliteral">&#39;s declared and forward declarations won&#39;</span>t help. However, consider the following:</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;```{.cpp}</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> _MemberT&gt; <span class="keyword">struct </span>Cat{</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  _MemberT m_Mouse;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> _member_t&gt; <span class="keyword">struct </span>Cat{</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  _member_t m_Mouse;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;};</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">struct </span>Mouse{</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keywordtype">int</span> m_Cheese;</div>

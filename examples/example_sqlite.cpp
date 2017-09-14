@@ -14,9 +14,10 @@ struct IUnknown;
 int main(){
   using namespace xtd::sqlite;
   try{
-    auto oDBFile = xtd::filesystem::temp_directory_path() + "sqlite_test.db";
+    auto oDBFile = xtd::filesystem::temp_directory_path();
+    oDBFile += "sqlite_test.db";
     INFO("Using database file ", oDBFile.string());
-    auto oDB = database::open_database(xtd::filesystem::temp_directory_path() + "sqlite_test.db", database::OpenCreate|database::ReadWrite|database::MemoryDB);
+    auto oDB = database::open_database(oDBFile, database::OpenCreate|database::ReadWrite|database::MemoryDB);
 
     {
       auto oTransaction = oDB->begin_transaction();

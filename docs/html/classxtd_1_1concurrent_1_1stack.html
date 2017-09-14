@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>XTL: xtd::concurrent::stack&lt; _ValueT, _WaitPolicyT &gt; Class Template Reference</title>
+<title>XTL: xtd::concurrent::stack&lt; _value_t, _WaitPolicyT &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -115,14 +115,14 @@ $(document).ready(function(){initNavTree('classxtd_1_1concurrent_1_1stack.html',
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
-<div class="title">xtd::concurrent::stack&lt; _ValueT, _WaitPolicyT &gt; Class Template Reference<div class="ingroups"><a class="el" href="group___concurrent.html">Concurrent algorithms library</a></div></div>  </div>
+<div class="title">xtd::concurrent::stack&lt; _value_t, _WaitPolicyT &gt; Class Template Reference<div class="ingroups"><a class="el" href="group___concurrent.html">Concurrent algorithms library</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>A lock-free LIFO stack multiple threads can push and pop items concurrently.  
  <a href="classxtd_1_1concurrent_1_1stack.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for xtd::concurrent::stack&lt; _ValueT, _WaitPolicyT &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for xtd::concurrent::stack&lt; _value_t, _WaitPolicyT &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('classxtd_1_1concurrent_1_1stack.html',
 <area shape="rect" id="node2" href="classxtd_1_1concurrent_1_1stack.html" title="{xtd::concurrent::stack\l\&lt; pointer \&gt;\n||+ stack()\l+ stack()\l+ stack()\l+ ~stack()\l+ operator=()\l+ operator=()\l+ pop()\l+ push()\l+ try_pop()\l}" alt="" coords="20,281,168,490"/></map>
 </div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::concurrent::stack&lt; _ValueT, _WaitPolicyT &gt;:</div>
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::concurrent::stack&lt; _value_t, _WaitPolicyT &gt;:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
@@ -143,7 +143,7 @@ $(document).ready(function(){initNavTree('classxtd_1_1concurrent_1_1stack.html',
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a07d4b643e5cd50bd7e14b304803a49d4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07d4b643e5cd50bd7e14b304803a49d4"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = _ValueT</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = _value_t</td></tr>
 <tr class="separator:a07d4b643e5cd50bd7e14b304803a49d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c9450fd79f0f7836acbbd9dde924601"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c9450fd79f0f7836acbbd9dde924601"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>wait_policy_type</b> = _WaitPolicyT</td></tr>
@@ -177,13 +177,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>try_pop</b> (value_ty
 <tr class="separator:a5ab0225e16333f8406d0b8758728af92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename _ValueT, typename _WaitPolicyT = null_wait_policy&gt;<br/>
-class xtd::concurrent::stack&lt; _ValueT, _WaitPolicyT &gt;</h3>
+<div class="textblock"><h3>template&lt;typename _value_t, typename _WaitPolicyT = null_wait_policy&gt;<br/>
+class xtd::concurrent::stack&lt; _value_t, _WaitPolicyT &gt;</h3>
 
 <p>A lock-free LIFO stack multiple threads can push and pop items concurrently. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">_ValueT</td><td>type of value contained in the stack. Must be copy constructible. </td></tr>
+    <tr><td class="paramname">_value_t</td><td>type of value contained in the stack. Must be copy constructible. </td></tr>
   </table>
   </dd>
 </dl>

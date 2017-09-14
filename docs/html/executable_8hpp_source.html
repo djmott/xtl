@@ -128,9 +128,9 @@ $(document).ready(function(){initNavTree('executable_8hpp_source.html','');});
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span>xtd {</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classxtd_1_1executable.html">   25</a></span>&#160;  <span class="keyword">class </span><a class="code" href="classxtd_1_1executable.html">executable</a>{</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a> _Path;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a> _path;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classxtd_1_1executable.html">executable</a>(<span class="keyword">const</span> <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a>&amp; oPath) : _Path(oPath){}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classxtd_1_1executable.html">executable</a>(<span class="keyword">const</span> <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a>&amp; oPath) : _path(oPath){}</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) &amp; XTD_OS)</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor"></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a> get_path(){</div>
@@ -165,7 +165,7 @@ $(document).ready(function(){initNavTree('executable_8hpp_source.html','');});
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">const</span> <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a>&amp; path()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> _Path; }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">const</span> <a class="code" href="classxtd_1_1filesystem_1_1path.html">xtd::filesystem::path</a>&amp; path()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> _path; }</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">static</span> <a class="code" href="classxtd_1_1executable.html">executable</a>&amp; this_executable(){</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      <span class="keyword">static</span> <a class="code" href="classxtd_1_1executable.html">executable</a> _executable(get_path());</div>

@@ -117,28 +117,28 @@ namespace xtd {
 
     void Exit() {
       {
-        std::lock_guard<std::mutex> oLock(_CallbackLock);
-        _Callbacks.push_back([this]() {
-          _CallbackThreadExit = true;
+        std::lock_guard<std::mutex> oLock(_callback_lock);
+        _callbacks.push_back([this]() {
+          _callbackThreadExit = true;
         });
-        _CallbackCheck.notify_one();
+        _callbackCheck.notify_one();
       }
-      if (_CallbackThread.joinable()) {
-        _CallbackThread.join();
-        _CallbackThreadFinished.get_future().get();
+      if (_callbackThread.joinable()) {
+        _callbackThread.join();
+        _callbackThreadFinished.get_future().get();
       }
     }
 
 
-    template <typename _Ty>
+    template <typename _ty>
     void AddTarget() {
-      std::lock_guard<std::mutex> oLock(_CallbackLock);
-      _LogTargets.emplace_back(new _Ty);
+      std::lock_guard<std::mutex> oLock(_callback_lock);
+      _logTargets.emplace_back(new _ty);
     }
 
     void AddTarget(log_target::pointer_type oTarget) {
-      std::lock_guard<std::mutex> oLock(_CallbackLock);
-      _LogTargets.push_back(oTarget);
+      std::lock_guard<std::mutex> oLock(_callback_lock);
+      _logTargets.push_back(oTarget);
     }
   private:
 
@@ -209,7 +209,7 @@ namespace xtd {
 
 #if (XTD_LOG_TARGET_CSV)
     class csv_target : public log_target {
-      std::ofstream _LogFile;
+      std::ofstream _logfile;
       std::mutex _FileLock;
     public:
 
@@ -222,61 +222,61 @@ namespace xtd {
         auto sMsg = xtd::string::format(oHash(oMsg->_tid), ",", oMsg->_time.time_since_epoch().count(), ",", type_string(oMsg->_type), ",", oMsg->_location.file(), ",", oMsg->_location.line(), sMsgPrefix, oMsg->_text);
         if (type::enter == oMsg->_type) ++_StackDepth;
         std::unique_lock<std::mutex> oLock(_FileLock);
-        _LogFile << sMsg << '\n';
+        _logfile << sMsg << '\n';
       }
 
-      csv_target() : _LogFile(), _FileLock() {
+      csv_target() : _logfile(), _FileLock() {
         auto oLogPath = xtd::filesystem::home_directory_path();
         oLogPath /= xtd::executable::this_executable().path().filename();
-        if (!xtd::filesystem::exists(oLogPath)) xtd::filesystem::create_directories(oLogPath);
+        if (!xtd::filesystem::exists(oLogFPath)) xtd::filesystem::create_directories(oLogPath);
         oLogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()), ".csv");
-        _LogFile.open(oLogPath.string(), std::ios::out);
+        _logfile.open(oLogPath.string(), std::ios::out);
       }
     };
 #endif
 
     void callback_thread() {
-      _CallbackThreadStarted.set_value();
-      while (!_CallbackThreadExit) {
+      _callbackThreadStarted.set_value();
+      while (!_callbackThreadExit) {
         callback_type oCallback; {
-          std::unique_lock<std::mutex> oLock(_CallbackLock);
-          _CallbackCheck.wait(oLock, [this] {
-                                return _Callbacks.size();
+          std::unique_lock<std::mutex> oLock(_callback_lock);
+          _callbackCheck.wait(oLock, [this] {
+                                return _callbacks.size();
                               });
-          oCallback = _Callbacks.front();
-          _Callbacks.pop_front();
+          oCallback = _callbacks.front();
+          _callbacks.pop_front();
           oLock.unlock();
-          _CallbackCheck.notify_one();
+          _callbackCheck.notify_one();
         }
         if (oCallback) {
           oCallback();
         }
       }
-      _CallbackThreadFinished.set_value();
+      _callbackThreadFinished.set_value();
     }
 
-    log() : _Messages(), _Callbacks(), _CallbackThread(), _CallbackLock(), _CallbackCheck(), _LogTargets()
-        ,_CallbackThreadStarted(), _CallbackThreadFinished()
+    log() : _messages(), _callbacks(), _callbackThread(), _callback_lock(), _callbackCheck(), _logTargets()
+        ,_callbackThreadStarted(), _callbackThreadFinished()
     {
 
 #if (XTD_LOG_TARGET_SYSLOG)
-      _LogTargets.emplace_back(new syslog_target);
+      _logTargets.emplace_back(new syslog_target);
 #endif
 
 #if (XTD_LOG_TARGET_WINDBG)
-      _LogTargets.emplace_back(new win_dbg_target);
+      _logTargets.emplace_back(new win_dbg_target);
 #endif
 
 #if (XTD_LOG_TARGET_COUT)
-      _LogTargets.emplace_back(new std_cout_target);
+      _logTargets.emplace_back(new std_cout_target);
 #endif
 
 #if (XTD_LOG_TARGET_CSV)
-      _LogTargets.emplace_back(new csv_target);
+      _logTargets.emplace_back(new csv_target);
 #endif
 
-      _CallbackThread = std::thread(&log::callback_thread, this);
-      _CallbackThreadStarted.get_future().get();
+      _callbackThread = std::thread(&log::callback_thread, this);
+      _callbackThreadStarted.get_future().get();
     }
 
     ~log() { Exit(); }
@@ -284,15 +284,15 @@ namespace xtd {
     using callback_type = std::function<void()>;
     using callback_deque = std::deque<callback_type>;
 
-    message::deque_type _Messages;
-    callback_deque _Callbacks;
-    std::thread _CallbackThread;
-    std::mutex _CallbackLock;
-    std::condition_variable _CallbackCheck;
-    log_target::vector_type _LogTargets;
-    std::promise<void> _CallbackThreadStarted;
-    std::promise<void> _CallbackThreadFinished;
-    bool _CallbackThreadExit = false;
+    message::deque_type _messages;
+    callback_deque _callbacks;
+    std::thread _callbackThread;
+    std::mutex _callback_lock;
+    std::condition_variable _callbackCheck;
+    log_target::vector_type _logTargets;
+    std::promise<void> _callbackThreadStarted;
+    std::promise<void> _callbackThreadFinished;
+    bool _callbackThreadExit = false;
 
   public:
 
@@ -301,18 +301,18 @@ namespace xtd {
       return _log;
     }
 
-    template <typename ... _ArgTs>
-    inline void write(type mesageType, const source_location& location, _ArgTs&&...oArgs) {
-      auto sMessage = xtd::string::format(std::forward<_ArgTs>(oArgs)...);
+    template <typename ... _arg_ts>
+    inline void write(type mesageType, const source_location& location, _arg_ts&&...oArgs) {
+      auto sMessage = xtd::string::format(std::forward<_arg_ts>(oArgs)...);
       auto oMessage = std::make_shared<message>(mesageType, location, std::move(sMessage)); {
-        std::lock_guard<std::mutex> oLock(_CallbackLock);
-        _Callbacks.push_back([oMessage, this]() {
-            for (auto oTarget : _LogTargets) {
+        std::lock_guard<std::mutex> oLock(_callback_lock);
+        _callbacks.push_back([oMessage, this]() {
+            for (auto oTarget : _logTargets) {
               (*oTarget)(oMessage);
             }
           });
       }
-      _CallbackCheck.notify_one();
+      _callbackCheck.notify_one();
     }
 
   };

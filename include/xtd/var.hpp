@@ -24,10 +24,10 @@ namespace xtd {
 
     var(const var& src) : _inner(src._inner->clone()) {}
 
-    template <typename _Ty> var(_Ty src) : _inner(new inner<_Ty>(src)) {}
+    template <typename _ty> var(_ty src) : _inner(new inner<_ty>(src)) {}
 
-    template <typename _Ty> var& operator = (_Ty src) {
-      var oTmp(std::forward<_Ty>(src));
+    template <typename _ty> var& operator = (_ty src) {
+      var oTmp(std::forward<_ty>(src));
       std::swap(oTmp, *this);
       return *this;
     }
@@ -44,12 +44,12 @@ namespace xtd {
 
     size_t size() const { return _inner->size(); }
 
-    template <typename _Ty> _Ty& as() {
-      return *dynamic_cast<inner<_Ty>&>(*_inner);
+    template <typename _ty> _ty& as() {
+      return *dynamic_cast<inner<_ty>&>(*_inner);
     }
 
-    template <typename _Ty> const _Ty& as() const {
-      return *dynamic_cast<inner<_Ty>&>(*_inner);
+    template <typename _ty> const _ty& as() const {
+      return *dynamic_cast<inner<_ty>&>(*_inner);
     }
 
     class inner_base {
@@ -74,42 +74,42 @@ namespace xtd {
       size_t size() const override { throw std::runtime_error("reference to uninitialized variable"); }
     };
 
-    template <typename _Ty> class inner : public inner_base {
+    template <typename _ty> class inner : public inner_base {
     public:
-      explicit inner(_Ty newval) : _value(newval) {}
+      explicit inner(_ty newval) : _value(newval) {}
       ~inner() override = default;
       inner(const inner&)=delete;
       inner() = delete;
       inner& operator=(const inner&) = delete;
       inner_base * clone() const override { return new inner(_value); }
-      const std::type_info& get_type() const override { return typeid(_Ty); }
-      _Ty & operator * () { return _value; }
-      const _Ty & operator * () const { return _value; }
-      bool is_pod() const override { return std::is_pod<_Ty>::value; }
-      size_t size() const override { return sizeof(_Ty); }
+      const std::type_info& get_type() const override { return typeid(_ty); }
+      _ty & operator * () { return _value; }
+      const _ty & operator * () const { return _value; }
+      bool is_pod() const override { return std::is_pod<_ty>::value; }
+      size_t size() const override { return sizeof(_ty); }
     private:
-      _Ty _value;
+      _ty _value;
     };
 
     inner_base::ptr _inner;
   };
 
-  template <typename _ChT>
-  class var::inner<xtd::xstring<_ChT>> : public var::inner_base {
+  template <typename _ch_t>
+  class var::inner<xtd::xstring<_ch_t>> : public var::inner_base {
   public:
-    explicit inner(xtd::xstring<_ChT> newval) : _value(std::move(newval)) {}
+    explicit inner(xtd::xstring<_ch_t> newval) : _value(std::move(newval)) {}
     ~inner() override = default;
     inner(const inner&) = delete;
     inner() = delete;
     inner& operator=(const inner&) = delete;
     inner_base * clone() const override { return new inner(_value); }
-    const std::type_info& get_type() const override { return typeid(xtd::xstring<_ChT>); }
-    xtd::xstring<_ChT> & operator * () { return _value; }
-    const std::basic_string<_ChT> & operator * () const { return _value; }
+    const std::type_info& get_type() const override { return typeid(xtd::xstring<_ch_t>); }
+    xtd::xstring<_ch_t> & operator * () { return _value; }
+    const std::basic_string<_ch_t> & operator * () const { return _value; }
     bool is_pod() const override { return false; }
     size_t size() const override { return _value.size(); }
   private:
-    xtd::xstring<_ChT> _value;
+    xtd::xstring<_ch_t> _value;
   };
 
 }

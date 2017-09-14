@@ -164,7 +164,7 @@ namespace xtd {
           }
           sPath.resize(dwNeeded);
         }
-        oRet[sPath] = dynamic_library::pointer(new dynamic_library(module));
+        oRet[xtd::filesystem::path(sPath)] = dynamic_library::pointer(new dynamic_library(module));
       }
       return oRet;
     }

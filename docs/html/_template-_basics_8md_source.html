@@ -130,9 +130,9 @@ $(document).ready(function(){initNavTree('_template-_basics_8md.html','');});
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral">---------------</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">At it&#39;</span>s most basic level, templates permit a <span class="keyword">generic</span> or type-less algorithm to work with various concrete types. When a <span class="keyword">template</span> is used the compiler will qualify the <span class="keyword">generic</span> types into the concrete types required to run. For example, here<span class="stringliteral">&#39;s a simple function template:</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">~~~{.c}</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">template &lt;typename _Ty&gt; _Ty square(_Ty src){ return src * src; }</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">template &lt;typename _ty&gt; _ty square(_ty src){ return src * src; }</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">~~~</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">This function template can be reused to square shorts, ints, longs, doubles or any other type that supports operator *.  The compiler will substitute the `_Ty` parameter with other concrete types at compile time to _generate_ the various overloaded versions of the function. Consider the following usage scenarios:</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">This function template can be reused to square shorts, ints, longs, doubles or any other type that supports operator *.  The compiler will substitute the `_ty` parameter with other concrete types at compile time to _generate_ the various overloaded versions of the function. Consider the following usage scenarios:</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">~~~{.c}</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral">char cVal = 8;</span></div>
@@ -144,7 +144,7 @@ $(document).ready(function(){initNavTree('_template-_basics_8md.html','');});
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">std::cout &lt;&lt; square&lt;double&gt;(dVal) &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">The compiler will substitute the generic _Ty parameter with a char, int and double respectively to generate the following specializations:</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">The compiler will substitute the generic _ty parameter with a char, int and double respectively to generate the following specializations:</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral">~~~{.c}</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="stringliteral">char square(char src){ return src * src; }</span></div>
@@ -156,7 +156,7 @@ $(document).ready(function(){initNavTree('_template-_basics_8md.html','');});
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral">The above specializations are qualified with the type surrounded in angle brackets. (e.g. square&lt;**char**&gt;) Function templates have a special ability to evaluate certain parameter types based on usage scenarios. The above template can be simplified:</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">~~~{.c}</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">template &lt;typename _Ty&gt; auto square(_Ty src) -&gt; _Ty { return src * src; }</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">template &lt;typename _ty&gt; auto square(_ty src) -&gt; _ty { return src * src; }</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">In this example, the `auto` keyword is a placeholder ordering the compiler to evaluate the type at a later time.  This new version of `square` can be used without the type qualifiers:</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">~~~{.c}</span></div>
@@ -172,17 +172,17 @@ $(document).ready(function(){initNavTree('_template-_basics_8md.html','');});
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">### Class Templates</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">The previous examples demonstrate _function templates_. _Class templates_ are another template variation:</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">~~~{.c}</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">template &lt;typename _Ty&gt; struct CheckedPointer{</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">    CheckedPointer(_Ty * newval) : _Ptr(newval){}</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">    _Ty * operator-&gt;() { assert(_Ptr); return _Ptr; }</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">template &lt;typename _ty&gt; struct CheckedPointer{</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">    CheckedPointer(_ty * newval) : _Ptr(newval){}</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">    _ty * operator-&gt;() { assert(_Ptr); return _Ptr; }</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">    void delete_it(){</span></div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">        delete _Ptr;</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">        _Ptr = nullptr;</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">    _Ty * _Ptr;</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">    _ty * _Ptr;</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">};</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">~~~</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">This is a very simple class template that checks if the contained pointer to type _Ty is not null during every access. This template could be used in code like:</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">This is a very simple class template that checks if the contained pointer to type _ty is not null during every access. This template could be used in code like:</span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">~~~{.c}</span></div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">int main(){</span></div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">    struct user{</span></div>
@@ -200,8 +200,8 @@ $(document).ready(function(){initNavTree('_template-_basics_8md.html','');});
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral"></span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">Here&#39;</span>s an example of a <span class="keyword">class </span><span class="keyword">template</span> that accepts a type and non-type <span class="keyword">template</span> parameters:</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;~~~{.c}</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Ty, <span class="keywordtype">size_t</span> _Dims&gt; <span class="keyword">struct </span>StaticArray{</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    _Ty value[_Dims];</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ty, <span class="keywordtype">size_t</span> _Dims&gt; <span class="keyword">struct </span>StaticArray{</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    _ty value[_Dims];</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;};</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;~~~</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;This very simply declares a fixed sized array. It<span class="stringliteral">&#39;s of little use but can be used in code as:</span></div>
@@ -214,7 +214,7 @@ $(document).ready(function(){initNavTree('_template-_basics_8md.html','');});
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="stringliteral">~~~</span></div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="stringliteral">The first parameter is a type parameter, the second is a non-type parameter. Here&#39;</span>s another example that pre-computes a value:</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;~~~{.c}</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Ty, <span class="keywordtype">size_t</span> _Dims&gt; <span class="keyword">struct </span>StaticArray{</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ty, <span class="keywordtype">size_t</span> _Dims&gt; <span class="keyword">struct </span>StaticArray{</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">bool</span> EvenNumberOfElements = (0 == ( _Dims %2 ));</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    ...</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;};</div>
@@ -301,11 +301,11 @@ $(document).ready(function(){initNavTree('_template-_basics_8md.html','');});
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">struct Fizzbang{</span></div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="stringliteral">  static const int Cost = 7;</span></div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="stringliteral">};</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">template &lt;typename _Ty, int _Quantity&gt; struct Order{</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="stringliteral">  static const int Total = _Ty::Cost * _Quantity;</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">template &lt;typename _ty, int _Quantity&gt; struct Order{</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="stringliteral">  static const int Total = _ty::Cost * _Quantity;</span></div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="stringliteral">};</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="stringliteral">template &lt;typename _Ty&gt; struct Order&lt;_Ty, 10&gt;{</span></div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="stringliteral">  static const int Total = _Ty::Cost * 10 - 5;</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="stringliteral">template &lt;typename _ty&gt; struct Order&lt;_ty, 10&gt;{</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="stringliteral">  static const int Total = _ty::Cost * 10 - 5;</span></div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="stringliteral">};</span></div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="stringliteral">int main(int argc, char * argv[]){</span></div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="stringliteral">  std::cout &lt;&lt; &quot;Order&lt;Widget, 5&gt;::Total : &quot; &lt;&lt; Order&lt;Widget, 5&gt;::Total &lt;&lt; std::endl;</span></div>

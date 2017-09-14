@@ -31,16 +31,16 @@ namespace xtd{
 
 /** Helper function template to test for an expression and throw an exception
 Throws exception if the test expression returns true. _throw_if methods are present in many XTL exception classes. Typically, the throw_if macro will be used as in exception::throw_if to properly fill parameters
-@tparam _ReturnT The return type of the function and type of the expression to evaluate. Implicitly deduced at compile time.
-@tparam _ExpressionT the type of expression tester that evaluates _ReturnT, normally a lambda.
+@tparam _return_t The return type of the function and type of the expression to evaluate. Implicitly deduced at compile time.
+@tparam _expression_t the type of expression tester that evaluates _return_t, normally a lambda.
 @param source The location in source code where called.
 @param ret The return value of _throw_if and parameter to exp used to test for success or failure
-@param exp Expression used to evaluate ret. Expression is in the form of: bool (_ReturnT). The exception is thrown if this expression evaluates to true.
+@param exp Expression used to evaluate ret. Expression is in the form of: bool (_return_t). The exception is thrown if this expression evaluates to true.
 @param expstr String value passed to the exceptions constructor when thrown
 @returns ret if no exception is thrown
 */
-        template <typename _ReturnT, typename _ExpressionT>
-        inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
+        template <typename _return_t, typename _expression_t>
+        inline static _return_t _throw_if(const xtd::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
           if (exp(ret)){
             throw exception(source, expstr);
           }
@@ -98,8 +98,8 @@ Throws exception if the test expression returns true. _throw_if methods are pres
 /// c++ wrapper around legacy errno based errors from the CRT
     class crt_exception : public xtd::exception{
     public:
-        template <typename _ReturnT, typename _ExpressionT>
-        inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
+        template <typename _return_t, typename _expression_t>
+        inline static _return_t _throw_if(const xtd::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
           if (exp(ret)){
             throw crt_exception(source, expstr);
           }
@@ -136,8 +136,8 @@ Throws exception if the test expression returns true. _throw_if methods are pres
     namespace windows{
         struct exception : xtd::exception{
         public:
-            template <typename _ReturnT, typename _ExpressionT>
-            inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
+            template <typename _return_t, typename _expression_t>
+            inline static _return_t _throw_if(const xtd::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
               if (exp(ret)){
                 throw exception(source, expstr, GetLastError());
               }

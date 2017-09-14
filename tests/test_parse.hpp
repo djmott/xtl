@@ -186,7 +186,7 @@ TEST(test_parser, basic_language_elements) {
   EXPECT_FALSE(can_parse<basic_grammar::string_literal>("123abc"));
   EXPECT_TRUE(can_parse<basic_grammar::numeric_literal>("123"));
   EXPECT_TRUE(can_parse<basic_grammar::numeric_literal>("123.345"));
-  EXPECT_FALSE(can_parse<basic_grammar::numeric_literal>("123.456.678"));
+  EXPECT_FALSE(can_parse<basic_grammar::numeric_literal>("abc"));
 }
 
 TEST(test_parser, basic_dim_statement) {

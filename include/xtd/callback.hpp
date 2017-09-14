@@ -13,7 +13,7 @@ Single producer - multiple subscriber callback
 
 namespace xtd{
 #if (!DOXY_INVOKED)
-  template <typename _FnSig> class callback;
+  template <typename> class callback;
 #endif 
   /** Notifies multiple targets of an event
 
@@ -22,54 +22,54 @@ namespace xtd{
   The template is parameterized with a function signature that defines the invocation and attached receivers must match the signature 
   or all parameters must be implicitly convertible from the signature's parameters.
 
-  @tparam _ReturnT return type
+  @tparam _return_t return type
   @tparam ... parameters
   */
-  template <typename _ReturnT, typename ... _Args> class callback < _ReturnT(_Args...) >{
+  template <typename _return_t, typename ... _arg_ts> class callback < _return_t(_arg_ts...) >{
     class invoker{
     public:
       using ptr = std::unique_ptr<invoker>;
       using vector = std::vector<ptr>;
       virtual ~invoker() = default;
-      virtual _ReturnT invoke(_Args...) const = 0;
+      virtual _return_t invoke(_arg_ts...) const = 0;
     };
 
-    template <typename _MethodT, _MethodT * _method> class method_invoker : public invoker{
+    template <typename _method_t, _method_t * _method> class method_invoker : public invoker{
     public:
       ~method_invoker() override = default;
-      virtual _ReturnT invoke(_Args...oArgs) const override { return (*_method)(std::forward<_Args>(oArgs)...); }
+      virtual _return_t invoke(_arg_ts...oArgs) const override { return (*_method)(std::forward<_arg_ts>(oArgs)...); }
     };
 
-    template <typename _LambdaT> class lamdba_invoker : public invoker{
+    template <typename _lambda_t> class lamdba_invoker : public invoker{
     public:
       ~lamdba_invoker() override = default;
-      virtual _ReturnT invoke(_Args...oArgs) const override { return _Lambda(std::forward<_Args>(oArgs)...); }
-      explicit lamdba_invoker(_LambdaT oLambda) : _Lambda(oLambda){} //NOSONAR
-      lamdba_invoker(lamdba_invoker&& src) : _Lambda(std::move(src._Lambda)){} //NOSONAR
-      lamdba_invoker(const lamdba_invoker& src) : _Lambda(src._Lambda){} //NOSONAR
+      virtual _return_t invoke(_arg_ts...oArgs) const override { return _lambda(std::forward<_arg_ts>(oArgs)...); }
+      explicit lamdba_invoker(_lambda_t oLambda) : _lambda(oLambda){} //NOSONAR
+      lamdba_invoker(lamdba_invoker&& src) : _lambda(std::move(src._lambda)){} //NOSONAR
+      lamdba_invoker(const lamdba_invoker& src) : _lambda(src._lambda){} //NOSONAR
       lamdba_invoker& operator=(const lamdba_invoker& src){
         if (this != &src){
-          _Lambda = src._Lambda;
+          _lambda = src._lambda;
         }
         return *this;
       }
       lamdba_invoker& operator=(lamdba_invoker&&) = delete;
-      _LambdaT _Lambda;
+      _lambda_t _lambda;
     };
 
-    template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> class member_invoker : public invoker{
+    template <typename _dest_t, _return_t(_dest_t::*_member)(_arg_ts...)> class member_invoker : public invoker{
     public:
       ~member_invoker() override = default;
       member_invoker() = delete;
       member_invoker& operator=(const member_invoker&) = delete;
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}  //NOSONAR
       member_invoker(const member_invoker& oSrc) : _dest(oSrc._dest){}  //NOSONAR
-      explicit member_invoker(_DestT* dest) : _dest(dest){} //NOSONAR
-      virtual _ReturnT invoke(_Args...oArgs) const override { return (_dest->*_member)(oArgs...); }
-      _DestT * _dest;
+      explicit member_invoker(_dest_t* dest) : _dest(dest){} //NOSONAR
+      virtual _return_t invoke(_arg_ts...oArgs) const override { return (_dest->*_member)(oArgs...); }
+      _dest_t * _dest;
     };
 
-    typename invoker::vector _Invokers;
+    typename invoker::vector _invokers;
 
   public:
     /// behavior of invocation when multiple receivers are attached 
@@ -79,18 +79,18 @@ namespace xtd{
     };
     ///{@
     callback() = default;
-    callback(callback&& src) : _Invokers(std::move(src._Invokers)){}
+    callback(callback&& src) : _invokers(std::move(src._invokers)){}
     callback(const callback&) = delete;
     ///@}
     ~callback() = default;
     callback& operator=(const callback&) = delete;
     /// Invokes all the attached targets and returns the result of the target as specified by the result policy
-    _ReturnT operator()(result_policy result, _Args...oArgs) const{
-      _ReturnT oRet;
+    _return_t operator()(result_policy result, _arg_ts...oArgs) const{
+      _return_t oRet;
       typename invoker::vector::size_type i = 0;
-      for (const auto & oInvoker : _Invokers){
-        if ((result_policy::first == result && 0 == i) || (result_policy::last == result && (_Invokers.size() - 1) == i)){
-          oRet = oInvoker->invoke(std::forward<_Args>(oArgs)...);
+      for (const auto & oInvoker : _invokers){
+        if ((result_policy::first == result && 0 == i) || (result_policy::last == result && (_invokers.size() - 1) == i)){
+          oRet = oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
         } else{
           oInvoker->invoke(oArgs...);
         }
@@ -99,109 +99,109 @@ namespace xtd{
       return oRet;
     }
     //invokes all the attached targets and returns the result of the last target
-    _ReturnT operator()(_Args...oArgs) const{
-      _ReturnT oRet;
-      for (const auto & oInvoker : _Invokers){
+    _return_t operator()(_arg_ts...oArgs) const{
+      _return_t oRet;
+      for (const auto & oInvoker : _invokers){
         oRet = oInvoker->invoke(oArgs...);
       }
       return oRet;
     }
 
     /// connect a class instance and member function
-    template <typename _ClassT, _ReturnT(_ClassT::*_MemberT)(_Args...)>
-    void connect(_ClassT *pClass){ _Invokers.emplace_back(new member_invoker<_ClassT, _MemberT>(pClass)); }
+    template <typename _class_t, _return_t(_class_t::*_member_t)(_arg_ts...)>
+    void connect(_class_t *pClass){ _invokers.emplace_back(new member_invoker<_class_t, _member_t>(pClass)); }
 
     /// connect a lambda 
     template <typename method>
-    void connect(method oMethod){ _Invokers.emplace_back(new lamdba_invoker< method >(oMethod)); }
+    void connect(method oMethod){ _invokers.emplace_back(new lamdba_invoker< method >(oMethod)); }
 
     /// connect a static method
-    template <_ReturnT(*method)(_Args...)>
-    void connect(){ _Invokers.emplace_back(new method_invoker<_ReturnT(_Args...), method>()); }
+    template <_return_t(*method)(_arg_ts...)>
+    void connect(){ _invokers.emplace_back(new method_invoker<_return_t(_arg_ts...), method>()); }
 
     /// connect a static method or lambda 
 
-    template <typename _Ty>
-    callback& operator += (_Ty&& addend){ connect(std::forward<_Ty>(addend)); return *this; }
+    template <typename _ty>
+    callback& operator += (_ty&& addend){ connect(std::forward<_ty>(addend)); return *this; }
 
   };
 
  
 #if (!DOXY_INVOKED)
-  template <typename ... _Args> class callback < void(_Args...) >{
+  template <typename ... _arg_ts> class callback < void(_arg_ts...) >{
 
-    using _ReturnT = void;
+    using return_type = void;
 
     class invoker{
     public:
       using ptr = std::unique_ptr<invoker>;
       using vector = std::vector<ptr>;
       virtual ~invoker() = default;
-      virtual _ReturnT invoke(_Args...) const = 0;
+      virtual return_type invoke(_arg_ts...) const = 0;
     };
 
-    template <typename _MethodT, _MethodT * _method> class method_invoker : public invoker{
+    template <typename _method_t, _method_t * _method> class method_invoker : public invoker{
     public:
       ~method_invoker() override = default;
-      virtual _ReturnT invoke(_Args...oArgs) const override { (*_method)(std::forward<_Args>(oArgs)...); }
+      virtual return_type invoke(_arg_ts...oArgs) const override { (*_method)(std::forward<_arg_ts>(oArgs)...); }
     };
 
-    template <typename _LambdaT> class lamdba_invoker : public invoker{
+    template <typename _lambda_t> class lamdba_invoker : public invoker{
     public:
       ~lamdba_invoker() override = default;
-      virtual _ReturnT invoke(_Args...oArgs) const override { _Lambda(std::forward<_Args>(oArgs)...); }
-      explicit lamdba_invoker(_LambdaT oLambda) : _Lambda(oLambda){}
-      lamdba_invoker(lamdba_invoker&& src) : _Lambda(std::move(src._Lambda)){}
-      lamdba_invoker(const lamdba_invoker& src) : _Lambda(src._Lambda){}
+      virtual return_type invoke(_arg_ts...oArgs) const override { _lambda(std::forward<_arg_ts>(oArgs)...); }
+      explicit lamdba_invoker(_lambda_t oLambda) : _lambda(oLambda){}
+      lamdba_invoker(lamdba_invoker&& src) : _lambda(std::move(src._lambda)){}
+      lamdba_invoker(const lamdba_invoker& src) : _lambda(src._lambda){}
       lamdba_invoker& operator=(const lamdba_invoker& src){
         if (this != &src){
-          _Lambda = src._Lambda;
+          _lambda = src._lambda;
         }
         return *this;
       }
       lamdba_invoker& operator=(lamdba_invoker&&) = delete;
-      _LambdaT _Lambda;
+      _lambda_t _lambda;
     };
 
-    template <typename _DestT, _ReturnT(_DestT::*_member)(_Args...)> class member_invoker : public invoker{
+    template <typename _dest_t, return_type(_dest_t::*_member)(_arg_ts...)> class member_invoker : public invoker{
     public:
       ~member_invoker() override = default;
       member_invoker() = delete;
       member_invoker& operator=(const member_invoker&) = delete;
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}
       member_invoker(const member_invoker& oSrc) : _dest(oSrc._dest){}
-      explicit member_invoker(_DestT* dest) : _dest(dest){}
-      virtual _ReturnT invoke(_Args...oArgs)const override { (_dest->*_member)(oArgs...); }
-      _DestT * _dest;
+      explicit member_invoker(_dest_t* dest) : _dest(dest){}
+      virtual return_type invoke(_arg_ts...oArgs)const override { (_dest->*_member)(oArgs...); }
+      _dest_t * _dest;
     };
 
-    typename invoker::vector _Invokers;
+    typename invoker::vector _invokers;
 
   public:
     ~callback() = default;
-    callback() = default;
+    callback() : _invokers(){}
     callback(const callback&) = delete;
-    callback(callback&& src) : _Invokers(std::move(src._Invokers)){}
+    callback(callback&& src) : _invokers(std::move(src._invokers)){}
     callback& operator=(const callback&) = delete;
 
 
-    void operator()(_Args...oArgs) const{
-      for (auto & oInvoker : _Invokers){
+    void operator()(_arg_ts...oArgs) const{
+      for (auto & oInvoker : _invokers){
         oInvoker->invoke(oArgs...);
       }
     }
 
-    template <typename _ClassT, _ReturnT(_ClassT::*_MemberT)(_Args...)>
-    void connect(_ClassT *pClass){ _Invokers.emplace_back(new member_invoker<_ClassT, _MemberT>(pClass)); }
+    template <typename _class_t, return_type(_class_t::*_MemberT)(_arg_ts...)>
+    void connect(_class_t *pClass){ _invokers.emplace_back(new member_invoker<_class_t, _MemberT>(pClass)); }
 
     template <typename method>
-    void connect(method oMethod){ _Invokers.emplace_back(new lamdba_invoker< method >(oMethod)); }
+    void connect(method oMethod){ _invokers.emplace_back(new lamdba_invoker< method >(oMethod)); }
 
-    template <_ReturnT(*method)(_Args...)>
-    void connect(){ _Invokers.emplace_back(new method_invoker<void(_Args...), method>()); }
+    template <return_type(*method)(_arg_ts...)>
+    void connect(){ _invokers.emplace_back(new method_invoker<void(_arg_ts...), method>()); }
 
-    template <typename _Ty>
-    callback& operator += (_Ty&& addend){ connect(std::forward<_Ty>(addend)); return *this; }
+    template <typename _ty>
+    callback& operator += (_ty&& addend){ connect(std::forward<_ty>(addend)); return *this; }
 
 
   };

@@ -30,8 +30,8 @@ namespace xtd{
 #endif
   public:
 
-    template <typename _ReturnT, typename _ExpressionT>
-    inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
+    template <typename _return_t, typename _expression_t>
+    inline static _return_t _throw_if(const xtd::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
       if (exp(ret)){
 #if (XTD_OS_WINDOWS & XTD_OS)
           throw dynamic_library_exception(source, expstr, GetLastError());
@@ -70,13 +70,13 @@ namespace xtd{
 
     native_handle_type handle() const{ return _Handle; }
 
-    template <typename _ReturnT, typename ... _ArgsT>
+    template <typename _return_t, typename ... _arg_ts>
     class function{
     public:
-      using function_pointer_type = _ReturnT(*)(_ArgsT...);
+      using function_pointer_type = _return_t(*)(_arg_ts...);
 
-      inline _ReturnT operator()(_ArgsT...oArgs) const{
-        return _function_pointer(std::forward<_ArgsT>(oArgs)...);
+      inline _return_t operator()(_arg_ts...oArgs) const{
+        return _function_pointer(std::forward<_arg_ts>(oArgs)...);
       }
 
       function() = delete;
@@ -125,8 +125,8 @@ namespace xtd{
     }
   #endif
 
-    template <typename _ReturnT, typename ... _ArgsT> function <_ReturnT, _ArgsT...> get(const char * name){
-      using return_type = function <_ReturnT, _ArgsT...>;
+    template <typename _return_t, typename ... _arg_ts> function <_return_t, _arg_ts...> get(const char * name){
+      using return_type = function <_return_t, _arg_ts...>;
 #if (XTD_OS_WINDOWS & XTD_OS)
       auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(GetProcAddress(_Handle, name), [](FARPROC p){ return nullptr == p; }));
 #elif (XTD_OS_UNIX & XTD_OS)

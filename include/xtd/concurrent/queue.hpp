@@ -10,9 +10,9 @@ concurrently push and pop items from a FIFO queue
 
 namespace xtd{
   namespace concurrent{
-    template <typename _Ty> class queue{
+    template <typename _ty> class queue{
     public:
-      using value_type = _Ty;
+      using value_type = _ty;
 
       queue() : _head(nullptr), _tail(nullptr){}
       queue(const queue&) = delete;

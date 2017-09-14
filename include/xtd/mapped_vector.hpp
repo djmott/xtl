@@ -12,19 +12,19 @@ namespace xtd{
 
   /**
   erase item from a mapped vector policy that shifts remaining items one place toward the erased item
-  @tparam _MappedVectorT the mapped vector type
+  @tparam _mapped_vector_t the mapped vector type
   */
-  template <typename _MappedVectorT>
+  template <typename _mapped_vector_t>
   class shift_erase_policy{
 
   };
 
-  template <typename _Ty, size_t _page_size = ((size_t)(-1)), template <typename> class _ErasePolicyT = shift_erase_policy>
+  template <typename _ty, size_t _page_size = ((size_t)(-1)), template <typename> class _erase_policy_t = shift_erase_policy>
   class mapped_vector {
     friend class iterator;
     template <typename> friend class shift_erase_policy;
     using _super_t = mapped_file<_page_size>;
-    using _erase_policy_t = _ErasePolicyT<mapped_vector>;
+    using erase_policy_t = _erase_policy_t<mapped_vector>;
 
     struct page{
       using pointer = mapped_page<page>;
@@ -38,8 +38,8 @@ namespace xtd{
 
     PACK_PUSH(1);
     struct data_page : page{
-      _Ty _values[1];
-      //static size_t items_per_page(){ return _::mapped_file_base<_page_size>::page_size() / sizeof(_Ty); }
+      _ty _values[1];
+      //static size_t items_per_page(){ return _::mapped_file_base<_page_size>::page_size() / sizeof(_ty); }
       static size_t items_per_page(){ return 5; }
     };
     PACK_POP();
@@ -60,7 +60,7 @@ namespace xtd{
     mutable cache_type _cache;
 
   public:
-    using value_type = _Ty;
+    using value_type = _ty;
     static const size_t npos = -1;
     
     explicit mapped_vector(const xtd::filesystem::path& oPath) 

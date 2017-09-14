@@ -23,15 +23,15 @@ namespace xtd {
   Provides access to the executable binary file structure
    */
   class executable{
-    xtd::filesystem::path _Path;
+    xtd::filesystem::path _path;
 
-    explicit executable(const xtd::filesystem::path& oPath) : _Path(oPath){}
+    explicit executable(const xtd::filesystem::path& oPath) : _path(oPath){}
 
 #if (XTD_OS_WINDOWS & XTD_OS)
     static inline xtd::filesystem::path get_path(){
-      static xtd::filesystem::path sRet="";
+      static xtd::filesystem::path sRet("");
       if (0 != sRet.string().size()){
-        return sRet;
+        return xtd::filesystem::path(sRet);
       }
       xtd::tstring sTemp(MAX_PATH, 0);
       forever {
@@ -44,7 +44,7 @@ namespace xtd {
         }
       }
       sRet = sTemp;
-      return sRet;
+      return xtd::filesystem::path(sRet);
     }
 #elif (XTD_OS_UNIX & XTD_OS)
 
@@ -61,7 +61,7 @@ namespace xtd {
   public:
 
     ///
-    const xtd::filesystem::path& path() const { return _Path; }
+    const xtd::filesystem::path& path() const { return _path; }
 
     static executable& this_executable(){
       static executable _executable(get_path());

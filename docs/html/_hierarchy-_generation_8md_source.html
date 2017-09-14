@@ -164,15 +164,15 @@ $(document).ready(function(){initNavTree('_hierarchy-_generation_8md.html','');}
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">The &#39;</span>magic<span class="stringliteral">&#39; is done through a couple partial specializations of `HierarchyGenerator`:</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">```{.cpp}</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">template &lt;typename _BaseT&gt; class HierarchyGenerator&lt;_BaseT&gt; : public _BaseT{</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">    template &lt;typename ... _Args&gt; HierarchyGenerator(_Args&amp;&amp;...oArgs) : _BaseT(std::forward&lt;_Args&gt;(oArgs)...){}</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">    template &lt;typename ... _arg_ts&gt; HierarchyGenerator(_arg_ts&amp;&amp;...oArgs) : _BaseT(std::forward&lt;_arg_ts&gt;(oArgs)...){}</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">};</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">```</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">This is the final specialization in the recusive template instantation chain that makes `_BaseT` the base class of all the policies. The compiler selects this specialization when the `_PolicyList` has been depleted of items. Chaining together the items in the `_PolicyList` is performed with the following partial specialization:</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">```</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">template &lt;typename _BaseT, template &lt;class&gt; class _PolicyT, template &lt;class&gt; class ... _PolicyList&gt;</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">class HierarchyGenerator&lt;_BaseT, _PolicyT, _PolicyList...&gt; : public _PolicyT&lt; HierarchyGenerator&lt;_PolicyList...&gt;&gt; {</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">    template &lt;typename ... _Args&gt; HierarchyGenerator(_Args&amp;&amp;...oArgs) </span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">        : _PolicyT&lt; HierarchyGenerator&lt;_PolicyList...&gt;&gt;(std::forward&lt;_Args&gt;(oArgs)...){}</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">    template &lt;typename ... _arg_ts&gt; HierarchyGenerator(_arg_ts&amp;&amp;...oArgs) </span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">        : _PolicyT&lt; HierarchyGenerator&lt;_PolicyList...&gt;&gt;(std::forward&lt;_arg_ts&gt;(oArgs)...){}</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">};</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">```</span></div>
 <div class="ttc" id="class___super_t_html"><div class="ttname"><a href="class___super_t.html">_SuperT</a></div></div>

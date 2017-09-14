@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>XTL: xtd::callback&lt; _ReturnT(_Args...) &gt; Class Template Reference</title>
+<title>XTL: xtd::callback&lt; _return_t(_arg_ts...) &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -115,14 +115,14 @@ $(document).ready(function(){initNavTree('classxtd_1_1callback_3_01___return_t_0
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
-<div class="title">xtd::callback&lt; _ReturnT(_Args...) &gt; Class Template Reference</div>  </div>
+<div class="title">xtd::callback&lt; _return_t(_arg_ts...) &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Notifies multiple targets of an event.  
  <a href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::callback&lt; _ReturnT(_Args...) &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::callback&lt; _return_t(_arg_ts...) &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
@@ -155,8 +155,8 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>callback</b> (const callback &amp;)=delete</td></tr>
 <tr class="separator:ae6fa8f422cc086b3435ae9d1a33badf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a950a8102b6ee62d0dd09462255478588"><td class="memTemplParams" colspan="2"><a class="anchor" id="a950a8102b6ee62d0dd09462255478588"></a>
-template&lt;typename _ClassT , _ReturnT(_ClassT::*)(_Args...) _MemberT&gt; </td></tr>
-<tr class="memitem:a950a8102b6ee62d0dd09462255478588"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#a950a8102b6ee62d0dd09462255478588">connect</a> (_ClassT *pClass)</td></tr>
+template&lt;typename _class_t , _return_t(_class_t::*)(_arg_ts...) _member_t&gt; </td></tr>
+<tr class="memitem:a950a8102b6ee62d0dd09462255478588"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#a950a8102b6ee62d0dd09462255478588">connect</a> (_class_t *pClass)</td></tr>
 <tr class="memdesc:a950a8102b6ee62d0dd09462255478588"><td class="mdescLeft">&#160;</td><td class="mdescRight">connect a class instance and member function <br/></td></tr>
 <tr class="separator:a950a8102b6ee62d0dd09462255478588"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab62a6c2d97284a2841e560907c8f4e5c"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab62a6c2d97284a2841e560907c8f4e5c"></a>
@@ -165,20 +165,20 @@ template&lt;typename method &gt; </td></tr>
 <tr class="memdesc:ab62a6c2d97284a2841e560907c8f4e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">connect a lambda <br/></td></tr>
 <tr class="separator:ab62a6c2d97284a2841e560907c8f4e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedeb89ca0be0b60f115d90fa1e6afaf2"><td class="memTemplParams" colspan="2"><a class="anchor" id="aedeb89ca0be0b60f115d90fa1e6afaf2"></a>
-template&lt;_ReturnT(*)(_Args...) method&gt; </td></tr>
+template&lt;_return_t(*)(_arg_ts...) method&gt; </td></tr>
 <tr class="memitem:aedeb89ca0be0b60f115d90fa1e6afaf2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#aedeb89ca0be0b60f115d90fa1e6afaf2">connect</a> ()</td></tr>
 <tr class="memdesc:aedeb89ca0be0b60f115d90fa1e6afaf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">connect a static method <br/></td></tr>
 <tr class="separator:aedeb89ca0be0b60f115d90fa1e6afaf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e1d2fa1cc512e30c8919360574cd06c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e1d2fa1cc512e30c8919360574cd06c"></a>
-_ReturnT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#a8e1d2fa1cc512e30c8919360574cd06c">operator()</a> (<a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#aa38858e82c55d05ceffbf363ac9fe4dc">result_policy</a> result, _Args...oArgs) const </td></tr>
+_return_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#a8e1d2fa1cc512e30c8919360574cd06c">operator()</a> (<a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#aa38858e82c55d05ceffbf363ac9fe4dc">result_policy</a> result, _arg_ts...oArgs) const </td></tr>
 <tr class="memdesc:a8e1d2fa1cc512e30c8919360574cd06c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invokes all the attached targets and returns the result of the target as specified by the result policy. <br/></td></tr>
 <tr class="separator:a8e1d2fa1cc512e30c8919360574cd06c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55651d0e39d48cc1b09514a730e4f3b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55651d0e39d48cc1b09514a730e4f3b1"></a>
-_ReturnT&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (_Args...oArgs) const </td></tr>
+_return_t&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (_arg_ts...oArgs) const </td></tr>
 <tr class="separator:a55651d0e39d48cc1b09514a730e4f3b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc0642c1c7ee23158cd9143d6311ee92"><td class="memTemplParams" colspan="2"><a class="anchor" id="abc0642c1c7ee23158cd9143d6311ee92"></a>
-template&lt;typename _Ty &gt; </td></tr>
-<tr class="memitem:abc0642c1c7ee23158cd9143d6311ee92"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#a702d03afb78755d8a2b831d0e9a8252b">callback</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#abc0642c1c7ee23158cd9143d6311ee92">operator+=</a> (_Ty &amp;&amp;addend)</td></tr>
+template&lt;typename _ty &gt; </td></tr>
+<tr class="memitem:abc0642c1c7ee23158cd9143d6311ee92"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#a702d03afb78755d8a2b831d0e9a8252b">callback</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#abc0642c1c7ee23158cd9143d6311ee92">operator+=</a> (_ty &amp;&amp;addend)</td></tr>
 <tr class="memdesc:abc0642c1c7ee23158cd9143d6311ee92"><td class="mdescLeft">&#160;</td><td class="mdescRight">connect a static method or lambda <br/></td></tr>
 <tr class="separator:abc0642c1c7ee23158cd9143d6311ee92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea2d3d3599071c8646a645105c4b9951"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea2d3d3599071c8646a645105c4b9951"></a>
@@ -186,14 +186,14 @@ template&lt;typename _Ty &gt; </td></tr>
 <tr class="separator:aea2d3d3599071c8646a645105c4b9951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename _ReturnT, typename... _Args&gt;<br/>
-class xtd::callback&lt; _ReturnT(_Args...) &gt;</h3>
+<div class="textblock"><h3>template&lt;typename _return_t, typename... _arg_ts&gt;<br/>
+class xtd::callback&lt; _return_t(_arg_ts...) &gt;</h3>
 
 <p>Notifies multiple targets of an event. </p>
 <p>The callbacks are performed serially within the invoking thread. Receivers can be static functions, member functions or lambdas. Callbacks with a return value can be invoked with a policy describing which receiver contains the return value of interest. The template is parameterized with a function signature that defines the invocation and attached receivers must match the signature or all parameters must be implicitly convertible from the signature's parameters.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">_ReturnT</td><td>return type </td></tr>
+    <tr><td class="paramname">_return_t</td><td>return type </td></tr>
     <tr><td class="paramname">...</td><td>parameters </td></tr>
   </table>
   </dd>
@@ -205,10 +205,10 @@ class xtd::callback&lt; _ReturnT(_Args...) &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _ReturnT , typename... _Args&gt; </div>
+template&lt;typename _return_t , typename... _arg_ts&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">enum xtd::callback&lt; _ReturnT(_Args...) &gt;::<a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#aa38858e82c55d05ceffbf363ac9fe4dc">result_policy</a></td>
+          <td class="memname">enum xtd::callback&lt; _return_t(_arg_ts...) &gt;::<a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html#aa38858e82c55d05ceffbf363ac9fe4dc">result_policy</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -236,7 +236,7 @@ template&lt;typename _ReturnT , typename... _Args&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html">callback< _ReturnT(_Args...) ></a></li>
+    <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><a class="el" href="classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html">callback< _return_t(_arg_ts...) ></a></li>
     <li class="footer">Generated on Tue Aug 9 2016 19:59:26 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

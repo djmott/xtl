@@ -80,8 +80,8 @@ namespace xtd {
       private:
         friend struct module;
 
-        template <typename _Ty>
-        source_file(_Ty sPath, ULONG64 base) : xtd::filesystem::path(sPath), _base(base) {}
+        template <typename _ty>
+        source_file(_ty sPath, ULONG64 base) : xtd::filesystem::path(sPath), _base(base) {}
 
         ULONG64 _base;
       };

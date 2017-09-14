@@ -139,8 +139,8 @@ $(document).ready(function(){initNavTree('dynamic__library_8hpp_source.html','')
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor"></span>  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ReturnT, <span class="keyword">typename</span> _ExpressionT&gt;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">inline</span> <span class="keyword">static</span> _ReturnT _throw_if(<span class="keyword">const</span> <a class="code" href="classxtd_1_1source__location.html">xtd::source_location</a>&amp; source, _ReturnT ret, _ExpressionT exp, <span class="keyword">const</span> <span class="keywordtype">char</span>* expstr){</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _return_t, <span class="keyword">typename</span> _expression_t&gt;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">inline</span> <span class="keyword">static</span> _return_t _throw_if(<span class="keyword">const</span> <a class="code" href="classxtd_1_1source__location.html">xtd::source_location</a>&amp; source, _return_t ret, _expression_t exp, <span class="keyword">const</span> <span class="keywordtype">char</span>* expstr){</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;      <span class="keywordflow">if</span> (exp(ret)){</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) &amp; XTD_OS)</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor"></span>          <span class="keywordflow">throw</span> <a class="code" href="classxtd_1_1dynamic__library__exception.html">dynamic_library_exception</a>(source, expstr);</div>
@@ -173,13 +173,13 @@ $(document).ready(function(){initNavTree('dynamic__library_8hpp_source.html','')
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    native_handle_type handle()<span class="keyword"> const</span>{ <span class="keywordflow">return</span> _Handle; }</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ReturnT, <span class="keyword">typename</span> ... _ArgsT&gt;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _return_t, <span class="keyword">typename</span> ... _arg_ts&gt;</div>
 <div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classxtd_1_1dynamic__library_1_1function.html">   68</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classxtd_1_1dynamic__library_1_1function.html">function</a>{</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      <span class="keyword">using</span> function_pointer_type = _ReturnT(*)(_ArgsT...);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      <span class="keyword">using</span> function_pointer_type = _return_t(*)(_arg_ts...);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keyword">inline</span> _ReturnT operator()(_ArgsT...oArgs)<span class="keyword"> const</span>{</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">return</span> _function_pointer(std::forward&lt;_ArgsT&gt;(oArgs)...);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keyword">inline</span> _return_t operator()(_arg_ts...oArgs)<span class="keyword"> const</span>{</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">return</span> _function_pointer(std::forward&lt;_arg_ts&gt;(oArgs)...);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      }</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keyword">function</span>() = <span class="keyword">delete</span>;</div>
@@ -228,8 +228,8 @@ $(document).ready(function(){initNavTree('dynamic__library_8hpp_source.html','')
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    }</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">  #endif</span></div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ReturnT, <span class="keyword">typename</span> ... _ArgsT&gt; <span class="keyword">function</span> &lt;_ReturnT, _ArgsT...&gt; <span class="keyword">get</span>(<span class="keyword">const</span> <span class="keywordtype">char</span> * name){</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      <span class="keyword">using</span> return_type = <span class="keyword">function</span> &lt;_ReturnT, _ArgsT...&gt;;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _return_t, <span class="keyword">typename</span> ... _arg_ts&gt; <span class="keyword">function</span> &lt;_return_t, _arg_ts...&gt; <span class="keyword">get</span>(<span class="keyword">const</span> <span class="keywordtype">char</span> * name){</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      <span class="keyword">using</span> return_type = <span class="keyword">function</span> &lt;_return_t, _arg_ts...&gt;;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">#if ((XTD_OS_WINDOWS | XTD_OS_MINGW) &amp; XTD_OS)</span></div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor"></span>      <span class="keyword">auto</span> fnptr = <span class="keyword">reinterpret_cast&lt;</span>typename return_type::function_pointer_type<span class="keyword">&gt;</span>(<a class="code" href="exception_8hpp.html#a634fb2b21866703d2760f62927010cb6">xtd::dynamic_library_exception::throw_if</a>(GetProcAddress(_Handle, name), [](FARPROC p){ <span class="keywordflow">return</span> <span class="keyword">nullptr</span> == p; }));</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">#elif ((XTD_OS_LINUX | XTD_OS_CYGWIN | XTD_OS_MSYS) &amp; XTD_OS)</span></div>

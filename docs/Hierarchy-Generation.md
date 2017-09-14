@@ -50,14 +50,14 @@ The two forms are the same and the varation using the `HierarchyGenerator` is mo
 The 'magic' is done through a couple partial specializations of `HierarchyGenerator`:
 ~~~{.cpp}
 template <typename _BaseT> class HierarchyGenerator<_BaseT> : public _BaseT{
-    template <typename ... _Args> HierarchyGenerator(_Args&&...oArgs) : _BaseT(std::forward<_Args>(oArgs)...){}
+    template <typename ... _arg_ts> HierarchyGenerator(_arg_ts&&...oArgs) : _BaseT(std::forward<_arg_ts>(oArgs)...){}
 };
 ~~~
 This is the final specialization in the recusive template instantation chain that makes `_BaseT` the base class of all the policies. The compiler selects this specialization when the `_PolicyList` has been depleted of items. Chaining together the items in the `_PolicyList` is performed with the following partial specialization:
 ~~~
 template <typename _BaseT, template <class> class _PolicyT, template <class> class ... _PolicyList>
 class HierarchyGenerator<_BaseT, _PolicyT, _PolicyList...> : public _PolicyT< HierarchyGenerator<_PolicyList...>> {
-    template <typename ... _Args> HierarchyGenerator(_Args&&...oArgs) 
-        : _PolicyT< HierarchyGenerator<_PolicyList...>>(std::forward<_Args>(oArgs)...){}
+    template <typename ... _arg_ts> HierarchyGenerator(_arg_ts&&...oArgs)
+        : _PolicyT< HierarchyGenerator<_PolicyList...>>(std::forward<_arg_ts>(oArgs)...){}
 };
 ~~~

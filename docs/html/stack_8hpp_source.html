@@ -121,10 +121,10 @@ $(document).ready(function(){initNavTree('stack_8hpp_source.html','');});
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>xtd{</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="keyword">namespace </span>concurrent{</div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1stack.html">   20</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _ValueT, <span class="keyword">typename</span> _WaitPolicyT = null_wait_policy&gt; <span class="keyword">class </span><a class="code" href="classxtd_1_1concurrent_1_1stack.html">stack</a>{</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1stack.html">   20</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _value_t, <span class="keyword">typename</span> _WaitPolicyT = null_wait_policy&gt; <span class="keyword">class </span><a class="code" href="classxtd_1_1concurrent_1_1stack.html">stack</a>{</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;      <span class="keyword">using</span> value_type = _ValueT;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;      <span class="keyword">using</span> value_type = _value_t;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;      <span class="keyword">using</span> wait_policy_type = _WaitPolicyT;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;      <a class="code" href="classxtd_1_1concurrent_1_1stack.html">stack</a>(wait_policy_type oWait = wait_policy_type()) : _Root(<span class="keyword">nullptr</span>), _WaitPolicy(oWait){}</div>

@@ -8,9 +8,6 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include <cstddef>
-
 #define XTD_GIT_IDENT "$Id$"
 
 #if !defined(ON)
@@ -304,7 +301,7 @@ namespace xtd{
   #endif
 #endif
 
-#if (XTD_OS_WINDOWS & XTD_OS)
+#if (XTD_OS_WINDOWS & XTD_OS || XTD_COMPILER_MINGW & XTD_COMPILER)
   #if !defined(_WIN32_WINNT)
     #define _WIN32_WINNT 0x600
   #endif
@@ -313,6 +310,8 @@ namespace xtd{
   #include <windows.h>
   #include <Shlobj.h>
 #endif
+
+
 
 #if !defined(interface)
   #define interface struct

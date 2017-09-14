@@ -12,16 +12,16 @@ TODO("Write unit tests for lru_cache")
 
 namespace xtd{
 
-  template <typename _KeyT, typename _ValueT, size_t _CacheSize, typename _LoaderT = _ValueT(*)(const _KeyT&)>
-  class lru_cache : protected std::deque<std::pair<_KeyT, _ValueT>>{
-    using _super_t = std::deque<std::pair<_KeyT, _ValueT>>;
+  template <typename _key_t, typename _value_t, size_t _cache_size, typename _loader_t = _value_t(*)(const _key_t&)>
+  class lru_cache : protected std::deque<std::pair<_key_t, _value_t>>{
+    using _super_t = std::deque<std::pair<_key_t, _value_t>>;
   public:
-    using key_type = _KeyT;
-    using value_type = _ValueT;
-    using pair_type = std::pair<_KeyT, _ValueT>;
-    using loader_type = _LoaderT;
+    using key_type = _key_t;
+    using value_type = _value_t;
+    using pair_type = std::pair<_key_t, _value_t>;
+    using loader_type = _loader_t;
 
-    static const size_t cache_size = _CacheSize;
+    static const size_t cache_size = _cache_size;
 
     explicit lru_cache(const loader_type& oLoader) : _loader(oLoader){}
     explicit lru_cache(loader_type&& oLoader) : _loader(std::move(oLoader)){}
@@ -30,7 +30,7 @@ namespace xtd{
     lru_cache(lru_cache&& src) : _super_t(std::move(src)), _loader(std::move(src._loader)){}
     ~lru_cache(){}
 
-    _ValueT& operator[](const _KeyT& key){
+    _value_t& operator[](const _key_t& key){
       for (typename _super_t::iterator oItem = _super_t::begin(); _super_t::end() != oItem; ++oItem){
         if (key == oItem->first){
           value_type oRet = oItem->second;

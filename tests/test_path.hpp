@@ -12,8 +12,8 @@ xtd::path system and unit tests
 TEST(test_path, Initialization){
   using namespace xtd::filesystem;
   ASSERT_NO_THROW(path oPath);
-  ASSERT_NO_THROW(path oPath = "/a");
-  ASSERT_NO_THROW(path oPath = "/a/b");
+  ASSERT_NO_THROW(path oPath("/a"));
+  ASSERT_NO_THROW(path oPath("/a/b"));
 }
 
 TEST(test_path, append){
