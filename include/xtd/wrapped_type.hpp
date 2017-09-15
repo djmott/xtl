@@ -8,12 +8,12 @@ namespace xtd {
 
 #define WRAPPED(_type) xtd::wrapped<_type, __COUNTER__>
 
-  template <typename _Ty, size_t> class wrapped {
-    _Ty _inner;
+  template <typename _ty, size_t> class wrapped {
+    _ty _inner;
   public:
-    using value_type = _Ty;
+    using value_type = _ty;
 
-    template <typename ... _ArgTs> wrapped(_ArgTs...oArgs) : _inner(std::forward<_ArgTs>(oArgs)...) {}
+    template <typename ... _arg_ts> wrapped(_arg_ts...oArgs) : _inner(std::forward<_arg_ts>(oArgs)...) {}
 
     wrapped(wrapped&& src) : _inner(std::move(src._inner)) {}
 

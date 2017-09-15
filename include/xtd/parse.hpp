@@ -87,7 +87,7 @@ namespace xtd{
       @param[in] oChildRules list of child rules that successfully parsed to satisfy the current parse rule. The child rules are stored in a local variable and accessible via the items() member.
       */
       template <typename ... _child_ts>
-      explicit rule_base(_child_ts&& ... oChildRules) : _items({ std::forward<_child_ts>(oChildRules)... }){}
+      explicit rule_base(_child_ts&& ... oChildRules) : _items({ oChildRules... }){}
 
       virtual ~rule_base() = default;
       /** Determines if the interface is implemented by a concrete type
