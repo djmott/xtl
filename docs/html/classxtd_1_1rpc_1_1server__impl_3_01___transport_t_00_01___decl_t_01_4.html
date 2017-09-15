@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>XTL: xtd::rpc::server_impl&lt; _TransportT, _DeclT &gt; Class Template Reference</title>
+<title>XTL: xtd::rpc::server_impl&lt; _transport_t, _decl_t &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -114,14 +114,14 @@ $(document).ready(function(){initNavTree('classxtd_1_1rpc_1_1server__impl_3_01__
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">xtd::rpc::server_impl&lt; _TransportT, _DeclT &gt; Class Template Reference</div>  </div>
+<div class="title">xtd::rpc::server_impl&lt; _transport_t, _decl_t &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>super class of server implementation chain  
  <a href="classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::rpc::server_impl&lt; _TransportT, _DeclT &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::rpc::server_impl&lt; _transport_t, _decl_t &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
@@ -133,11 +133,11 @@ $(document).ready(function(){initNavTree('classxtd_1_1rpc_1_1server__impl_3_01__
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4eddf546031f8dbae3d407f9cddf67af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4eddf546031f8dbae3d407f9cddf67af"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>server_impl</b> (typename _TransportT::pointer_type &amp;oTransport)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>server_impl</b> (typename _transport_t::pointer_type &amp;oTransport)</td></tr>
 <tr class="separator:a4eddf546031f8dbae3d407f9cddf67af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36ef794bc97f1b87409f3c6927505859"><td class="memTemplParams" colspan="2"><a class="anchor" id="a36ef794bc97f1b87409f3c6927505859"></a>
-template&lt;typename... _XportCtorTs&gt; </td></tr>
-<tr class="memitem:a36ef794bc97f1b87409f3c6927505859"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>server_impl</b> (_XportCtorTs &amp;&amp;...oParams)</td></tr>
+template&lt;typename... _xport_ctor_ts&gt; </td></tr>
+<tr class="memitem:a36ef794bc97f1b87409f3c6927505859"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>server_impl</b> (_xport_ctor_ts &amp;&amp;...oParams)</td></tr>
 <tr class="separator:a36ef794bc97f1b87409f3c6927505859"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d18a9b3758f43db3d259b191bc29e76"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d18a9b3758f43db3d259b191bc29e76"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>call_handler</b> (<a class="el" href="classxtd_1_1rpc_1_1payload.html">payload</a> &amp;)</td></tr>
@@ -155,18 +155,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>stop_server</b> ()</t
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:afd3b4a18f0ab87ccf4395549d41e6054"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd3b4a18f0ab87ccf4395549d41e6054"></a>
-_TransportT::pointer_type&#160;</td><td class="memItemRight" valign="bottom"><b>_Transport</b></td></tr>
+_transport_t::pointer_type&#160;</td><td class="memItemRight" valign="bottom"><b>_tranport</b></td></tr>
 <tr class="separator:afd3b4a18f0ab87ccf4395549d41e6054"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class _TransportT, class _DeclT&gt;<br/>
-class xtd::rpc::server_impl&lt; _TransportT, _DeclT &gt;</h3>
+<div class="textblock"><h3>template&lt;class _transport_t, class _decl_t&gt;<br/>
+class xtd::rpc::server_impl&lt; _transport_t, _decl_t &gt;</h3>
 
 <p>super class of server implementation chain </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">_TransportT</td><td>the transport type to use (tcp, udp, named pipes, homing pigeons, etc.) </td></tr>
-    <tr><td class="paramname">_DeclT</td><td>the full server declaration </td></tr>
+    <tr><td class="paramname">_transport_t</td><td>the transport type to use (tcp, udp, named pipes, homing pigeons, etc.) </td></tr>
+    <tr><td class="paramname">_decl_t</td><td>the full server declaration </td></tr>
   </table>
   </dd>
 </dl>
@@ -181,7 +181,7 @@ class xtd::rpc::server_impl&lt; _TransportT, _DeclT &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><b>rpc</b></li><li class="navelem"><a class="el" href="classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html">server_impl< _TransportT, _DeclT ></a></li>
+    <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><b>rpc</b></li><li class="navelem"><a class="el" href="classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html">server_impl< _transport_t, _decl_t ></a></li>
     <li class="footer">Generated on Tue Aug 9 2016 19:59:26 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

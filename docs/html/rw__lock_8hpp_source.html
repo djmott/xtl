@@ -119,15 +119,15 @@ $(document).ready(function(){initNavTree('rw__lock_8hpp_source.html','');});
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>xtd{</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  <span class="keyword">namespace </span>concurrent{</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _WaitPolicyT&gt;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _wait_policy_t&gt;</div>
 <div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1rw__lock__base.html">   16</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classxtd_1_1concurrent_1_1rw__lock__base.html">rw_lock_base</a>{</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;      std::atomic&lt;uint32_t&gt; _lock;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;      <span class="keyword">static</span> constexpr uint32_t write_lock_bit = 0x80000000;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;      <span class="keyword">static</span> constexpr uint32_t read_bits_mask = ~write_lock_bit;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;      _WaitPolicyT _WaitPolicy;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;      _wait_policy_t _wait_policy;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;      <span class="keyword">using</span> wait_policy_type = _WaitPolicyT;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;      <a class="code" href="classxtd_1_1concurrent_1_1rw__lock__base.html">rw_lock_base</a>(wait_policy_type oWait = wait_policy_type()) : _lock(0), _WaitPolicy(oWait){}</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;      <span class="keyword">using</span> wait_policy_type = _wait_policy_t;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;      <a class="code" href="classxtd_1_1concurrent_1_1rw__lock__base.html">rw_lock_base</a>(wait_policy_type oWait = wait_policy_type()) : _lock(0), _wait_policy(oWait){}</div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1rw__lock__base.html#ab8d2a34b4b0da69458ba30c29436adc7">   25</a></span>&#160;      uint32_t <a class="code" href="classxtd_1_1concurrent_1_1rw__lock__base.html#ab8d2a34b4b0da69458ba30c29436adc7">readers</a>()<span class="keyword"> const</span>{</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">return</span> _lock.load() &amp; read_bits_mask;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;      }</div>
@@ -143,7 +143,7 @@ $(document).ready(function(){initNavTree('rw__lock_8hpp_source.html','');});
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;              <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            }</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;          }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;          _WaitPolicy();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;          _wait_policy();</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;      }</div>
 <div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1rw__lock__base.html#aac56a4ddb2c62456951f58949b26f22e">   45</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="classxtd_1_1concurrent_1_1rw__lock__base.html#aac56a4ddb2c62456951f58949b26f22e">lock_read</a>(){</div>
@@ -152,7 +152,7 @@ $(document).ready(function(){initNavTree('rw__lock_8hpp_source.html','');});
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;          <span class="keywordflow">if</span> (_lock.compare_exchange_strong(iOriginal, 1 + iOriginal)){</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;          }</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;          _WaitPolicy();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;          _wait_policy();</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      }</div>
 <div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1rw__lock__base.html#a81303b799dc54d5d05a35a9d421919dc">   57</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="classxtd_1_1concurrent_1_1rw__lock__base.html#a81303b799dc54d5d05a35a9d421919dc">try_lock_read</a>(){</div>
@@ -162,7 +162,7 @@ $(document).ready(function(){initNavTree('rw__lock_8hpp_source.html','');});
 <div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1rw__lock__base.html#a9109bb0a99f8f11714dde0afbadc29bb">   62</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="classxtd_1_1concurrent_1_1rw__lock__base.html#a9109bb0a99f8f11714dde0afbadc29bb">lock_write</a>(){</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        uint32_t iOriginal = 0;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">while</span> (!_lock.compare_exchange_strong(iOriginal, write_lock_bit)){</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;          _WaitPolicy();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;          _wait_policy();</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      }</div>
 <div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1rw__lock__base.html#a3276f1d6857b25c8e92772c6300b73a6">   71</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="classxtd_1_1concurrent_1_1rw__lock__base.html#a3276f1d6857b25c8e92772c6300b73a6">try_lock_write</a>(){</div>

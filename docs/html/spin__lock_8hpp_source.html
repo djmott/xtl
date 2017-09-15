@@ -121,16 +121,16 @@ $(document).ready(function(){initNavTree('spin__lock_8hpp_source.html','');});
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>xtd{</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="keyword">namespace </span>concurrent{</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _WaitPolicyT = null_wait_policy&gt;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> _wait_policy_t = null_wait_policy&gt;</div>
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1spin__lock__base.html">   15</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a> {</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;      std::atomic &lt; uint32_t &gt; _lock;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;      <span class="keyword">using</span> wait_policy_type = _WaitPolicyT;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;      <span class="keyword">using</span> wait_policy_type = _wait_policy_t;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;      <span class="keyword">static</span> constexpr uint32_t LockedValue = 0x80000000;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;      <span class="keyword">using</span> <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">scope_locker</a> = <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker&lt;spin_lock_base&lt;_WaitPolicyT&gt;</a>&gt;;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;      <span class="keyword">using</span> <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">scope_locker</a> = <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker&lt;spin_lock_base&lt;_wait_policy_t&gt;</a>&gt;;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;      ~<a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;      <a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>(wait_policy_type oWait = wait_policy_type()) : _lock(0), _WaitPolicy(oWait){};</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;      <a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>(wait_policy_type oWait = wait_policy_type()) : _lock(0), _wait_policy(oWait){};</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;      <a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>(<span class="keyword">const</span> <a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;      <a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>(<a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1spin__lock__base.html#a5a05c4bace41d2d173c572de66ef2604">   27</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html#a5a05c4bace41d2d173c572de66ef2604">lock</a>(){</div>
@@ -139,7 +139,7 @@ $(document).ready(function(){initNavTree('spin__lock_8hpp_source.html','');});
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;          <span class="keywordflow">if</span> (_lock.compare_exchange_strong(compare, LockedValue)){</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;          }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;          _WaitPolicy();</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;          _wait_policy();</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        }</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;      }</div>
 <div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1spin__lock__base.html#a26363f61f5285ed48956d480d7508523">   37</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="classxtd_1_1concurrent_1_1spin__lock__base.html#a26363f61f5285ed48956d480d7508523">unlock</a>(){</div>
@@ -151,7 +151,7 @@ $(document).ready(function(){initNavTree('spin__lock_8hpp_source.html','');});
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      }</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      wait_policy_type _WaitPolicy;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      wait_policy_type _wait_policy;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    };</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">using</span> spin_lock = spin_lock_base&lt;null_wait_policy&gt;;</div>

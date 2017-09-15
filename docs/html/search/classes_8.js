@@ -11,8 +11,8 @@ var searchData=
   ['ipv4address',['ipv4address',['../classxtd_1_1socket_1_1ipv4address.html',1,'xtd::socket']]],
   ['ipv6address',['ipv6address',['../classxtd_1_1socket_1_1ipv6address.html',1,'xtd::socket']]],
   ['is_5fa',['is_a',['../namespacextd.html#classxtd_1_1is__a',1,'xtd']]],
-  ['is_5fa_3c_20_5fty_20_3e',['is_a&lt; _Ty &gt;',['../classxtd_1_1is__a_3_01___ty_01_4.html',1,'xtd']]],
-  ['is_5fa_3c_20_5fty_2c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_3e',['is_a&lt; _Ty, _HeadT, _TailT...&gt;',['../classxtd_1_1is__a_3_01___ty_00_01___head_t_00_01___tail_t_8_8_8_4.html',1,'xtd']]],
-  ['is_5fa_3c_20_5fty_2c_20_5ftailt_2e_2e_2e_3e',['is_a&lt; _Ty, _TailT...&gt;',['../namespacextd.html',1,'xtd']]],
-  ['is_5fa_3c_20_5fty_2c_20_5fty_2c_20_5ftailt_2e_2e_2e_3e',['is_a&lt; _Ty, _Ty, _TailT...&gt;',['../classxtd_1_1is__a_3_01___ty_00_01___ty_00_01___tail_t_8_8_8_4.html',1,'xtd']]]
+  ['is_5fa_3c_20_5fty_20_3e',['is_a&lt; _ty &gt;',['../classxtd_1_1is__a_3_01___ty_01_4.html',1,'xtd']]],
+  ['is_5fa_3c_20_5fty_2c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_3e',['is_a&lt; _ty, _head_t, _tail_t...&gt;',['../classxtd_1_1is__a_3_01___ty_00_01___head_t_00_01___tail_t_8_8_8_4.html',1,'xtd']]],
+  ['is_5fa_3c_20_5fty_2c_20_5ftailt_2e_2e_2e_3e',['is_a&lt; _ty, _tail_t...&gt;',['../namespacextd.html',1,'xtd']]],
+  ['is_5fa_3c_20_5fty_2c_20_5fty_2c_20_5ftailt_2e_2e_2e_3e',['is_a&lt; _ty, _ty, _tail_t...&gt;',['../classxtd_1_1is__a_3_01___ty_00_01___ty_00_01___tail_t_8_8_8_4.html',1,'xtd']]]
 ];

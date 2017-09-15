@@ -69,7 +69,7 @@ namespace xtd{
       _dest_t * _dest;
     };
 
-    typename invoker::vector _invokers;
+    typename invoker::vector _invokers{};
 
   public:
     /// behavior of invocation when multiple receivers are attached 

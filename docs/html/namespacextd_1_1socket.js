@@ -10,7 +10,7 @@ var namespacextd_1_1socket =
     [ "polling_socket", "classxtd_1_1socket_1_1polling__socket.html", "classxtd_1_1socket_1_1polling__socket" ],
     [ "selectable_socket", "classxtd_1_1socket_1_1selectable__socket.html", "classxtd_1_1socket_1_1selectable__socket" ],
     [ "serializer", "group___sockets.html#classxtd_1_1socket_1_1serializer", null ],
-    [ "socket_base< _AddressT, _SocketT, _Protocol >", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4" ],
+    [ "socket_base< _address_t, _socket_t, _socket_protocol >", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4" ],
     [ "socket_options", "classxtd_1_1socket_1_1socket__options.html", "classxtd_1_1socket_1_1socket__options" ],
     [ "tcp_options", "classxtd_1_1socket_1_1tcp__options.html", "classxtd_1_1socket_1_1tcp__options" ],
     [ "udp_options", "classxtd_1_1socket_1_1udp__options.html", "classxtd_1_1socket_1_1udp__options" ]

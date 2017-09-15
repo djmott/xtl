@@ -7,7 +7,7 @@ var searchData=
   ['xstring',['xstring',['../classxtd_1_1xstring.html',1,'xtd']]],
   ['xstring_3c_20char_20_3e',['xstring&lt; char &gt;',['../classxtd_1_1xstring.html',1,'xtd']]],
   ['xstring_5fformat_3c_20_5fcht_20_3e',['xstring_format&lt; _ChT &gt;',['../classxtd_1_1___1_1xstring__format_3_01___ch_t_01_4.html',1,'xtd::_']]],
-  ['xstring_5fformat_3c_20_5fcht_2c_20const_20_5fch2_28_26_29_5b_5flen_5d_3e',['xstring_format&lt; _ChT, const _Ch2(&amp;)[_Len]&gt;',['../classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch2_07_6_08[___len]_4.html',1,'xtd::_']]],
+  ['xstring_5fformat_3c_20_5fcht_2c_20const_20_5fch2_28_26_29_5b_5flen_5d_3e',['xstring_format&lt; _ChT, const _Ch2(&amp;)[_len]&gt;',['../classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch2_07_6_08[___len]_4.html',1,'xtd::_']]],
   ['xstring_5fformat_3c_20_5fcht_2c_20const_20_5fcht_20_2aconst_20_26_20_3e',['xstring_format&lt; _ChT, const _ChT *const &amp; &gt;',['../classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01___ch_t_01_5const_01_6_01_4.html',1,'xtd::_']]],
   ['xstring_5fformat_3c_20_5fcht_2c_20const_20std_3a_3abasic_5fstring_3c_20_5fch2_20_3e_20_26_20_3e',['xstring_format&lt; _ChT, const std::basic_string&lt; _Ch2 &gt; &amp; &gt;',['../classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01std_1_1basic__string_3_01___ch2_01_4_01_6_01_4.html',1,'xtd::_']]],
   ['xstring_5fformat_3c_20_5fcht_2c_20const_20xtd_3a_3axstring_3c_20_5fch2_20_3e_20_26_20_3e',['xstring_format&lt; _ChT, const xtd::xstring&lt; _Ch2 &gt; &amp; &gt;',['../classxtd_1_1___1_1xstring__format_3_01___ch_t_00_01const_01xtd_1_1xstring_3_01___ch2_01_4_01_6_01_4.html',1,'xtd::_']]],

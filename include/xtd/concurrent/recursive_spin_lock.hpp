@@ -10,20 +10,20 @@ Recursive spin lock
 namespace xtd{
   namespace concurrent {
     namespace _ {
-      template<typename _WaitPolicyT = null_wait_policy>
+      template<typename _wait_policy_t = null_wait_policy>
       class recursive_spin_lock_base{
-        using wait_policy_type = _WaitPolicyT;
+        using wait_policy_type = _wait_policy_t;
         using hash_type = std::hash<std::thread::id>;
         std::atomic<size_t> _lock;
         hash_type _hash;
         uint32_t _lock_count;
-        wait_policy_type _WaitPolicy;
+        wait_policy_type _wait_policy;
       public:
-        using scope_locker = xtd::concurrent::scope_locker<recursive_spin_lock_base<_WaitPolicyT>>;
+        using scope_locker = xtd::concurrent::scope_locker<recursive_spin_lock_base<_wait_policy_t>>;
 
         ~recursive_spin_lock_base() = default;
 
-        recursive_spin_lock_base(wait_policy_type oWait = wait_policy_type()) : _lock(-1), _lock_count(0), _WaitPolicy(oWait) {};
+        recursive_spin_lock_base(wait_policy_type oWait = wait_policy_type()) : _lock(-1), _hash(), _lock_count(0), _wait_policy(oWait) {};
 
         recursive_spin_lock_base(const recursive_spin_lock_base &) = delete;
 
@@ -41,7 +41,7 @@ namespace xtd{
 
         void lock() {
           while (!try_lock()) {
-            _WaitPolicy();
+            _wait_policy();
           }
         }
 

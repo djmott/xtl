@@ -15,8 +15,8 @@ var searchData=
   ['try_5flock_5fwrite',['try_lock_write',['../classxtd_1_1concurrent_1_1rw__lock__base.html#a3276f1d6857b25c8e92772c6300b73a6',1,'xtd::concurrent::rw_lock_base']]],
   ['tuple',['tuple',['../namespacextd.html#classxtd_1_1tuple',1,'xtd']]],
   ['tuple_2ehpp',['tuple.hpp',['../tuple_8hpp.html',1,'']]],
-  ['tuple_3c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_3e',['tuple&lt; _HeadT, _TailT...&gt;',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4.html',1,'xtd']]],
-  ['tuple_3c_20_5ftailt_2e_2e_2e_3e',['tuple&lt; _TailT...&gt;',['../namespacextd.html',1,'xtd']]],
+  ['tuple_3c_20_5fheadt_2c_20_5ftailt_2e_2e_2e_3e',['tuple&lt; _head_t, _tail_t...&gt;',['../classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4.html',1,'xtd']]],
+  ['tuple_3c_20_5ftailt_2e_2e_2e_3e',['tuple&lt; _tail_t...&gt;',['../namespacextd.html',1,'xtd']]],
   ['tuple_3c_3e',['tuple&lt;&gt;',['../classxtd_1_1tuple_3_4.html',1,'xtd']]],
-  ['type',['type',['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3bce247106dfaac57ac70c2f10e56bdd',1,'xtd::socket::socket_base&lt; _AddressT, _SocketT, _Protocol &gt;::type()'],['../classxtd_1_1parse_1_1rule__base.html#a35018cb83d9eab19fe3344372b8c3594',1,'xtd::parse::rule_base::type()'],['../classxtd_1_1parse_1_1rule.html#ab1016f64d99f09c99bed3901414a5433',1,'xtd::parse::rule::type()']]]
+  ['type',['type',['../classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3bce247106dfaac57ac70c2f10e56bdd',1,'xtd::socket::socket_base&lt; _address_t, _socket_t, _socket_protocol &gt;::type()'],['../classxtd_1_1parse_1_1rule__base.html#a35018cb83d9eab19fe3344372b8c3594',1,'xtd::parse::rule_base::type()'],['../classxtd_1_1parse_1_1rule.html#ab1016f64d99f09c99bed3901414a5433',1,'xtd::parse::rule::type()']]]
 ];

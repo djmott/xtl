@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>XTL: xtd::rpc::rpc_call&lt; _DeclT, _return_t(_arg_ts...)&gt; Class Template Reference</title>
+<title>XTL: xtd::rpc::rpc_call&lt; _decl_t, _return_t(_arg_ts...)&gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -113,14 +113,14 @@ $(document).ready(function(){initNavTree('classxtd_1_1rpc_1_1rpc__call_3_01___de
   <div class="summary">
 <a href="#pub-types">Public Types</a>  </div>
   <div class="headertitle">
-<div class="title">xtd::rpc::rpc_call&lt; _DeclT, _return_t(_arg_ts...)&gt; Class Template Reference</div>  </div>
+<div class="title">xtd::rpc::rpc_call&lt; _decl_t, _return_t(_arg_ts...)&gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>super class of rpc call declarations concrete rpc call declarations subclass <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">rpc_call</a>  
  <a href="classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::rpc::rpc_call&lt; _DeclT, _return_t(_arg_ts...)&gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::rpc::rpc_call&lt; _decl_t, _return_t(_arg_ts...)&gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
@@ -145,13 +145,13 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>upload_marshaler_typ
 <tr class="separator:a1d04ad3541b7a90fc4ed6a3f445b8bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename _DeclT, typename _return_t, typename... _arg_ts&gt;<br/>
-class xtd::rpc::rpc_call&lt; _DeclT, _return_t(_arg_ts...)&gt;</h3>
+<div class="textblock"><h3>template&lt;typename _decl_t, typename _return_t, typename... _arg_ts&gt;<br/>
+class xtd::rpc::rpc_call&lt; _decl_t, _return_t(_arg_ts...)&gt;</h3>
 
 <p>super class of rpc call declarations concrete rpc call declarations subclass <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">rpc_call</a> </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">_DeclT</td><td>the concrete implementation type passed as a curiously recurring parameter </td></tr>
+    <tr><td class="paramname">_decl_t</td><td>the concrete implementation type passed as a curiously recurring parameter </td></tr>
     <tr><td class="paramname">_return_t</td><td>return type of the rpc call </td></tr>
     <tr><td class="paramname">...</td><td>list of call parameters </td></tr>
   </table>
@@ -164,10 +164,10 @@ class xtd::rpc::rpc_call&lt; _DeclT, _return_t(_arg_ts...)&gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _DeclT , typename _return_t , typename... _arg_ts&gt; </div>
+template&lt;typename _decl_t , typename _return_t , typename... _arg_ts&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">xtd::rpc::rpc_call</a>&lt; _DeclT, _return_t(_arg_ts...)&gt;::<a class="el" href="classxtd_1_1rpc_1_1marshaler.html">download_marshaler_type</a> =  <a class="el" href="classxtd_1_1rpc_1_1marshaler.html">marshaler</a>&lt;true, _arg_ts..., _return_t&amp;&gt;</td>
+          <td class="memname">using <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">xtd::rpc::rpc_call</a>&lt; _decl_t, _return_t(_arg_ts...)&gt;::<a class="el" href="classxtd_1_1rpc_1_1marshaler.html">download_marshaler_type</a> =  <a class="el" href="classxtd_1_1rpc_1_1marshaler.html">marshaler</a>&lt;true, _arg_ts..., _return_t&amp;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -180,10 +180,10 @@ template&lt;typename _DeclT , typename _return_t , typename... _arg_ts&gt; </div
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _DeclT , typename _return_t , typename... _arg_ts&gt; </div>
+template&lt;typename _decl_t , typename _return_t , typename... _arg_ts&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">xtd::rpc::rpc_call</a>&lt; _DeclT, _return_t(_arg_ts...)&gt;::function_type =  std::function&lt;_return_t(_arg_ts...)&gt;</td>
+          <td class="memname">using <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">xtd::rpc::rpc_call</a>&lt; _decl_t, _return_t(_arg_ts...)&gt;::function_type =  std::function&lt;_return_t(_arg_ts...)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -196,10 +196,10 @@ template&lt;typename _DeclT , typename _return_t , typename... _arg_ts&gt; </div
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _DeclT , typename _return_t , typename... _arg_ts&gt; </div>
+template&lt;typename _decl_t , typename _return_t , typename... _arg_ts&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">xtd::rpc::rpc_call</a>&lt; _DeclT, _return_t(_arg_ts...)&gt;::return_type =  _return_t</td>
+          <td class="memname">using <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">xtd::rpc::rpc_call</a>&lt; _decl_t, _return_t(_arg_ts...)&gt;::return_type =  _return_t</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -212,10 +212,10 @@ template&lt;typename _DeclT , typename _return_t , typename... _arg_ts&gt; </div
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _DeclT , typename _return_t , typename... _arg_ts&gt; </div>
+template&lt;typename _decl_t , typename _return_t , typename... _arg_ts&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">xtd::rpc::rpc_call</a>&lt; _DeclT, _return_t(_arg_ts...)&gt;::<a class="el" href="classxtd_1_1rpc_1_1marshaler.html">upload_marshaler_type</a> =  <a class="el" href="classxtd_1_1rpc_1_1marshaler.html">marshaler</a>&lt;false, size_t, _arg_ts...&gt;</td>
+          <td class="memname">using <a class="el" href="classxtd_1_1rpc_1_1rpc__call.html">xtd::rpc::rpc_call</a>&lt; _decl_t, _return_t(_arg_ts...)&gt;::<a class="el" href="classxtd_1_1rpc_1_1marshaler.html">upload_marshaler_type</a> =  <a class="el" href="classxtd_1_1rpc_1_1marshaler.html">marshaler</a>&lt;false, size_t, _arg_ts...&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -233,7 +233,7 @@ template&lt;typename _DeclT , typename _return_t , typename... _arg_ts&gt; </div
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><b>rpc</b></li><li class="navelem"><a class="el" href="classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4.html">rpc_call< _DeclT, _return_t(_arg_ts...)></a></li>
+    <li class="navelem"><a class="el" href="namespacextd.html">xtd</a></li><li class="navelem"><b>rpc</b></li><li class="navelem"><a class="el" href="classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4.html">rpc_call< _decl_t, _return_t(_arg_ts...)></a></li>
     <li class="footer">Generated on Tue Aug 9 2016 19:59:26 for XTL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>XTL: xtd::concurrent::rw_lock_base&lt; _WaitPolicyT &gt; Class Template Reference</title>
+<title>XTL: xtd::concurrent::rw_lock_base&lt; _wait_policy_t &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -115,14 +115,14 @@ $(document).ready(function(){initNavTree('classxtd_1_1concurrent_1_1rw__lock__ba
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
-<div class="title">xtd::concurrent::rw_lock_base&lt; _WaitPolicyT &gt; Class Template Reference</div>  </div>
+<div class="title">xtd::concurrent::rw_lock_base&lt; _wait_policy_t &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>A multiple reader/single writer spin lock supports 2^31 simultaneous readers.  
  <a href="classxtd_1_1concurrent_1_1rw__lock__base.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::concurrent::rw_lock_base&lt; _WaitPolicyT &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::concurrent::rw_lock_base&lt; _wait_policy_t &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
@@ -143,7 +143,7 @@ Data Structures</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:ae1ee2853c4e75b10345e942f4b0a61bd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1ee2853c4e75b10345e942f4b0a61bd"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>wait_policy_type</b> = _WaitPolicyT</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>wait_policy_type</b> = _wait_policy_t</td></tr>
 <tr class="separator:ae1ee2853c4e75b10345e942f4b0a61bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -175,13 +175,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a62589d1d95610b780fc13c73a70e6c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename _WaitPolicyT&gt;<br/>
-class xtd::concurrent::rw_lock_base&lt; _WaitPolicyT &gt;</h3>
+<div class="textblock"><h3>template&lt;typename _wait_policy_t&gt;<br/>
+class xtd::concurrent::rw_lock_base&lt; _wait_policy_t &gt;</h3>
 
 <p>A multiple reader/single writer spin lock supports 2^31 simultaneous readers. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">_WaitPolicyT</td><td>behavior when spinning </td></tr>
+    <tr><td class="paramname">_wait_policy_t</td><td>behavior when spinning </td></tr>
   </table>
   </dd>
 </dl>
@@ -192,13 +192,13 @@ class xtd::concurrent::rw_lock_base&lt; _WaitPolicyT &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _WaitPolicyT &gt; </div>
+template&lt;typename _wait_policy_t &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classxtd_1_1concurrent_1_1rw__lock__base.html">xtd::concurrent::rw_lock_base</a>&lt; _WaitPolicyT &gt;::try_lock_read </td>
+          <td class="memname">bool <a class="el" href="classxtd_1_1concurrent_1_1rw__lock__base.html">xtd::concurrent::rw_lock_base</a>&lt; _wait_policy_t &gt;::try_lock_read </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -222,13 +222,13 @@ template&lt;typename _WaitPolicyT &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _WaitPolicyT &gt; </div>
+template&lt;typename _wait_policy_t &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classxtd_1_1concurrent_1_1rw__lock__base.html">xtd::concurrent::rw_lock_base</a>&lt; _WaitPolicyT &gt;::try_lock_write </td>
+          <td class="memname">bool <a class="el" href="classxtd_1_1concurrent_1_1rw__lock__base.html">xtd::concurrent::rw_lock_base</a>&lt; _wait_policy_t &gt;::try_lock_write </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

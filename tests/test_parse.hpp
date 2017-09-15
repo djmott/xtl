@@ -203,7 +203,7 @@ TEST(test_parser, basic_input_statement) {
   EXPECT_TRUE(!!basic_grammar::parser::parse(s.begin(), s.end()));
   s = "xx123=input()\n";
   auto oAST = basic_grammar::parser::parse(s.begin(), s.end());
-  EXPECT_FALSE(!!oAST);
+  EXPECT_TRUE(!!oAST);
 }
 
 

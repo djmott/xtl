@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>XTL: xtd::concurrent::spin_lock_base&lt; _WaitPolicyT &gt; Class Template Reference</title>
+<title>XTL: xtd::concurrent::spin_lock_base&lt; _wait_policy_t &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -115,14 +115,14 @@ $(document).ready(function(){initNavTree('classxtd_1_1concurrent_1_1spin__lock__
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a>  </div>
   <div class="headertitle">
-<div class="title">xtd::concurrent::spin_lock_base&lt; _WaitPolicyT &gt; Class Template Reference</div>  </div>
+<div class="title">xtd::concurrent::spin_lock_base&lt; _wait_policy_t &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>A single owner spinning lock.  
  <a href="classxtd_1_1concurrent_1_1spin__lock__base.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::concurrent::spin_lock_base&lt; _WaitPolicyT &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for xtd::concurrent::spin_lock_base&lt; _wait_policy_t &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
@@ -134,10 +134,10 @@ $(document).ready(function(){initNavTree('classxtd_1_1concurrent_1_1spin__lock__
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:afee1755a74859c9674f45f36e182e66d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afee1755a74859c9674f45f36e182e66d"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>scope_locker</b> = <a class="el" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker</a>&lt; <a class="el" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>&lt; _WaitPolicyT &gt;&gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>scope_locker</b> = <a class="el" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker</a>&lt; <a class="el" href="classxtd_1_1concurrent_1_1spin__lock__base.html">spin_lock_base</a>&lt; _wait_policy_t &gt;&gt;</td></tr>
 <tr class="separator:afee1755a74859c9674f45f36e182e66d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b72353df7127af7edc69883a137e6d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b72353df7127af7edc69883a137e6d6"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>wait_policy_type</b> = _WaitPolicyT</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>wait_policy_type</b> = _wait_policy_t</td></tr>
 <tr class="separator:a8b72353df7127af7edc69883a137e6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -170,8 +170,8 @@ static constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>
 <tr class="separator:a8c56cc2710c65b742c5b11454cbf45e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename _WaitPolicyT = null_wait_policy&gt;<br/>
-class xtd::concurrent::spin_lock_base&lt; _WaitPolicyT &gt;</h3>
+<div class="textblock"><h3>template&lt;typename _wait_policy_t = null_wait_policy&gt;<br/>
+class xtd::concurrent::spin_lock_base&lt; _wait_policy_t &gt;</h3>
 
 <p>A single owner spinning lock. </p>
 
@@ -181,13 +181,13 @@ class xtd::concurrent::spin_lock_base&lt; _WaitPolicyT &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename _WaitPolicyT  = null_wait_policy&gt; </div>
+template&lt;typename _wait_policy_t  = null_wait_policy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classxtd_1_1concurrent_1_1spin__lock__base.html">xtd::concurrent::spin_lock_base</a>&lt; _WaitPolicyT &gt;::try_lock </td>
+          <td class="memname">bool <a class="el" href="classxtd_1_1concurrent_1_1spin__lock__base.html">xtd::concurrent::spin_lock_base</a>&lt; _wait_policy_t &gt;::try_lock </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

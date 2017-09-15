@@ -33,8 +33,8 @@ namespace xtd{
     */
     class exception : public xtd::exception{
     public:
-      template <typename _DatabaseT, typename _ExpressionT>
-      inline static int _throw_if(_DatabaseT db, const xtd::source_location& source, int ret, _ExpressionT exp, const char* expstr){
+      template <typename _database_t, typename _expression_t>
+      inline static int _throw_if(_database_t db, const xtd::source_location& source, int ret, _expression_t exp, const char* expstr){
         if (exp(ret)){
           throw exception(db, source, ret, expstr);
         }
@@ -45,8 +45,8 @@ namespace xtd{
 
       /// constructors
       /// @{
-      template <typename _DatabaseT>
-      exception(_DatabaseT db, const source_location& Source, int ErrCode, const std::string& What) : xtd::exception(Source, What){
+      template <typename _database_t>
+      exception(_database_t db, const source_location& Source, int ErrCode, const std::string& What) : xtd::exception(Source, What){
 
         _errnum = ErrCode;
 
@@ -67,7 +67,7 @@ namespace xtd{
 
     namespace _{
 
-      template <typename _Ty> struct sqlite_field_loader;
+      template <typename _ty> struct sqlite_field_loader;
 
       template <> struct sqlite_field_loader<double>{
         template <int Index> static double get(sqlite3_stmt* st){ return sqlite3_column_double(st, Index); }
@@ -126,15 +126,15 @@ namespace xtd{
       }
     };
 
-    template <typename _HeadT, typename ... _TailT> class result_set<_HeadT, _TailT...> : public result_set<_TailT...>{
+    template <typename _head_t, typename ... _tail_ts> class result_set<_head_t, _tail_ts...> : public result_set<_tail_ts...>{
     protected:
       friend class database;
-      using _super_t = result_set<_TailT...>;
+      using _super_t = result_set<_tail_ts...>;
       result_set(sqlite3 * pDB, sqlite3_stmt * pStatement) : _super_t(pDB, pStatement){}
     public:
-      using value_type = _HeadT;
+      using value_type = _head_t;
       using pointer = std::shared_ptr < result_set > ;
-      template <int _index> using type_at = typename xtd::_::tuple_index<_index, _HeadT, _TailT...>::value_type;
+      template <int _index> using type_at = typename xtd::_::tuple_index<_index, _head_t, _tail_ts...>::value_type;
       template <int _index> type_at<_index> get(){
         return _::sqlite_field_loader<type_at<_index>>::template get<_index>(_super_t::_pStatement);
       }
@@ -178,17 +178,17 @@ namespace xtd{
         static void set(sqlite3 *, sqlite3_stmt *){}
       };
 
-      template <int idx, typename _HeadT, typename ... _TailT> struct sqlite_command_params<idx, _HeadT, _TailT...>{
-        static void set(sqlite3 * pDB, sqlite3_stmt * st, const _HeadT& oHead, _TailT&&...oTail){
-          sqlite_field_binder<_HeadT>::template set<idx>(pDB, st, oHead);
-          sqlite_command_params<1 + idx, _TailT...>::set(pDB, st, std::forward<_TailT>(oTail)...);
+      template <int idx, typename _head_t, typename ... _tail_ts> struct sqlite_command_params<idx, _head_t, _tail_ts...>{
+        static void set(sqlite3 * pDB, sqlite3_stmt * st, const _head_t& oHead, _tail_ts&&...oTail){
+          sqlite_field_binder<_head_t>::template set<idx>(pDB, st, oHead);
+          sqlite_command_params<1 + idx, _tail_ts...>::set(pDB, st, std::forward<_tail_ts>(oTail)...);
         }
       };
     }
     /**
     command
     */
-    template <typename ... _ArgTs> class command{
+    template <typename ... _arg_ts> class command{
       friend class database;
       sqlite3 * _pDatabase;
       sqlite3_stmt * _pStatement;
@@ -207,8 +207,8 @@ namespace xtd{
         std::swap(_pStatement, src._pStatement);
         return *this;
       }
-      int operator()(const _ArgTs&...oArgs){
-        _::sqlite_command_params<1, const _ArgTs& ...>::set(_pDatabase, _pStatement, std::forward<const _ArgTs &>(oArgs)...);
+      int operator()(const _arg_ts&...oArgs){
+        _::sqlite_command_params<1, const _arg_ts& ...>::set(_pDatabase, _pStatement, std::forward<const _arg_ts &>(oArgs)...);
         exception::throw_if(_pDatabase, sqlite3_step(_pStatement), [](int i){ return !(i == SQLITE_OK || i == SQLITE_DONE || i == SQLITE_ROW);  });
         exception::throw_if(_pDatabase, sqlite3_reset(_pStatement), [](int i){return SQLITE_OK != i; });
         return sqlite3_changes(_pDatabase);
@@ -217,11 +217,11 @@ namespace xtd{
 
 
 
-    template <typename _DatabaseT> class transaction{
+    template <typename _database_t> class transaction{
       friend class database;
-      _DatabaseT * _database;
+      _database_t * _database;
       bool _finished;
-      transaction(_DatabaseT * oDB) : _database(oDB), _finished(false){
+      transaction(_database_t * oDB) : _database(oDB), _finished(false){
         if (_database) _database->execute("begin transaction;");
       }
     public:
@@ -292,11 +292,11 @@ namespace xtd{
         return pointer(new database(oPath, flags));
       }
 
-      template <typename ... _ArgTs>
-      typename command<_ArgTs...>::pointer prepare(const xtd::string& sSQL){
-        command<_ArgTs...> oRet(_pDB, nullptr);
+      template <typename ... _arg_ts>
+      typename command<_arg_ts...>::pointer prepare(const xtd::string& sSQL){
+        command<_arg_ts...> oRet(_pDB, nullptr);
         exception::throw_if(_pDB, sqlite3_prepare_v2(_pDB, sSQL.c_str(), (int)(1 + sSQL.size()), &oRet._pStatement, nullptr), [](int i){ return SQLITE_OK != i; });
-        return std::make_shared<command<_ArgTs...>>(std::move(oRet));
+        return std::make_shared<command<_arg_ts...>>(std::move(oRet));
       }
 
       transaction_type begin_transaction(){
@@ -308,11 +308,11 @@ namespace xtd{
         return (*oCmd)();
       }
 
-      template <typename ... _Types>
-      typename result_set<_Types...>::pointer execute_reader(const xtd::string& sSQL){
-        result_set<_Types...> oRet(_pDB, nullptr);
+      template <typename ... _ts>
+      typename result_set<_ts...>::pointer execute_reader(const xtd::string& sSQL){
+        result_set<_ts...> oRet(_pDB, nullptr);
         exception::throw_if(_pDB, sqlite3_prepare_v2(_pDB, sSQL.c_str(), (int)(1 + sSQL.size()), &oRet._pStatement, nullptr), [](int i){ return SQLITE_OK != i; });
-        return std::make_shared<result_set<_Types...>>(std::move(oRet));
+        return std::make_shared<result_set<_ts...>>(std::move(oRet));
       }
 
 

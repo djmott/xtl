@@ -7,7 +7,7 @@ creates or loads singleton objects in shared memory regions
 #include <xtd/xtd.hpp>
 
 namespace xtd{
-  template <typename _Ty> class shared_mem_obj{
+  template <typename _ty> class shared_mem_obj{
     std::atomic<bool> _BeginInit; //set when initialization has began
     std::atomic<bool> _EndInit; //set when initialization has complete
     size_t _ObjectID;

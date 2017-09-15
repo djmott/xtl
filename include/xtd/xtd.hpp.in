@@ -67,7 +67,7 @@ The build/target/host OS selected by cmake configure
     #define XTD_COMPILER @XTD_COMPILER@
 #endif
 
-
+/*
 #if (XTD_COMPILER_GCC & XTD_COMPILER) && (XTD_OS_UNIX & XTD_OS)
 
 #define fopen_s( retfile , spath, smode ) *retfile = fopen(spath, smode)
@@ -78,7 +78,7 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 };
 
 #endif
-
+*/
 ///@}
 
 

@@ -76,17 +76,19 @@ namespace xtd{
 
     public:
 
+      using _this_t = mapped_vector<_ty, _page_size, _erase_policy_t>::iterator;
+
       bool operator != (const iterator& rhs) const { return _current_index != rhs._current_index; }
 
-      iterator& operator++(int){
-        _current_index++;
-        return *this;
-      }
-
-      iterator operator++(){
+      iterator operator++(int){
         iterator oRet(*this);
         this->operator++(0);
         return oRet;
+      }
+
+      iterator& operator++(){
+        _current_index++;
+        return *this;
       }
 
       value_type* get(){

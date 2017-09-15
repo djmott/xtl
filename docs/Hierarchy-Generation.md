@@ -4,16 +4,16 @@ This is a TMP pattern to generate a class hierarchy from a collection of policy 
 
 The various policies are required to implement a parameterized super class idiom:
 ~~~{.cpp}
-template <class _SuperT> class OnClick : _SuperT {
+template <class _super_t> class OnClick : _super_t {
     ...
 };
-template <class _SuperT> class OnPaint : _SuperT {
+template <class _super_t> class OnPaint : _super_t {
     ...
 };
-template <class _SuperT> class OnResize : _SuperT {
+template <class _super_t> class OnResize : _super_t {
     ...
 };
-template <class _SuperT> class OnTimer : _SuperT {
+template <class _super_t> class OnTimer : _super_t {
     ...
 };
 ~~~

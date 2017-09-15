@@ -9,3 +9,4 @@ docs/Doxyfile
 doxygen_sqlite3.db
 include/xtd/xtd.hpp
 CMakeSettings.json
+tests/gtest

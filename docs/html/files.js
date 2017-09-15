@@ -4,7 +4,7 @@ var files =
       [ "btree", "classxtd_1_1btree.html", "classxtd_1_1btree" ]
     ] ],
     [ "callback.hpp", "callback_8hpp.html", [
-      [ "callback< _ReturnT(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ]
+      [ "callback< _return_t(_Args...) >", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4.html", "classxtd_1_1callback_3_01___return_t_07___args_8_8_8_08_01_4" ]
     ] ],
     [ "concurrent.hpp", "concurrent_8hpp.html", null ],
     [ "dbghelp.hpp", "dbghelp_8hpp.html", [
@@ -70,30 +70,30 @@ var files =
     [ "rpc.hpp", "rpc_8hpp.html", [
       [ "bad_call", "classxtd_1_1rpc_1_1bad__call.html", "classxtd_1_1rpc_1_1bad__call" ],
       [ "client", "classxtd_1_1rpc_1_1client.html", null ],
-      [ "client< _TransportT >", "classxtd_1_1rpc_1_1client_3_01___transport_t_01_4.html", "classxtd_1_1rpc_1_1client_3_01___transport_t_01_4" ],
-      [ "client< _TransportT, _HeadT, _TailT...>", "classxtd_1_1rpc_1_1client_3_01___transport_t_00_01___head_t_00_01___tail_t_8_8_8_4.html", "classxtd_1_1rpc_1_1client_3_01___transport_t_00_01___head_t_00_01___tail_t_8_8_8_4" ],
+      [ "client< _transport_t >", "classxtd_1_1rpc_1_1client_3_01___transport_t_01_4.html", "classxtd_1_1rpc_1_1client_3_01___transport_t_01_4" ],
+      [ "client< _transport_t, _head_t, _tail_t...>", "classxtd_1_1rpc_1_1client_3_01___transport_t_00_01___head_t_00_01___tail_t_8_8_8_4.html", "classxtd_1_1rpc_1_1client_3_01___transport_t_00_01___head_t_00_01___tail_t_8_8_8_4" ],
       [ "malformed_payload", "classxtd_1_1rpc_1_1malformed__payload.html", "classxtd_1_1rpc_1_1malformed__payload" ],
       [ "marshaler", "classxtd_1_1rpc_1_1marshaler.html", null ],
-      [ "marshaler< _SkipByVal >", "classxtd_1_1rpc_1_1marshaler_3_01___skip_by_val_01_4.html", "classxtd_1_1rpc_1_1marshaler_3_01___skip_by_val_01_4" ],
-      [ "marshaler< false, _Ty &, _ArgTs...>", "classxtd_1_1rpc_1_1marshaler_3_01false_00_01___ty_01_6_00_01___arg_ts_8_8_8_4.html", "classxtd_1_1rpc_1_1marshaler_3_01false_00_01___ty_01_6_00_01___arg_ts_8_8_8_4" ],
-      [ "marshaler< false, _Ty, _ArgTs...>", "classxtd_1_1rpc_1_1marshaler_3_01false_00_01___ty_00_01___arg_ts_8_8_8_4.html", "classxtd_1_1rpc_1_1marshaler_3_01false_00_01___ty_00_01___arg_ts_8_8_8_4" ],
-      [ "marshaler< true, _Ty, _ArgTs...>", "classxtd_1_1rpc_1_1marshaler_3_01true_00_01___ty_00_01___arg_ts_8_8_8_4.html", "classxtd_1_1rpc_1_1marshaler_3_01true_00_01___ty_00_01___arg_ts_8_8_8_4" ],
-      [ "marshaler< true, const _Ty &, _ArgTs...>", "classxtd_1_1rpc_1_1marshaler_3_01true_00_01const_01___ty_01_6_00_01___arg_ts_8_8_8_4.html", "classxtd_1_1rpc_1_1marshaler_3_01true_00_01const_01___ty_01_6_00_01___arg_ts_8_8_8_4" ],
+      [ "marshaler< _skip_byval >", "classxtd_1_1rpc_1_1marshaler_3_01___skip_by_val_01_4.html", "classxtd_1_1rpc_1_1marshaler_3_01___skip_by_val_01_4" ],
+      [ "marshaler< false, _ty &, _arg_ts...>", "classxtd_1_1rpc_1_1marshaler_3_01false_00_01___ty_01_6_00_01___arg_ts_8_8_8_4.html", "classxtd_1_1rpc_1_1marshaler_3_01false_00_01___ty_01_6_00_01___arg_ts_8_8_8_4" ],
+      [ "marshaler< false, _ty, _arg_ts...>", "classxtd_1_1rpc_1_1marshaler_3_01false_00_01___ty_00_01___arg_ts_8_8_8_4.html", "classxtd_1_1rpc_1_1marshaler_3_01false_00_01___ty_00_01___arg_ts_8_8_8_4" ],
+      [ "marshaler< true, _ty, _arg_ts...>", "classxtd_1_1rpc_1_1marshaler_3_01true_00_01___ty_00_01___arg_ts_8_8_8_4.html", "classxtd_1_1rpc_1_1marshaler_3_01true_00_01___ty_00_01___arg_ts_8_8_8_4" ],
+      [ "marshaler< true, const _ty &, _arg_ts...>", "classxtd_1_1rpc_1_1marshaler_3_01true_00_01const_01___ty_01_6_00_01___arg_ts_8_8_8_4.html", "classxtd_1_1rpc_1_1marshaler_3_01true_00_01const_01___ty_01_6_00_01___arg_ts_8_8_8_4" ],
       [ "marshaler_base", "classxtd_1_1rpc_1_1marshaler__base.html", null ],
-      [ "marshaler_base< _Ty >", "classxtd_1_1rpc_1_1marshaler__base_3_01___ty_01_4.html", "classxtd_1_1rpc_1_1marshaler__base_3_01___ty_01_4" ],
-      [ "marshaler_base< _Ty(&)[_Len] >", "classxtd_1_1rpc_1_1marshaler__base_3_01___ty_07_6_08[___len]_01_4.html", "classxtd_1_1rpc_1_1marshaler__base_3_01___ty_07_6_08[___len]_01_4" ],
+      [ "marshaler_base< _ty >", "classxtd_1_1rpc_1_1marshaler__base_3_01___ty_01_4.html", "classxtd_1_1rpc_1_1marshaler__base_3_01___ty_01_4" ],
+      [ "marshaler_base< _ty(&)[_len] >", "classxtd_1_1rpc_1_1marshaler__base_3_01___ty_07_6_08[___len]_01_4.html", "classxtd_1_1rpc_1_1marshaler__base_3_01___ty_07_6_08[___len]_01_4" ],
       [ "marshaler_base< std::string >", "classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1string_01_4.html", "classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1string_01_4" ],
-      [ "marshaler_base< std::vector< _Ty > >", "classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1vector_3_01___ty_01_4_01_4.html", "classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1vector_3_01___ty_01_4_01_4" ],
+      [ "marshaler_base< std::vector< _ty > >", "classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1vector_3_01___ty_01_4_01_4.html", "classxtd_1_1rpc_1_1marshaler__base_3_01std_1_1vector_3_01___ty_01_4_01_4" ],
       [ "marshaler_base<>", "classxtd_1_1rpc_1_1marshaler__base_3_4.html", "classxtd_1_1rpc_1_1marshaler__base_3_4" ],
       [ "null_transport", "classxtd_1_1rpc_1_1null__transport.html", "classxtd_1_1rpc_1_1null__transport" ],
       [ "payload", "classxtd_1_1rpc_1_1payload.html", "classxtd_1_1rpc_1_1payload" ],
       [ "protocol_exception", "classxtd_1_1rpc_1_1protocol__exception.html", "classxtd_1_1rpc_1_1protocol__exception" ],
       [ "rpc_call", "classxtd_1_1rpc_1_1rpc__call.html", null ],
-      [ "rpc_call< _DeclT, _ReturnT(_ArgTs...)>", "classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4.html", "classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4" ],
+      [ "rpc_call< _decl_t, _return_t(_arg_ts...)>", "classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4.html", "classxtd_1_1rpc_1_1rpc__call_3_01___decl_t_00_01___return_t_07___arg_ts_8_8_8_08_4" ],
       [ "server", "classxtd_1_1rpc_1_1server.html", "classxtd_1_1rpc_1_1server" ],
       [ "server_impl", "classxtd_1_1rpc_1_1server__impl.html", null ],
-      [ "server_impl< _TransportT, _DeclT >", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4" ],
-      [ "server_impl< _TransportT, _DeclT, _HeadT, _TailT...>", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4" ],
+      [ "server_impl< _transport_t, _decl_t >", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4" ],
+      [ "server_impl< _transport_t, _decl_t, _head_t, _tail_t...>", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4.html", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_00_01___head_t_00_01___tail_t_8_8_8_4" ],
       [ "tcp_transport", "classxtd_1_1rpc_1_1tcp__transport.html", "classxtd_1_1rpc_1_1tcp__transport" ]
     ] ],
     [ "rw_lock.hpp", "rw__lock_8hpp.html", "rw__lock_8hpp" ],
@@ -107,7 +107,7 @@ var files =
     [ "string.hpp", "string_8hpp.html", "string_8hpp" ],
     [ "tuple.hpp", "tuple_8hpp.html", [
       [ "tuple", "namespacextd.html#classxtd_1_1tuple", null ],
-      [ "tuple< _HeadT, _TailT...>", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4.html", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4" ],
+      [ "tuple< _head_t, _tail_t...>", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4.html", "classxtd_1_1tuple_3_01___head_t_00_01___tail_t_8_8_8_4" ],
       [ "tuple<>", "classxtd_1_1tuple_3_4.html", "classxtd_1_1tuple_3_4" ]
     ] ],
     [ "unique_id.hpp", "unique__id_8hpp.html", null ],

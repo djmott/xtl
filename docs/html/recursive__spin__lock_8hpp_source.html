@@ -120,20 +120,20 @@ $(document).ready(function(){initNavTree('recursive__spin__lock_8hpp_source.html
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>xtd{</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keyword">namespace </span>concurrent {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">namespace </span>_ {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;      <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _WaitPolicyT = null_wait_policy&gt;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;      <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _wait_policy_t = null_wait_policy&gt;</div>
 <div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">   14</a></span>&#160;      <span class="keyword">class </span><a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>{</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">using</span> wait_policy_type = _WaitPolicyT;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">using</span> wait_policy_type = _wait_policy_t;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">using</span> hash_type = std::hash&lt;std::thread::id&gt;;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        std::atomic&lt;size_t&gt; _lock;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        hash_type _hash;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        uint32_t _lock_count;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        wait_policy_type _WaitPolicy;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        wait_policy_type _wait_policy;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;      <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">using</span> <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">scope_locker</a> = <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker&lt;recursive_spin_lock_base&lt;_WaitPolicyT&gt;</a>&gt;;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">using</span> <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">scope_locker</a> = <a class="code" href="classxtd_1_1concurrent_1_1scope__locker.html">xtd::concurrent::scope_locker&lt;recursive_spin_lock_base&lt;_wait_policy_t&gt;</a>&gt;;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        ~<a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(wait_policy_type oWait = wait_policy_type()) : _lock(-1), _lock_count(0), _WaitPolicy(oWait) {};</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(wait_policy_type oWait = wait_policy_type()) : _lock(-1), _lock_count(0), _wait_policy(oWait) {};</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a>(<span class="keyword">const</span> <a class="code" href="classxtd_1_1concurrent_1_1___1_1recursive__spin__lock__base.html">recursive_spin_lock_base</a> &amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
@@ -151,7 +151,7 @@ $(document).ready(function(){initNavTree('recursive__spin__lock_8hpp_source.html
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">void</span> lock() {</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;          <span class="keywordflow">while</span> (!try_lock()) {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            _WaitPolicy();</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            _wait_policy();</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;          }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        }</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>

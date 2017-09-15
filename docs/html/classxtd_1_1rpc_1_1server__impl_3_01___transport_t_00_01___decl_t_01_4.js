@@ -7,5 +7,5 @@ var classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4 =
     [ "invoke", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html#a42d4ae123705a437e475cc22e503c32b", null ],
     [ "start_server", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html#ade4f37a1558fd4c842a5ae6cd1842c8c", null ],
     [ "stop_server", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html#ac37e0983e190243a393c2a8a51936608", null ],
-    [ "_Transport", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html#afd3b4a18f0ab87ccf4395549d41e6054", null ]
+    [ "_tranport", "classxtd_1_1rpc_1_1server__impl_3_01___transport_t_00_01___decl_t_01_4.html#afd3b4a18f0ab87ccf4395549d41e6054", null ]
 ];

@@ -151,8 +151,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>vector_type</b> = st
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5e0e7f47809fe73ceddfa4de0daa76e0"><td class="memTemplParams" colspan="2">template&lt;typename... _ChildRuleTs&gt; </td></tr>
-<tr class="memitem:a5e0e7f47809fe73ceddfa4de0daa76e0"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1parse_1_1rule__base.html#a5e0e7f47809fe73ceddfa4de0daa76e0">rule_base</a> (_ChildRuleTs &amp;&amp;...oChildRules)</td></tr>
+<tr class="memitem:a5e0e7f47809fe73ceddfa4de0daa76e0"><td class="memTemplParams" colspan="2">template&lt;typename... _child_ts&gt; </td></tr>
+<tr class="memitem:a5e0e7f47809fe73ceddfa4de0daa76e0"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classxtd_1_1parse_1_1rule__base.html#a5e0e7f47809fe73ceddfa4de0daa76e0">rule_base</a> (_child_ts &amp;&amp;...oChildRules)</td></tr>
 <tr class="memdesc:a5e0e7f47809fe73ceddfa4de0daa76e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a5e0e7f47809fe73ceddfa4de0daa76e0">More...</a><br/></td></tr>
 <tr class="separator:a5e0e7f47809fe73ceddfa4de0daa76e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a982ea7fbdf86e151c958125aa3a43de8"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxtd_1_1parse_1_1rule__base.html#a982ea7fbdf86e151c958125aa3a43de8">isa</a> (const std::type_info &amp;oType) const =0</td></tr>
@@ -169,7 +169,7 @@ virtual const std::type_info &amp;&#160;</td><td class="memItemRight" valign="bo
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a0e054bbd2867db06571f76129d09faf1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e054bbd2867db06571f76129d09faf1"></a>
-vector_type&#160;</td><td class="memItemRight" valign="bottom"><b>_Items</b></td></tr>
+vector_type&#160;</td><td class="memItemRight" valign="bottom"><b>_items</b></td></tr>
 <tr class="separator:a0e054bbd2867db06571f76129d09faf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -182,7 +182,7 @@ vector_type&#160;</td><td class="memItemRight" valign="bottom"><b>_Items</b></td
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename... _ChildRuleTs&gt; </div>
+template&lt;typename... _child_ts&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -190,7 +190,7 @@ template&lt;typename... _ChildRuleTs&gt; </div>
         <tr>
           <td class="memname">xtd::parse::rule_base::rule_base </td>
           <td>(</td>
-          <td class="paramtype">_ChildRuleTs &amp;&amp;...&#160;</td>
+          <td class="paramtype">_child_ts &amp;&amp;...&#160;</td>
           <td class="paramname"><em>oChildRules</em></td><td>)</td>
           <td></td>
         </tr>
@@ -272,7 +272,7 @@ template&lt;typename... _ChildRuleTs&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the implementation's is the specified type </dd></dl>
 
-<p>Implemented in <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; _DeclT, _ImplT &gt;</a>, <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; zero_or_more_&lt; _ty &gt; &gt;</a>, <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; one_or_more_&lt; _ty &gt; &gt;</a>, <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; character&lt; _value &gt; &gt;</a>, and <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; zero_or_one_&lt; _ty &gt; &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; _decl_t, _ImplT &gt;</a>, <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; zero_or_more_&lt; _ty &gt; &gt;</a>, <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; one_or_more_&lt; _ty &gt; &gt;</a>, <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; character&lt; _value &gt; &gt;</a>, and <a class="el" href="classxtd_1_1parse_1_1rule.html#a9da39208029dffaa336374cfe9b908e6">xtd::parse::rule&lt; zero_or_one_&lt; _ty &gt; &gt;</a>.</p>
 
 <p>Referenced by <a class="el" href="parse_8hpp_source.html#l00079">rule_base()</a>.</p>
 

@@ -46,7 +46,7 @@ var group___sockets =
       [ "onWrite", "classxtd_1_1socket_1_1selectable__socket.html#a3c5190f93147ba86fecf4dbb5b19bcfd", null ]
     ] ],
     [ "serializer", "group___sockets.html#classxtd_1_1socket_1_1serializer", null ],
-    [ "socket_base< _AddressT, _SocketT, _Protocol >", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html", [
+    [ "socket_base< _address_t, _socket_t, _socket_protocol >", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html", [
       [ "address_type", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#ac7ef7a493235c48414becf76e29465f1", null ],
       [ "shared_ptr", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a60127ea09116b9da737113d80edd4445", null ],
       [ "unique_ptr", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#ad680b3110b210ede2988e72e4676e044", null ],
@@ -64,7 +64,7 @@ var group___sockets =
       [ "read", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#ae0d27e5dbdcee4fd62084c004724962c", null ],
       [ "set_blocking", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a6a2e835383c4a8f35cbeef3a71ae97c1", null ],
       [ "write", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a88c001bb4b1b1ba81139a5614d1b28b3", null ],
-      [ "_Socket", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3f2efdeebba6a86c2e8b534e76746fe4", null ],
+      [ "_socket", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3f2efdeebba6a86c2e8b534e76746fe4", null ],
       [ "protocol", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#aef6747ca74bff04e1b630f988e12c17d", null ],
       [ "type", "classxtd_1_1socket_1_1socket__base_3_01___address_t_00_01___socket_t_00_01___protocol_01_4.html#a3bce247106dfaac57ac70c2f10e56bdd", null ]
     ] ],

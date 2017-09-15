@@ -66,8 +66,8 @@ namespace xtd{
       explicit exception(exception&& ex) : crt_exception(std::move(ex)){}
       /// @}
 
-      template <typename _ReturnT, typename _ExpressionT>
-      inline static _ReturnT _throw_if(const xtd::source_location& source, _ReturnT ret, _ExpressionT exp, const char* expstr){
+      template <typename _return_t, typename _expression_t>
+      inline static _return_t _throw_if(const xtd::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
         if (exp(ret)){
           throw exception(source, expstr);
         }
@@ -78,9 +78,9 @@ namespace xtd{
 
 #if (!DOXY_INVOKED)
     namespace _{
-      template <typename _Ty, int level, int optname> class socket_option{
+      template <typename _ty, int level, int optname> class socket_option{
       public:
-        using value_type = _Ty;
+        using value_type = _ty;
         static value_type get(SOCKET s){
           value_type iRet;
 #if  (XTD_COMPILER_MSVC & XTD_COMPILER)
@@ -194,34 +194,34 @@ namespace xtd{
 
 
 #if (!DOXY_INVOKED)
-    template<typename _AddressT, socket_type, socket_protocol, template<class> class ... _Policies> class socket_base;
+    template<typename _address_t, socket_type, socket_protocol, template<class> class ... _policy_ts> class socket_base;
 
 
-    template<typename _AddressT, socket_type _ST, socket_protocol _PR, template<class> class _HeadT, template<class> class ..._TailT>
-    class socket_base<_AddressT, _ST, _PR, _HeadT, _TailT...> : public _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >{
+    template<typename _address_t, socket_type _socket_t, socket_protocol _socket_protocol, template<class> class _head_t, template<class> class ..._tail_ts>
+    class socket_base<_address_t, _socket_t, _socket_protocol, _head_t, _tail_ts...> : public _head_t<socket_base<_address_t, _socket_t, _socket_protocol, _tail_ts...> >{
     public:
-      template<typename ... _ArgsT> explicit socket_base(_ArgsT &&...oArgs) : _HeadT<socket_base<_AddressT, _ST, _PR, _TailT...> >(std::forward<_ArgsT>(oArgs)...){}
+      template<typename ... _arg_ts> explicit socket_base(_arg_ts &&...oArgs) : _head_t<socket_base<_address_t, _socket_t, _socket_protocol, _tail_ts...> >(std::forward<_arg_ts>(oArgs)...){}
     };
 #endif
 
     /** Base class of the various socket specializations
     Hierarchy generation TMP pattern to create all the socket object types with the various behavioral policies.
      */
-    template<typename _AddressT, socket_type _SocketT, socket_protocol _Protocol>
-    class socket_base<_AddressT, _SocketT, _Protocol>{
+    template<typename _address_t, socket_type _socket_t, socket_protocol _socket_protocol>
+    class socket_base<_address_t, _socket_t, _socket_protocol>{
     public:
 
       /// typedefs
       /// @{
       using unique_ptr = std::unique_ptr<socket_base>;
       using shared_ptr = std::shared_ptr<socket_base>;
-      using address_type = _AddressT;
+      using address_type = _address_t;
       /// @}
 
       /// constants
       /// @{
-      static constexpr socket_type type = _SocketT;
-      static constexpr socket_protocol protocol = _Protocol;
+      static constexpr socket_type type = _socket_t;
+      static constexpr socket_protocol protocol = _socket_protocol;
       /// @}
 
       /// dtor
@@ -229,19 +229,19 @@ namespace xtd{
 
       /// constructors
       /// @{
-      socket_base() : _Socket(0){
+      socket_base() : _socket(0){
 #if (XTD_OS_WINDOWS & XTD_OS)
         winsock_initializer::get();
 #endif
-        _Socket = xtd::crt_exception::throw_if(::socket(address_type::address_family, (int)type, (int)protocol), [](SOCKET s){ return static_cast<SOCKET>(-1) == s; });
+        _socket = xtd::crt_exception::throw_if(::socket(address_type::address_family, (int)type, (int)protocol), [](SOCKET s){ return static_cast<SOCKET>(-1) == s; });
       }
 
-      explicit socket_base(socket_base&& src) : _Socket(src._Socket){
-        src._Socket = 0;
+      explicit socket_base(socket_base&& src) : _socket(src._socket){
+        src._socket = 0;
       }
 
 
-      explicit socket_base(SOCKET newval) : _Socket(newval){}
+      explicit socket_base(SOCKET newval) : _socket(newval){}
 
       socket_base(const socket_base&) = delete;
       /// @}
@@ -255,7 +255,7 @@ namespace xtd{
        * @return *this
        */
       socket_base& operator=(socket_base&& src){
-        std::swap(_Socket, src._Socket);
+        std::swap(_socket, src._socket);
         return *this;
       }
 
@@ -263,32 +263,32 @@ namespace xtd{
        * cast to native socket
        * @return native socket value
        */
-      operator SOCKET() const{ return _Socket; }
+      operator SOCKET() const{ return _socket; }
 
 
       /**
        * writes data to the connected socket
        * @param data the data to write
        */
-      template <typename _Ty> void write(const _Ty& data){
-        serializer<_Ty>::write(*this, data);
+      template <typename _ty> void write(const _ty& data){
+        serializer<_ty>::write(*this, data);
       }
 
       /**
        * reads data from the connected socket
        * @param data returned data
        */
-      template <typename _Ty> void read(_Ty& data){
-        serializer<_Ty>::read(*this, data);
+      template <typename _ty> void read(_ty& data){
+        serializer<_ty>::read(*this, data);
       }
 
       /**
        * reads data from the connected socket
        * @return the data of type _Ty from the socket
        */
-      template <typename _Ty> _Ty read(){
-        _Ty data;
-        serializer<_Ty>::read(*this, data);
+      template <typename _ty> _ty read(){
+        _ty data;
+        serializer<_ty>::read(*this, data);
         return data;
       }
 
@@ -296,11 +296,11 @@ namespace xtd{
        * Closes the open socket
        */
       void close(){
-        if (!_Socket){
+        if (!_socket){
           return;
         }
-        ::closesocket(_Socket);
-        _Socket = -1;
+        ::closesocket(_socket);
+        _socket = -1;
       }
 
       /** sets the blocking mode of the socket
@@ -308,32 +308,32 @@ namespace xtd{
        */
       void set_blocking(bool blocking){
         u_long val = (blocking ? 0 : 1);
-        xtd::crt_exception::throw_if(ioctlsocket(_Socket, FIONBIO, &val), [](int i){ return i < 0; });
+        xtd::crt_exception::throw_if(ioctlsocket(_socket, FIONBIO, &val), [](int i){ return i < 0; });
       }
 
       /** gets the number of bytes waiting in the read buffer
        */
       u_long bytes_available(){
         u_long iRet=0;
-        xtd::crt_exception::throw_if(ioctlsocket(_Socket, FIONREAD, &iRet), [](int i){ return i < 0; });
+        xtd::crt_exception::throw_if(ioctlsocket(_socket, FIONREAD, &iRet), [](int i){ return i < 0; });
         return iRet;
       }
 
       /**
        * test if the socket is valid
        */
-      bool is_valid() const{ return -1 != _Socket; }
+      bool is_valid() const{ return -1 != _socket; }
 
     protected:
       /// OS/CRT inner SOCKET that is being managed by this wrapper
-      SOCKET _Socket;
+      SOCKET _socket;
 
     };
 
 
     ///Polling behavior policy
-    template <typename _SuperT>
-    class polling_socket : public _SuperT{
+    template <typename _super_t>
+    class polling_socket : public _super_t{
     public:
       /// callback event fires when data is ready to read data
       callback<void()> read_event;
@@ -347,7 +347,7 @@ namespace xtd{
       void poll(int Timeout){
         struct pollfd oPoll;
         oPoll.events = POLLIN | POLLOUT;
-        oPoll.fd = _SuperT::_Socket;
+        oPoll.fd = _super_t::_socket;
         oPoll.revents = 0;
         if (0 == xtd::crt_exception::throw_if(::poll(&oPoll, 1, Timeout), [](int i){ return i < 0; })){
           return;
@@ -366,8 +366,8 @@ namespace xtd{
         }
       }
       ///ctor
-      template<typename ... _ArgTs>
-      explicit polling_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit polling_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
 #if (XTD_OS_WINDOWS & XTD_OS)
       int poll(POLLFD *ufds, unsigned int nfds, int timeout){ return ::WSAPoll(ufds, nfds, timeout); }
@@ -376,133 +376,134 @@ namespace xtd{
 
 
     ///Server side binding behavior
-    template <typename _SuperT>
-    class bindable_socket : public _SuperT{
+    template <typename _super_t>
+    class bindable_socket : public _super_t{
     public:
 
       /// ctor
-      template<typename ... _ArgTs>
-      explicit bindable_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit bindable_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
       /// binds the socket to an address and port
-      void bind(const typename _SuperT::address_type& addr){
-        exception::throw_if(::bind(_SuperT::_Socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _SuperT::address_type)), [](int i){ return i < 0; });
+      void bind(const typename _super_t::address_type& addr){
+        exception::throw_if(::bind(_super_t::_socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _super_t::address_type)), [](int i){ return i < 0; });
       }
     };
 
 
     ///Client side connecting behavior
-    template <typename _SuperT>
-    class connectable_socket : public _SuperT{
+    template <typename _super_t>
+    class connectable_socket : public _super_t{
     public:
 
       /// ctor
-      template<typename ... _ArgTs>
-      explicit connectable_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit connectable_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
       /// initiates connection to a socket
-      void connect(const typename _SuperT::address_type& addr){
-        exception::throw_if(::connect(_SuperT::_Socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _SuperT::address_type)), [](int i){ return i < 0; });
+      void connect(const typename _super_t::address_type& addr){
+        exception::throw_if(::connect(_super_t::_socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _super_t::address_type)), [](int i){ return i < 0; });
       }
     };
 
 
     ///Server side listening behavior
-    template <typename _SuperT>
-    class listening_socket : public _SuperT{
+    template <typename _super_t>
+    class listening_socket : public _super_t{
     public:
 
       /// ctor
-      template<typename ... _ArgTs>
-      explicit listening_socket(_ArgTs &&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit listening_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
       /// begins listening on the socket
       void listen(int Backlog = SOMAXCONN){
-        exception::throw_if(::listen(_SuperT::_Socket, Backlog), [](int i){ return i < 0; });
+        exception::throw_if(::listen(_super_t::_socket, Backlog), [](int i){ return i < 0; });
       }
 
       /// accepts an incoming connection request
-      template <typename _ReturnT>
-      _ReturnT accept(){
-        return _ReturnT(exception::throw_if(::accept(_SuperT::_Socket, nullptr, nullptr), [](SOCKET s){ return (s <= 0); }));
+      template <typename _return_t>
+      _return_t accept(){
+        return _return_t(exception::throw_if(::accept(_super_t::_socket, nullptr, nullptr), [](SOCKET s){ return (s <= 0); }));
       }
     };
 
     /// Socket properties
-    template <typename _SuperT>
-    class socket_options : public _SuperT{
+    template <typename _super_t>
+    class socket_options : public _super_t{
     public:
 
       /// ctor
-      template<typename ... _ArgTs>
-      explicit socket_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit socket_options(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
       /// gets the SO_KEEPALIVE property
-      bool keep_alive() const{ return (_::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::get(_SuperT::_Socket) ? true : false); }
+      bool keep_alive() const{ return (_::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::get(_super_t::_socket) ? true : false); }
       /// sets the SO_KEEPALIVE property
-      void keep_alive(bool newval){ _::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::set(_SuperT::_Socket, newval); }
+      void keep_alive(bool newval){ _::socket_option<int, SOL_SOCKET, SO_KEEPALIVE>::set(_super_t::_socket, newval); }
       TODO("Add more SOL_SOCKET options");
     };
 
     /// IP based socket properties
-    template <typename _SuperT>
-    class ip_options : public _SuperT{
+    template <typename _super_t>
+    class ip_options : public _super_t{
     public:
 
       /// ctor
-      template<typename ... _ArgTs>
-      explicit ip_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit ip_options(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 #if (XTD_OS_WINDOWS & XTD_OS)
       /// gets the IP_DONTFRAGMENT property
-      bool dont_fragment() const{ return (_::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::get(_SuperT::_Socket) ? true : false); }
+      bool dont_fragment() const{ return (_::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::get(_super_t::_socket) ? true : false); }
       /// sets the IP_DONTFRAGMENT property
-      void dont_fragment(bool newval){ _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::set(_SuperT::_Socket, newval); }
+      void dont_fragment(bool newval){ _::socket_option<int, IPPROTO_IP, IP_DONTFRAGMENT>::set(_super_t::_socket, newval); }
 #endif
       TODO("Add more IPPROTO_IP options");
     };
 
     /// TCP based socket properties
-    template <typename _SuperT>
-    class tcp_options : public _SuperT{
+    template <typename _super_t>
+    class tcp_options : public _super_t{
     public:
 
       /// ctor
-      template<typename ... _ArgTs>
-      explicit tcp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit tcp_options(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
       /// gets the TCP_NODELAY property
-      bool no_delay() const{ return (_::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::get(_SuperT::_Socket) ? true : false); }
+      bool no_delay() const{ return (_::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::get(_super_t::_socket) ? true : false); }
       /// sets the TCP_NODELAY property
-      void no_delay(bool newval){ _::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::set(_SuperT::_Socket, newval); }
+      void no_delay(bool newval){ _::socket_option<int, IPPROTO_TCP, TCP_NODELAY>::set(_super_t::_socket, newval); }
       TODO("Add more IPPROTO_TCP options");
     };
 
     /// UDP socket properties
-    template <typename _SuperT>
-    class udp_options : public _SuperT{
+    template <typename _super_t>
+    class udp_options : public _super_t{
     public:
 
       /// ctor
-      template<typename ... _ArgTs>
-      explicit udp_options(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit udp_options(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
 #if (XTD_OS_WINDOWS & XTD_OS)
       /// gets the UDP_NOCHECKSUM property
-      bool no_checksum() const{ return (_::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_SuperT::_Socket) ? true : false); }
+      bool no_checksum() const{ return (_::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::get(_super_t::_socket) ? true : false); }
       /// sets the UDP_NOCHECKSUM property
-      void no_checksum(bool newval){ _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::set(_SuperT::_Socket, newval); }
+      void no_checksum(bool newval){ _::socket_option<int, IPPROTO_UDP, UDP_NOCHECKSUM>::set(_super_t::_socket, newval); }
 #endif
       TODO("Add more IPPROTO_UDP options");
     };
 
 
     ///Async IO select behavior
-    template <typename _SuperT>
-    class selectable_socket : public _SuperT{
+    template <typename _super_t>
+    class selectable_socket : public _super_t{
     public:
       /// ctor
-      template<typename ... _ArgTs>
-      explicit selectable_socket(_ArgTs&&...oArgs) : _SuperT(std::forward<_ArgTs>(oArgs)...){}
+      template<typename ... _arg_ts>
+      explicit selectable_socket(_arg_ts&&...oArgs)
+        : _super_t(std::forward<_arg_ts>(oArgs)...), onRead(), onWrite(), onError() {}
 
       /// callback event fired when data is ready to be read
       xtd::callback<void()> onRead;
@@ -549,72 +550,72 @@ namespace xtd{
 
 #if (!DOXY_INVOKED)
     TODO("Get rid of these")
-    template <typename _Ty>
+    template <typename _ty>
     class serializer{
     public:
 
-      template <typename _SocketT>
-      static void write(_SocketT& oSocket, const _Ty& src){
-        static_assert(std::is_pod<_Ty>::value, "no acceptable specialization for type");
-        exception::throw_if(::send(oSocket, reinterpret_cast<const char*>(&src), sizeof(_Ty), 0), [](int i){ return i <= 0; });
+      template <typename _socket_t>
+      static void write(_socket_t& oSocket, const _ty& src){
+        static_assert(std::is_pod<_ty>::value, "no acceptable specialization for type");
+        exception::throw_if(::send(oSocket, reinterpret_cast<const char*>(&src), sizeof(_ty), 0), [](int i){ return i <= 0; });
       }
 
-      template <typename _SocketT>
-      static void read(_SocketT& oSocket, _Ty& src){
-        static_assert(std::is_pod<_Ty>::value, "no acceptable specialization for type");
-        exception::throw_if(::recv(oSocket, reinterpret_cast<char*>(&src), sizeof(_Ty), 0), [](int i){ return i <= 0; });
+      template <typename _socket_t>
+      static void read(_socket_t& oSocket, _ty& src){
+        static_assert(std::is_pod<_ty>::value, "no acceptable specialization for type");
+        exception::throw_if(::recv(oSocket, reinterpret_cast<char*>(&src), sizeof(_ty), 0), [](int i){ return i <= 0; });
       }
     };
 
 
-    template <typename _Ty>
+    template <typename _ty>
     class NON_POD_Vector_Serializer{
     public:
 
-      template <typename _SocketT>
-      static void write(_SocketT& oSocket, const std::vector<_Ty>& src){
-        serializer<typename std::vector<_Ty>::size_type>::write(oSocket, src.size());
+      template <typename _socket_t>
+      static void write(_socket_t& oSocket, const std::vector<_ty>& src){
+        serializer<typename std::vector<_ty>::size_type>::write(oSocket, src.size());
         for (const auto & oItem : src){
-          serializer<_Ty>::write(oSocket, oItem);
+          serializer<_ty>::write(oSocket, oItem);
         }
       }
 
-      template <typename _SocketT>
-      static void read(_SocketT& oSocket, std::vector<_Ty>& src){
-        typename std::vector<_Ty>::size_type count;
-        serializer<typename std::vector<_Ty>::size_type>::read(oSocket, count);
+      template <typename _socket_t>
+      static void read(_socket_t& oSocket, std::vector<_ty>& src){
+        typename std::vector<_ty>::size_type count;
+        serializer<typename std::vector<_ty>::size_type>::read(oSocket, count);
         for (; count; --count){
-          _Ty newval;
-          serializer<_Ty>::read(oSocket, newval);
+          _ty newval;
+          serializer<_ty>::read(oSocket, newval);
           src.push_back(newval);
         }
       }
     };
 
 
-    template <typename _Ty>
+    template <typename _ty>
     class POD_Vector_Serializer{
     public:
 
-      template <typename _SocketT >
-      static void write(_SocketT& oSocket, const std::vector<_Ty>& src){
-        serializer<typename std::vector<_Ty>::size_type>::write(oSocket, src.size());
-        send(oSocket, reinterpret_cast<const char*>(&src[0]), (int)(sizeof(_Ty) * src.size()), 0);
+      template <typename _socket_t >
+      static void write(_socket_t& oSocket, const std::vector<_ty>& src){
+        serializer<typename std::vector<_ty>::size_type>::write(oSocket, src.size());
+        send(oSocket, reinterpret_cast<const char*>(&src[0]), (int)(sizeof(_ty) * src.size()), 0);
       }
 
-      template <typename _SocketT>
-      static void read(_SocketT& oSocket, std::vector<_Ty>& src){
-        typename std::vector<_Ty>::size_type count;
-        serializer<typename std::vector<_Ty>::size_type>::read(oSocket, count);
+      template <typename _socket_t>
+      static void read(_socket_t& oSocket, std::vector<_ty>& src){
+        typename std::vector<_ty>::size_type count;
+        serializer<typename std::vector<_ty>::size_type>::read(oSocket, count);
         src.resize(count);
-        recv(oSocket, reinterpret_cast<char*>(&src[0]), (int)(sizeof(_Ty) * count), 0);
+        recv(oSocket, reinterpret_cast<char*>(&src[0]), (int)(sizeof(_ty) * count), 0);
       }
 
     };
 
 
-    template <typename _Ty>
-    class serializer<std::vector<_Ty>> : public std::conditional<std::is_pod<_Ty>::value, POD_Vector_Serializer<_Ty>, NON_POD_Vector_Serializer<_Ty>>::type{};
+    template <typename _ty>
+    class serializer<std::vector<_ty>> : public std::conditional<std::is_pod<_ty>::value, POD_Vector_Serializer<_ty>, NON_POD_Vector_Serializer<_ty>>::type{};
 #endif
     /// General purpose IPV4 client and server socket type
     using ipv4_tcp_stream = socket_base<ipv4address, socket_type::stream, socket_protocol::tcp, socket_options, ip_options, tcp_options, connectable_socket, bindable_socket, listening_socket, selectable_socket>;
