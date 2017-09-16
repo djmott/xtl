@@ -76,8 +76,6 @@ namespace xtd{
 
     public:
 
-      using _this_t = mapped_vector<_ty, _page_size, _erase_policy_t>::iterator;
-
       bool operator != (const iterator& rhs) const { return _current_index != rhs._current_index; }
 
       iterator operator++(int){
