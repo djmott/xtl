@@ -290,7 +290,7 @@ namespace xtd{
     public:
       using _super_t = rule<regex<char[_len], _str>>;
       static constexpr size_t length = _len;
-      explicit regex(const std::string& newval) : _super_t(), _value(newval){}
+      regex(const std::string& newval) : _super_t(), _value(newval){}
       const std::string& value() const{ return _value; }
     protected:
       std::string _value;
@@ -408,7 +408,7 @@ namespace xtd{
           parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
 
           begin = oCurr;
-          return rule_base::pointer_type(new _decl_t(oMatch[0].str()));
+          return rule_base::pointer_type(new _decl_t(/*rule_base::pointer_type(new parse::regex<char[_len], _str>*/((oMatch[0].str()))));
 
         }
 
