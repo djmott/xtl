@@ -679,7 +679,9 @@ namespace xtd{
     template <typename _iterator_t> static parse::rule_base::pointer_type parse(_iterator_t begin, _iterator_t end) {
       _iterator_t oBegin = begin;
       _iterator_t oEnd = end;
-      return parse::_::parse_helper<_rule_t, typename _rule_t::impl_type, _ignore_case, _whitespace_t>::parse(oBegin, oEnd);
+      auto oRet = parse::_::parse_helper<_rule_t, typename _rule_t::impl_type, _ignore_case, _whitespace_t>::parse(oBegin, oEnd);
+      if (oBegin < oEnd) return parse::rule_base::pointer_type();
+      return oRet;
     }
 
   };

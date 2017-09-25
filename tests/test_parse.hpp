@@ -203,7 +203,7 @@ TEST(test_parser, basic_input_statement) {
   EXPECT_TRUE(!!basic_grammar::parser::parse(s.begin(), s.end()));
   s = "xx123=input()\n";
   auto oAST = basic_grammar::parser::parse(s.begin(), s.end());
-  EXPECT_TRUE(!!oAST);
+  EXPECT_FALSE(!!oAST);
 }
 
 
@@ -280,7 +280,7 @@ TEST(test_parser, rule_and){
 
 
 TEST(test_parser, rule_or){
-  std::string s = "PDQ";
+  std::string s = "P";
   using namespace test_grammar;
   using test_parse = xtd::parser<xtd::parse::or_<P, D, Q>>;
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
@@ -294,7 +294,7 @@ TEST(test_parser, rule_zero_or_more){
   using test_parse = xtd::parser<xtd::parse::zero_or_more_<P>>;
   EXPECT_TRUE(!!test_parse::parse(s.begin(), s.end()));
   s = "XYZ";
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end()));
+  EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
 }
 
 
@@ -303,9 +303,9 @@ TEST(test_parser, rule_zero_or_one){
   std::string s= "PD";
   using namespace xtd::parse;
   using namespace test_grammar;
-  EXPECT_TRUE(!!xtd::parser<zero_or_one_<P>>::parse(s.begin(), s.end()));
+  EXPECT_FALSE(!!xtd::parser<zero_or_one_<P>>::parse(s.begin(), s.end()));
   using grammar = xtd::parser<and_<zero_or_one_<P>, zero_or_one_<P>, zero_or_one_<P>>>;
-  EXPECT_TRUE(!!grammar::parse(s.begin(), s.end()));
+  EXPECT_FALSE(!!grammar::parse(s.begin(), s.end()));
   using grammar2 = xtd::parser<and_<zero_or_one_<P>, zero_or_one_<D>>>;
   EXPECT_TRUE(!!grammar2::parse(s.begin(), s.end()));
 }
@@ -313,7 +313,7 @@ TEST(test_parser, rule_zero_or_one){
 TEST(test_parser, isa){
   std::string s = "PDQ";
   using namespace test_grammar;
-  using pdq = xtd::parse::or_<P, D, Q>;
+  using pdq = xtd::parse::one_or_more_<xtd::parse::or_<P, D, Q>>;
   using test_parse = xtd::parser<pdq>;
   auto oAST = test_parse::parse(s.begin(), s.end());
   EXPECT_TRUE(!!oAST);
