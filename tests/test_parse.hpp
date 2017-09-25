@@ -142,6 +142,10 @@ template <typename _element_t> bool can_parse(std::string src) {
   return bRet;
 }
 
+TEST(test_parser, basic_identifier){
+  EXPECT_TRUE(can_parse<basic_grammar::IDENTIFIER >("x"));
+}
+
 TEST(test_parser, basic_empty_input) {
   EXPECT_TRUE(can_parse<basic_grammar::statements>(""));
 }
@@ -188,6 +192,7 @@ TEST(test_parser, basic_language_elements) {
   EXPECT_TRUE(can_parse<basic_grammar::numeric_literal>("123.345"));
   EXPECT_FALSE(can_parse<basic_grammar::numeric_literal>("abc"));
 }
+
 
 TEST(test_parser, basic_dim_statement) {
   EXPECT_TRUE(can_parse<basic_grammar::dim_statement>("dim a\n"));
