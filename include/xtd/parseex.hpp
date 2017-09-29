@@ -2,6 +2,7 @@
 #include <memory>
 #include <deque>
 #include <string>
+#include <cassert>
 
 namespace xtd {
   namespace parseex {
@@ -59,7 +60,7 @@ namespace xtd {
 
       using ptr = std::shared_ptr<rule_base>;
       using weak_ptr = std::weak_ptr<rule_base>;
-      using deque = std::vector<ptr>;
+      using deque = std::deque<ptr>;
 
       deque::size_type size() const { return _items.size(); }
 
@@ -84,8 +85,8 @@ namespace xtd {
     template <typename impl_t, typename decl_t> struct rule : rule_base {
 
       bool is_a(const std::type_info& oType) override {
-        if (impl_t::typeid == oType) return true;
-        return (decl_t::typeid == oType);
+        if (typeid(impl_t) == oType) return true;
+        return (typeid(decl_t) == oType);
       }
     };
 
@@ -96,7 +97,10 @@ namespace xtd {
 
     namespace _ {
       struct context{
-        
+        context(std::string::const_iterator oBegin, std::string::const_iterator oEnd) : begin(oBegin), end(oEnd){}
+        rule_base::ptr rule;
+        std::string::const_iterator begin;
+        std::string::const_iterator end;
       };
 
       template <typename> struct parse_helper;
@@ -137,6 +141,14 @@ namespace xtd {
           if (!parse_helper<_head_t>::parse(oContext)) {
 
           }
+        }
+      };
+
+      template <char _ch> struct parse_helper<character<_ch>>{
+        static bool parse(context& oOuter) {
+          assert(false);
+          return false;
+        
         }
       };
 
