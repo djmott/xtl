@@ -148,7 +148,7 @@ namespace xtd {
         static bool parse(context& oOuter) {
           assert(false);
           return false;
-        
+
         }
       };
 
