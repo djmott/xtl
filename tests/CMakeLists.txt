@@ -43,6 +43,7 @@ set(TEST_SOURCE
   test_mapped_vector.hpp
   test_meta.hpp
   test_parse.hpp
+  test_parseex.hpp
   test_path.hpp
   test_process.hpp
   test_rw_lock.hpp
@@ -79,6 +80,7 @@ build_option(TEST_MAPPED_FILE "test xtd::mapped_file")
 build_option(TEST_MAPPED_VECTOR "test xtd::mapped_vector")
 build_option(TEST_META "test meta programming")
 build_option(TEST_PARSE "test xtd::parse")
+build_option(TEST_PARSEEX "test xtd::parseex")
 build_option(TEST_PATH "test xtd::filesystem::path")
 build_option(TEST_PROCESS "test xtd::process")
 build_option(TEST_READ_WRITE_LOCK "test xtd::concurrent::rw_lock")
