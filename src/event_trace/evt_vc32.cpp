@@ -10,8 +10,8 @@
 
 extern "C" {
 
-  void __xtd_EventEnter(void* addr);
-  void __xtd_EventLeave(void* addr);
+  void _xtd_EventEnter(void* addr);
+  void _xtd_EventLeave(void* addr);
 
   void __declspec(naked, dllexport) _cdecl _penter() {
     __asm {
@@ -20,7 +20,7 @@ extern "C" {
       SUB ESP, __LOCAL_SIZE
       PUSHAD
     }
-    __xtd_EventEnter((void*)((uint32_t)_ReturnAddress() - 5));
+    _xtd_EventEnter((void*)((uint32_t)_ReturnAddress() - 5));
     __asm {
       POPAD
       MOV ESP, EBP
@@ -36,7 +36,7 @@ extern "C" {
       SUB ESP, __LOCAL_SIZE
       PUSHAD
     }
-    __xtd_EventLeave((void*)((unsigned long long)_ReturnAddress() - 5));
+    _xtd_EventLeave((void*)((unsigned long long)_ReturnAddress() - 5));
     __asm {
       POPAD
       MOV ESP, EBP

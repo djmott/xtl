@@ -9,7 +9,7 @@ add_dependencies(examples XTL)
 
 
 function(build_example target)
-  set(BUILD_${target}_EXAMPLE YES CACHE BOOLEAN "Build ${target}")
+  option(BUILD_${target}_EXAMPLE "Build ${target}" YES)
   if(BUILD_${target}_EXAMPLE)
     add_executable("example_${target}" EXCLUDE_FROM_ALL "example_${target}.cpp")
     add_dependencies("example_${target}" XTL)

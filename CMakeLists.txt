@@ -288,6 +288,7 @@ add_library(XTL STATIC
   include/xtd/log.hpp
   include/xtd/meta.hpp
   include/xtd/parse.hpp
+  include/xtd/parseex.hpp
   include/xtd/process.hpp
   include/xtd/rpc.hpp
   include/xtd/shared_mem_obj.hpp
