@@ -16,6 +16,9 @@ text parsing and AST generation
 
 namespace xtd{
 
+  template <typename, bool, typename> class parser;
+
+
   /// @addtogroup Parsing
   /// @{
   namespace parse{
@@ -71,23 +74,66 @@ namespace xtd{
       namespace _{ char _name[] = _value; } \
       using _name = xtd::parse::regex< decltype(_::_name), _::_name>;
 
+    class rule_base;
 
+    template <typename iterator_t>
+    struct parse_error{
+      using iterator_type = iterator_t;
+      using ptr = std::shared_ptr<parse_error>;
+      using vector = std::vector<ptr>;
+      const std::type_info& failed_rule;
+      const iterator_type position;
+      parse_error(const std::type_info& oFailedRule, const iterator_type oPosition) : failed_rule(oFailedRule), position(oPosition){}
+      parse_error(const parse_error& src) : failed_rule(src.failed_rule), position(src.position){}
+      parse_error(parse_error&& src) : failed_rule(std::move(src.failed_rule)), position(std::move(src.position)){}
+      parse_error& operator=(const parse_error&) = delete;
+      parse_error& operator=(parse_error&& src) = delete;
+    };
+
+    template <typename iterator_t>
+    struct context{
+      using iterator_type = iterator_t;
+      iterator_type begin;
+      iterator_type end;
+      std::shared_ptr<rule_base> start_rule;
+      typename parse_error<iterator_t>::vector parse_errors;
+      context(const context& src) : begin(src.begin), end(src.end), start_rule(src.start_rule), parse_errors(src.parse_errors){}
+      context(context&& src) : begin(std::move(src.begin)), end(std::move(src.end)), start_rule(std::move(src.start_rule)), parse_errors(std::move(src.parse_errors)){}
+      context& operator=(const context& src){
+        if (this == &src) return *this;
+        begin = src.begin;
+        end = src.end;
+        start_rule = src.start_rule;
+        parse_errors = src.parse_errors;
+        return *this;
+      }
+      context& operator=(context&& src){
+        begin = std::move(src.begin);
+        end = std::move(src.end);
+        start_rule = std::move(src.start_rule);
+        parse_errors = std::move(src.parse_errors);
+        return *this;
+      }
+      context(iterator_t& oBegin, iterator_t& oEnd) : begin(oBegin), end(oEnd), start_rule(nullptr), parse_errors(){}
+    };
 
 
     /** Base class of both rules and terminals
      Though rules and terminals are technically different they share the rule_base ancestor in XTL to have a cleaner object model and simpler parsing algorithms.
      Its an abstract interface of parsable text or containers of same satisfying various rules (one or more, zero or more, exactly one, etc).
      */
-    class rule_base{
+    class rule_base : std::vector<std::shared_ptr<rule_base>>, std::enable_shared_from_this<rule_base>{
     public:
       using pointer_type = std::shared_ptr<rule_base>;
-      using vector_type = std::vector<pointer_type>;
+      using weak_ptr_t = std::weak_ptr<rule_base>;
+      using super_t = std::vector<pointer_type>;
+      using vector_type = super_t;
 
       /** Constructor
       @param[in] oChildRules list of child rules that successfully parsed to satisfy the current parse rule. The child rules are stored in a local variable and accessible via the items() member.
       */
       template <typename ... _child_ts>
-      rule_base(_child_ts&& ... oChildRules) : _items{ std::forward<_child_ts>(oChildRules)... }{}
+      rule_base(_child_ts&& ... oChildRules) : super_t{ std::forward<_child_ts>(oChildRules)... }, _parent(){}
 
       virtual ~rule_base() = default;
       /** Determines if the interface is implemented by a concrete type
@@ -100,10 +146,16 @@ namespace xtd{
       /** Accessor for child parse elements
       @returns a vector of the parsed child rules and terminals
       */
-      const vector_type& items() const{ return _items; }
-
-    protected:
-      vector_type _items;
+      pointer_type parent() { return _parent.lock(); }
+    private:
+      template <typename, bool, typename> friend class xtd::parser;
+      void set_parent(weak_ptr_t oParent){
+        _parent = oParent;
+        for (auto & oChild : static_cast<super_t&>(*this)){
+          oChild->set_parent(shared_from_this());
+        }
+      }
+      std::weak_ptr<rule_base> _parent;
     };
 
 
@@ -313,16 +365,14 @@ namespace xtd{
       template <typename _decl_t, size_t _len, char(&_str)[_len], typename _whitespace_t>
       class parse_helper<_decl_t, parse::string<char[_len], _str>, false, _whitespace_t>{
       public:
-        template <typename _iterator_t> static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end){
-          if (begin >= end) return rule_base::pointer_type(nullptr);
-          _iterator_t oCurr = begin;
+        template<typename _iterator_t> static bool parse(context<_iterator_t> &oOuter) {
+          context <_iterator_t> oContext(oOuter);
+          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
 
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-
-          rule_base::pointer_type oRet(nullptr);
-          for (size_t i = 0; (i < (_len-1)) && (oCurr < end); ++i, ++oCurr){
-            if (_str[i] != *oCurr){
-              return rule_base::pointer_type(nullptr);
+          for (size_t i = 0; (i < (_len-1)) && (oContext.begin < oContext.end); ++i, ++oContext.begin){
+            if (_str[i] != *oContext.begin){
+              oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+              return false;
             }
           }
 
@@ -335,13 +385,14 @@ namespace xtd{
             This isn't ideal because it maybe perfectly valid in some grammars to expect 'ABCXYZ' to appear in the input stream yet successfully parse into independent terminals.
             This library assumes contiguous alpha-numeric terminals constitute a single terminal so the input stream of 'ABCXYZ' will fail to parse without grammar definition trickery
           */
-          if (oCurr < end && isalnum(*oCurr) && isalnum(_str[_len - 2])){
-            return rule_base::pointer_type(nullptr);
+          if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 2])){
+            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+            return false;
           }
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-
-          begin = oCurr;
-          return rule_base::pointer_type(new _decl_t);
+          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
+          oContext.start_rule = rule_base::pointer_type(new _decl_t);
+          oOuter = oContext;
+          return true;
         }
       };
 
@@ -350,177 +401,126 @@ namespace xtd{
       template <typename _decl_t, size_t _len, char(&_str)[_len], typename _whitespace_t>
       class parse_helper<_decl_t, parse::string<char[_len], _str>, true, _whitespace_t>{
       public:
-
-        template <typename _iterator_t>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end){
-          if (begin >= end) return rule_base::pointer_type(nullptr);
-          _iterator_t oCurr = begin;
-
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-
-          rule_base::pointer_type oRet(nullptr);
-          for (size_t i = 0; (i < _len-1) && (oCurr < end); ++i, ++oCurr){
-            if (tolower(_str[i]) != tolower(*oCurr)){
-              return rule_base::pointer_type(nullptr);
+        template<typename _iterator_t> static bool parse(context<_iterator_t> &oOuter) {
+          context <_iterator_t> oContext(oOuter);
+          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
+          for (size_t i = 0; (i < _len-1) && (oContext.begin < oContext.end); ++i, ++oContext.begin){
+            if (tolower(_str[i]) != tolower(*oContext.begin)){
+              oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+              return false;
             }
           }
           ///ensure there's an identifiable separation between terminals. this should be done differently
-          if (oCurr < end && isalnum(*oCurr) && isalnum(_str[_len - 2])){
-            return rule_base::pointer_type(nullptr);
+          if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 2])){
+            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+            return false;
           }
-
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-
-          begin = oCurr;
-          return rule_base::pointer_type(new _decl_t);
+          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
+          oContext.start_rule = rule_base::pointer_type(new _decl_t);
+          oOuter = oContext;
+          return true;
         }
-
       };
 
       ///regex
       template <typename _decl_t, size_t _len, char(&_str)[_len], bool _ignore_case, typename _whitespace_t>
-      class parse_helper<_decl_t, parse::regex<char[_len], _str>, _ignore_case, _whitespace_t>{
+      class parse_helper<_decl_t, parse::regex<char[_len], _str>, _ignore_case, _whitespace_t> {
       public:
-
-        template <typename _iterator_t>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end){
-          if (begin >= end) return rule_base::pointer_type(nullptr);
-          _iterator_t oCurr = begin;
-
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-
-          std::regex_constants::syntax_option_type iFlags = std::regex_constants::optimize;
-          if (_ignore_case) iFlags |=  std::regex_constants::icase;
+        template<typename _iterator_t> static bool parse(context<_iterator_t> &oOuter) {
+          context <_iterator_t> oContext(oOuter);
+          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
+          static std::regex_constants::syntax_option_type iFlags = std::regex_constants::optimize |
+                                                                   (_ignore_case ? std::regex_constants::icase
+                                                                                 : std::regex_constants::optimize);
 
           static std::regex oRE(_str, iFlags);
           std::match_results<std::string::iterator> oMatch;
-          if (!std::regex_search(oCurr, end, oMatch, oRE, std::regex_constants::match_continuous)){
-            return rule_base::pointer_type(nullptr);
+          if (!std::regex_search(oContext.begin, oContext.end, oMatch, oRE, std::regex_constants::match_continuous)) {
+            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+            return false;
           }
-          oCurr += oMatch[0].length();
+          oContext.begin += oMatch[0].length();
 
           ///ensure there's an identifiable separation between terminals. this should be done differently
-          if (oCurr < end && isalnum(*oCurr) && isalnum(_str[_len - 1])){
-            return rule_base::pointer_type(nullptr);
+          if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 1])) {
+            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+            return false;
           }
-
-
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-
-          begin = oCurr;
-          return rule_base::pointer_type(new _decl_t(/*rule_base::pointer_type(new parse::regex<char[_len], _str>*/((oMatch[0].str()))));
-
+          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
+          oContext.start_rule = rule_base::pointer_type(new _decl_t(oMatch[0].str()));
+          oOuter = oContext;
+          return true;
         }
-
       };
 
       ///whitespace
       template <bool _ignore_case>
       class parse_helper<whitespace<>, void, _ignore_case, void>{
       public:
-        template <typename _iterator_t>
-        static bool parse(_iterator_t&, _iterator_t&){ return false; }
+        static bool parse(...) { return false; }
       };
 
       template <char _head_ch, char... _tail_chs, bool _ignore_case>
       class parse_helper<whitespace<_head_ch, _tail_chs...>, void, _ignore_case, void>{
       public:
         template <typename _iterator_t>
-        static bool parse(_iterator_t& begin, _iterator_t& end){
-          _iterator_t oCurr = begin;
-
-          while (oCurr < end){
-            if (*oCurr == _head_ch){
-              oCurr++;
-            }else if (parse_helper<whitespace<_tail_chs...>, void, _ignore_case, void>::parse(oCurr, end)){
-              //do nothing
-            }else{
-              break;
+        static bool parse(context<_iterator_t>& oContext) {
+          while (oContext.begin < oContext.end){
+            if (*oContext.begin == _head_ch) {
+              oContext.begin++;
+              continue;
             }
+            if (parse_helper<whitespace<_tail_chs...>, void, _ignore_case, void>::parse(oContext)) continue;
+            break;
           }
-          begin = oCurr;
+          return true;
+        }
+      };
+
+      //characters
+      template <typename _decl_t, char _first, char _last, typename _whitespace_t>
+      class parse_helper<_decl_t, characters<_first, _last>, true, _whitespace_t>{
+      public:
+        template <typename _iterator_t>
+        static bool parse(context<_iterator_t>& oOuter) {
+          context<_iterator_t> oContext(oOuter);
+          parse_helper< _whitespace_t, void, true, void>::parse(oContext);
+          if (oContext.begin < oContext.end && tolower(*oContext.begin) >= tolower(_first) && tolower(*oContext.begin) <= tolower(_last)){
+            oContext.parse_errors.clear();
+            oContext.start_rule = rule_base::pointer_type(new _decl_t);
+            oContext.begin++;
+            oOuter = oContext;
+            return true;
+          }
+          oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(characters<_first, _last>), oContext.begin));
+          return false;
+        }
+      };
+      template <typename _decl_t, char _first, char _last, typename _whitespace_t>
+      class parse_helper<_decl_t, characters<_first, _last>, false, _whitespace_t>{
+      public:
+        template <typename _iterator_t>
+        static bool parse(context<_iterator_t>& oOuter) {
+          context<_iterator_t> oContext(oOuter);
+          parse_helper< _whitespace_t, void, true, void>::parse(oContext);
+          if (oContext.begin < oContext.end && *oContext.begin >= _first && *oContext.begin <= _last){
+            oContext.parse_errors.clear();
+            oContext.start_rule = rule_base::pointer_type(new _decl_t(*oContext.begin));
+            oContext.begin++;
+            oOuter = oContext;
+            return true;
+          }
+          oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(characters<_first, _last>), oContext.begin));
           return false;
         }
       };
 
       //character
-      template <typename _decl_t, char _Ch, typename _whitespace_t>
-      class parse_helper<_decl_t, character<_Ch>, true, _whitespace_t>{
-      public:
+      template <typename _decl_t, char _ch, bool _ignore_case, typename _whitespace_t>
+      class parse_helper<_decl_t, character<_ch>, _ignore_case, _whitespace_t>
+        : public parse_helper<_decl_t, characters<_ch, _ch>, _ignore_case, _whitespace_t>
+      {};
 
-        template <typename _iterator_t>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end){
-          if (begin >= end) return rule_base::pointer_type(nullptr);
-          _iterator_t oCurr = begin;
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-          if (lower_case<char, _Ch>::value != tolower(*oCurr)){
-            return rule_base::pointer_type(nullptr);
-          }
-          ++oCurr;
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-          begin = oCurr;
-          return rule_base::pointer_type(new character<_Ch>);
-        }
-
-      };
-
-      template <typename _decl_t, char _Ch, typename _whitespace_t>
-      class parse_helper<_decl_t, character<_Ch>, false, _whitespace_t>{
-      public:
-        template <typename _iterator_t>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end){
-          if (begin >= end) return rule_base::pointer_type(nullptr);
-          _iterator_t oCurr = begin;
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-          if (_Ch != oCurr[0]){
-            return rule_base::pointer_type(nullptr);
-          }
-          ++oCurr;
-          parse_helper< _whitespace_t, void, true, void>::parse(oCurr, end);
-          begin = oCurr;
-          return rule_base::pointer_type(new character<_Ch>);
-        }
-      };
-
-      //characters
-      template <typename _decl_t, char _First, char _Last, typename _whitespace_t>
-      class parse_helper<_decl_t, characters<_First, _Last>, true, _whitespace_t>{
-      public:
-        template <typename _iterator_t>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end) {
-          if (begin >= end) return rule_base::pointer_type(nullptr);
-          _iterator_t oCurr = begin;
-          parse_helper<_whitespace_t, void, true, void>::parse(oCurr, end);
-          for (char c = _First; c <= _Last; ++c) {
-            if (tolower(c) == tolower(*oCurr)) {
-              rule_base::pointer_type oRet(new characters<_First, _Last>(*oCurr));
-              ++oCurr;
-              begin = oCurr;
-              return oRet;
-            }
-          }
-          return rule_base::pointer_type(nullptr);
-        }
-      };
-      template <typename _decl_t, char _First, char _Last, typename _whitespace_t>
-      class parse_helper<_decl_t, characters<_First, _Last>, false, _whitespace_t>{
-      public:
-        template <typename _iterator_t>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end) {
-          if (begin >= end) return rule_base::pointer_type(nullptr);
-          _iterator_t oCurr = begin;
-          parse_helper<_whitespace_t, void, true, void>::parse(oCurr, end);
-          for (char c = _First; c <= _Last; ++c) {
-            if (c == *oCurr) {
-              rule_base::pointer_type oRet(new characters<_First, _Last>(*oCurr));
-              ++oCurr;
-              begin = oCurr;
-              return oRet;
-            }
-          }
-          return rule_base::pointer_type(nullptr);
-        }
-      };
 
 
       //not
@@ -528,21 +528,23 @@ namespace xtd{
       class parse_helper < _decl_t, parse::not_<_ParamTs...>, _ignore_case, _whitespace_t> {
       public:
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static rule_base::pointer_type parse(_iterator_t& oBegin, _iterator_t& oEnd){
-          _iterator_t begin = oBegin;
-          auto oTmp = parse_helper<and_<_ParamTs...>, and_<_ParamTs...>, _ignore_case, _whitespace_t>::parse(begin, oEnd);
-          if (oTmp) return rule_base::pointer_type(nullptr);
-          return rule_base::pointer_type(new _decl_t());
+        static bool parse(context<_iterator_t>& oOuter) {
+          context<_iterator_t> oContext(oOuter);
+          if (!parse_helper<and_<_ParamTs...>, and_<_ParamTs...>, _ignore_case, _whitespace_t>::parse(oContext)) return true;
+          oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oOuter.begin));
+          return false;
         }
       };
 
-        //and
+      ///and
       template <typename _decl_t, bool _ignore_case, typename _whitespace_t >
       class parse_helper < _decl_t, parse::and_<>, _ignore_case, _whitespace_t>{
       public:
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static rule_base::pointer_type parse(_iterator_t& , _iterator_t& , _child_rule_ts&& ... oChildRules){
-          return rule_base::pointer_type(new _decl_t(std::forward<_child_rule_ts>(oChildRules)...));
+        static bool parse(context<_iterator_t>& oOuter, _child_rule_ts&& ... oChildRules) {
+          oOuter.start_rule = rule_base::pointer_type(new _decl_t(std::forward<_child_rule_ts>(oChildRules)...));
+          oOuter.parse_errors.clear();
+          return true;
         }
       };
 
@@ -550,111 +552,100 @@ namespace xtd{
       class parse_helper < _decl_t, parse::and_<_head_t, _tail_ts...>, _ignore_case, _whitespace_t> {
       public:
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end, _child_rule_ts&& ... oChildRules) {
-          _iterator_t oBegin = begin;
-          auto oItem = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oBegin, end);
-          if (!oItem) {
-            return oItem;
+        static bool parse(context<_iterator_t>& oOuter, _child_rule_ts&& ... oChildRules) {
+          context<_iterator_t> oContext(oOuter);
+          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+          if (!bRet) {
+            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(and_<_decl_t>), oOuter.begin));
+            return false;
           }
-          oItem = parse_helper<_decl_t, parse::and_<_tail_ts...>, _ignore_case, _whitespace_t>::parse(oBegin, end, std::forward<_child_rule_ts>(oChildRules)..., oItem);
-          if (oItem) {
-            begin = oBegin;
+          bRet = parse_helper<_decl_t, parse::and_<_tail_ts...>, _ignore_case, _whitespace_t>::parse(oContext, std::forward<_child_rule_ts>(oChildRules)..., oContext.start_rule);
+          if (!bRet) {
+            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(and_<_tail_ts...>), oOuter.begin));
+            return false;
           }
-          return oItem;
+          oOuter = oContext;
+          return true;
         }
       };
 
-      ///zero_or_one_
-      template <typename _decl_t, typename _head_t, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::zero_or_one_<_head_t>, _ignore_case, _whitespace_t> {
-      public:
-
-        template <typename _iterator_t>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end) {
-          _iterator_t oBegin = begin;
-          auto oItem = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oBegin, end);
-          begin = oBegin;
-          return rule_base::pointer_type(new _decl_t(oItem));
-        }
-
-      };
-
-      ///one_or_more_
-      template <typename _decl_t, typename _head_t, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::one_or_more_<_head_t>, _ignore_case, _whitespace_t> {
-      public:
-
-        template <typename _iterator_t>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end) {
-          _iterator_t oBegin = begin;
-          rule_base::vector_type oChildRules;
-          forever{
-            auto oItem = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oBegin, end);
-            if (!oItem) break;
-            oChildRules.push_back(oItem);
-          }
-          if (!oChildRules.size()){
-            return rule_base::pointer_type(nullptr);
-          }
-          begin = oBegin;
-          return rule_base::pointer_type(new _decl_t(std::move(oChildRules)));
-        }
-
-      };
 
       ///or
       template <typename _decl_t, bool _ignore_case, typename _whitespace_t >
       class parse_helper < _decl_t, parse::or_<>, _ignore_case, _whitespace_t>{
       public:
-
-        template <typename _iterator_t, typename ... _child_rule_ts>
-        static rule_base::pointer_type parse(_iterator_t& , _iterator_t& , _child_rule_ts ... ){
-          return rule_base::pointer_type(nullptr);
-        }
-
+        static bool parse(...){ return false; }
       };
 
       template <typename _decl_t, typename _head_t, typename ... _tail_ts, bool _ignore_case, typename _whitespace_t >
       class parse_helper < _decl_t, parse::or_<_head_t, _tail_ts...>, _ignore_case, _whitespace_t>{
       public:
-
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end, _child_rule_ts&& ... oChildRules){
-          _iterator_t oBegin = begin;
-          auto oItem = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oBegin, end);
-          if (oItem){
-            begin = oBegin;
-            return rule_base::pointer_type(new _decl_t(oItem));
+        static bool parse(context<_iterator_t>& oOuter){
+          context<_iterator_t> oContext(oOuter);
+          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+          if (bRet){
+            oOuter = oContext;
+            oOuter.parse_errors.clear();
+            oOuter.start_rule = rule_base::pointer_type(new _decl_t(oOuter.start_rule));
+            return true;
           }
-          oItem = parse_helper<_decl_t, parse::or_<_tail_ts...>, _ignore_case, _whitespace_t>::parse(oBegin, end, std::forward<_child_rule_ts>(oChildRules)..., oItem);
-          if (oItem){
-            begin = oBegin;
-          }
-          return oItem;
+          oContext.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_head_t), oOuter.begin));
+          return parse_helper<_decl_t, parse::or_<_tail_ts...>, _ignore_case, _whitespace_t>::parse(oContext);
         }
-
       };
 
 
+      ///zero_or_one_
+      template <typename _decl_t, typename _head_t, bool _ignore_case, typename _whitespace_t >
+      class parse_helper < _decl_t, parse::zero_or_one_<_head_t>, _ignore_case, _whitespace_t> {
+      public:
+        template <typename _iterator_t>
+        static bool parse(context<_iterator_t>& oOuter){
+          parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oOuter);
+          oOuter.start_rule = rule_base::pointer_type(new _decl_t(oOuter.start_rule));
+          oOuter.parse_errors.clear();
+          return true;
+        }
+      };
+
+
+      ///one_or_more_
+      template <typename _decl_t, typename _head_t, bool _ignore_case, typename _whitespace_t >
+      class parse_helper < _decl_t, parse::one_or_more_<_head_t>, _ignore_case, _whitespace_t> {
+      public:
+        template <typename _iterator_t, typename ... _child_rule_ts>
+        static bool parse(context<_iterator_t>& oOuter,_child_rule_ts&&...oChildren ){
+          context<_iterator_t> oContext(oOuter);
+          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+          if (!bRet) {
+            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oOuter.begin));
+            oOuter.start_rule = rule_base::pointer_type(new _decl_t(std::forward<_child_rule_ts>(oChildren)...));
+            return false;
+          }
+          parse(oContext, std::forward<_child_rule_ts>(oChildren)..., oContext.start_rule);
+          oContext.parse_errors.clear();
+          oOuter = oContext;
+          return true;
+        }
+      };
 
       ///zero or more
-      template <typename _decl_t, typename _Ty, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::zero_or_more_<_Ty>, _ignore_case, _whitespace_t>{
+      template <typename _decl_t, typename _ty, bool _ignore_case, typename _whitespace_t >
+      class parse_helper < _decl_t, parse::zero_or_more_<_ty>, _ignore_case, _whitespace_t>{
       public:
 
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static rule_base::pointer_type parse(_iterator_t& begin, _iterator_t& end){
-          rule_base::vector_type oChildRules;
-          _iterator_t oBegin = begin;
-          _iterator_t oEnd = end;
-          forever{
-            auto oItem = parse_helper<_Ty, typename _Ty::impl_type, _ignore_case, _whitespace_t>::parse(oBegin, oEnd);
-            if (oItem){
-              oChildRules.push_back(oItem);
-            }else{
-              begin = oBegin;
-              return rule_base::pointer_type(new _decl_t(std::move(oChildRules)));
-            }
+        static bool parse(context<_iterator_t>& oOuter, _child_rule_ts&&...oChildren){
+        context<_iterator_t> oContext(oOuter);
+          auto bRet = parse_helper<_ty, typename _ty::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+          if (bRet){
+            return parse_helper<_decl_t, zero_or_more_<_ty>, _ignore_case, _whitespace_t>::parse(oContext, std::forward<_child_rule_ts>(oChildren)..., oContext.start_rule);
+          }else{
+            oOuter = oContext;
+            oOuter.parse_errors.clear();
+            oOuter.start_rule = rule_base::pointer_type(new _decl_t(std::forward<_child_rule_ts>(oChildren)..., oContext.start_rule));
+            return true;
           }
         }
       };
@@ -676,12 +667,19 @@ namespace xtd{
     @param end the end iterator of the text to parse
     @returns a fully constructed AST of type _RuleT if the parse succeeds or a nullptr if failed
     */
-    template <typename _iterator_t> static parse::rule_base::pointer_type parse(_iterator_t begin, _iterator_t end) {
-      _iterator_t oBegin = begin;
-      _iterator_t oEnd = end;
-      auto oRet = parse::_::parse_helper<_rule_t, typename _rule_t::impl_type, _ignore_case, _whitespace_t>::parse(oBegin, oEnd);
-      if (oBegin < oEnd) return parse::rule_base::pointer_type();
-      return oRet;
+    template <typename _iterator_t> static bool parse(_iterator_t begin, _iterator_t end, typename _rule_t::pointer_type& ast, typename parse::parse_error<_iterator_t>::vector& errors) {
+      typename parse::context<_iterator_t> oContext{begin, end};
+
+      auto bRet = parse::_::parse_helper<_rule_t, typename _rule_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+      errors = oContext.parse_errors;
+      if (oContext.begin  < oContext.end) return false;
+      ast = oContext.start_rule;
+      ast->set_parent(parse::rule_base::pointer_type());
+      return bRet;
+    }
+    template <typename _iterator_t> static bool parse(_iterator_t begin, _iterator_t end, typename _rule_t::pointer_type& ast) {
+      typename parse::parse_error<_iterator_t>::vector oErrors;
+      return parse(begin, end, ast, oErrors);
     }
 
   };

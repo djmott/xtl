@@ -100,10 +100,6 @@ main system and unit test entry point
   #include "test_rpc.hpp"
 #endif
 
-#if (ON==TEST_PARSEEX)
-  #include "test_parseex.hpp"
-#endif
-
 #if (ON==TEST_SHARED_MEM_OBJ)
   #include "test_shared_mem_obj.hpp"
 #endif
