@@ -105,7 +105,7 @@ add_executable(unit_tests ${TEST_SOURCE})
 add_test(unit_tests "" ${TEST_SOURCE})
 add_dependencies(unit_tests dummy_library_test)
 
-if(BUILD_TEST_COVERAGE)
+if(XTD_OS STREQUAL "XTD_OS_WINDOWS" AND BUILD_TEST_COVERAGE)
   target_compile_options(unit_tests PRIVATE -coverage -fprofile-arcs -ftest-coverage)
   target_link_libraries(unit_tests gcov)
 endif()
