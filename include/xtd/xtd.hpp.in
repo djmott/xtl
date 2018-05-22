@@ -214,7 +214,7 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
   #define MULTIPLE __declspec(selectany)
   #define ALIGN(val) __declspec(align(val))
   #define XTD_EXPORT __declspec(dllexport)
-#elif ((XTD_COMPILER_GCC | XTD_COMPILER_MINGW) & XTD_COMPILER)
+#elif ((XTD_COMPILER_CLANG | XTD_COMPILER_GCC | XTD_COMPILER_MINGW) & XTD_COMPILER)
   #define PRAGMA_(x) _Pragma( #x )
   #define FORCEINLINE __attribute__((always_inline))
   #define NOVTABLE

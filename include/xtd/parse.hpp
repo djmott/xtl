@@ -122,7 +122,7 @@ namespace xtd{
      Though rules and terminals are technically different they share the rule_base ancestor in XTL to have a cleaner object model and simpler parsing algorithms.
      Its an abstract interface of parsable text or containers of same satisfying various rules (one or more, zero or more, exactly one, etc).
      */
-    class rule_base : std::vector<std::shared_ptr<rule_base>>, std::enable_shared_from_this<rule_base>{
+    class rule_base : public std::vector<std::shared_ptr<rule_base>>, public std::enable_shared_from_this<rule_base>{
     public:
       using pointer_type = std::shared_ptr<rule_base>;
       using weak_ptr_t = std::weak_ptr<rule_base>;
@@ -364,15 +364,15 @@ namespace xtd{
 
       ///case sensitive string
       template <typename _decl_t, size_t _len, char(&_str)[_len], typename _whitespace_t>
-      class parse_helper<_decl_t, parse::string<char[_len], _str>, false, _whitespace_t>{
+      class parse_helper<_decl_t, xtd::parse::string<char[_len], _str>, false, _whitespace_t>{
       public:
-        template<typename _iterator_t> static bool parse(context<_iterator_t> &oOuter) {
+        template<typename _iterator_t> static bool _parse(context<_iterator_t> &oOuter) {
           context <_iterator_t> oContext(oOuter);
-          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
+          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
 
           for (size_t i = 0; (i < (_len-1)) && (oContext.begin < oContext.end); ++i, ++oContext.begin){
             if (_str[i] != *oContext.begin){
-              oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+              oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>>(typeid(_decl_t), oContext.begin));
               return false;
             }
           }
@@ -387,11 +387,11 @@ namespace xtd{
             This library assumes contiguous alpha-numeric terminals constitute a single terminal so the input stream of 'ABCXYZ' will fail to parse without grammar definition trickery
           */
           if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 2])){
-            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
             return false;
           }
-          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
-          oContext.start_rule = rule_base::pointer_type(new _decl_t);
+          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
+          oContext.start_rule = std::make_shared<_decl_t>();
           oOuter = oContext;
           return true;
         }
@@ -402,22 +402,26 @@ namespace xtd{
       template <typename _decl_t, size_t _len, char(&_str)[_len], typename _whitespace_t>
       class parse_helper<_decl_t, parse::string<char[_len], _str>, true, _whitespace_t>{
       public:
-        template<typename _iterator_t> static bool parse(context<_iterator_t> &oOuter) {
+        template<typename _iterator_t> static bool _parse(context<_iterator_t> &oOuter) {
           context <_iterator_t> oContext(oOuter);
-          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
+          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
+          if (oContext.begin >= oContext.end){
+            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
+            return false;
+          }
           for (size_t i = 0; (i < _len-1) && (oContext.begin < oContext.end); ++i, ++oContext.begin){
             if (tolower(_str[i]) != tolower(*oContext.begin)){
-              oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+              oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
               return false;
             }
           }
           ///ensure there's an identifiable separation between terminals. this should be done differently
           if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 2])){
-            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
             return false;
           }
-          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
-          oContext.start_rule = rule_base::pointer_type(new _decl_t);
+          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
+          oContext.start_rule = std::make_shared<_decl_t>();
           oOuter = oContext;
           return true;
         }
@@ -427,9 +431,9 @@ namespace xtd{
       template <typename _decl_t, size_t _len, char(&_str)[_len], bool _ignore_case, typename _whitespace_t>
       class parse_helper<_decl_t, parse::regex<char[_len], _str>, _ignore_case, _whitespace_t> {
       public:
-        template<typename _iterator_t> static bool parse(context<_iterator_t> &oOuter) {
+        template<typename _iterator_t> static bool _parse(context<_iterator_t> &oOuter) {
           context <_iterator_t> oContext(oOuter);
-          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
+          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
           static std::regex_constants::syntax_option_type iFlags = std::regex_constants::optimize |
                                                                    (_ignore_case ? std::regex_constants::icase
                                                                                  : std::regex_constants::optimize);
@@ -437,18 +441,18 @@ namespace xtd{
           static std::regex oRE(_str, iFlags);
           std::match_results<std::string::iterator> oMatch;
           if (!std::regex_search(oContext.begin, oContext.end, oMatch, oRE, std::regex_constants::match_continuous)) {
-            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
             return false;
           }
           oContext.begin += oMatch[0].length();
 
           ///ensure there's an identifiable separation between terminals. this should be done differently
           if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 1])) {
-            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oContext.begin));
+            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
             return false;
           }
-          parse_helper<_whitespace_t, void, true, void>::parse(oContext);
-          oContext.start_rule = rule_base::pointer_type(new _decl_t(oMatch[0].str()));
+          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
+          oContext.start_rule = std::make_shared<_decl_t>(oMatch[0].str());
           oOuter = oContext;
           return true;
         }
@@ -458,20 +462,21 @@ namespace xtd{
       template <bool _ignore_case>
       class parse_helper<whitespace<>, void, _ignore_case, void>{
       public:
-        static bool parse(...) { return false; }
+        template <typename ... _argTs>
+        static bool _parse(_argTs...) { return false; }
       };
 
       template <char _head_ch, char... _tail_chs, bool _ignore_case>
       class parse_helper<whitespace<_head_ch, _tail_chs...>, void, _ignore_case, void>{
       public:
         template <typename _iterator_t>
-        static bool parse(context<_iterator_t>& oContext) {
+        static bool _parse(context<_iterator_t>& oContext) {
           while (oContext.begin < oContext.end){
             if (*oContext.begin == _head_ch) {
               oContext.begin++;
               continue;
             }
-            if (parse_helper<whitespace<_tail_chs...>, void, _ignore_case, void>::parse(oContext)) continue;
+            if (parse_helper<whitespace<_tail_chs...>, void, _ignore_case, void>::_parse(oContext)) continue;
             break;
           }
           return false;
@@ -483,17 +488,17 @@ namespace xtd{
       class parse_helper<_decl_t, characters<_first, _last>, true, _whitespace_t>{
       public:
         template <typename _iterator_t>
-        static bool parse(context<_iterator_t>& oOuter) {
+        static bool _parse(context<_iterator_t>& oOuter) {
           context<_iterator_t> oContext(oOuter);
-          parse_helper< _whitespace_t, void, true, void>::parse(oContext);
+          parse_helper< _whitespace_t, void, true, void>::_parse(oContext);
           if (oContext.begin < oContext.end && tolower(*oContext.begin) >= tolower(_first) && tolower(*oContext.begin) <= tolower(_last)){
             oContext.parse_errors.clear();
-            oContext.start_rule = rule_base::pointer_type(new _decl_t);
+            oContext.start_rule = std::make_shared<_decl_t>();
             oContext.begin++;
             oOuter = oContext;
             return true;
           }
-          oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(characters<_first, _last>), oContext.begin));
+          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(characters<_first, _last>), oContext.begin));
           return false;
         }
       };
@@ -501,17 +506,17 @@ namespace xtd{
       class parse_helper<_decl_t, characters<_first, _last>, false, _whitespace_t>{
       public:
         template <typename _iterator_t>
-        static bool parse(context<_iterator_t>& oOuter) {
+        static bool _parse(context<_iterator_t>& oOuter) {
           context<_iterator_t> oContext(oOuter);
-          parse_helper< _whitespace_t, void, true, void>::parse(oContext);
+          parse_helper< _whitespace_t, void, true, void>::_parse(oContext);
           if (oContext.begin < oContext.end && *oContext.begin >= _first && *oContext.begin <= _last){
             oContext.parse_errors.clear();
-            oContext.start_rule = rule_base::pointer_type(new _decl_t(*oContext.begin));
+            oContext.start_rule = std::make_shared<_decl_t>(*oContext.begin);
             oContext.begin++;
             oOuter = oContext;
             return true;
           }
-          oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(characters<_first, _last>), oContext.begin));
+          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(characters<_first, _last>), oContext.begin));
           return false;
         }
       };
@@ -529,10 +534,10 @@ namespace xtd{
       class parse_helper < _decl_t, parse::not_<_ParamTs...>, _ignore_case, _whitespace_t> {
       public:
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool parse(context<_iterator_t>& oOuter) {
+        static bool _parse(context<_iterator_t>& oOuter) {
           context<_iterator_t> oContext(oOuter);
-          if (!parse_helper<and_<_ParamTs...>, and_<_ParamTs...>, _ignore_case, _whitespace_t>::parse(oContext)) return true;
-          oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oOuter.begin));
+          if (!parse_helper<and_<_ParamTs...>, and_<_ParamTs...>, _ignore_case, _whitespace_t>::_parse(oContext)) return true;
+          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oOuter.begin));
           return false;
         }
       };
@@ -542,8 +547,8 @@ namespace xtd{
       class parse_helper < _decl_t, parse::and_<>, _ignore_case, _whitespace_t>{
       public:
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool parse(context<_iterator_t>& oOuter, _child_rule_ts&& ... oChildRules) {
-          oOuter.start_rule = rule_base::pointer_type(new _decl_t(std::forward<_child_rule_ts>(oChildRules)...));
+        static bool _parse(context<_iterator_t>& oOuter, _child_rule_ts&& ... oChildRules) {
+          oOuter.start_rule = std::make_shared<_decl_t>(std::forward<_child_rule_ts>(oChildRules)...);
           oOuter.parse_errors.clear();
           return true;
         }
@@ -553,16 +558,16 @@ namespace xtd{
       class parse_helper < _decl_t, parse::and_<_head_t, _tail_ts...>, _ignore_case, _whitespace_t> {
       public:
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool parse(context<_iterator_t>& oOuter, _child_rule_ts&& ... oChildRules) {
+        static bool _parse(context<_iterator_t>& oOuter, _child_rule_ts&& ... oChildRules) {
           context<_iterator_t> oContext(oOuter);
-          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oContext);
           if (!bRet) {
-            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(and_<_decl_t>), oOuter.begin));
+            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(and_<_decl_t>), oOuter.begin));
             return false;
           }
-          bRet = parse_helper<_decl_t, parse::and_<_tail_ts...>, _ignore_case, _whitespace_t>::parse(oContext, std::forward<_child_rule_ts>(oChildRules)..., oContext.start_rule);
+          bRet = parse_helper<_decl_t, parse::and_<_tail_ts...>, _ignore_case, _whitespace_t>::_parse(oContext, std::forward<_child_rule_ts>(oChildRules)..., oContext.start_rule);
           if (!bRet) {
-            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(and_<_tail_ts...>), oOuter.begin));
+            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(and_<_tail_ts...>), oOuter.begin));
             return false;
           }
           oOuter = oContext;
@@ -575,24 +580,25 @@ namespace xtd{
       template <typename _decl_t, bool _ignore_case, typename _whitespace_t >
       class parse_helper < _decl_t, parse::or_<>, _ignore_case, _whitespace_t>{
       public:
-        static bool parse(...){ return false; }
+        template <typename ... _argTs>
+        static bool _parse(_argTs...){ return false; }
       };
 
       template <typename _decl_t, typename _head_t, typename ... _tail_ts, bool _ignore_case, typename _whitespace_t >
       class parse_helper < _decl_t, parse::or_<_head_t, _tail_ts...>, _ignore_case, _whitespace_t>{
       public:
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool parse(context<_iterator_t>& oOuter){
+        static bool _parse(context<_iterator_t>& oOuter){
           context<_iterator_t> oContext(oOuter);
-          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oContext);
           if (bRet){
             oOuter = oContext;
             oOuter.parse_errors.clear();
-            oOuter.start_rule = rule_base::pointer_type(new _decl_t(oOuter.start_rule));
+            oOuter.start_rule = std::make_shared<_decl_t>(oOuter.start_rule);
             return true;
           }
-          oContext.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_head_t), oOuter.begin));
-          return parse_helper<_decl_t, parse::or_<_tail_ts...>, _ignore_case, _whitespace_t>::parse(oContext);
+          oContext.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_head_t), oOuter.begin));
+          return parse_helper<_decl_t, parse::or_<_tail_ts...>, _ignore_case, _whitespace_t>::_parse(oContext);
         }
       };
 
@@ -602,9 +608,9 @@ namespace xtd{
       class parse_helper < _decl_t, parse::zero_or_one_<_head_t>, _ignore_case, _whitespace_t> {
       public:
         template <typename _iterator_t>
-        static bool parse(context<_iterator_t>& oOuter){
-          parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oOuter);
-          oOuter.start_rule = rule_base::pointer_type(new _decl_t(oOuter.start_rule));
+        static bool _parse(context<_iterator_t>& oOuter){
+          parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oOuter);
+          oOuter.start_rule = std::make_shared<_decl_t>(oOuter.start_rule);
           oOuter.parse_errors.clear();
           return true;
         }
@@ -616,15 +622,15 @@ namespace xtd{
       class parse_helper < _decl_t, parse::one_or_more_<_head_t>, _ignore_case, _whitespace_t> {
       public:
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool parse(context<_iterator_t>& oOuter,_child_rule_ts&&...oChildren ){
+        static bool _parse(context<_iterator_t>& oOuter,_child_rule_ts&&...oChildren ){
           context<_iterator_t> oContext(oOuter);
-          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oContext);
           if (!bRet) {
-            oOuter.parse_errors.emplace_back(new parse::parse_error<_iterator_t>(typeid(_decl_t), oOuter.begin));
-            oOuter.start_rule = rule_base::pointer_type(new _decl_t(std::forward<_child_rule_ts>(oChildren)...));
+            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oOuter.begin));
+            oOuter.start_rule = std::make_shared<_decl_t>(std::forward<_child_rule_ts>(oChildren)...);
             return false;
           }
-          parse(oContext, std::forward<_child_rule_ts>(oChildren)..., oContext.start_rule);
+          _parse(oContext, std::forward<_child_rule_ts>(oChildren)..., oContext.start_rule);
           oContext.parse_errors.clear();
           oOuter = oContext;
           return true;
@@ -637,17 +643,16 @@ namespace xtd{
       public:
 
         template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool parse(context<_iterator_t>& oOuter, _child_rule_ts&&...oChildren){
-        context<_iterator_t> oContext(oOuter);
-          auto bRet = parse_helper<_ty, typename _ty::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
-          if (bRet){
-            return parse_helper<_decl_t, zero_or_more_<_ty>, _ignore_case, _whitespace_t>::parse(oContext, std::forward<_child_rule_ts>(oChildren)..., oContext.start_rule);
-          }else{
-            oOuter = oContext;
-            oOuter.parse_errors.clear();
-            oOuter.start_rule = rule_base::pointer_type(new _decl_t(std::forward<_child_rule_ts>(oChildren)..., oContext.start_rule));
-            return true;
+        static bool _parse(context<_iterator_t>& oOuter, _child_rule_ts&&...oChildren){
+          context<_iterator_t> oContext(oOuter);
+          auto oParent = std::make_shared<parse::zero_or_more_<_ty>>();
+          while(parse_helper<_ty, typename _ty::impl_type, _ignore_case, _whitespace_t>::_parse(oContext)){
+            oParent->push_back(oContext.start_rule);
           }
+          oOuter = oContext;
+          oOuter.parse_errors.clear();
+          oOuter.start_rule = oParent;
+          return true;
         }
       };
     }
@@ -671,10 +676,10 @@ namespace xtd{
     template <typename _iterator_t> static bool parse(_iterator_t begin, _iterator_t end, typename _rule_t::pointer_type& ast, typename parse::parse_error<_iterator_t>::vector& errors) {
       typename parse::context<_iterator_t> oContext{begin, end};
 
-      auto bRet = parse::_::parse_helper<_rule_t, typename _rule_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
+      auto bRet = parse::_::parse_helper<_rule_t, typename _rule_t::impl_type, _ignore_case, _whitespace_t>::_parse(oContext);
       errors = oContext.parse_errors;
       if (oContext.begin  < oContext.end) return false;
-      typename _rule_t::pointer_type oAST = oContext.start_rule;
+      auto oAST = oContext.start_rule;
       oAST->set_parent(oAST);
       ast = oAST;
       return bRet;

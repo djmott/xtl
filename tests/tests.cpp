@@ -133,7 +133,7 @@ main system and unit test entry point
 #endif
 
 #undef forever
-#include "src/gtest-all.cc"
+#include "gtest/gtest.h"
 
 int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);

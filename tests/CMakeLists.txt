@@ -1,28 +1,32 @@
 
 enable_testing()
 
-option(XTD_INSTALL_TESTS "Install tests?" YES)
+option(XTD_INSTALL_TESTS "Install tests?" FALSE)
 
-file(DOWNLOAD https://github.com/google/googletest/archive/release-1.8.0.tar.gz ${CMAKE_CURRENT_BINARY_DIR}/gtest/gtest.tar.gz)
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf gtest.tar.gz WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/gtest)
-file(GLOB GTEST_FILES ${CMAKE_CURRENT_BINARY_DIR}/gtest/**/*)
-file(COPY ${GTEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/gtest)
+ExternalProject_Add(googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_SHALLOW TRUE
+  GIT_TAG release-1.8.0
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/googletest
+)
+
 include_directories(
-  "${CMAKE_CURRENT_BINARY_DIR}/gtest/googletest/"
-  "${CMAKE_CURRENT_BINARY_DIR}/gtest/googletest/include"
-  )
+  "${CMAKE_CURRENT_BINARY_DIR}/googletest/include"
+)
+
+link_directories("${CMAKE_CURRENT_BINARY_DIR}/googletest/lib")
 
 add_library(dummy_library_test SHARED dummy_library.cpp)
-add_dependencies(dummy_library_test XTL)
+add_dependencies(dummy_library_test XTL googletest)
 
 if(XTD_OS STREQUAL "XTD_OS_WINDOWS")
   if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
-    option(BUILD_TEST_COVERAGE "profile test coverage" ON)
+    option(BUILD_TEST_COVERAGE "profile test coverage" TRUE)
   else()
-    set(BUILD_TEST_COVERAGE OFF)
+    set(BUILD_TEST_COVERAGE FALSE)
   endif()
 else()
-  option(BUILD_TEST_COVERAGE "profile test coverage" ON)
+  option(BUILD_TEST_COVERAGE "profile test coverage" TRUE)
 endif()
 
 set(TEST_SOURCE
@@ -59,7 +63,7 @@ set(TEST_SOURCE
 )
 
 function(build_option NAME DESC)
-  option(${NAME} "${DESC}" YES)
+  option(${NAME} "${DESC}" TRUE)
   add_definitions(-D${NAME}=${${NAME}})
 endfunction()
 
@@ -104,6 +108,7 @@ endif()
 add_executable(unit_tests ${TEST_SOURCE})
 add_test(unit_tests "" ${TEST_SOURCE})
 add_dependencies(unit_tests dummy_library_test)
+target_link_libraries(unit_tests gtest gmock)
 
 if(XTD_OS STREQUAL "XTD_OS_WINDOWS" AND BUILD_TEST_COVERAGE)
   target_compile_options(unit_tests PRIVATE -coverage -fprofile-arcs -ftest-coverage)

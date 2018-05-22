@@ -86,6 +86,8 @@ elseif(MINGW)
   set(XTD_COMPILER XTD_COMPILER_MINGW)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set(XTD_COMPILER XTD_COMPILER_GCC)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  set(XTD_COMPILER XTD_COMPILER_CLANG)
 else()
   message(FATAL_ERROR "Compiler not supported : ${CMAKE_CXX_COMPILER_ID}")
 endif()
@@ -200,9 +202,13 @@ endif()
 
 
 #gcc specfics
-if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC")
+if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" OR XTD_COMPILER STREQUAL "XTD_COMPILER_CLANG" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
   set(EVT_TRACE_SRC src/event_trace/evt_gcc.cpp)
   add_compile_options(-std=c++11 -Wall -Wextra -Weffc++)
+
+  if ("Debug" STREQUAL "${CMAKE_BUILD_TYPE}" OR "RelWithDebInfo" STREQUAL "${CMAKE_BUILD_TYPE}")
+    add_compile_options(-ggdb3 -fvar-tracking-assignments -DSF_VISIBILITY -fvisibility=hidden -fno-strict-aliasing)
+  endif()
 
   if(XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM)
     link_libraries(stdc++fs)
