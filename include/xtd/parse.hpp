@@ -151,8 +151,9 @@ namespace xtd{
       template <typename, bool, typename> friend class xtd::parser;
       void set_parent(weak_ptr_t oParent){
         _parent = oParent;
+        auto oThis = shared_from_this();
         for (auto & oChild : static_cast<super_t&>(*this)){
-          oChild->set_parent(shared_from_this());
+          oChild->set_parent(oThis);
         }
       }
       std::weak_ptr<rule_base> _parent;
@@ -473,7 +474,7 @@ namespace xtd{
             if (parse_helper<whitespace<_tail_chs...>, void, _ignore_case, void>::parse(oContext)) continue;
             break;
           }
-          return true;
+          return false;
         }
       };
 
@@ -673,8 +674,9 @@ namespace xtd{
       auto bRet = parse::_::parse_helper<_rule_t, typename _rule_t::impl_type, _ignore_case, _whitespace_t>::parse(oContext);
       errors = oContext.parse_errors;
       if (oContext.begin  < oContext.end) return false;
-      ast = oContext.start_rule;
-      ast->set_parent(parse::rule_base::pointer_type());
+      typename _rule_t::pointer_type oAST = oContext.start_rule;
+      oAST->set_parent(oAST);
+      ast = oAST;
       return bRet;
     }
     template <typename _iterator_t> static bool parse(_iterator_t begin, _iterator_t end, typename _rule_t::pointer_type& ast) {
