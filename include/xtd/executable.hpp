@@ -53,7 +53,7 @@ namespace xtd {
       if (!sRet[0]) {
         sRet.resize(xtd::crt_exception::throw_if(::readlink("/proc/self/exe", &sRet[0], sRet.size()), [](int i) { return (-1 == i); }));
       }
-      return sRet;
+      return xtd::filesystem::path(sRet);
     }
 
 #endif
