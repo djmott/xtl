@@ -12,9 +12,11 @@ handle necessary filesystem and path functionality until C++17 is finalized
 #if (XTD_OS_UNIX & XTD_OS)
   #include <sys/stat.h>
   #include <paths.h>
+  #include <pwd.h>
+  #include <unistd.h>
 #else
-#include <xtd/exception.hpp>
-#include <xtd/meta.hpp>
+  #include <xtd/exception.hpp>
+  #include <xtd/meta.hpp>
 #endif
 
 #include <xtd/exception.hpp>
@@ -125,7 +127,16 @@ namespace xtd{
         return operator/=(replacement);
       }
 
-      bool operator<(const path& src) const { return _str<src._str; }
+      xtd::string filename() const {
+        path oPath(*this);
+        oPath.make_preferred();
+        auto i = _str.rfind(preferred_separator, _str.length());
+        if (std::string::npos != i) return _str.substr(1+i, _str.length()-i);
+        return "";
+      }
+
+      bool operator<(const path& src) const { return _str < src._str; }
+
     private:
       xtd::string _str;
     };
@@ -145,6 +156,26 @@ namespace xtd{
 
 
 #elif (XTD_OS_UNIX & XTD_OS)
+    inline void create_directory(const path& oPath){
+      mkdir(oPath.string().c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    }
+
+    inline void create_directories(const path& oPath){
+      path oTemp(oPath);
+      oTemp.make_preferred();
+      auto str = oTemp.string();
+      auto dirs = str.split({path::preferred_separator});
+      xtd::string sDir = "";
+      for (const auto & dir : dirs){
+        sDir += path::preferred_separator;
+        sDir += dir;
+        create_directory(sDir);
+      }
+    }
+
+    inline path home_directory_path(){
+      return path(getpwuid(getuid())->pw_dir);
+    }
 
 
     inline path temp_directory_path(){
@@ -161,6 +192,9 @@ namespace xtd{
       throw xtd::exception(here(), "Unable to determine temp path");
     }
 
+    inline bool exists(const path& oPath){
+      return (-1 != access(oPath.string().c_str(), F_OK));
+    }
 
 #endif
 

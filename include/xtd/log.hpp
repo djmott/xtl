@@ -228,7 +228,7 @@ namespace xtd {
       csv_target() : _logfile(), _FileLock() {
         auto oLogPath = xtd::filesystem::home_directory_path();
         oLogPath /= xtd::executable::this_executable().path().filename();
-        if (!xtd::filesystem::exists(oLogFPath)) xtd::filesystem::create_directories(oLogPath);
+        if (!xtd::filesystem::exists(oLogPath)) xtd::filesystem::create_directories(oLogPath);
         oLogPath /= xtd::string::format(intrinsic_cast(xtd::process::this_process().id()), ".csv");
         _logfile.open(oLogPath.string(), std::ios::out);
       }
