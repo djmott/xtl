@@ -102,10 +102,7 @@ namespace xtd{
 #endif
 
     xstring& reverse(){
-      size_t iEnd = _super_t::size();
-      for (size_t i=0 ; i<iEnd /2; ++i){
-        std::swap((*this)[i], (*this)[iEnd - i - 1]);
-      }
+      std::reverse(_super_t::begin(), _super_t::end());
       return *this;
     }
     /**
@@ -349,9 +346,9 @@ namespace xtd{
   namespace _{
 
   #if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)
-    template <> class xstring_format<char, const wchar_t * const &>{
+    template <> class xstring_format<char, const wchar_t * const &> {
     public:
-      static inline string format(const wchar_t * const & src){
+      static inline string format(const wchar_t * const & src) {
         std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> oConv;
         return oConv.to_bytes(src);
       }

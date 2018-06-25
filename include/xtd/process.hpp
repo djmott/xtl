@@ -156,9 +156,9 @@ namespace xtd {
       }
       modules.resize(dwNeeded / sizeof(HMODULE));
       for (dynamic_library::native_handle_type module : modules) {
-        xtd::string sPath(MAX_PATH, 0);
+        xtd::tstring sPath(MAX_PATH, 0);
         forever {
-          dwNeeded = GetModuleFileNameExA(*this, module, &sPath[0], static_cast<DWORD>(sPath.size()));
+          dwNeeded = GetModuleFileNameEx(*this, module, &sPath[0], static_cast<DWORD>(sPath.size()));
           if (dwNeeded < sPath.size()) {
             break;
           }

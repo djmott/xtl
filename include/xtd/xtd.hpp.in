@@ -88,16 +88,18 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #define XTD_CHARSET_MBCS      1
 #define XTD_CHARSET_UNICODE   2
 #if !defined(XTD_CHARSET)
+  #if defined(UNICODE) || defined(_UNICODE)
     #define XTD_CHARSET @XTD_CHARSET@
+  #endif
 #endif
 
 
 #if (XTD_CHARSET_UNICODE & XTD_CHARSET)
   using tchar = wchar_t;
-  #define __(x) L ## x
+  #define __(...) L ## __VA_ARGS__
 #else
   using tchar = char;
-  #define __(x)  x
+  #define __(...)  __VA_ARGS__
 #endif
     ///@}
 
@@ -114,11 +116,19 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #endif
 
 #if (XTD_CONFIG_RELEASE & XTD_CONFIG)
-  #define D_(...)
-  #define R_(...) __VA_ARGS__
+  #if !defined(D_)
+    #define D_(...)
+  #endif
+  #if !defined(R_)
+    #define R_(...) __VA_ARGS__
+  #endif
 #else
-  #define D_(...) __VA_ARGS__
-  #define R_(...)
+  #if !defined(D_)
+    #define D_(...) __VA_ARGS__
+  #endif
+  #if !defined(R_)
+    #define R_(...)
+  #endif
 #endif
     ///@}
 
@@ -186,15 +196,27 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
   #define NOMINMAX
 #endif
 
-#define W_(x) L # x
+#if !defined(W_)
+    #define W_(x) L # x
+#endif
 
-#define QUOTE2_( x ) # x
-#define QUOTE( x ) QUOTE2_( x )
+#if !defined(QUOTE2_)
+    #define QUOTE2_( x ) # x
+#endif
+#if !defined(QUOTE)
+    #define QUOTE( x ) QUOTE2_( x )
+#endif
 
-#define CONCAT2_(x, y) x ## y
-#define CONCAT(x, y) CONCAT2_(x,y)
+#if !defined(CONCAT2_)
+    #define CONCAT2_(x, y) x ## y
+#endif
+#if !defined(CONCAT)
+    #define CONCAT(x, y) CONCAT2_(x,y)
+#endif
 
-#define DEFINE(x) x
+#if !defined(DEFINE)
+    #define DEFINE(x) x
+#endif
 
 #if defined(__COUNTER__)
   #define UNIQUE_IDENTIFIER(_prefix) CONCAT(_prefix, __COUNTER__)
@@ -207,25 +229,57 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #endif
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
-  #define PRAGMA_(x) __pragma(x)
-  #define FORCEINLINE __forceinline
-  #define NOVTABLE __declspec(novtable)
-  #define NORETURN __declspec(noreturn)
-  #define MULTIPLE __declspec(selectany)
-  #define ALIGN(val) __declspec(align(val))
-  #define XTD_EXPORT __declspec(dllexport)
+    #if !defined(PRAGMA_)
+      #define PRAGMA_(x) __pragma(x)
+    #endif
+    #if !defined(FORCEINLINE)
+      #define FORCEINLINE __forceinline
+    #endif
+    #if !defined(NOVTABLE)
+      #define NOVTABLE __declspec(novtable)
+    #endif
+    #if !defined(NORETURN)
+      #define NORETURN __declspec(noreturn)
+    #endif
+    #if !defined(MULTIPLE)
+      #define MULTIPLE __declspec(selectany)
+    #endif
+    #if !defined(ALIGN)
+      #define ALIGN(val) __declspec(align(val))
+    #endif
+    #if !defined(XTD_EXPORT)
+      #define XTD_EXPORT __declspec(dllexport)
+    #endif
 #elif ((XTD_COMPILER_CLANG | XTD_COMPILER_GCC | XTD_COMPILER_MINGW) & XTD_COMPILER)
-  #define PRAGMA_(x) _Pragma( #x )
-  #define FORCEINLINE __attribute__((always_inline))
-  #define NOVTABLE
-  #define NORETURN __attribute__((noreturn))
-  #define MULTIPLE __attribute__ ((weak))
-  #define ALIGN(val) __attribute__ ((aligned (val)))
-  #define XTD_EXPORT __attribute__ ((visibility ("default")))
+    #if !defined(PRAGMA_)
+      #define PRAGMA_(x) _Pragma( #x )
+    #endif
+    #if !defined(FORCEINLINE)
+      #define FORCEINLINE __attribute__((always_inline))
+    #endif
+    #if !defined(NOVTABLE)
+      #define NOVTABLE
+    #endif
+    #if !defined(NORETURN)
+      #define NORETURN __attribute__((noreturn))
+    #endif
+    #if !defined(MULTIPLE)
+      #define MULTIPLE __attribute__ ((weak))
+    #endif
+    #if !defined(ALIGN)
+      #define ALIGN(val) __attribute__ ((aligned (val)))
+    #endif
+    #if !defined(XTD_EXPORT)
+      #define XTD_EXPORT __attribute__ ((visibility ("default")))
+    #endif
 #endif
 
-#define PACK_PUSH(n) PRAGMA_(pack(push, n))
-#define PACK_POP() PRAGMA_(pack(pop))
+#if !defined(PACK_PUSH)
+    #define PACK_PUSH(n) PRAGMA_(pack(push, n))
+#endif
+#if !defined(PACK_POP)
+    #define PACK_POP() PRAGMA_(pack(pop))
+#endif
 
 #if !defined(XTD_VERBOSE_BUILD)
     #define XTD_VERBOSE_BUILD @XTD_VERBOSE_BUILD@
@@ -308,6 +362,7 @@ namespace xtd{
 
   #include <winsock2.h>
   #include <windows.h>
+  #include <Shlwapi.h>
   #include <Shlobj.h>
 #endif
 

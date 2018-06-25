@@ -310,6 +310,7 @@ add_library(XTL STATIC
   include/xtd/var.hpp
   include/xtd/wrapped_type.hpp
   include/xtd/xtd.hpp
+  include/xtd/xtd.hpp.in
   )
 
 link_libraries(XTL)
@@ -318,6 +319,7 @@ install(TARGETS XTL
   RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
   ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 )
+
 install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX} FILES_MATCHING PATTERN "*.hpp")
 
 if(XTD_BUILD_TESTS)

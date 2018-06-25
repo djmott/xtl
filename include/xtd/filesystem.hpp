@@ -58,16 +58,16 @@ namespace xtd{
     struct path  {
 
 #if(XTD_OS_WINDOWS & XTD_OS)
-      static const char preferred_separator = '\\';
-      static const char not_preferred_separator = '/';
+      static const tchar preferred_separator = __('\\');
+      static const tchar not_preferred_separator = __('/');
 #else
-      static const char preferred_separator = '/';
-      static const char not_preferred_separator = '\\';
+      static const tchar preferred_separator = __('/');
+      static const tchar not_preferred_separator = __('\\');
 #endif
 
       path() : _str() {}
-      path(const char * src) : _str(src){}
-      path(const xtd::string& src) : _str(src){}
+      path(const tchar * src) : _str(src){}
+      path(const xtd::tstring& src) : _str(src){}
       path(const path& src) : _str(src._str){}
       path(path&& src) : _str(std::move(src._str)){}
 
@@ -79,17 +79,17 @@ namespace xtd{
         std::swap(_str, src._str);
         return *this;
       }
-      path& operator=(const xtd::string& src){
+      path& operator=(const xtd::tstring& src){
         _str = src;
         return *this;
       }
 
-      path& operator=(const char * src){
+      path& operator=(const tchar * src){
         _str = src;
         return *this;
       }
 
-      const xtd::string& string() const { return _str; }
+      const xtd::tstring& tstring() const { return _str; }
 
       ///appends a perferred separator and path element
       path& append(const path& src) {
@@ -118,7 +118,7 @@ namespace xtd{
         if (!_str.length()) return *this;
         if (preferred_separator == _str.back() || not_preferred_separator==_str.back()) return *this;
         auto isep = _str.find_last_of({preferred_separator, not_preferred_separator});
-        if (xtd::string::npos != isep) _str.erase(isep);
+        if (xtd::tstring::npos != isep) _str.erase(isep);
         return *this;
       }
 
@@ -127,35 +127,52 @@ namespace xtd{
         return operator/=(replacement);
       }
 
-      xtd::string filename() const {
+      xtd::tstring filename() const {
         path oPath(*this);
         oPath.make_preferred();
         auto i = _str.rfind(preferred_separator, _str.length());
-        if (std::string::npos != i) return _str.substr(1+i, _str.length()-i);
-        return "";
+        if (xtd::tstring::npos != i) return _str.substr(1+i, _str.length()-i);
+        return __("");
       }
 
       bool operator<(const path& src) const { return _str < src._str; }
 
     private:
-      xtd::string _str;
+      xtd::tstring _str;
     };
 
 
-    inline bool remove(const path& oPath) { return (0==std::remove(oPath.string().c_str())); }
 
 //temp_directory_path
 #if (XTD_OS_WINDOWS & XTD_OS)
+    inline bool remove(const path& oPath) { return (::DeleteFile(oPath.tstring().c_str()) ? true : false); }
 
-
-    inline path temp_directory_path() {
-      xtd::string sTemp(1 + MAX_PATH, 0);
-      sTemp.resize(xtd::windows::exception::throw_if(GetTempPath(MAX_PATH, &sTemp[0]), [](DWORD d){return 0 == d;}));
+    inline path home_directory_path() {
+      LPWSTR sRet = nullptr;
+      xtd::windows::exception::throw_if(::SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &sRet), [](HRESULT h) { return FAILED(h); });
+      xtd::tstring sTemp(sRet);
+      ::CoTaskMemFree(sRet);
       return path(sTemp);
     }
 
+    inline path temp_directory_path() {
+      xtd::tstring sTemp(1 + MAX_PATH, 0);
+      sTemp.resize(xtd::windows::exception::throw_if(::GetTempPath(MAX_PATH, &sTemp[0]), [](DWORD d){return 0 == d;}));
+      return path(sTemp);
+    }
+
+    inline bool exists(const path& oPath) {
+      return (::PathFileExists(oPath.tstring().c_str()) ? true : false);
+    }
+
+    inline void create_directories(const path& oPath) {
+      xtd::windows::exception::throw_if(::SHPathPrepareForWrite(nullptr, nullptr, oPath.tstring().c_str(), SHPPFW_DIRCREATE), [](HRESULT h) { return FAILED(h); });
+    }
 
 #elif (XTD_OS_UNIX & XTD_OS)
+
+    inline bool remove(const path& oPath) { return (0 == std::remove(oPath.tstring().c_str())); }
+
     inline void create_directory(const path& oPath){
       mkdir(oPath.string().c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     }
@@ -165,7 +182,7 @@ namespace xtd{
       oTemp.make_preferred();
       auto str = oTemp.string();
       auto dirs = str.split({path::preferred_separator});
-      xtd::string sDir = "";
+      xtd::tstring sDir = "";
       for (const auto & dir : dirs){
         sDir += path::preferred_separator;
         sDir += dir;

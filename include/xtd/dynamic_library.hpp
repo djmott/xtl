@@ -140,9 +140,9 @@ namespace xtd{
     friend class process;
 
 #if (XTD_OS_WINDOWS & XTD_OS)
-    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::exception::throw_if(LoadLibraryA(sPath.string().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
+    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::exception::throw_if(LoadLibrary(sPath.tstring().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
 #else
-    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.string().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
+    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.tstring().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif
 
     explicit dynamic_library(native_handle_type hHandle) : _Handle(hHandle){}
