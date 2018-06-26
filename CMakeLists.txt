@@ -100,7 +100,7 @@ set_property(CACHE XTD_CHARSET PROPERTY STRINGS XTD_CHARSET_MBCS XTD_CHARSET_UNI
 if(XTD_CHARSET STREQUAL "XTD_CHARSET_MBCS")
   add_definitions(-DMBCS)
 else()
-  add_definitions(-DUNICODE)
+  add_definitions(-DUNICODE -D_UNICODE)
 endif()
 
 set(ASSET_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
