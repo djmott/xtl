@@ -1,9 +1,12 @@
 ### cmake config
 
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.0)
 
 set(CMAKE_CXX_STANDARD 11)
 
+if(POLICY CMP0048)
+  cmake_policy(SET CMP0048 NEW)
+endif()
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
 endif()

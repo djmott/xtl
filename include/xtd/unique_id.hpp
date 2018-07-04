@@ -164,7 +164,7 @@ namespace xtd{
     public:
       inline static string format(const unique_id& value){
         xtd::string oRet(36, 0);
-        sprintf(&oRet[0], "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+        sprintf_s(&oRet[0], 1+oRet.size(), "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
                 value.Data1, value.Data2, value.Data3,
                 value.Data4[0], value.Data4[1], value.Data4[2], value.Data4[3],
                 value.Data4[4], value.Data4[5], value.Data4[6], value.Data4[7]);

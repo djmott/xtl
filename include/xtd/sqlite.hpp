@@ -153,23 +153,39 @@ namespace xtd{
       template <typename> struct sqlite_field_binder;
 
       template <> struct sqlite_field_binder<const double &>{
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const double& val){ exception::throw_if(pDB, sqlite3_bind_double(st, Index, val), [](int i){return SQLITE_OK != i; }); }
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const double& val){
+          exception::throw_if(pDB, sqlite3_bind_double(st, Index, val), [](int i){return SQLITE_OK != i; }); 
+        }
       };
 
       template <> struct sqlite_field_binder<const int &>{
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const int& val){ exception::throw_if(pDB, sqlite3_bind_int(st, Index, val), [](int i){return SQLITE_OK != i; }); }
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const int& val){ 
+          exception::throw_if(pDB, sqlite3_bind_int(st, Index, val), [](int i){return SQLITE_OK != i; }); 
+        }
       };
 
       template <> struct sqlite_field_binder<const sqlite3_int64 &>{
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const sqlite3_int64& val){ exception::throw_if(pDB, sqlite3_bind_int64(st, Index, val), [](int i){return SQLITE_OK != i; }); }
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const sqlite3_int64& val){ 
+          exception::throw_if(pDB, sqlite3_bind_int64(st, Index, val), [](int i){return SQLITE_OK != i; }); 
+        }
       };
 
       template <> struct sqlite_field_binder<const std::vector<uint8_t>&>{
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const std::vector<uint8_t>& val){ exception::throw_if(pDB, sqlite3_bind_blob(st, Index, &val[0], val.size(), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; }); }
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const std::vector<uint8_t>& val){ 
+          exception::throw_if(pDB, sqlite3_bind_blob(st, Index, &val[0], val.size(), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; }); 
+        }
       };
 
-      template <> struct sqlite_field_binder<const xtd::string &>{
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val){ exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), val.size(), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; }); }
+      template <> struct sqlite_field_binder<const xtd::string &> {
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val) { 
+          exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), val.size(), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; }); 
+        }
+      };
+
+      template <> struct sqlite_field_binder<const xtd::wstring &> {
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::wstring& val) { 
+          exception::throw_if(pDB, sqlite3_bind_blob(st, Index, val.c_str(), val.size() * sizeof(wchar_t), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; });
+        }
       };
 
       template <int, typename ...> struct sqlite_command_params;
@@ -268,7 +284,15 @@ namespace xtd{
     class database : public std::enable_shared_from_this<database>{
       sqlite3 * _pDB;
       explicit database(const xtd::filesystem::path& oPath, int flags){
-        exception::throw_if(_pDB, sqlite3_open_v2(oPath.string().c_str(), &_pDB, flags, nullptr), [](int i){ return SQLITE_OK != i; });
+        xtd::string sPath = "";// "file:";
+#if defined(_UNICODE) || defined(UNICODE)
+        sPath += xtd::string::format(oPath.tstring());
+#else
+        sPath += oPath.tstring();
+#endif
+        
+        exception::throw_if(_pDB, sqlite3_open_v2(sPath.c_str(),&_pDB, flags, nullptr), 
+          [](int i){ return SQLITE_OK != i; });
       }
     public:
       using pointer = std::shared_ptr<database>;
