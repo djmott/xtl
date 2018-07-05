@@ -12,7 +12,8 @@
 #include <xtd/string.hpp>
 #include <xtd/filesystem.hpp>
 #include <xtd/tuple.hpp>
-
+#include <xtd/unique_id.hpp>
+#include <xtd/debug.hpp>
 #include <sqlite3.h>
 
 
@@ -74,15 +75,21 @@ namespace xtd{
       };
 
       template <> struct sqlite_field_loader<int>{
-        template <int Index> static int get(sqlite3_stmt* st){ return sqlite3_column_int(st, Index); }
+        template <int Index> static int get(sqlite3_stmt* st){ 
+          return sqlite3_column_int(st, Index); 
+        }
       };
 
       template <> struct sqlite_field_loader<sqlite3_int64>{
-        template <int Index> static sqlite3_int64 get(sqlite3_stmt* st){ return sqlite3_column_int64(st, Index); }
+        template <int Index> static sqlite3_int64 get(sqlite3_stmt* st){ 
+          return sqlite3_column_int64(st, Index); 
+        }
       };
 
       template <> struct sqlite_field_loader<char*>{
-        template <int Index> static const char * get(sqlite3_stmt* st){ return reinterpret_cast<const char *>(sqlite3_column_text(st, Index)); }
+        template <int Index> static const char * get(sqlite3_stmt* st){ 
+          return reinterpret_cast<const char *>(sqlite3_column_text(st, Index)); 
+        }
       };
 
       template <> struct sqlite_field_loader<std::vector<uint8_t>>{
@@ -91,9 +98,24 @@ namespace xtd{
         }
       };
 
-      template <> struct sqlite_field_loader<xtd::string>{
-        template <int Index> static const char * get(sqlite3_stmt* st){
+      template <> struct sqlite_field_loader<std::string> {
+        template <int Index> static const char * get(sqlite3_stmt* st) {
           return reinterpret_cast<const char *>(sqlite3_column_text(st, Index));
+        }
+      };
+
+      template <> struct sqlite_field_loader<std::wstring> {
+        template <int Index> static const wchar_t * get(sqlite3_stmt* st) {
+          return reinterpret_cast<const wchar_t *>(sqlite3_column_text16(st, Index));
+        }
+      };
+
+      template <> struct sqlite_field_loader<xtd::unique_id> {
+        template <int Index> static xtd::unique_id get(sqlite3_stmt* st){
+          XTD_ASSERT(sizeof(xtd::unique_id) == sqlite3_column_bytes(st, Index));
+          xtd::unique_id oRet;
+          memcpy(&oRet, sqlite3_column_blob(st, Index), sizeof(xtd::unique_id));
+          return oRet;
         }
       };
 
@@ -183,8 +205,14 @@ namespace xtd{
       };
 
       template <> struct sqlite_field_binder<const xtd::wstring &> {
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::wstring& val) { 
-          exception::throw_if(pDB, sqlite3_bind_blob(st, Index, val.c_str(), val.size() * sizeof(wchar_t), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; });
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::wstring& val) {
+          exception::throw_if(pDB, sqlite3_bind_blob(st, Index, val.c_str(), static_cast<int>(val.size() * sizeof(wchar_t)), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; });
+        }
+      };
+
+      template <> struct sqlite_field_binder<const xtd::unique_id &> {
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::unique_id& val) {
+          exception::throw_if(pDB, sqlite3_bind_blob(st, Index, &val, sizeof(xtd::unique_id), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; });
         }
       };
 
