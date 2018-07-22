@@ -350,7 +350,9 @@ namespace xtd{
     };
 #endif
 
-    struct EndOfFile {};
+    struct EndOfFile {
+      using impl_type = EndOfFile;
+    };
 
 
 #if (!DOXY_INVOKED)
@@ -598,7 +600,7 @@ namespace xtd{
             return true;
           }
           oContext.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_head_t), oOuter.begin));
-          return parse_helper<_decl_t, parse::or_<_tail_ts...>, _ignore_case, _whitespace_t>::_parse(oContext);
+          return parse_helper<_decl_t, parse::or_<_tail_ts...>, _ignore_case, _whitespace_t>::_parse(oOuter);
         }
       };
 
@@ -655,6 +657,20 @@ namespace xtd{
           return true;
         }
       };
+
+      ///EOF
+/*
+      template <bool _ignore_case, typename _whitespace_t >
+      class parse_helper < EndOfFile, EndOfFile, _ignore_case, _whitespace_t> {
+      public:
+
+        template <typename _iterator_t, typename ... _child_rule_ts>
+        static bool _parse(context<_iterator_t>& oOuter, _child_rule_ts&&...oChildren) {
+          context <_iterator_t> oContext(oOuter);
+          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
+          if (oContext.end() !=)
+        }
+      };*/
     }
 #endif
   }
