@@ -23,7 +23,7 @@
 #include <map>
 
 #include <xtd/dynamic_library.hpp>
-
+#include <xtd/filesystem.hpp>
 
 namespace xtd {
 
@@ -95,7 +95,7 @@ namespace xtd {
       std::vector<DWORD> pids(10, 0);
       DWORD dwNeeded;
       forever {
-        xtd::windows::exception::throw_if(EnumProcesses(&pids[0], static_cast<DWORD>(pids.size() * sizeof(DWORD)), &dwNeeded), [](BOOL b){ return FALSE==b; });
+        xtd::windows::exception::throw_if(::EnumProcesses(&pids[0], static_cast<DWORD>(pids.size() * sizeof(DWORD)), &dwNeeded), [](BOOL b){ return FALSE==b; });
         if ((dwNeeded / sizeof(DWORD)) < pids.size()) {
           break;
         }
@@ -171,15 +171,26 @@ namespace xtd {
 
     operator handle_type() {
       if (!_hProcess) {
-        _hProcess = xtd::windows::exception::throw_if(OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, _pid), [](HANDLE h) { return NULL == h; });
+        _hProcess = xtd::windows::exception::throw_if(OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, _pid), [](HANDLE h) { return NULL == h; });
       }
       return _hProcess;
+    }
+
+    const xtd::filesystem::path& path() {
+      if (!_path) {
+        xtd::tstring stemp(1 + MAX_PATH, 0);
+        DWORD dwsize = stemp.size();
+        auto ret = xtd::windows::exception::throw_if(::QueryFullProcessImageName(*this, 0, &stemp[0], &dwsize), [](BOOL b) { return !b; });
+        stemp.resize(dwsize);
+        _path = std::make_unique<xtd::filesystem::path>(stemp);
+      }
+      return *_path;
     }
 
   private:
     pid_type _pid;
     handle_type _hProcess;
-
+    std::unique_ptr<xtd::filesystem::path> _path;
   };
 
 #else
