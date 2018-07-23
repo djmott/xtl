@@ -462,6 +462,13 @@ namespace xtd{
 
   #endif
 
+    template <> class xstring_format<char, const LPWSTR &> {
+    public:
+      static inline string format(const LPWSTR & src) {
+        return xstring_format<char, const wchar_t*const&>::format(src);
+      }
+    };
+
     template <typename _ChT> class xstring_format<_ChT, const _ChT * const &> {
     public:
       inline static xstring<_ChT> format(const _ChT * const & src) {

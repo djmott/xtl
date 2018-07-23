@@ -150,7 +150,7 @@ namespace xtd{
     inline path home_directory_path() {
       LPWSTR sRet = nullptr;
       xtd::windows::exception::throw_if(::SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &sRet), [](HRESULT h) { return FAILED(h); });
-      xtd::tstring sTemp(sRet);
+      auto sTemp = xtd::tstring::format(sRet);
       ::CoTaskMemFree(sRet);
       return path(sTemp);
     }

@@ -436,11 +436,10 @@ namespace xtd{
         template<typename _iterator_t> static bool _parse(context<_iterator_t> &oOuter) {
           context <_iterator_t> oContext(oOuter);
           parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-          static std::regex_constants::syntax_option_type iFlags = std::regex_constants::optimize |
+          static const std::regex_constants::syntax_option_type iFlags = std::regex_constants::optimize |
                                                                    (_ignore_case ? std::regex_constants::icase
                                                                                  : std::regex_constants::optimize);
-
-          static std::regex oRE(_str, iFlags);
+          static const std::regex oRE(_str, iFlags);
           std::match_results<std::string::iterator> oMatch;
           if (!std::regex_search(oContext.begin, oContext.end, oMatch, oRE, std::regex_constants::match_continuous)) {
             oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
@@ -599,7 +598,7 @@ namespace xtd{
             oOuter.start_rule = std::make_shared<_decl_t>(oOuter.start_rule);
             return true;
           }
-          oContext.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_head_t), oOuter.begin));
+          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_head_t), oOuter.begin));
           return parse_helper<_decl_t, parse::or_<_tail_ts...>, _ignore_case, _whitespace_t>::_parse(oOuter);
         }
       };
