@@ -109,35 +109,44 @@ namespace xtd {
     }
 
     ~process() {
-      if (_hProcess) {
-        CloseHandle(_hProcess);
+      if (_hProcess) CloseHandle(_hProcess);
+      if (_hMainThread) CloseHandle(_hMainThread);
+    }
+
+    process(pid_type hPid, handle_type hProc, handle_type hMainThread) : _pid(hPid), _hProcess(hProc), _hMainThread(hMainThread) {}
+    process(pid_type hPid, handle_type hProc) : process(hPid,hProc,nullptr) {}
+    explicit process(pid_type hPid) : process(hPid, nullptr, nullptr) {}
+
+    process(const process& src) : _pid(src._pid), _hProcess(nullptr), _hMainThread(nullptr) {
+      if (src._hProcess) {
+        xtd::windows::exception::throw_if(DuplicateHandle(GetCurrentProcess(), src._hProcess, GetCurrentProcess(), &_hProcess, 0, TRUE, DUPLICATE_SAME_ACCESS), [](BOOL b) { return FALSE == b; });
+      }
+      if (src._hMainThread) {
+        xtd::windows::exception::throw_if(DuplicateHandle(GetCurrentProcess(), src._hMainThread, GetCurrentProcess(), &_hMainThread, 0, TRUE, DUPLICATE_SAME_ACCESS), [](BOOL b) { return FALSE == b; });
       }
     }
 
-    explicit process(pid_type hPid) : _pid(hPid), _hProcess(nullptr) {}
-    process(pid_type hPid, handle_type hProc) : _pid(hPid), _hProcess(hProc) {}
-
-    process(const process& src) : _pid(src._pid), _hProcess(nullptr){
-      if (src._hProcess){
-        xtd::windows::exception::throw_if(DuplicateHandle(GetCurrentProcess(), src._hProcess, GetCurrentProcess(), &_hProcess, 0, TRUE, DUPLICATE_SAME_ACCESS), [](BOOL b){ return FALSE==b;});
-      }
-    }
-
-    process(process&& src) : _pid(src._pid), _hProcess(src._hProcess){
+    process(process&& src) : _pid(src._pid), _hProcess(src._hProcess), _hMainThread(src._hMainThread){
       src._pid = 0;
       src._hProcess = nullptr;
+      src._hMainThread = nullptr;
     }
     process& operator=(const process& src){
       _pid = src._pid;
       _hProcess = nullptr;
-      if (src._hProcess){
+      _hMainThread = nullptr;
+      if (src._hProcess) {
         xtd::windows::exception::throw_if(DuplicateHandle(GetCurrentProcess(), src._hProcess, GetCurrentProcess(), &_hProcess, 0, TRUE, DUPLICATE_SAME_ACCESS), [](BOOL b){ return FALSE==b;});
+      }
+      if (src._hMainThread) {
+        xtd::windows::exception::throw_if(DuplicateHandle(GetCurrentProcess(), src._hMainThread, GetCurrentProcess(), &_hMainThread, 0, TRUE, DUPLICATE_SAME_ACCESS), [](BOOL b) { return FALSE == b; });
       }
       return *this;
     }
     process& operator=(process&& src){
       std::swap(_pid, src._pid);
       std::swap(_hProcess, src._hProcess);
+      std::swap(_hMainThread, src._hMainThread);
       return *this;
     }
 
@@ -169,6 +178,11 @@ namespace xtd {
       return oRet;
     }
 
+    handle_type handle() {
+      if (!_hProcess) _hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, _pid);
+      return _hProcess;
+    }
+
     operator handle_type() {
       if (!_hProcess) {
         _hProcess = xtd::windows::exception::throw_if(OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, _pid), [](HANDLE h) { return NULL == h; });
@@ -178,18 +192,33 @@ namespace xtd {
 
     const xtd::filesystem::path& path() {
       if (!_path) {
-        xtd::tstring stemp(1 + MAX_PATH, 0);
-        DWORD dwsize = stemp.size();
-        auto ret = xtd::windows::exception::throw_if(::QueryFullProcessImageName(*this, 0, &stemp[0], &dwsize), [](BOOL b) { return !b; });
-        stemp.resize(dwsize);
+        DWORD dwsize = 1 + MAX_PATH;
+        xtd::tstring stemp(dwsize, 0);
+        if (::QueryFullProcessImageName(handle(), 0, &stemp[0], &dwsize)) {
+          stemp.resize(dwsize);
+        }else {
+          stemp = __("");
+        }
         _path = std::make_unique<xtd::filesystem::path>(stemp);
       }
       return *_path;
     }
 
+    static process create(const xtd::tstring& sPath) {
+      STARTUPINFO si;
+      PROCESS_INFORMATION pi;
+      memset(&si, 0, sizeof(STARTUPINFO));
+      si.cb = sizeof(STARTUPINFO);
+      memset(&pi, 0, sizeof(PROCESS_INFORMATION));
+      xtd::tstring sMutablePath = sPath;
+      xtd::windows::exception::throw_if(::CreateProcess(nullptr, &sMutablePath[0], nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi), [](BOOL b) { return !b; });      
+      return process(pi.dwProcessId, pi.hProcess, pi.hThread);
+    }
+
   private:
     pid_type _pid;
     handle_type _hProcess;
+    handle_type _hMainThread;
     std::unique_ptr<xtd::filesystem::path> _path;
   };
 

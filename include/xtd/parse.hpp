@@ -445,7 +445,7 @@ namespace xtd{
             oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
             return false;
           }
-          oContext.begin += oMatch[0].length();
+          oContext.begin += oMatch[0].length() + oMatch.suffix().length();
 
           ///ensure there's an identifiable separation between terminals. this should be done differently
           if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 1])) {
