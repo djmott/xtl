@@ -453,7 +453,7 @@ namespace xtd{
             return false;
           }
           parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-          oContext.start_rule = std::make_shared<_decl_t>(oMatch[0].str());
+          oContext.start_rule = std::make_shared<_decl_t>(oMatch[0].str() + oMatch.suffix().str());
           oOuter = oContext;
           return true;
         }
