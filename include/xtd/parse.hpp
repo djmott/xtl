@@ -441,11 +441,12 @@ namespace xtd{
                                                                                  : std::regex_constants::optimize);
           static const std::regex oRE(_str, iFlags);
           std::match_results<std::string::iterator> oMatch;
-          if (!std::regex_search(oContext.begin, oContext.end, oMatch, oRE, std::regex_constants::match_continuous)) {
+          if (!std::regex_search(oContext.begin, oContext.end, oMatch, oRE, std::regex_constants::match_continuous | std::regex_constants::match_not_null)) {
             oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
             return false;
           }
-          oContext.begin += oMatch[0].length() + oMatch.suffix().length();
+          //oContext.begin += oMatch[0].length() + oMatch.suffix().length();
+          oContext.begin += oMatch[0].length();
 
           ///ensure there's an identifiable separation between terminals. this should be done differently
           if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 1])) {
@@ -453,7 +454,8 @@ namespace xtd{
             return false;
           }
           parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-          oContext.start_rule = std::make_shared<_decl_t>(oMatch[0].str() + oMatch.suffix().str());
+//          oContext.start_rule = std::make_shared<_decl_t>(oMatch[0].str() + oMatch.suffix().str());
+          oContext.start_rule = std::make_shared<_decl_t>(oMatch[0].str());
           oOuter = oContext;
           return true;
         }
@@ -610,8 +612,11 @@ namespace xtd{
       public:
         template <typename _iterator_t>
         static bool _parse(context<_iterator_t>& oOuter){
-          parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oOuter);
-          oOuter.start_rule = std::make_shared<_decl_t>(oOuter.start_rule);
+          if (parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oOuter)) {
+            oOuter.start_rule = std::make_shared<_decl_t>(oOuter.start_rule);
+          }else {
+            oOuter.start_rule = std::make_shared<_decl_t>();
+          }
           oOuter.parse_errors.clear();
           return true;
         }
