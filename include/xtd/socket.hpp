@@ -124,9 +124,15 @@ namespace xtd{
        * @param iPort port
        */
       ipv4address(const char * sIP, uint16_t iPort){
-        sin_family = AF_INET;
-        sin_addr.s_addr = inet_addr(sIP);
-        sin_port = htons(iPort);
+        #if (NTDDI_VERSION >= NTDDI_VISTA)
+          sin_family = AF_INET;
+          inet_pton(AF_INET, sIP, &sin_addr.s_addr);
+          sin_port = htons(iPort);
+        #else
+          sin_family = AF_INET;
+          sin_addr.s_addr = inet_addr(sIP);
+          sin_port = htons(iPort);
+        #endif
       }
       ipv4address(const ipv4address& src){
         memcpy(this, &src, sizeof(ipv4address));
@@ -530,7 +536,7 @@ namespace xtd{
 #if (XTD_COMPILER_MINGW & XTD_COMPILER)
         auto iRet = xtd::crt_exception::throw_if(::select(1 + (SOCKET)*this, &fdRead, &fdWrite, &fdErr, reinterpret_cast<PTIMEVAL>(&tv)), [](int i){return i < 0; });
 #else
-        auto iRet = xtd::crt_exception::throw_if(::select(1 + (SOCKET)*this, &fdRead, &fdWrite, &fdErr, &tv), [](int i){return i < 0; });
+        auto iRet = xtd::crt_exception::throw_if(::select(static_cast<int>(1 + (SOCKET)*this), &fdRead, &fdWrite, &fdErr, &tv), [](int i){return i < 0; });
 #endif
         if (0 == iRet){
           return false;

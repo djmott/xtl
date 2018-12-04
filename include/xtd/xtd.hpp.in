@@ -44,9 +44,13 @@ RESERVED FOR FUTURE USE
 /** @name XTD_OS
 The build/target/host OS selected by cmake configure
 @{*/
-#define XTD_OS_IOS        0x04
-#define XTD_OS_UNIX      0x08
+#define XTD_OS_BAREMETAL  0x0
+#define XTD_OS_ANDROID    0x02
+#define XTD_OS_IOS        (0x04 | XTD_OS_UNIX)
+#define XTD_OS_UNIX       0x08
 #define XTD_OS_WINDOWS    0x10
+#define XTD_OS_MINGW      (0x20 | XTD_OS_WINDOWS)
+#define XTD_OS_CYGWIN     (0x40 | XTD_OS_UNIX)
 #if !defined(XTD_OS)
     #define XTD_OS @XTD_OS@
 #endif
@@ -55,14 +59,15 @@ The build/target/host OS selected by cmake configure
 
 /** @name XTD_COMPILER
 @{*/
-#define XTD_COMPILER_MSVC 1
-#define XTD_COMPILER_GCC 2
-#define XTD_COMPILER_CLANG 4
-#define XTD_COMPILER_INTEL 8
-#define XTD_COMPILER_DMC 16
-#define XTD_COMPILER_WATCOM 32
-#define XTD_COMPILER_XCODE 64
-#define XTD_COMPILER_MINGW 128
+#define XTD_COMPILER_UNKNOWN  0x0
+#define XTD_COMPILER_MSVC     0x001
+#define XTD_COMPILER_GCC      0x002
+#define XTD_COMPILER_CLANG    0x004
+#define XTD_COMPILER_INTEL    0x008
+#define XTD_COMPILER_DMC      0x010
+#define XTD_COMPILER_WATCOM   0x020
+#define XTD_COMPILER_BORLAND  0x080
+#define XTD_COMPILER_ARM      0x100
 #if !defined(XTD_COMPILER)
     #define XTD_COMPILER @XTD_COMPILER@
 #endif
@@ -109,8 +114,10 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 /** @name XTD_CONFIG
     The build configuration set by cmake configure
     {@*/
-#define XTD_CONFIG_DEBUG      1
-#define XTD_CONFIG_RELEASE    2
+#define XTD_CONFIG_DEBUG      0x1
+#define XTD_CONFIG_RELEASE    0x2
+#define XTD_CONFIG_MINSIZE    (0x4 | XTD_CONFIG_RELEASE)
+#define XTD_CONFIG_RELDEBUG   (XTD_CONFIG_DEBUG | XTD_CONFIG_RELEASE)
 #if !defined(XTD_CONFIG)
     #define XTD_CONFIG @XTD_CONFIG@
 #endif

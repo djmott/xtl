@@ -90,6 +90,7 @@ namespace xtd{
       }
 
       const xtd::tstring& tstring() const { return _str; }
+      xtd::string string() const { return string::format(_str); }
 
       ///appends a perferred separator and path element
       path& append(const path& src) {

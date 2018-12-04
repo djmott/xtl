@@ -1,18 +1,16 @@
 
-add_custom_target(examples)
+add_custom_target(examples ALL)
 
 add_library(dummy_library_example SHARED dummy_library.cpp)
 
-add_dependencies(dummy_library_example XTL)
 add_dependencies(examples dummy_library_example)
-add_dependencies(examples XTL)
+
 
 
 function(build_example target)
   option(BUILD_${target}_EXAMPLE "Build ${target}" TRUE)
   if(BUILD_${target}_EXAMPLE)
     add_executable("example_${target}" EXCLUDE_FROM_ALL "example_${target}.cpp")
-    add_dependencies("example_${target}" XTL)
     add_dependencies(examples "example_${target}")
   endif()
 endfunction()
