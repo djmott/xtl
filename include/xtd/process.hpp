@@ -173,7 +173,7 @@ namespace xtd {
           }
           sPath.resize(dwNeeded);
         }
-        oRet[xtd::filesystem::path(sPath)] = dynamic_library::pointer(new dynamic_library(module));
+        oRet[xtd::filesystem::path(sPath.c_str())] = dynamic_library::pointer(new dynamic_library(module));
       }
       return oRet;
     }
@@ -199,7 +199,7 @@ namespace xtd {
         }else {
           stemp = __("");
         }
-        _path = std::make_unique<xtd::filesystem::path>(stemp);
+        _path = std::make_unique<xtd::filesystem::path>(stemp.c_str());
       }
       return *_path;
     }

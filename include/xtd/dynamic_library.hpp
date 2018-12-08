@@ -17,6 +17,7 @@ load and invoke methods in a dynamic library
 
 #include <xtd/exception.hpp>
 #include <xtd/filesystem.hpp>
+#include <filesystem>
 
 namespace xtd{
 
@@ -65,7 +66,7 @@ namespace xtd{
 
     using pointer = std::shared_ptr<dynamic_library>;
     using map = std::map<xtd::filesystem::path, pointer>;
-
+    
     static inline pointer make(const xtd::filesystem::path& spath){ return pointer(new dynamic_library(spath)); }
 
     native_handle_type handle() const{ return _Handle; }
@@ -140,7 +141,7 @@ namespace xtd{
     friend class process;
 
 #if (XTD_OS_WINDOWS & XTD_OS)
-    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::exception::throw_if(LoadLibrary(sPath.tstring().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
+    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::exception::throw_if(LoadLibraryA(sPath.string().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
 #else
     explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.tstring().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif

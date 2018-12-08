@@ -30,7 +30,7 @@ namespace xtd {
 #if (XTD_OS_WINDOWS & XTD_OS)
     static inline xtd::filesystem::path get_path(){
       static xtd::filesystem::path sRet(__(""));
-      if (0 != sRet.tstring().size()){
+      if (0 != sRet.string().size()){
         return xtd::filesystem::path(sRet);
       }
       xtd::tstring sTemp(MAX_PATH, 0);
@@ -43,7 +43,7 @@ namespace xtd {
           break;
         }
       }
-      sRet = sTemp;
+      sRet = xtd::filesystem::path(xtd::string::format(sTemp).c_str());
       return xtd::filesystem::path(sRet);
     }
 #elif (XTD_OS_UNIX & XTD_OS)

@@ -31,26 +31,27 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #endif
 
-namespace std{
-  namespace filesystem{}
-  namespace experimental{
-    namespace filesystem{}
+
+#if (XTD_HAS_FILESYSTEM) 
+
+
+namespace xtd {
+  namespace filesystem {
+    using namespace xtd::filesystem;
+    using path = std::filesystem::path;
   }
 }
 
-#if (XTD_HAS_FILESYSTEM || XTD_HAS_EXP_FILESYSTEM)
+#elif (XTD_HAS_EXP_FILESYSTEM)
 
-
-  namespace xtd{
-    namespace filesystem{
-      using namespace std::experimental::filesystem;
-      using namespace std::filesystem;
-    }
+namespace xtd {
+  namespace filesystem {
+    using namespace xtd::filesystem;
+    using path = std::experimental::filesystem::path;
   }
-
+}
 
 #else
-
 
 namespace xtd{
   namespace filesystem{

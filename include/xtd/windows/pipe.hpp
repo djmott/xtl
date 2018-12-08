@@ -18,6 +18,15 @@ namespace xtd {
         std::swap(_hWrite, src._hWrite);
         return *this;
       }
+      static shared_ptr create(const std::string& name) {
+        std::string sPipe = "\\\\.\\pipe\\";
+        sPipe += name;
+        auto hRead = windows::exception::throw_if(CreateNamedPipe(sPipe.c_str(), PIPE_ACCESS_DUPLEX , PIPE_READMODE_BYTE| PIPE_WAIT | PIPE_REJECT_REMOTE_CLIENTS, 4, 1024, 1024, NMPWAIT_USE_DEFAULT_WAIT, nullptr), [](HANDLE h) { return INVALID_HANDLE_VALUE == h; });
+        auto hWrite = windows::exception::throw_if(CreateNamedPipe(sPipe.c_str(), PIPE_ACCESS_DUPLEX , PIPE_TYPE_BYTE| PIPE_WAIT | PIPE_REJECT_REMOTE_CLIENTS, 4, 1024, 1024, NMPWAIT_USE_DEFAULT_WAIT, nullptr), [](HANDLE h) { return INVALID_HANDLE_VALUE == h; });
+        handle_type oRead(hRead, ::CloseHandle);
+        handle_type oWrite(hWrite, ::CloseHandle);
+        return shared_ptr(new pipe(std::move(oRead), std::move(oWrite)));
+      }
       static shared_ptr create(DWORD buffer_size=0) {
         HANDLE hRead, hWrite;
         windows::exception::throw_if(CreatePipe(&hRead, &hWrite, nullptr, buffer_size), [](BOOL b) { return !b; });

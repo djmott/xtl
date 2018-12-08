@@ -252,7 +252,7 @@ namespace xtd{
         return *this;
       }
       int operator()(const _arg_ts&...oArgs){
-        _::sqlite_command_params<1, const _arg_ts& ...>::set(_pDatabase, _pStatement, std::forward<const _arg_ts &>(oArgs)...);
+        _::sqlite_command_params<1, const _arg_ts& ...>::template set(_pDatabase, _pStatement, std::forward<_vargs>(oArgs)...);
         exception::throw_if(_pDatabase, sqlite3_step(_pStatement), [](int i){ return !(i == SQLITE_OK || i == SQLITE_DONE || i == SQLITE_ROW);  });
         exception::throw_if(_pDatabase, sqlite3_reset(_pStatement), [](int i){return SQLITE_OK != i; });
         return sqlite3_changes(_pDatabase);
@@ -310,11 +310,12 @@ namespace xtd{
     sqlite3 database
     */
     class database : public std::enable_shared_from_this<database>{
+    protected:
       sqlite3 * _pDB;
       explicit database(const xtd::filesystem::path& oPath, int flags){
         xtd::string sPath = "";// "file:";
 #if defined(_UNICODE) || defined(UNICODE)
-        sPath += xtd::string::format(oPath.tstring());
+        sPath += xtd::string::format(oPath.string());
 #else
         sPath += oPath.tstring();
 #endif

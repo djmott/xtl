@@ -209,9 +209,15 @@ namespace xtd{
     struct anonymous_pipe_transport {
       using pointer_type = std::shared_ptr<anonymous_pipe_transport>;
 
+      ~anonymous_pipe_transport() {
+        if (_running) stop_server();
+      }
+
       anonymous_pipe_transport(xtd::windows::pipe::shared_ptr& oServerPipe, xtd::windows::pipe::shared_ptr& oClientPipe) : _server_pipe{ oServerPipe }, _client_pipe{ oClientPipe }{}
 
       void stop_server() {
+        if (!_running) throw xtd::exception(here(), "Pipe server not running");
+        _running = false;
         _stop_server_thread->set_value();
         _server_thread->join();
       }
@@ -227,6 +233,8 @@ namespace xtd{
       }
 
       template <typename _server_t> void start_server(_server_t& oServer) {
+        if (_running) throw xtd::exception(here(), "Pipe server already running");
+        _running = true;
         _stop_server_thread = std::make_unique<std::promise<void>>();
         _server_thread = std::make_unique<std::thread>([this, &oServer]() {
           auto oFuture = _stop_server_thread->get_future();
@@ -362,7 +370,7 @@ namespace xtd{
 
     protected:
       friend struct pipe_transport;
-      friend struct anonymous_pipe_transport;
+      friend struct pipe_transport;
       call_type _call;
 
       bool invoke(payload& oPayload) {

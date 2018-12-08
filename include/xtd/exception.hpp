@@ -23,6 +23,8 @@ Simplifies use of exception::_throw_if
 
 namespace xtd{
 
+  class unhandled_exception{};
+
 /// Base exception for XTL
     class exception : public std::exception{
     public:
@@ -139,7 +141,8 @@ Throws exception if the test expression returns true. _throw_if methods are pres
             template <typename _return_t, typename _expression_t>
             inline static _return_t _throw_if(const xtd::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
               if (exp(ret)){
-                throw exception(source, expstr, GetLastError());
+                auto iLastErr = GetLastError();
+                throw exception(source, expstr,iLastErr);
               }
               return ret;
             }
