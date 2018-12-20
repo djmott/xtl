@@ -194,13 +194,19 @@ namespace xtd{
 
       template <> struct sqlite_field_binder<const std::vector<uint8_t>&>{
         template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const std::vector<uint8_t>& val){ 
-          exception::throw_if(pDB, sqlite3_bind_blob(st, Index, &val[0], val.size(), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; }); 
+          exception::throw_if(pDB, sqlite3_bind_blob(st, Index, &val[0], static_cast<int>(val.size()), SQLITE_TRANSIENT), [](int i){return SQLITE_OK != i; });
         }
       };
 
       template <> struct sqlite_field_binder<const xtd::string &> {
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val) { 
-          exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), val.size(), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; }); 
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val) {
+          exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), static_cast<int>(val.size()), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; });
+        }
+      };
+
+      template <> struct sqlite_field_binder<const std::string &> {
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val) {
+          exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), static_cast<int>(val.size()), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; });
         }
       };
 
@@ -224,7 +230,7 @@ namespace xtd{
 
       template <int idx, typename _head_t, typename ... _tail_ts> struct sqlite_command_params<idx, _head_t, _tail_ts...>{
         static void set(sqlite3 * pDB, sqlite3_stmt * st, const _head_t& oHead, _tail_ts&&...oTail){
-          sqlite_field_binder<_head_t>::template set<idx>(pDB, st, oHead);
+          sqlite_field_binder<_head_t>::set<idx>(pDB, st, oHead);
           sqlite_command_params<1 + idx, _tail_ts...>::set(pDB, st, std::forward<_tail_ts>(oTail)...);
         }
       };
@@ -252,7 +258,7 @@ namespace xtd{
         return *this;
       }
       int operator()(const _arg_ts&...oArgs){
-        _::sqlite_command_params<1, const _arg_ts& ...>::template set(_pDatabase, _pStatement, std::forward<_vargs>(oArgs)...);
+        _::sqlite_command_params<1, const _arg_ts& ...>::set(_pDatabase, _pStatement, oArgs...);
         exception::throw_if(_pDatabase, sqlite3_step(_pStatement), [](int i){ return !(i == SQLITE_OK || i == SQLITE_DONE || i == SQLITE_ROW);  });
         exception::throw_if(_pDatabase, sqlite3_reset(_pStatement), [](int i){return SQLITE_OK != i; });
         return sqlite3_changes(_pDatabase);
