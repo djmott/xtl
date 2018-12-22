@@ -60,8 +60,8 @@ namespace xtd{
  */
 #define CHARACTERS_(_name, _first, _last) \
   using _name = xtd::parse::characters<_first, _last>
-#if 0
-/**
+
+ /**
  @def REGEX(_name, _value)
  Declares a regular expression terminal.
  Must be used at namespace scope.
@@ -71,7 +71,7 @@ namespace xtd{
 #define REGEX(_name, _value) \
       namespace _{ char _name[] = _value; } \
       using _name = xtd::parse::regex< decltype(_::_name), _::_name>;
-#endif
+
     class rule_base;
 
     template <typename iterator_t>
@@ -331,7 +331,7 @@ namespace xtd{
     protected:
       char _ch;
     };
-#if 0
+
     /** regular expression parsing algorithm.
     This template is infrequently used directly. The REGEX macro is provided to declare a regular expression terminal.
     */
@@ -347,7 +347,7 @@ namespace xtd{
       std::string _value;
     };
 #endif
-#endif
+
     struct EndOfFile {
       using impl_type = EndOfFile;
     };

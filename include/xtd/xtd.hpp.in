@@ -94,7 +94,9 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
 #define XTD_CHARSET_UNICODE   2
 #if !defined(XTD_CHARSET)
   #if defined(UNICODE) || defined(_UNICODE)
-    #define XTD_CHARSET @XTD_CHARSET@
+    #define XTD_CHARSET XTD_CHARSET_UNICODE
+  #else
+    #define XTD_CHARSET XTD_CHARSET_MBCS
   #endif
 #endif
 

@@ -32,6 +32,7 @@ project(XTL)
 
 include(CheckIncludeFile)
 include(CheckIncludeFileCXX)
+include(ExternalProject)
 
 include_directories(include)
 
@@ -257,6 +258,10 @@ set(XTD_TEST_HEADERS
   tests/test_unique_id.hpp
   tests/test_var.hpp
 )
+
+
+
+add_library(xtl SHARED src/xtl.cpp)
 
 install(FILES ${XTD_COM_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd/com)
 install(FILES ${XTD_CONCURRENT_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd/concurrent)
