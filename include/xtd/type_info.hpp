@@ -5,7 +5,7 @@
 
 #pragma once
 
-
+#include <typeinfo>
 
 inline bool operator<(const std::type_info& lhs, const std::type_info& rhs){
   return lhs.before(rhs);

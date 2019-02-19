@@ -45,12 +45,11 @@ RESERVED FOR FUTURE USE
 The build/target/host OS selected by cmake configure
 @{*/
 #define XTD_OS_BAREMETAL  0x0
-#define XTD_OS_ANDROID    0x02
+#define XTD_OS_UNIX       0x01
+#define XTD_OS_WINDOWS    0x02
 #define XTD_OS_IOS        (0x04 | XTD_OS_UNIX)
-#define XTD_OS_UNIX       0x08
-#define XTD_OS_WINDOWS    0x10
-#define XTD_OS_MINGW      (0x20 | XTD_OS_WINDOWS)
-#define XTD_OS_CYGWIN     (0x40 | XTD_OS_UNIX)
+#define XTD_OS_ANDROID    (0x08 | XTD_OS_UNIX)
+#define XTD_OS_CYGWIN     (0x10 | XTD_OS_UNIX)
 #if !defined(XTD_OS)
     #define XTD_OS @XTD_OS@
 #endif
@@ -64,8 +63,9 @@ The build/target/host OS selected by cmake configure
 #define XTD_COMPILER_GCC      0x002
 #define XTD_COMPILER_CLANG    0x004
 #define XTD_COMPILER_INTEL    0x008
-#define XTD_COMPILER_DMC      0x010
-#define XTD_COMPILER_WATCOM   0x020
+#define XTD_COMPILER_MINGW	  (0x010 | XTD_COMPILER_GCC)
+#define XTD_COMPILER_DMC      0x020
+#define XTD_COMPILER_WATCOM   0x040
 #define XTD_COMPILER_BORLAND  0x080
 #define XTD_COMPILER_ARM      0x100
 #if !defined(XTD_COMPILER)
@@ -140,63 +140,6 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
   #endif
 #endif
     ///@}
-
-
-#if !defined(XTD_LOG_TARGET_SYSLOG)
-    #define XTD_LOG_TARGET_SYSLOG @XTD_LOG_TARGET_SYSLOG@
-#endif
-
-#if !defined(XTD_LOG_TARGET_WINDBG)
-    #define XTD_LOG_TARGET_WINDBG @XTD_LOG_TARGET_WINDBG@
-#endif
-
-#if !defined(XTD_LOG_TARGET_CSV)
-    #define XTD_LOG_TARGET_CSV @XTD_LOG_TARGET_CSV@
-#endif
-
-#if !defined(XTD_LOG_TARGET_COUT)
-    #define XTD_LOG_TARGET_COUT @XTD_LOG_TARGET_COUT@
-#endif
-
-#if !defined(XTD_LOG_TARGET_XML)
-    #define XTD_LOG_TARGET_XML @XTD_LOG_TARGET_XML@
-#endif
-
-#if !defined(XTD_HAS_UUID)
-    #define XTD_HAS_UUID @XTD_HAS_UUID@
-#endif
-
-#if !defined(XTD_COLOR_MESSAGES)
-    #define XTD_COLOR_MESSAGES @XTD_COLOR_MESSAGES@
-#endif
-
-#if !defined(XTD_HAS_CODECVT)
-    #define XTD_HAS_CODECVT @XTD_HAS_CODECVT@
-#endif
-
-#if !defined(XTD_HAS_EXP_CODECVT)
-    #define XTD_HAS_EXP_CODECVT @XTD_HAS_EXP_CODECVT@
-#endif
-
-#if !defined(XTD_HAS_ICONV)
-    #define XTD_HAS_ICONV @XTD_HAS_ICONV@
-#endif
-
-#if !defined(XTD_HAS_FILESYSTEM)
-    #define XTD_HAS_FILESYSTEM @XTD_HAS_FILESYSTEM@
-#endif
-
-#if !defined(XTD_HAS_EXP_FILESYSTEM)
-    #define XTD_HAS_EXP_FILESYSTEM @XTD_HAS_EXP_FILESYSTEM@
-#endif
-
-#if !defined(XTD_USE_DBGHELP)
-    #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
-#endif
-
-#if (XTD_HAS_UUID)
-  #include "@XTD_UUID_H@"
-#endif
 
 
 /** @name Misc macros
@@ -299,6 +242,9 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
     #undef NOTE
     #define TODO(...)
     #define NOTE(...)
+#elif (XTD_COMPILER_MSVC & XTD_COMPILER)
+  #define TODO( x ) PRAGMA_(message ( __FILE__ "(" QUOTE(__LINE__) ") : TODO : " x ))
+  #define NOTE( x ) PRAGMA_(message ( __FILE__ "(" QUOTE(__LINE__) ") : NOTE : " x  ))
 #elif XTD_COLOR_MESSAGES
   #define TODO( x ) PRAGMA_(message ( __FILE__ ":" QUOTE(__LINE__) " : \e[31mTODO : " x "\e[0m" ))
   #define NOTE( x ) PRAGMA_(message ( __FILE__ ":" QUOTE(__LINE__) " : \e[32mNOTE : " x  "\e[0m"))
@@ -357,6 +303,17 @@ namespace xtd{
 
 #define forever for(;;)
 
+#if !defined(XTD_HAS_FILESYSTEM)
+    #define XTD_HAS_FILESYSTEM @XTD_HAS_FILESYSTEM@
+#endif
+
+#if !defined(XTD_HAS_EXP_FILESYSTEM)
+    #define XTD_HAS_EXP_FILESYSTEM @XTD_HAS_EXP_FILESYSTEM@
+#endif
+
+TODO("Move these")
+#if 0
+
 //System
 #if (XTD_OS_UNIX & XTD_OS)
   #if !defined(_GNU_SOURCE)
@@ -379,4 +336,58 @@ namespace xtd{
 
 #if !defined(interface)
   #define interface struct
+#endif
+
+
+
+#if !defined(XTD_LOG_TARGET_SYSLOG)
+    #define XTD_LOG_TARGET_SYSLOG @XTD_LOG_TARGET_SYSLOG@
+#endif
+
+#if !defined(XTD_LOG_TARGET_WINDBG)
+    #define XTD_LOG_TARGET_WINDBG @XTD_LOG_TARGET_WINDBG@
+#endif
+
+#if !defined(XTD_LOG_TARGET_CSV)
+    #define XTD_LOG_TARGET_CSV @XTD_LOG_TARGET_CSV@
+#endif
+
+#if !defined(XTD_LOG_TARGET_COUT)
+    #define XTD_LOG_TARGET_COUT @XTD_LOG_TARGET_COUT@
+#endif
+
+#if !defined(XTD_LOG_TARGET_XML)
+    #define XTD_LOG_TARGET_XML @XTD_LOG_TARGET_XML@
+#endif
+
+#if !defined(XTD_HAS_UUID)
+    #define XTD_HAS_UUID @XTD_HAS_UUID@
+#endif
+
+#if !defined(XTD_COLOR_MESSAGES)
+    #define XTD_COLOR_MESSAGES @XTD_COLOR_MESSAGES@
+#endif
+
+#if !defined(XTD_HAS_CODECVT)
+    #define XTD_HAS_CODECVT @XTD_HAS_CODECVT@
+#endif
+
+#if !defined(XTD_HAS_EXP_CODECVT)
+    #define XTD_HAS_EXP_CODECVT @XTD_HAS_EXP_CODECVT@
+#endif
+
+#if !defined(XTD_HAS_ICONV)
+    #define XTD_HAS_ICONV @XTD_HAS_ICONV@
+#endif
+
+
+
+#if !defined(XTD_USE_DBGHELP)
+    #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
+#endif
+
+#if (XTD_HAS_UUID)
+  #include "@XTD_UUID_H@"
+#endif
+
 #endif

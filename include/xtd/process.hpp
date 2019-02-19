@@ -15,13 +15,14 @@
 #endif
 
 #if (XTD_OS_WINDOWS & XTD_OS)
-#include <Psapi.h>
+  #include <windows.h>
+  #include <Psapi.h>
 #endif
 
 #include <regex>
-#include <memory>
 #include <map>
 
+#include <xtd/memory.hpp>
 #include <xtd/dynamic_library.hpp>
 #include <xtd/filesystem.hpp>
 
@@ -199,7 +200,7 @@ namespace xtd {
         }else {
           stemp = __("");
         }
-        _path = std::make_unique<xtd::filesystem::path>(stemp.c_str());
+        _path = xtd::make_unique<xtd::filesystem::path>(stemp.c_str());
       }
       return *_path;
     }

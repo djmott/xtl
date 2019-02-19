@@ -1,0 +1,23 @@
+#include <xtd/unique_id.hpp>
+#define CATCH_CONFIG_MAIN
+
+#include <catch2/catch.hpp>
+
+SCENARIO("unique_id used in code", "[unique_id]") {
+  GIVEN("supported use") {
+    THEN("is 128 bits wide") {
+      REQUIRE(16 == sizeof(xtd::unique_id));
+    }
+    THEN("is default constructable") {
+      REQUIRE(std::is_default_constructible_v<xtd::unique_id>);
+    }
+    
+    WHEN("default constructed") {
+      xtd::unique_id id1;
+      THEN("is not null") {
+        auto pTemp = reinterpret_cast<uint64_t*>(&id1);
+        REQUIRE((0 != pTemp[0] || 0 != pTemp[1]));
+      }
+    }
+  }
+}

@@ -7,13 +7,15 @@ general purpose socket communication
 #include <xtd/xtd.hpp>
 
 #if (XTD_OS_WINDOWS & XTD_OS)
+  #include <winsock2.h>
+  #include <windows.h>
   #include <Ws2ipdef.h>
   #include <ws2tcpip.h>
   static_assert(_WIN32_WINNT >= 0x500, "unsupported target Windows version");
   #define poll WSAPoll
 #endif
 
-#if (XTD_COMPILER_MINGW & XTD_COMPILER)
+#if (XTD_COMPILER_MINGW == XTD_COMPILER)
   #include <mswsock.h>
 #endif
 
@@ -46,7 +48,7 @@ namespace xtd{
     /// @addtogroup Sockets
     /// @{
 #if (!DOXY_INVOKED)
-#if (XTD_COMPILER_MINGW & XTD_COMPILER)
+#if (XTD_COMPILER_MINGW == XTD_COMPILER)
     using POLLFD=WSAPOLLFD;
 #elif (XTD_OS_UNIX & XTD_OS)
   using SOCKET = int;
@@ -533,7 +535,7 @@ namespace xtd{
         tv.tv_sec = WaitMS / 1000;
         WaitMS %= 1000;
         tv.tv_usec = WaitMS / 1000;
-#if (XTD_COMPILER_MINGW & XTD_COMPILER)
+#if (XTD_COMPILER_MINGW == XTD_COMPILER)
         auto iRet = xtd::crt_exception::throw_if(::select(1 + (SOCKET)*this, &fdRead, &fdWrite, &fdErr, reinterpret_cast<PTIMEVAL>(&tv)), [](int i){return i < 0; });
 #else
         auto iRet = xtd::crt_exception::throw_if(::select(static_cast<int>(1 + (SOCKET)*this), &fdRead, &fdWrite, &fdErr, &tv), [](int i){return i < 0; });

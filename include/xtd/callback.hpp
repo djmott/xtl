@@ -78,11 +78,16 @@ namespace xtd{
       return_last ///< return the result of the last attached target
     };
     ///{@
+    ~callback() = default;
     callback() = default;
     callback(callback&& src) : _invokers(std::move(src._invokers)){}
+    callback& operator=(callback&& src) {
+      if (this == &src) return *this;
+      std::swap(_invokers, src._invokers);
+      return *this;
+    }
     callback(const callback&) = delete;
     ///@}
-    ~callback() = default;
     callback& operator=(const callback&) = delete;
     /// Invokes all the attached targets and returns the result of the target as specified by the result policy
     _return_t operator()(result_policy result, _arg_ts...oArgs) const{

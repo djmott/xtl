@@ -3,12 +3,14 @@
 * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 #pragma once
-
+#include <xtd/xtd.hpp>
+#include <cstdint>
+#include <memory>
 namespace xtd {
 
 #define WRAPPED(_type) xtd::wrapped<_type, __COUNTER__>
 
-  template <typename _ty, size_t> class wrapped {
+  template <typename _ty, std::size_t> class wrapped {
     _ty _inner;
   public:
     using value_type = _ty;

@@ -9,6 +9,11 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #include <xtd/string.hpp>
 
+#if (XTD_OS_WINDOWS & XTD_OS)
+	#include <ShlObj.h>
+	#include <Shlwapi.h>
+#endif
+
 #if (XTD_OS_UNIX & XTD_OS)
   #include <sys/stat.h>
   #include <paths.h>
@@ -31,6 +36,10 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 #endif
 
+namespace std {
+	namespace experimental{}
+	using namespace experimental;
+}
 
 #if (XTD_HAS_FILESYSTEM) 
 

@@ -1,5 +1,89 @@
-### cmake config
+cmake_minimum_required(VERSION 3.0)
 
+enable_testing()
+
+include(ExternalProject)
+include(CheckIncludeFileCXX)
+
+set(default_build_type "Release")
+if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
+  set(default_build_type "Debug")
+endif()
+ 
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
+  set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_EXTENSIONS FALSE)
+
+add_library(xtl INTERFACE IMPORTED GLOBAL)
+
+target_include_directories(xtl INTERFACE include ${CMAKE_CURRENT_BINARY_DIR})
+
+set(XTD_OS XTD_OS_BAREMETAL)
+if(ANDROID)
+	set(XTD_OS XTD_OS_ANDROID)
+elseif(APPLE)
+	set(XTD_OS XTD_OS_IOS)
+elseif(CYGWIN)
+	set(XTD_OS XTD_OS_CYGWIN)
+elseif(WIN32)
+	set(XTD_OS XTD_OS_WINDOWS)
+elseif(UNIX)
+	set(XTD_OS XTD_OS_UNIX)
+else()
+	message(FATAL_ERROR "Unsupported target")
+endif()
+
+set(XTD_COMPILER XTD_COMPILER_UNKNOWN)
+if(MINGW)
+	set(XTD_COMPILER XTD_COMPILER_MINGW)
+elseif(MSVC STREQUAL ${CMAKE_CXX_COMPILER_ID})
+	set(XTD_COMPILER XTD_COMPILER_MSVC)
+elseif(GNU STREQUAL ${CMAKE_CXX_COMPILER_ID})
+	set(XTD_COMPILER XTD_COMPILER_GCC)
+elseif(Clang STREQUAL ${CMAKE_CXX_COMPILER_ID})
+	set(XTD_COMPILER XTD_COMPILER_CLANG)
+elseif(Intel STREQUAL ${CMAKE_CXX_COMPILER_ID})
+	set(XTD_COMPILER XTD_COMPILER_INTEL)
+elseif(OpenWatcom STREQUAL ${CMAKE_CXX_COMPILER_ID})
+	set(XTD_COMPILER XTD_COMPILER_WATCOM)
+elseif(ARMCC STREQUAL ${CMAKE_CXX_COMPILER_ID})
+	set(XTD_COMPILER XTD_COMPILER_ARM)
+else()
+	message(FATAL_ERROR "Unsupported compiler")
+endif()
+
+set(XTD_CONFIG XTD_CONFIG_RELEASE)
+if("Debug" STREQUAL "${CMAKE_BUILD_TYPE}")
+	set(XTD_CONFIG XTD_CONFIG_DEBUG)
+elseif("MinSizeRel" STREQUAL "${CMAKE_BUILD_TYPE}")
+	set(XTD_CONFIG XTD_CONFIG_MINSIZE)
+elseif("RelWithDebInfo" STREQUAL "${CMAKE_BUILD_TYPE}")
+	set(XTD_CONFIG XTD_CONFIG_RELDEBUG)
+endif()
+
+option(XTD_VERBOSE_BUILD "Verbose source TODO and NOTE build messages" TRUE)
+
+set(XTD_HAS_FILESYSTEM 0)
+set(XTD_HAS_EXP_FILESYSTEM 0)
+CHECK_INCLUDE_FILE_CXX(filesystem XTD_HAS_FILESYSTEM)
+CHECK_INCLUDE_FILE_CXX(experimental/filesystem XTD_HAS_EXP_FILESYSTEM)
+
+configure_file(include/xtd/xtd.hpp.in xtd/xtd.hpp)
+
+#add_subdirectory(src)
+
+option(ENABLE_TESTS "Enable tests" TRUE)
+if(ENABLE_TESTS)
+	add_subdirectory(tests)
+endif()
+
+#[[
 cmake_minimum_required(VERSION 3.0)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -270,3 +354,4 @@ install(FILES ${XTD_NLP_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd
 install(FILES ${XTD_WINDOWS_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd/windows)
 install(FILES ${XTD_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd)
 
+]]

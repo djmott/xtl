@@ -5,17 +5,17 @@ creates or loads singleton objects in shared memory regions
 */
 #pragma once
 #include <xtd/xtd.hpp>
+#include <cstddef>
 
 namespace xtd{
   template <typename _ty> class shared_mem_obj{
-    std::atomic<bool> _BeginInit; //set when initialization has began
-    std::atomic<bool> _EndInit; //set when initialization has complete
+    volatile bool _initialized; 
     size_t _ObjectID;
   public:
     shared_mem_obj() = delete;
     shared_mem_obj(const shared_mem_obj&) = delete;
     shared_mem_obj& operator=(const shared_mem_obj&) = delete;
-    void * operator new(const char * name, size_t len);
+    void * operator new(size_t,const char * name, size_t len);
     void operator delete(void* addr);
     virtual void initialize() = 0;
     virtual void destroy() = 0;

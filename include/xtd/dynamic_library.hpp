@@ -12,24 +12,30 @@ load and invoke methods in a dynamic library
   #include <dlfcn.h>
 #endif
 
-#include <memory>
 #include <map>
 
+#include <xtd/memory.hpp>
 #include <xtd/exception.hpp>
 #include <xtd/filesystem.hpp>
-#include <filesystem>
 
 namespace xtd{
 
   class dynamic_library_exception
-#if (XTD_OS_WINDOWS & XTD_COMPILER)
-    : public xtd::windows::exception{
+#if (XTD_OS_WINDOWS & XTD_OS)
+    : public xtd::windows::exception
+#else
+    : public xtd::exception
+#endif
+  {
+
+#if (XTD_OS_WINDOWS & XTD_OS)
       using _super_t = xtd::windows::exception;
 #else
-    : public xtd::exception{
       using _super_t = xtd::exception;
 #endif
-  public:
+
+
+public:
 
     template <typename _return_t, typename _expression_t>
     inline static _return_t _throw_if(const xtd::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
@@ -71,12 +77,14 @@ namespace xtd{
 
     native_handle_type handle() const{ return _Handle; }
 
+    template <typename> class function;
+
     template <typename _return_t, typename ... _arg_ts>
-    class function{
+    class function<_return_t(_arg_ts...)>{
     public:
       using function_pointer_type = _return_t(*)(_arg_ts...);
 
-      inline _return_t operator()(_arg_ts...oArgs) const{
+      _return_t operator()(_arg_ts...oArgs) const{
         return _function_pointer(std::forward<_arg_ts>(oArgs)...);
       }
 
@@ -126,8 +134,8 @@ namespace xtd{
     }
   #endif
 
-    template <typename _return_t, typename ... _arg_ts> function <_return_t, _arg_ts...> get(const char * name){
-      using return_type = function <_return_t, _arg_ts...>;
+    template <typename _ty> function <_ty> get(const char * name){
+      using return_type = function <_ty>;
 #if (XTD_OS_WINDOWS & XTD_OS)
       auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(GetProcAddress(_Handle, name), [](FARPROC p){ return nullptr == p; }));
 #elif (XTD_OS_UNIX & XTD_OS)

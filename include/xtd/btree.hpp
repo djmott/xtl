@@ -71,11 +71,11 @@ namespace xtd{
       };
 
       template <size_t _page_size, size_t _cache_size>
-      class lru_cache : public xtd::lru_cache<size_t, typename data_page<_page_size>::pointer, _cahce_size, page_loader<_page_size> >{
-        using _super_t = xtd::lru_cache<size_t, typename data_page<_page_size>::pointer, _cahce_size, page_loader<_page_size> >;
+      class lru_cache : public xtd::lru_cache<size_t, typename data_page<_page_size>::pointer, _cache_size, page_loader<_page_size> >{
+        using _super_t = xtd::lru_cache<size_t, typename data_page<_page_size>::pointer, _cache_size, page_loader<_page_size> >;
       public:
         using value_type = typename data_page<_page_size>::pointer;
-        static const size_t cache_size = _cahce_size;
+        static const size_t cache_size = _cache_size;
         explicit lru_cache(const xtd::filesystem::path& oPath) : _super_t(page_loader<_page_size>(oPath)) {}
 
         typename data_page<_page_size>::pointer append(size_t & newpage){

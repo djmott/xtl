@@ -7,9 +7,12 @@
 
 #if (XTD_OS_UNIX & XTD_OS)
   #include <unistd.h>
+#elif (XTD_OS_WINDOWS & XTD_OS)
+  #include <windows.h>
 #endif
 
-#include <xtd/debug.hpp>
+
+#include <memory>
 
 namespace xtd{
 
@@ -32,7 +35,6 @@ namespace xtd{
   #endif
   }
 
-  template <typename _ty, typename _param_t> static inline std::unique_ptr<_ty> make_unique(_param_t&& src){ return std::unique_ptr<_ty>(new _ty(std::forward<_param_t>(src))); }
-  template <typename _ty, typename _param_t> static inline std::unique_ptr<_ty> make_unique(const _param_t& src){ return std::unique_ptr<_ty>(new _ty(src)); }
+  template <typename _ty, typename ... _arg_ts> constexpr std::unique_ptr<_ty> make_unique(_arg_ts&&...args){ return std::unique_ptr<_ty>(new _ty(std::forward<_arg_ts>(args)...)); }
 
 }

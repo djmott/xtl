@@ -5,7 +5,8 @@ Tuple manipulation
 
 #pragma once
 #include <xtd/xtd.hpp>
-
+#include <memory>
+#include <cstdint>
 namespace xtd {
 
   /*

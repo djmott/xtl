@@ -32,6 +32,7 @@
 #include <xtd/string.hpp>
 #include <xtd/source_location.hpp>
 #include <xtd/filesystem.hpp>
+#include <xtd/memory.hpp>
 #include <xtd/process.hpp>
 #include <xtd/executable.hpp>
 #include <xtd/meta.hpp>

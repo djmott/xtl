@@ -8,10 +8,15 @@
 
 #include <xtd/xtd.hpp>
 
+#if (XTD_OS_WINDOWS & XTD_OS)
+#include <windows.h>
+#endif
+
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <functional>
+#include <algorithm>
 
 #if (XTD_HAS_CODECVT)
   #include <codecvt>
@@ -462,12 +467,14 @@ namespace xtd{
 
   #endif
 
+#if (XTD_OS_WINDOWS & XTD_OS)
     template <> class xstring_format<char, const LPWSTR &> {
     public:
       static inline string format(const LPWSTR & src) {
         return xstring_format<char, const wchar_t*const&>::format(src);
       }
     };
+#endif
 
     template <typename _ChT> class xstring_format<_ChT, const _ChT * const &> {
     public:

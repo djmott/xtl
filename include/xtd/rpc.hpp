@@ -11,12 +11,16 @@ transport neutral light weight IPC/RPC library
 #include <mutex>
 #include <condition_variable>
 #include <future>
+#include <cassert>
 
 #include <xtd/socket.hpp>
 #include <xtd/concurrent/hash_map.hpp>
 #include <xtd/memory.hpp>
 #include <xtd/debug.hpp>
-#include <xtd/windows/pipe.hpp>
+
+#if(XTD_OS_WINDOWS & XTD_OS)
+  #include <xtd/windows/pipe.hpp>
+#endif
 
 namespace xtd{
   namespace rpc {
@@ -203,6 +207,9 @@ namespace xtd{
 
     };
 #endif
+
+    TODO("Create generic named pipe wrapper that works on windows and linux")
+#if(XTD_OS_WINDOWS & XTD_OS)
     /*
      * anonymous_pipe_transport
      */
@@ -260,7 +267,7 @@ namespace xtd{
       std::unique_ptr<std::promise<void>> _stop_server_thread;
       bool _running = false;
     };
-
+#endif
 
     /*
      * rpc_client
@@ -279,7 +286,7 @@ namespace xtd{
       template <typename _impl_t> using client_from_impl = typename std::conditional< std::is_same<_impl_t, _head_t>::value, _this_t, typename _super_t::template client_from_impl<_impl_t>>::type;
 
       template <typename _ty, typename ... _arg_ts> typename _ty::return_type call(_arg_ts&&...oArgs) {
-        return static_cast<client_from_impl<_ty>&>(*this)._call<typename _ty::return_type>(std::forward<_arg_ts>(oArgs)...);
+        return static_cast<client_from_impl<_ty>&>(*this).template _call<typename _ty::return_type>(std::forward<_arg_ts>(oArgs)...);
       }
 
     protected:

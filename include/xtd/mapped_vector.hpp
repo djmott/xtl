@@ -7,7 +7,7 @@ memory mapped vector
 
 #include <xtd/mapped_file.hpp>
 #include <xtd/lru_cache.hpp>
-
+#include <xtd/debug.hpp>
 namespace xtd{
 
   /**

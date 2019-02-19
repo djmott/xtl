@@ -34,9 +34,11 @@ namespace xtd{
           _wait_policy();
         }
       }
+      
       stack(stack&& src) : _root(src._root.load()){
         src._root.store(nullptr);
       }
+      
       stack& operator=(stack&& src){
         if (&src == this) return *this;
         std::swap(_root, src._root);
@@ -49,6 +51,7 @@ namespace xtd{
       bool try_pop(value_type& oRet){        
         auto oTmp = _root.load();
         if (!oTmp) return false;
+        if (-1 == reinterpret_cast<size_t>(oTmp)) return false;
         if (!_root.compare_exchange_strong(oTmp, oTmp->_next)){
           return false;
         }
@@ -69,14 +72,25 @@ namespace xtd{
       }
 
       value_type pop(){
-        value_type oRet;
-        while (!try_pop(oRet)){
+        forever{
+          auto oTemp = _root.load();
+          if (_root.compare_exchange_strong(oTemp, oTemp->_next)) {
+            value_type oRet(oTemp->_value);
+            delete oTemp;
+            return oRet;
+          }
           _wait_policy();
-        }
-        return oRet;
+        }        
       }
-
+      
+      size_t unsafe_count() const {
+        size_t iRet = 0;
+        for (const node * tmp = _root.load(); tmp; tmp = tmp->_next, ++iRet);
+        return iRet;
+      }
+    
     private:
+      
       struct node{
         using pointer = node *;
         using atomic_ptr = std::atomic<pointer>;
@@ -89,8 +103,11 @@ namespace xtd{
         node * _next;
         value_type _value;
       };
+      
       typename node::atomic_ptr _root;
+
       _wait_policy_t _wait_policy;
+
     };
     ///@}
   }
