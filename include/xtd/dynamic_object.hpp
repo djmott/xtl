@@ -7,6 +7,7 @@
 #include <xtd/xtd.hpp>
 
 #include <map>
+#include <cassert>
 
 #include <xtd/var.hpp>
 
@@ -44,7 +45,7 @@ namespace xtd{
       }
       var oRet = typename _ty::value_type();
       auto oTmp = map_type::emplace(typeid(_ty).hash_code(), oRet);
-      XTD_ASSERT(oTmp.second);
+      assert(oTmp.second);
       return oTmp.first->second.as<typename _ty::value_type>();
     }
     template <typename _ty> const typename _ty::value_type& value() const{

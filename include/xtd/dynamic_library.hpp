@@ -10,6 +10,7 @@ load and invoke methods in a dynamic library
 
 #if (XTD_OS_UNIX & XTD_OS)
   #include <dlfcn.h>
+  #include <memory>
 #endif
 
 #include <map>
@@ -45,7 +46,8 @@ public:
 #if (XTD_OS_WINDOWS & XTD_OS)
           throw dynamic_library_exception(source, expstr, GetLastError());
 #elif (XTD_OS_UNIX & XTD_OS)
-          throw dynamic_library_exception(source, std::string(dlerror()) + " " + expstr, errno);
+          auto iErr = errno;
+          throw dynamic_library_exception(source, std::string(dlerror()) + " " + expstr, iErr);
 #endif
       }
       return ret;

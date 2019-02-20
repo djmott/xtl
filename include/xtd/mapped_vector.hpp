@@ -6,6 +6,8 @@ memory mapped vector
 #pragma once
 #include <xtd/xtd.hpp>
 
+#include <cassert>
+
 #include <xtd/mapped_file.hpp>
 #include <xtd/lru_cache.hpp>
 
@@ -91,14 +93,14 @@ namespace xtd{
       }
 
       value_type* get(){
-        XTD_ASSERT(npos != _current_index);
+        assert(npos != _current_index);
         auto iPage = 1 + (_current_index / data_page::items_per_page());
         auto oPage = xtd::static_page_cast<data_page>(_vector._cache[iPage]);
         return &oPage->_values[_current_index % data_page::items_per_page()];
       }
 
       const value_type* get() const {
-        XTD_ASSERT(npos != _current_index);
+        assert(npos != _current_index);
         auto iPage = 1 + (_current_index / data_page::items_per_page());
         auto oPage = xtd::static_page_cast<data_page>(_vector._cache[iPage]);
         return &oPage->_values[_current_index % data_page::items_per_page()];

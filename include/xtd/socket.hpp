@@ -36,6 +36,7 @@ general purpose socket communication
 
 #include <xtd/exception.hpp>
 #include <xtd/callback.hpp>
+#include <xtd/meta.hpp>
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma comment(lib, "ws2_32")

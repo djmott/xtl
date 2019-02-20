@@ -7,7 +7,11 @@ Debugging
 
 #include <xtd/xtd.hpp>
 
+#if(XTD_OS_UNIX & XTD_OS)
+  #include <iostream>
+#endif
 
+#include <xtd/log.hpp>
 #include <xtd/source_location.hpp>
 
 /// @def XTD_ASSERT debug assertion. The expression is expanded and checked for debug builds

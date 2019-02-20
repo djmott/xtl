@@ -12,7 +12,7 @@ transport neutral light weight IPC/RPC library
 #include <condition_variable>
 #include <future>
 #include <cassert>
-
+#include <vector>
 
 #if(XTD_OS_WINDOWS & XTD_OS)
   #include <xtd/windows/pipe.hpp>

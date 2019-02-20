@@ -9,7 +9,7 @@ SCENARIO("unique_id used in code", "[unique_id]") {
       REQUIRE(16 == sizeof(xtd::unique_id));
     }
     THEN("is default constructable") {
-      REQUIRE(std::is_default_constructible_v<xtd::unique_id>);
+      REQUIRE(std::is_default_constructible<xtd::unique_id>::value);
     }
     
     WHEN("default constructed") {

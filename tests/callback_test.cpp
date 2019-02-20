@@ -18,12 +18,12 @@ struct evt_dest{
 
 SCENARIO("callback used in code", "[callback]") {
   GIVEN("supported use") {
-    REQUIRE(std::is_default_constructible_v<xtd::callback<void()>>);
-    REQUIRE(std::is_default_constructible_v<xtd::callback<int(int)>>);
-    REQUIRE(!std::is_copy_constructible_v<xtd::callback<int()>>);
-    REQUIRE(!std::is_copy_assignable_v<xtd::callback<int()>>);
-    REQUIRE(std::is_move_constructible_v<xtd::callback<int()>>);
-    REQUIRE(std::is_move_assignable_v<xtd::callback<int()>>);
+    REQUIRE(std::is_default_constructible<xtd::callback<void()>>::value);
+    REQUIRE(std::is_default_constructible<xtd::callback<int(int)>>::value);
+    REQUIRE(!std::is_copy_constructible<xtd::callback<int()>>::value);
+    REQUIRE(!std::is_copy_assignable<xtd::callback<int()>>::value);
+    REQUIRE(std::is_move_constructible<xtd::callback<int()>>::value);
+    REQUIRE(std::is_move_assignable<xtd::callback<int()>>::value);
     WHEN("default constructed") {
       xtd::callback<void()> lambda_call;
       xtd::callback<void()> function_call;

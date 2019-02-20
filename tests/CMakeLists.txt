@@ -1,14 +1,6 @@
 set(TEST_FILES
   btree_test.cpp
   callback_test.cpp
-  com_class_factory_test.cpp
-  com_data_object_test.cpp
-  com_dll_test.cpp
-  com_exception_test.cpp
-  com_initializer_test.cpp
-  com_object_test.cpp
-  com_pointer_test.cpp
-  com_test.cpp
   concurrent_hash_map_test.cpp
   concurrent_queue_test.cpp
   concurrent_recursive_spin_lock_test.cpp
@@ -40,13 +32,26 @@ set(TEST_FILES
   type_info_test.cpp
   unique_id_test.cpp
   var_test.cpp
-  win_debug_help_test.cpp
-  win_image_help_test.cpp
-  win_pipe_test.cpp
-  win_service_test.cpp
   wrapped_type_test.cpp
   xstring_test.cpp
 )
+
+if(WIN32)
+	list(APPEND TEST_FILES
+		win_debug_help_test.cpp
+		win_image_help_test.cpp
+		win_pipe_test.cpp
+		win_service_test.cpp
+		com_class_factory_test.cpp
+		com_data_object_test.cpp
+		com_dll_test.cpp
+		com_exception_test.cpp
+		com_initializer_test.cpp
+		com_object_test.cpp
+		com_pointer_test.cpp
+		com_test.cpp
+	)
+endif()
 
 ExternalProject_Add(catch2_download
 	PREFIX .catch2

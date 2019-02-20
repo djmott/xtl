@@ -15,6 +15,7 @@
 #include <mutex>
 #include <future>
 #include <deque>
+#include <vector>
 
 #if (XTD_LOG_TARGET_CSV | XTD_LOG_TARGET_XML)
 #include <fstream>
@@ -29,7 +30,7 @@
 #endif
 
 #include <xtd/source_location.hpp>
-
+#include <xtd/xstring.hpp>
 
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)

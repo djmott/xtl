@@ -8,7 +8,9 @@
 
 #include <xtd/xtd.hpp>
 
-
+#if(XTD_OS_UNIX & XTD_OS)
+  #include <fstream>
+#endif
 #if(XTD_OS_WINDOWS & XTD_OS)
   #include <rpc.h>
 #endif

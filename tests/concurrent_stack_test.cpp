@@ -9,12 +9,12 @@
 
 SCENARIO("concurrent stack used in code") {
   GIVEN("supported use") {
-    REQUIRE(std::is_default_constructible_v<xtd::concurrent::stack<int>>);
-    REQUIRE(std::is_default_constructible_v<xtd::concurrent::stack<int>>);
-    REQUIRE(!std::is_copy_constructible_v<xtd::concurrent::stack<int>>);
-    REQUIRE(!std::is_copy_assignable_v<xtd::concurrent::stack<int>>);
-    REQUIRE(std::is_move_constructible_v<xtd::concurrent::stack<int>>);
-    REQUIRE(std::is_move_assignable_v<xtd::concurrent::stack<int>>);
+    REQUIRE(std::is_default_constructible<xtd::concurrent::stack<int>>::value);
+    REQUIRE(std::is_default_constructible<xtd::concurrent::stack<int>>::value);
+    REQUIRE(!std::is_copy_constructible<xtd::concurrent::stack<int>>::value);
+    REQUIRE(!std::is_copy_assignable<xtd::concurrent::stack<int>>::value);
+    REQUIRE(std::is_move_constructible<xtd::concurrent::stack<int>>::value);
+    REQUIRE(std::is_move_assignable<xtd::concurrent::stack<int>>::value);
     WHEN("An empty stack is created") {
       xtd::concurrent::stack<int> s1;
       THEN("pop returns false") {
