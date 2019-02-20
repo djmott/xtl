@@ -418,6 +418,32 @@ namespace xtd{
         }
       }
     };
+#elif (XTD_OS_WINDOWS & XTD_OS)
+
+    template <> class xstring_format<char, const wchar_t * const &> {
+    public:
+      static string format(const wchar_t * const & src) {
+        int iRet;
+        if (!(iRet = ::WideCharToMultiByte(CP_UTF8, 0, src, -1, nullptr, 0, "?", nullptr)))
+          throw std::runtime_error("A string conversion error occurred");
+        string sRet(iRet-1, 0);
+        ::WideCharToMultiByte(CP_UTF8, 0, src, -1, &sRet[0], iRet, "?", nullptr);
+        return sRet;
+      }
+    };
+
+    template <> class xstring_format<wchar_t, const char * const &> {
+    public:
+      static inline wstring format(const char * const & src) {
+        int iRet;
+        if (!(iRet = ::MultiByteToWideChar(CP_UTF8, 0, src, -1, nullptr, 0)))
+          throw std::runtime_error("A string conversion error occurred");
+        wstring sRet(iRet - 1, 0);
+        ::MultiByteToWideChar(CP_UTF8, 0, src, -1, &sRet[0], iRet);
+        return sRet;
+      }
+    };
+
 
   #else
     template <> class xstring_format<char, const wchar_t * const &>{

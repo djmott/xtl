@@ -5,12 +5,13 @@
 */
 
 #pragma once
+
 #include <xtd/xtd.hpp>
-#include <xtd/string.hpp>
-#include <ios>
-#include <fstream>
-#include <cstring>
-#include "exception.hpp"
+
+
+#if(XTD_OS_WINDOWS & XTD_OS)
+  #include <rpc.h>
+#endif
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   #pragma comment(lib, "rpcrt4")
@@ -20,7 +21,12 @@
   #include <uuid/uuid.h>
 #endif
 
+#include <xtd/exception.hpp>
+#include <xtd/xstring.hpp>
+
+
 namespace xtd{
+
 #if (XTD_OS_UNIX & XTD_OS)
   #if (XTD_HAS_UUID)
     class unique_id{

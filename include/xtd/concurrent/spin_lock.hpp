@@ -6,7 +6,6 @@ simple user mode spin lock based on std::atomic
 
 #include <xtd/concurrent/concurrent.hpp>
 
-#include <atomic>
 
 namespace xtd{
   namespace concurrent{

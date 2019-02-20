@@ -8,9 +8,16 @@ generic and special purpose exceptions
 
 #include <xtd/xtd.hpp>
 
+#if(XTD_OS_WINDOWS & XTD_OS)
+  #include <windows.h>
+#endif
+
 #include <exception>
+#include <string>
+
 #include <xtd/source_location.hpp>
-#include <xtd/string.hpp>
+
+
 /**
 @def throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
 
@@ -150,7 +157,9 @@ Throws exception if the test expression returns true. _throw_if methods are pres
             exception(const xtd::source_location& source, const std::string& exp, uint32_t last_err) :xtd::exception(source, ""), _last_error(last_err){
               const char * sTemp = nullptr;
               FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, _last_error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&sTemp), 0, nullptr);
-              _what = xtd::string::format(sTemp, " : ", exp);
+              _what = sTemp;
+              _what += " : ";
+              _what += exp;
               LocalFree((HLOCAL)sTemp);
             }
         private:

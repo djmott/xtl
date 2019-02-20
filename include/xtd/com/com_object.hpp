@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <xtd/xtd.hpp>
+#include <windows.h>
+
 #include <atomic>
 
 namespace xtd{

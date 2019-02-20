@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <xtd/xtd.hpp>
+
 #include <xtd/unique_id.hpp>
 
 namespace xtd {

@@ -28,14 +28,8 @@
 #include <iostream>
 #endif
 
-
-#include <xtd/string.hpp>
 #include <xtd/source_location.hpp>
-#include <xtd/filesystem.hpp>
-#include <xtd/memory.hpp>
-#include <xtd/process.hpp>
-#include <xtd/executable.hpp>
-#include <xtd/meta.hpp>
+
 
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
@@ -83,7 +77,7 @@ namespace xtd {
       using deque_type = std::deque<pointer_type>;
       using time_type = std::chrono::time_point<std::chrono::system_clock>;
 
-      message(type msg_type, const xtd::source_location& location, xtd::string&& text)
+      message(type msg_type, const xtd::source_location& location, std::string&& text)
         : _tid(std::this_thread::get_id()), _type(msg_type), _location(location), _text(std::move(text)), _time(std::chrono::system_clock::now()) {}
 
       message(const message& src)
@@ -104,7 +98,7 @@ namespace xtd {
       std::thread::id _tid;
       type _type;
       source_location _location;
-      xtd::string _text;
+      std::string _text;
       time_type _time;
     };
 

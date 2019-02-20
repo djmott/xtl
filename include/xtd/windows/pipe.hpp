@@ -1,7 +1,13 @@
 #pragma once
 #include <xtd/xtd.hpp>
+
+#include <windows.h>
+
+#include <memory>
+#include <string>
+#include <vector>
+
 #include <xtd/exception.hpp>
-#include <xtd/source_location.hpp>
 
 namespace xtd {
   namespace windows {

@@ -6,10 +6,8 @@ STL-ish map using on disk b-tree
 
 #include <xtd/xtd.hpp>
 
-#include <xtd/lru_cache.hpp>
 #include <xtd/mapped_file.hpp>
-#include <xtd/filesystem.hpp>
-#include <xtd/debug.hpp>
+#include <xtd/lru_cache.hpp>
 
 #define __DEBUG_ME__ 1
 

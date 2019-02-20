@@ -1,5 +1,4 @@
-#include <xtd/com/com.hpp>
-
+#include <xtd/xstring.hpp>
 #define CATCH_CONFIG_MAIN
 
 #include <catch2/catch.hpp>

@@ -14,8 +14,10 @@ load and invoke methods in a dynamic library
 
 #include <map>
 
-#include <xtd/memory.hpp>
-#include <xtd/exception.hpp>
+#if(XTD_OS_WINDOWS & XTD_OS)
+  #include <xtd/exception.hpp>
+#endif
+
 #include <xtd/filesystem.hpp>
 
 namespace xtd{

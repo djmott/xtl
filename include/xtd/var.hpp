@@ -9,8 +9,9 @@
 #include <xtd/xtd.hpp>
 
 #include <memory>
+#include <stdexcept>
 
-#include <xtd/string.hpp>
+#include <xtd/xstring.hpp>
 
 namespace xtd {
 

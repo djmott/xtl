@@ -13,10 +13,6 @@ transport neutral light weight IPC/RPC library
 #include <future>
 #include <cassert>
 
-#include <xtd/socket.hpp>
-#include <xtd/concurrent/hash_map.hpp>
-#include <xtd/memory.hpp>
-#include <xtd/debug.hpp>
 
 #if(XTD_OS_WINDOWS & XTD_OS)
   #include <xtd/windows/pipe.hpp>

@@ -4,10 +4,11 @@ memory mapped vector
 */
 
 #pragma once
+#include <xtd/xtd.hpp>
 
 #include <xtd/mapped_file.hpp>
 #include <xtd/lru_cache.hpp>
-#include <xtd/debug.hpp>
+
 namespace xtd{
 
   /**

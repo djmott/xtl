@@ -22,9 +22,8 @@
 #include <regex>
 #include <map>
 
-#include <xtd/memory.hpp>
 #include <xtd/dynamic_library.hpp>
-#include <xtd/filesystem.hpp>
+
 
 namespace xtd {
 
@@ -200,7 +199,7 @@ namespace xtd {
         }else {
           stemp = __("");
         }
-        _path = xtd::make_unique<xtd::filesystem::path>(stemp.c_str());
+        _path = std::unique_ptr<xtd::filesystem::path>(new xtd::filesystem::path(stemp.c_str()));
       }
       return *_path;
     }

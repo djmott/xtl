@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <xtd/xtd.hpp>
+
+#include <xtd/com/com_object.hpp>
+
 namespace xtd {
 	namespace com {
 		template <typename _ObjectT> struct ClassFactory : com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > {

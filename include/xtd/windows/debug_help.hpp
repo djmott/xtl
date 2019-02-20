@@ -4,17 +4,16 @@ object oriented access to the dbghelp library
 */
 #pragma once
 
-#if (XTD_USE_DBGHELP)
-
 #include <xtd/xtd.hpp>
+
+#include <windows.h>
 #include <dbghelp.h>
+
 #include <mutex>
 #include <map>
-#include <xtd/debug.hpp>
-#include <xtd/exception.hpp>
-#include <xtd/process.hpp>
+
 #include <xtd/callback.hpp>
-#include <xtd/meta.hpp>
+#include <xtd/process.hpp>
 
 namespace xtd {
   namespace windows {
@@ -128,4 +127,3 @@ namespace xtd {
   }
 }
 
-#endif

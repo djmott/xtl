@@ -33,9 +33,8 @@ general purpose socket communication
 #include <type_traits>
 #include <memory>
 
+
 #include <xtd/exception.hpp>
-#include <xtd/string.hpp>
-#include <xtd/meta.hpp>
 #include <xtd/callback.hpp>
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
@@ -63,7 +62,7 @@ namespace xtd{
     public:
       /// constructors
       /// @{
-      exception(const source_location& loc, const xtd::string& swhat) : crt_exception(loc, swhat){}
+      exception(const source_location& loc, const std::string& swhat) : crt_exception(loc, swhat){}
       exception(const exception& ex) : crt_exception(ex){}
       explicit exception(exception&& ex) : crt_exception(std::move(ex)){}
       /// @}

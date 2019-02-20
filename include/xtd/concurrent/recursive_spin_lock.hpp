@@ -5,6 +5,7 @@ Recursive spin lock
 
 #pragma once
 
+
 #include <xtd/concurrent/concurrent.hpp>
 
 namespace xtd{

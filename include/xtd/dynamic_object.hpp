@@ -7,11 +7,8 @@
 #include <xtd/xtd.hpp>
 
 #include <map>
-#include <vector>
-#include <typeinfo>
 
 #include <xtd/var.hpp>
-#include <xtd/debug.hpp>
 
 #define PROPERTY(_type) xtd::dynamic_object::property_type<_type, __COUNTER__>
 

@@ -1,5 +1,9 @@
 #pragma once
+#include <xtd/xtd.hpp>
 
+#include <windows.h>
+
+#include <xtd/exception.hpp>
 
 namespace xtd {
   namespace windows {
@@ -43,7 +47,7 @@ namespace xtd {
         friend struct binary;
       };
 
-      struct binary : private IMAGE_DOS_HEADER{
+      struct binary : IMAGE_DOS_HEADER{
 
         static const binary& this_binary() {
           auto & dos_image_header = reinterpret_cast<binary&>(__ImageBase);
@@ -72,10 +76,3 @@ namespace xtd {
 }
 
 
-int main() {
-  auto & oBinary = xtd::windows::image_help::binary::this_binary();
-  auto & oSect = oBinary.section_header();
-  auto & oNTHeader = oBinary.nt_header();
-  auto & oOptional = oNTHeader.optional_header();
-  return oBinary.checksum();
-}

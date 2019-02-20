@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <xtd/xstring.hpp>
+#include <xtd/com/com_object.hpp>
+
 namespace xtd {
 	namespace com {
 		enum class ThreadingModel {

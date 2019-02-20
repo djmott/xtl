@@ -78,8 +78,8 @@ configure_file(include/xtd/xtd.hpp.in xtd/xtd.hpp)
 
 #add_subdirectory(src)
 
-option(ENABLE_TESTS "Enable tests" TRUE)
-if(ENABLE_TESTS)
+option(XTL_BUILD_TESTS "Enable tests" FALSE)
+if(XTL_BUILD_TESTS)
 	add_subdirectory(tests)
 endif()
 

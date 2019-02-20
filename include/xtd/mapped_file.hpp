@@ -14,8 +14,6 @@ memory mapped files
 
 #include <xtd/memory.hpp>
 #include <xtd/filesystem.hpp>
-#include <xtd/exception.hpp>
-#include <xtd/meta.hpp>
 
 namespace xtd{
 

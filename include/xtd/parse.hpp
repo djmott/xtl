@@ -10,7 +10,7 @@ text parsing and AST generation
 #include <xtd/xtd.hpp>
 #include <memory>
 #include <vector>
-#include <xtd/meta.hpp>
+
 
 namespace xtd{
 
