@@ -186,7 +186,7 @@ namespace xtd {
       ~win_dbg_target() override = default;
 
       void operator()(const message::pointer_type& oMessage) override {
-        OutputDebugStringA(xtd::string::format(oMessage->_text, "\n").c_str());
+        OutputDebugStringA(xtd::cstring::format(oMessage->_text, "\n").c_str());
       }
     };
 #endif
@@ -215,7 +215,7 @@ namespace xtd {
         if (type::leave == oMsg->_type) --_StackDepth;
         std::string sMsgPrefix(_StackDepth, ',');
         std::hash<std::thread::id> oHash;
-        auto sMsg = xtd::string::format(oHash(oMsg->_tid), ",", oMsg->_time.time_since_epoch().count(), ",", type_string(oMsg->_type), ",", oMsg->_location.file(), ",", oMsg->_location.line(), sMsgPrefix, oMsg->_text);
+        auto sMsg = xtd::cstring::format(oHash(oMsg->_tid), ",", oMsg->_time.time_since_epoch().count(), ",", type_string(oMsg->_type), ",", oMsg->_location.file(), ",", oMsg->_location.line(), sMsgPrefix, oMsg->_text);
         if (type::enter == oMsg->_type) ++_StackDepth;
         std::unique_lock<std::mutex> oLock(_FileLock);
         _logfile << sMsg << '\n';
@@ -299,7 +299,7 @@ namespace xtd {
 
     template <typename ... _arg_ts>
     inline void write(type mesageType, const source_location& location, _arg_ts&&...oArgs) {
-      auto sMessage = xtd::string::format(std::forward<_arg_ts>(oArgs)...);
+      auto sMessage = xtd::cstring::format(std::forward<_arg_ts>(oArgs)...);
       auto oMessage = std::make_shared<message>(mesageType, location, std::move(sMessage)); {
         std::lock_guard<std::mutex> oLock(_callback_lock);
         _callbacks.push_back([oMessage, this]() {

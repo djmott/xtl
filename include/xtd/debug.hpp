@@ -57,7 +57,7 @@ namespace xtd{
     template <typename ... _arg_ts>
     static bool Assert(const source_location& location, bool test, const char * test_str, _arg_ts&&...oArgs){
       if (test) return true;
-      auto sMsg = xtd::string::format(location.file(), " line ", location.line(), "\nThe expression evaluated to false.\n\n\t", test_str, "\n", std::forward<_arg_ts>(oArgs)...);
+      auto sMsg = xtd::cstring::format(location.file(), " line ", location.line(), "\nThe expression evaluated to false.\n\n\t", test_str, "\n", std::forward<_arg_ts>(oArgs)...);
       auto iRet = MessageBoxA(nullptr, sMsg.c_str(), "Debug Assertion Failed", MB_ABORTRETRYIGNORE | MB_ICONERROR | MB_SYSTEMMODAL);
       if (IDABORT == iRet) std::abort();
       return (IDIGNORE == iRet);
@@ -66,7 +66,7 @@ namespace xtd{
     template <typename ... _arg_ts>
     static bool Assert(const source_location& location, bool test, const char * test_str, _arg_ts&&...oArgs){
       if (test) return true;
-      auto sMsg = xtd::string::format(location.file(), " line ", location.line(), "\nThe expression evaluated to false.\n\n\t", test_str, "\n", std::forward<_arg_ts>(oArgs)...);
+      auto sMsg = xtd::cstring::format(location.file(), " line ", location.line(), "\nThe expression evaluated to false.\n\n\t", test_str, "\n", std::forward<_arg_ts>(oArgs)...);
       std::cout << sMsg.c_str();
       abort();
     }

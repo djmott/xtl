@@ -332,8 +332,8 @@ namespace xtd{
           return k;
         }
         public:
-        xtd::string operator()(const xtd::string& src){
-          xtd::string sRet = src;
+        xtd::cstring operator()(const xtd::cstring& src){
+          xtd::cstring sRet = src;
           sRet.resize(1+stem(&sRet[0], 0, sRet.size() - 1));
           return sRet;
         }

@@ -17,13 +17,16 @@
 #if (XTD_OS_WINDOWS & XTD_OS)
   #include <windows.h>
   #include <Psapi.h>
+  #include <TlHelp32.h>
 #endif
+
 
 #include <regex>
 #include <map>
 
 #include <xtd/dynamic_library.hpp>
-
+#include <xtd/thread.hpp>
+#include <xtd/filesystem.hpp>
 
 namespace xtd {
 
@@ -76,6 +79,7 @@ namespace xtd {
     }
   };
 #elif (XTD_OS_WINDOWS & XTD_OS)
+
   class process {
   public:
 
@@ -92,19 +96,14 @@ namespace xtd {
 
     static map system_processes() {
       map oRet;
-      std::vector<DWORD> pids(10, 0);
-      DWORD dwNeeded;
-      forever {
-        xtd::windows::exception::throw_if(::EnumProcesses(&pids[0], static_cast<DWORD>(pids.size() * sizeof(DWORD)), &dwNeeded), [](BOOL b){ return FALSE==b; });
-        if ((dwNeeded / sizeof(DWORD)) < pids.size()) {
-          break;
-        }
-        pids.resize(pids.size() * 2);
-      }
-      pids.resize(dwNeeded / sizeof(DWORD));
-      for (auto pid : pids) {
-        oRet[pid] = pointer(new process(pid));
-      }
+      std::shared_ptr<void> hSnapshot(
+        xtd::windows::exception::throw_if(::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0), [](HANDLE h) { return INVALID_HANDLE_VALUE == h; }),
+        [](void * h) { ::CloseHandle(h); });
+      PROCESSENTRY32 oPE;
+      oPE.dwSize = sizeof(PROCESSENTRY32);
+      for (BOOL bContinue = Process32First(hSnapshot.get(), &oPE); bContinue; bContinue = Process32Next(hSnapshot.get(), &oPE)) {
+        oRet.insert(std::make_pair(oPE.th32ProcessID, std::make_shared<process>(oPE.th32ProcessID)));
+      }    
       return oRet;
     }
 
@@ -113,6 +112,12 @@ namespace xtd {
       if (_hMainThread) CloseHandle(_hMainThread);
     }
 
+    process(const xtd::filesystem::path& oPath, pid_type hPid, handle_type hProc, handle_type hMainThread) 
+      : _path(new xtd::filesystem::path(oPath)), 
+      _pid(hPid), 
+      _hProcess(hProc), 
+      _hMainThread(hMainThread) 
+    {}
     process(pid_type hPid, handle_type hProc, handle_type hMainThread) : _pid(hPid), _hProcess(hProc), _hMainThread(hMainThread) {}
     process(pid_type hPid, handle_type hProc) : process(hPid,hProc,nullptr) {}
     explicit process(pid_type hPid) : process(hPid, nullptr, nullptr) {}
@@ -154,26 +159,14 @@ namespace xtd {
 
     dynamic_library::map libraries() {
       dynamic_library::map oRet;
-      std::vector<HMODULE> modules(10, 0);
-      DWORD dwNeeded;
-      forever {
-        xtd::windows::exception::throw_if(EnumProcessModules(*this, &modules[0], static_cast<DWORD>(modules.size() * sizeof(HMODULE)), &dwNeeded), [](BOOL b){return FALSE==b;});
-        if ((dwNeeded / sizeof(HMODULE)) < modules.size()) {
-          break;
-        }
-        modules.resize(modules.size() * 2);
-      }
-      modules.resize(dwNeeded / sizeof(HMODULE));
-      for (dynamic_library::native_handle_type module : modules) {
-        xtd::tstring sPath(MAX_PATH, 0);
-        forever {
-          dwNeeded = GetModuleFileNameEx(*this, module, &sPath[0], static_cast<DWORD>(sPath.size()));
-          if (dwNeeded < sPath.size()) {
-            break;
-          }
-          sPath.resize(dwNeeded);
-        }
-        oRet[xtd::filesystem::path(sPath.c_str())] = dynamic_library::pointer(new dynamic_library(module));
+      std::shared_ptr<void> hSnapshot(
+        xtd::windows::exception::throw_if(::CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, _pid), [](HANDLE h) { return INVALID_HANDLE_VALUE == h; }),
+        [](void * h) { ::CloseHandle(h); });
+      MODULEENTRY32 oME;
+      oME.dwSize = sizeof(MODULEENTRY32);
+      for (BOOL bContinue = Module32First(hSnapshot.get(), &oME); bContinue; bContinue = Module32Next(hSnapshot.get(), &oME)) {
+        xtd::filesystem::path oPath(oME.szModule);
+        oRet.insert(std::make_pair(oPath, dynamic_library::pointer(new dynamic_library(oPath, oME.hModule))));
       }
       return oRet;
     }
@@ -204,16 +197,27 @@ namespace xtd {
       return *_path;
     }
 
-    static process create(const xtd::tstring& sPath) {
+    static process create(const xtd::tstring& sPath, bool suspended = false, bool debug = false) {
+      return create(xtd::filesystem::path(sPath), suspended, debug);
+    }
+
+    static process create(const xtd::filesystem::path& oPath, bool suspended = false, bool debug = false) {
       STARTUPINFO si;
       PROCESS_INFORMATION pi;
       memset(&si, 0, sizeof(STARTUPINFO));
       si.cb = sizeof(STARTUPINFO);
       memset(&pi, 0, sizeof(PROCESS_INFORMATION));
-      xtd::tstring sMutablePath = sPath;
-      xtd::windows::exception::throw_if(::CreateProcess(nullptr, &sMutablePath[0], nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi), [](BOOL b) { return !b; });      
-      return process(pi.dwProcessId, pi.hProcess, pi.hThread);
+      xtd::tstring sMutablePath = oPath.tstring();
+      xtd::windows::exception::throw_if(::CreateProcess(nullptr, &sMutablePath[0], nullptr, nullptr, FALSE,
+        (suspended ? CREATE_SUSPENDED : 0) |
+        (debug ? DEBUG_PROCESS | DEBUG_ONLY_THIS_PROCESS : 0)
+        , nullptr, nullptr, &si, &pi), [](BOOL b) { return !b; });
+      return process(oPath, pi.dwProcessId, pi.hProcess, pi.hThread);
     }
+
+
+
+    unowned_thread::vector threads() const {}
 
   private:
     pid_type _pid;

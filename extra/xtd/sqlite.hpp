@@ -198,14 +198,14 @@ namespace xtd{
         }
       };
 
-      template <> struct sqlite_field_binder<const xtd::string &> {
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val) {
+      template <> struct sqlite_field_binder<const xtd::cstring &> {
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::cstring& val) {
           exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), static_cast<int>(val.size()), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; });
         }
       };
 
       template <> struct sqlite_field_binder<const std::string &> {
-        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::string& val) {
+        template <int Index> static void set(sqlite3 * pDB, sqlite3_stmt* st, const xtd::cstring& val) {
           exception::throw_if(pDB, sqlite3_bind_text(st, Index, val.c_str(), static_cast<int>(val.size()), SQLITE_TRANSIENT), [](int i) {return SQLITE_OK != i; });
         }
       };
@@ -319,9 +319,9 @@ namespace xtd{
     protected:
       sqlite3 * _pDB;
       explicit database(const xtd::filesystem::path& oPath, int flags){
-        xtd::string sPath = "";// "file:";
+        xtd::cstring sPath = "";// "file:";
 #if defined(_UNICODE) || defined(UNICODE)
-        sPath += xtd::string::format(oPath.string());
+        sPath += xtd::cstring::format(oPath.string());
 #else
         sPath += oPath.tstring();
 #endif
@@ -352,7 +352,7 @@ namespace xtd{
       }
 
       template <typename ... _arg_ts>
-      typename command<_arg_ts...>::pointer prepare(const xtd::string& sSQL){
+      typename command<_arg_ts...>::pointer prepare(const xtd::cstring& sSQL){
         command<_arg_ts...> oRet(_pDB, nullptr);
         exception::throw_if(_pDB, sqlite3_prepare_v2(_pDB, sSQL.c_str(), (int)(1 + sSQL.size()), &oRet._pStatement, nullptr), [](int i){ return SQLITE_OK != i; });
         return std::make_shared<command<_arg_ts...>>(std::move(oRet));
@@ -362,13 +362,13 @@ namespace xtd{
         return transaction_type(this);
       }
 
-      int execute(const xtd::string& sSQL){
+      int execute(const xtd::cstring& sSQL){
         auto oCmd = prepare<>(sSQL);
         return (*oCmd)();
       }
 
       template <typename ... _ts>
-      typename result_set<_ts...>::pointer execute_reader(const xtd::string& sSQL){
+      typename result_set<_ts...>::pointer execute_reader(const xtd::cstring& sSQL){
         result_set<_ts...> oRet(_pDB, nullptr);
         exception::throw_if(_pDB, sqlite3_prepare_v2(_pDB, sSQL.c_str(), (int)(1 + sSQL.size()), &oRet._pStatement, nullptr), [](int i){ return SQLITE_OK != i; });
         return std::make_shared<result_set<_ts...>>(std::move(oRet));

@@ -34,7 +34,7 @@ TEST(test_dynamic_library, invocation){
   auto Add = oLib->get<int, int, int>("Add");
 
   ASSERT_EQ(3, Add(1, 2));
-  xtd::string s(Echo("hello"));
+  xtd::cstring s(Echo("hello"));
   ASSERT_EQ(static_cast<size_t>(5), s.size());
 }
 #endif

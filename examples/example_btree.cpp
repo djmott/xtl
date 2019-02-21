@@ -12,7 +12,7 @@ int main(){}
 #include <iostream>
 
 int main(){
-  auto oFile = xtd::filesystem::temp_directory_path() + xtd::string::format(xtd::unique_id());
+  auto oFile = xtd::filesystem::temp_directory_path() + xtd::cstring::format(xtd::unique_id());
   oFile += ".dat";
   try{
     xtd::btree<int, int> oTree(oFile);

@@ -26,23 +26,19 @@ namespace xtd {
 
 #if (XTD_OS_WINDOWS & XTD_OS)
     static inline xtd::filesystem::path get_path(){
-      static xtd::filesystem::path sRet(__(""));
-      if (0 != sRet.string().size()){
-        return xtd::filesystem::path(sRet);
+      static xtd::tstring sPath;
+      if (!sPath.empty()) return xtd::filesystem::path(sPath);
+      sPath.resize(MAX_PATH, 0);
+      DWORD iLen;
+      for (;;) {
+        iLen = xtd::crt_exception::throw_if(::GetModuleFileName(nullptr, &sPath[0], static_cast<DWORD>(sPath.size())), [](DWORD d) { return !d; });
+        if (iLen < sPath.size()) break;
+        sPath.resize(2 * sPath.size());
       }
-      xtd::tstring sTemp(MAX_PATH, 0);
-      forever {
-        auto iLen = xtd::crt_exception::throw_if(GetModuleFileName(nullptr, &sTemp[0], static_cast<DWORD>(sTemp.size())), [](DWORD ret){ return (0==ret); });
-        if (iLen >= sTemp.size()){
-          sTemp.resize(sTemp.size() * 2);
-        }else{
-          sTemp.resize(iLen);
-          break;
-        }
-      }
-      sRet = xtd::filesystem::path(xtd::string::format(sTemp).c_str());
-      return xtd::filesystem::path(sRet);
+      sPath.resize(iLen);
+      return xtd::filesystem::path(sPath);
     }
+
 #elif (XTD_OS_UNIX & XTD_OS)
 
     static inline xtd::filesystem::path get_path() {

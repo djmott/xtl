@@ -9,7 +9,7 @@ namespace xtd{
 
     //unstructured, unformatted and unanalyzed text
     struct raw_document : dynamic_object{
-      using text = PROPERTY(xtd::string);
+      using text = PROPERTY(xtd::cstring);
 
       template <typename..._ParamTs> raw_document(_ParamTs&&...oParams) : dynamic_object(std::forward<_ParamTs>(oParams)...){}
 
@@ -21,7 +21,7 @@ namespace xtd{
 
       using locale = PROPERTY(std::locale);
 
-      raw_document operator()(const xtd::string& src) const {
+      raw_document operator()(const xtd::cstring& src) const {
         raw_document oRet;
         oRet.value<raw_document::text>() = src;
         return oRet;
@@ -33,7 +33,7 @@ namespace xtd{
       struct document : raw_document{
         template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
 
-        using tokens = PROPERTY(std::vector<xtd::string>);
+        using tokens = PROPERTY(std::vector<xtd::cstring>);
 
       };
 

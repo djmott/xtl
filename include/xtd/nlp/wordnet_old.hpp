@@ -83,7 +83,7 @@ namespace wordnet
       template <typename _RecordT, typename _ContainerT> bool load(const xtd::filesystem::path& oPath, _ContainerT& oRecords){
         std::ifstream in(oPath);
         in.exceptions(std::ios::badbit | std::ios::failbit);
-        xtd::string sFile((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
+        xtd::cstring sFile((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
         size_t i = 0;
         for (; i < sFile.size(); ++i){
           if (' ' == sFile[i] && ' ' == sFile[1 + i]){
@@ -118,20 +118,20 @@ namespace wordnet
         using map = std::map<uint32_t, record>;
         std::vector<std::string> ptr_symbol;
 
-        xtd::string lemma;
+        xtd::cstring lemma;
         SyntacticCategory pos;
         uint32_t synset_offset, synset_cnt, sense_cnt, tagsense_cnt;
 
-        bool load(const xtd::string& sz, size_t & i){
+        bool load(const xtd::cstring& sz, size_t & i){
           std::stringstream oSS;
           auto x = sz.find('\n', i);
-          xtd::string spos, ssynset_offset, p_cnt, ssynset_cnt, ssense_cnt, stagsense_cnt, sLine(&sz[i], &sz[x]);
+          xtd::cstring spos, ssynset_offset, p_cnt, ssynset_cnt, ssense_cnt, stagsense_cnt, sLine(&sz[i], &sz[x]);
           oSS.str(sLine);
           oSS >> lemma >> spos >> ssynset_cnt >> p_cnt;
           pos = static_cast<SyntacticCategory>(spos[0]);
           synset_cnt = atoi(ssynset_cnt.c_str());
           for (auto t = atoi(p_cnt.c_str()); t; --t){
-            xtd::string sTemp;
+            xtd::cstring sTemp;
             oSS >> sTemp;
             ptr_symbol.push_back(sTemp);
           }
@@ -170,8 +170,8 @@ namespace wordnet
 
         struct word_index{
           using vector = std::vector<word_index>;
-          xtd::string word, lex_id;
-          word_index(const xtd::string& sword, const xtd::string& slexid) : word(sword), lex_id(slexid){}
+          xtd::cstring word, lex_id;
+          word_index(const xtd::cstring& sword, const xtd::cstring& slexid) : word(sword), lex_id(slexid){}
         };
 
         struct ptr{
@@ -182,18 +182,18 @@ namespace wordnet
             adverb = 'r',
           };
           SyntacticCategory pos;
-          xtd::string pointer_symbol, source_target;
+          xtd::cstring pointer_symbol, source_target;
           uint32_t synset_offset;
           using vector = std::vector<ptr>;
-          ptr(const xtd::string& spointer_symbol, const xtd::string& ssynset_offset, SyntacticCategory spos, const xtd::string& ssource_target)
+          ptr(const xtd::cstring& spointer_symbol, const xtd::cstring& ssynset_offset, SyntacticCategory spos, const xtd::cstring& ssource_target)
             : pos(spos), pointer_symbol(spointer_symbol), source_target(ssource_target), synset_offset(atoi(ssynset_offset.c_str())){}
         };
 
-        bool load(const xtd::string& sFile, size_t & i){
+        bool load(const xtd::cstring& sFile, size_t & i){
           size_t iEnd = i;
           for (; '\n' != sFile[iEnd] && iEnd < sFile.size(); ++iEnd);
-          auto oItems = xtd::string(&sFile[i], &sFile[iEnd]).split({ ' ' }, true);
-          xtd::string w_cnt, p_cnt;
+          auto oItems = xtd::cstring(&sFile[i], &sFile[iEnd]).split({ ' ' }, true);
+          xtd::cstring w_cnt, p_cnt;
           size_t x = 0;
           synset_offset = atoi(oItems[x++].c_str());
           lex_filenum = atoi(oItems[x++].c_str());
@@ -215,14 +215,14 @@ namespace wordnet
             pointers.emplace_back(p1, p2, p3, p4);
           }
           for (; '|' != sFile[i] && i < iEnd; ++i);
-          gloss = xtd::string(&sFile[i], &sFile[iEnd]);
+          gloss = xtd::cstring(&sFile[i], &sFile[iEnd]);
           i = ++iEnd;
           return true;
         }
 
         uint32_t synset_offset, lex_filenum;
         SynsetType ss_type;
-        xtd::string gloss;
+        xtd::cstring gloss;
         word_index::vector words;
         ptr::vector pointers;
       };
@@ -246,15 +246,15 @@ namespace wordnet
 
         struct generic_frame{
           using vector = std::vector<generic_frame>;
-          xtd::string plus, f_num, w_num;
-          generic_frame(const xtd::string& splus, const xtd::string& sf_num, const xtd::string& sw_num) : plus(splus), f_num(sf_num), w_num(sw_num){}
+          xtd::cstring plus, f_num, w_num;
+          generic_frame(const xtd::cstring& splus, const xtd::cstring& sf_num, const xtd::cstring& sw_num) : plus(splus), f_num(sf_num), w_num(sw_num){}
         };
 
-        bool load(const xtd::string& sFile, size_t & i){
+        bool load(const xtd::cstring& sFile, size_t & i){
           size_t iEnd = i;
           for (; '\n' != sFile[iEnd] && iEnd < sFile.size(); ++iEnd);
-          auto oItems = xtd::string(&sFile[i], &sFile[iEnd]).split({ ' ' }, true);
-          xtd::string w_cnt, p_cnt;
+          auto oItems = xtd::cstring(&sFile[i], &sFile[iEnd]).split({ ' ' }, true);
+          xtd::cstring w_cnt, p_cnt;
           size_t x = 0;
           synset_offset = atoi(oItems[x++].c_str());
           lex_filenum = atoi(oItems[x++].c_str());
@@ -283,12 +283,12 @@ namespace wordnet
             generic_frames.emplace_back(p1, p2, p3);
           }
           for (; '|' != sFile[i] && i < iEnd; ++i);
-          gloss = xtd::string(&sFile[i], &sFile[iEnd]);
+          gloss = xtd::cstring(&sFile[i], &sFile[iEnd]);
           i = ++iEnd;
           return true;
         }
 
-        xtd::string f_cnt;
+        xtd::cstring f_cnt;
         generic_frame::vector generic_frames;
 
       };

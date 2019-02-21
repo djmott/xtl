@@ -28,7 +28,7 @@ namespace xtd{
       }
 
 
-      word::part_of_speech_t get_word_pos(const xtd::string& src){
+      word::part_of_speech_t get_word_pos(const xtd::cstring& src){
         auto sAdj = std::async(std::launch::async, [&](){ return _index_adj.find(src); });
         auto sAdv = std::async(std::launch::async, [&](){ return _index_adv.find(src); });
         auto sNoun = std::async(std::launch::async, [&](){ return _index_noun.find(src); });
@@ -41,7 +41,7 @@ namespace xtd{
         return static_cast<word::part_of_speech_t>(iRet);
       }
 
-      word::category_t get_word_category(const xtd::string& src, word::part_of_speech_t pos = word::part_of_speech_t::unknown_pos){
+      word::category_t get_word_category(const xtd::cstring& src, word::part_of_speech_t pos = word::part_of_speech_t::unknown_pos){
         uint64_t iRet = word::category_t::unknown_cat;
         index_file_record::pointer oIndex;
         data_file_record::pointer oData;
@@ -79,19 +79,19 @@ namespace xtd{
         using pointer = std::shared_ptr<index_file_record>;
         std::vector<std::string> ptr_symbol;
 
-        xtd::string lemma;
+        xtd::cstring lemma;
         SyntacticCategory pos;
         uint32_t synset_offset, synset_cnt, sense_cnt, tagsense_cnt;
 
-        bool load(const xtd::string& sz){
+        bool load(const xtd::cstring& sz){
           std::stringstream oSS;
-          xtd::string spos, ssynset_offset, p_cnt, ssynset_cnt, ssense_cnt, stagsense_cnt;
+          xtd::cstring spos, ssynset_offset, p_cnt, ssynset_cnt, ssense_cnt, stagsense_cnt;
           oSS.str(sz);
           oSS >> lemma >> spos >> ssynset_cnt >> p_cnt;
           pos = static_cast<SyntacticCategory>(spos[0]);
           synset_cnt = atoi(ssynset_cnt.c_str());
           for (auto t = atoi(p_cnt.c_str()); t; --t){
-            xtd::string sTemp;
+            xtd::cstring sTemp;
             oSS >> sTemp;
             ptr_symbol.push_back(sTemp);
           }
@@ -109,8 +109,8 @@ namespace xtd{
         using pointer = std::shared_ptr<data_file_record>;
         struct word_index{
           using vector = std::vector<word_index>;
-          xtd::string word, lex_id;
-          word_index(const xtd::string& sword, const xtd::string& slexid) : word(sword), lex_id(slexid){}
+          xtd::cstring word, lex_id;
+          word_index(const xtd::cstring& sword, const xtd::cstring& slexid) : word(sword), lex_id(slexid){}
         };
 
         struct ptr{
@@ -121,16 +121,16 @@ namespace xtd{
             adverb = 'r',
           };
           SyntacticCategory pos;
-          xtd::string pointer_symbol, source_target;
+          xtd::cstring pointer_symbol, source_target;
           uint32_t synset_offset;
           using vector = std::vector<ptr>;
-          ptr(const xtd::string& spointer_symbol, const xtd::string& ssynset_offset, SyntacticCategory spos, const xtd::string& ssource_target)
+          ptr(const xtd::cstring& spointer_symbol, const xtd::cstring& ssynset_offset, SyntacticCategory spos, const xtd::cstring& ssource_target)
             : pos(spos), pointer_symbol(spointer_symbol), source_target(ssource_target), synset_offset(atoi(ssynset_offset.c_str())){}
         };
 
-        bool load(const xtd::string& sz){
+        bool load(const xtd::cstring& sz){
           auto oItems = sz.split({ ' ' }, true);
-          xtd::string w_cnt, p_cnt;
+          xtd::cstring w_cnt, p_cnt;
           size_t x = 0;
           synset_offset = atoi(oItems[x++].c_str());
           lex_filenum = atoi(oItems[x++].c_str());
@@ -152,13 +152,13 @@ namespace xtd{
             pointers.emplace_back(p1, p2, p3, p4);
           }
           auto i = sz.find('|');
-          if (i != xtd::string::npos) gloss = sz.substr(i);
+          if (i != xtd::cstring::npos) gloss = sz.substr(i);
           return true;
         }
 
         uint32_t synset_offset, lex_filenum;
         SynsetType ss_type;
-        xtd::string gloss;
+        xtd::cstring gloss;
         word_index::vector words;
         ptr::vector pointers;
       };
@@ -168,15 +168,15 @@ namespace xtd{
         using pointer = std::shared_ptr<verb_data_file_record>;
         struct generic_frame{
           using vector = std::vector<generic_frame>;
-          xtd::string plus, f_num, w_num;
-          generic_frame(const xtd::string& splus, const xtd::string& sf_num, const xtd::string& sw_num) : plus(splus), f_num(sf_num), w_num(sw_num){}
+          xtd::cstring plus, f_num, w_num;
+          generic_frame(const xtd::cstring& splus, const xtd::cstring& sf_num, const xtd::cstring& sw_num) : plus(splus), f_num(sf_num), w_num(sw_num){}
         };
 
-        bool load(const xtd::string& sFile, size_t & i){
+        bool load(const xtd::cstring& sFile, size_t & i){
           size_t iEnd = i;
           for (; '\n' != sFile[iEnd] && iEnd < sFile.size(); ++iEnd);
-          auto oItems = xtd::string(&sFile[i], &sFile[iEnd]).split({ ' ' }, true);
-          xtd::string w_cnt, p_cnt;
+          auto oItems = xtd::cstring(&sFile[i], &sFile[iEnd]).split({ ' ' }, true);
+          xtd::cstring w_cnt, p_cnt;
           size_t x = 0;
           synset_offset = atoi(oItems[x++].c_str());
           lex_filenum = atoi(oItems[x++].c_str());
@@ -205,12 +205,12 @@ namespace xtd{
             generic_frames.emplace_back(p1, p2, p3);
           }
           for (; '|' != sFile[i] && i < iEnd; ++i);
-          gloss = xtd::string(&sFile[i], &sFile[iEnd]);
+          gloss = xtd::cstring(&sFile[i], &sFile[iEnd]);
           i = ++iEnd;
           return true;
         }
 
-        xtd::string f_cnt;
+        xtd::cstring f_cnt;
         generic_frame::vector generic_frames;
 
       };
@@ -238,7 +238,7 @@ namespace xtd{
           for (; i > 0 && '\n' != sTemp[i]; --i, --_End);
         }
 
-        xtd::string line_at(size_t& pos){
+        xtd::cstring line_at(size_t& pos){
           using namespace std;
           bool bol_found = false;
           static const size_t partition_size = 0x100;
@@ -259,7 +259,7 @@ namespace xtd{
           return sRet;
         }
 
-        static int key_compare(const xtd::string& key, const xtd::string& line){
+        static int key_compare(const xtd::cstring& key, const xtd::cstring& line){
 
           for (size_t i = 0; i < key.size(); ++i){
             if (i > line.size()) return 1;
@@ -269,7 +269,7 @@ namespace xtd{
           return 0;
         }
 
-        xtd::string find(const xtd::string& key){
+        xtd::cstring find(const xtd::cstring& key){
           size_t iStart = _Begin, iEnd = _End, iMid;
           while (iStart <= iEnd){
             iMid = (iStart + iEnd) / 2;
@@ -290,7 +290,7 @@ namespace xtd{
       struct index_file : text_file{
         index_file(const xtd::filesystem::path& oPath) : text_file(oPath){}
 
-        index_file_record::pointer get_record(const xtd::string& key){
+        index_file_record::pointer get_record(const xtd::cstring& key){
           auto sRecord = find(key);
           if (0 == sRecord.size()) return index_file_record::pointer(nullptr);
           auto oRet = std::make_shared<index_file_record>();

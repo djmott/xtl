@@ -1,3 +1,5 @@
+#copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+
 set(TEST_FILES
   btree_test.cpp
   callback_test.cpp
@@ -28,6 +30,7 @@ set(TEST_FILES
   shared_mem_obj_test.cpp
   socket_test.cpp
   source_location_test.cpp
+  thread_test.cpp
   tuple_test.cpp
   type_info_test.cpp
   unique_id_test.cpp
@@ -38,10 +41,6 @@ set(TEST_FILES
 
 if(WIN32)
 	list(APPEND TEST_FILES
-		win_debug_help_test.cpp
-		win_image_help_test.cpp
-		win_pipe_test.cpp
-		win_service_test.cpp
 		com_class_factory_test.cpp
 		com_data_object_test.cpp
 		com_dll_test.cpp
@@ -50,6 +49,11 @@ if(WIN32)
 		com_object_test.cpp
 		com_pointer_test.cpp
 		com_test.cpp
+		win_debug_help_test.cpp
+		win_image_help_test.cpp
+		win_pipe_test.cpp
+		win_service_test.cpp
+    win_tool_help_test.cpp
 	)
 endif()
 

@@ -16,17 +16,17 @@ namespace xtd{
       template <typename _DocumentT>
       struct simple{
         void operator()(_DocumentT& oDoc){
-          const xtd::string& sOriginalText = oDoc.template item<typename _DocumentT::original_text>();
+          const xtd::cstring& sOriginalText = oDoc.template item<typename _DocumentT::original_text>();
           std::vector<size_t> PositionScore(sOriginalText.size(), 0);
           //scan for question marks
           size_t iCurrPos=0;
-          for (; xtd::string::npos != iCurrPos; iCurrPos = sOriginalText.find('?', iCurrPos)){
+          for (; xtd::cstring::npos != iCurrPos; iCurrPos = sOriginalText.find('?', iCurrPos)){
             if (!iCurrPos) continue;
             PositionScore[iCurrPos] += 10;
           }
           //scan for exclamation points
           iCurrPos = 0;
-          for (; xtd::string::npos != iCurrPos; iCurrPos = sOriginalText.find('!', iCurrPos)){
+          for (; xtd::cstring::npos != iCurrPos; iCurrPos = sOriginalText.find('!', iCurrPos)){
             if (!iCurrPos) continue;
             PositionScore[iCurrPos] += 10;
           }

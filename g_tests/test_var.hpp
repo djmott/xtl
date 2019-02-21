@@ -47,13 +47,13 @@ TEST(test_var, assignments){
 
 TEST(test_var, xstring){
   using namespace xtd;
-  xtd::string s1="12345";
+  xtd::cstring s1="12345";
   ASSERT_NO_THROW(var t(s1));
   var x(s1);
   ASSERT_TRUE(x.get_type() == typeid(s1));
-  ASSERT_STREQ(x.as<xtd::string>().c_str(), s1.c_str());
-  x.as<xtd::string>() = "ABC";
-  ASSERT_STRNE(x.as<xtd::string>().c_str(), s1.c_str());
+  ASSERT_STREQ(x.as<xtd::cstring>().c_str(), s1.c_str());
+  x.as<xtd::cstring>() = "ABC";
+  ASSERT_STRNE(x.as<xtd::cstring>().c_str(), s1.c_str());
 }
 
 
@@ -61,7 +61,7 @@ TEST(test_var, is_pod){
   using namespace xtd;
   xtd::var v1 = 123;
   ASSERT_TRUE(v1.is_pod());
-  xtd::string xs = "abc";
+  xtd::cstring xs = "abc";
   v1 = xs;
   ASSERT_FALSE(v1.is_pod());
   struct s1{

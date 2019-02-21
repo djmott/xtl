@@ -79,7 +79,7 @@ public:
     
     static inline pointer make(const xtd::filesystem::path& spath){ return pointer(new dynamic_library(spath)); }
 
-    native_handle_type handle() const{ return _Handle; }
+    native_handle_type handle() const{ return _handle; }
 
     template <typename> class function;
 
@@ -113,27 +113,27 @@ public:
     dynamic_library() = delete;
     dynamic_library(const dynamic_library&) = delete;
     dynamic_library& operator=(const dynamic_library&) = delete;
-    dynamic_library(dynamic_library&& src) : _Handle(src._Handle){
-      src._Handle = nullptr;
+    dynamic_library(dynamic_library&& src) : _handle(src._handle){
+      src._handle = nullptr;
     }
     dynamic_library& operator=(dynamic_library&& src){
       if (this == &src) {
         return *this;
       }
-      _Handle = src._Handle;
-      src._Handle = nullptr;
+      _handle = src._handle;
+      src._handle = nullptr;
       return *this;
     }
   #if (XTD_OS_WINDOWS & XTD_OS)
     ~dynamic_library(){
-      if (_Handle){
-        FreeLibrary(_Handle);
+      if (_handle){
+        FreeLibrary(_handle);
       }
     }
   #elif (XTD_OS_UNIX & XTD_OS)
     ~dynamic_library(){
-      if (_Handle){
-        dlclose(_Handle);
+      if (_handle){
+        dlclose(_handle);
       }
     }
   #endif
@@ -141,25 +141,32 @@ public:
     template <typename _ty> function <_ty> get(const char * name){
       using return_type = function <_ty>;
 #if (XTD_OS_WINDOWS & XTD_OS)
-      auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(GetProcAddress(_Handle, name), [](FARPROC p){ return nullptr == p; }));
+      auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(GetProcAddress(_handle, name), [](FARPROC p){ return nullptr == p; }));
 #elif (XTD_OS_UNIX & XTD_OS)
-      auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(dlsym(_Handle, name), [](void * p){ return nullptr == p; }));
+      auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(dlsym(_handle, name), [](void * p){ return nullptr == p; }));
 #endif
       return return_type(fnptr, shared_from_this());
     }
+
+    const xtd::filesystem::path& path() const { return _path; }
 
   private:
 
     friend class process;
 
+    dynamic_library(const xtd::filesystem::path sPath, native_handle_type Handle) : _path(sPath), _handle(Handle){}
+
 #if (XTD_OS_WINDOWS & XTD_OS)
-    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::exception::throw_if(LoadLibraryA(sPath.string().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
+    explicit dynamic_library(const xtd::filesystem::path& sPath) : _path(sPath), _handle(xtd::exception::throw_if(LoadLibraryA(sPath.string().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
 #else
-    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.tstring().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
+    explicit dynamic_library(const xtd::filesystem::path& sPath) : _handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.tstring().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif
 
-    explicit dynamic_library(native_handle_type hHandle) : _Handle(hHandle){}
+    explicit dynamic_library(native_handle_type hHandle) : _handle(hHandle){
+      TODO("Get the library path from the handle")
+    }
 
-    native_handle_type _Handle;
+    xtd::filesystem::path _path;
+    native_handle_type _handle;
   };
 }

@@ -1,35 +1,35 @@
 /** @file
-xtd::string system and unit tests
+xtd::cstring system and unit tests
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
 #include <xtd/string.hpp>
 
 TEST(test_string, initialization){
-  xtd::string s("abcdefghijklmnopqrstuvwxyz");
+  xtd::cstring s("abcdefghijklmnopqrstuvwxyz");
   ASSERT_EQ(s.size(), static_cast<size_t>(26));
 }
 
 TEST(test_string, format){
-  auto s = xtd::string::format("abcdefghijklmnopqrstuvwxyz");
+  auto s = xtd::cstring::format("abcdefghijklmnopqrstuvwxyz");
   ASSERT_EQ(s.size(), static_cast<size_t>(26));
 }
 
 TEST(test_string, to_lower){
-  xtd::string s = "ABCD";
+  xtd::cstring s = "ABCD";
   s.to_lower(std::locale());
   ASSERT_STREQ(s.c_str(), "abcd");
 }
 
 TEST(test_string, to_upper){
-  xtd::string s = "abcd";
+  xtd::cstring s = "abcd";
   s.to_upper(std::locale());
   ASSERT_STREQ(s.c_str(), "ABCD");
 }
 
 
 TEST(test_string, ltrim){
-  xtd::string s = "        a";
+  xtd::cstring s = "        a";
   s.ltrim();
   ASSERT_EQ(s.size(), static_cast<size_t>(1));
   s = ".   .";
@@ -37,7 +37,7 @@ TEST(test_string, ltrim){
 }
 
 TEST(test_string, rtrim){
-  xtd::string s = "a     ";
+  xtd::cstring s = "a     ";
   s.rtrim();
   ASSERT_EQ(s.size(), static_cast<size_t>(1));
   s = ".   .";
@@ -45,7 +45,7 @@ TEST(test_string, rtrim){
 }
 
 TEST(test_string, trim){
-  xtd::string s = "   a     ";
+  xtd::cstring s = "   a     ";
   s.trim();
   ASSERT_EQ(s.size(), static_cast<size_t>(1));
   s = "    .   .    ";
@@ -53,7 +53,7 @@ TEST(test_string, trim){
 }
 
 TEST(test_string, find_first_in_initializer_list){
-  xtd::string s = "This is a test X";
+  xtd::cstring s = "This is a test X";
   ASSERT_EQ(static_cast<size_t>(0), s.find_first_of({ 'T' }));
   ASSERT_EQ(static_cast<size_t>(2), s.find_first_of({ 'i' }));
   ASSERT_EQ(static_cast<size_t>(4), s.find_first_of({ 'a', 'e', ' ' }));
@@ -62,7 +62,7 @@ TEST(test_string, find_first_in_initializer_list){
 }
 
 TEST(test_string, find_last_in_initializer_list){
-  xtd::string s = "This is a test X";
+  xtd::cstring s = "This is a test X";
   ASSERT_EQ(static_cast<size_t>(0), s.find_last_of({'T'}));
   ASSERT_EQ(static_cast<size_t>(13), s.find_last_of({'t'}));
   ASSERT_EQ(static_cast<size_t>(5), s.find_last_of({'i'}));
@@ -71,7 +71,7 @@ TEST(test_string, find_last_in_initializer_list){
 }
 
 TEST(test_string, replace){
-  xtd::string s = "aaaaaaa";
+  xtd::cstring s = "aaaaaaa";
   ASSERT_TRUE(s.size());
   s.replace({ 'a' }, ' ').trim();
   ASSERT_FALSE(s.size());
@@ -85,34 +85,34 @@ TEST(test_string, replace){
 }
 
 TEST(test_string, split){
-  xtd::string s = "this is a test";
+  xtd::cstring s = "this is a test";
   ASSERT_EQ(static_cast<size_t>(4), s.split({ ' ' }).size());
   s = "1 2 3 4 5 6 7 8 9";
   ASSERT_EQ(static_cast<size_t>(9), s.split({ ' ' }).size());
 }
 
 TEST(test_string, string_from_wchar_ptr){
-  auto s = xtd::string::format(L"123456789");
+  auto s = xtd::cstring::format(L"123456789");
   ASSERT_EQ(static_cast<size_t>(9), s.size());
   ::testing::StaticAssertTypeEq<decltype(s)::value_type, char>();
 }
 
 TEST(test_string, wstring_from_char_ptr){
-  xtd::string s = "12345";
+  xtd::cstring s = "12345";
   auto ws = xtd::wstring::format(s.c_str());
   ASSERT_EQ(ws.size(), s.size());
   ::testing::StaticAssertTypeEq<decltype(ws)::value_type, wchar_t>();
 }
 
 TEST(test_string, wstring_from_string){
-  xtd::string s = "12345";
+  xtd::cstring s = "12345";
   auto ws = xtd::wstring::format(s);
   ASSERT_EQ(ws.size(), s.size());
 }
 
 TEST(test_string, string_from_wstring){
   xtd::wstring ws(L"123456789");
-  auto s = xtd::string::format(ws);
+  auto s = xtd::cstring::format(ws);
   ASSERT_EQ(ws.size(), s.size());
 }
 

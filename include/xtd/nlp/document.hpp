@@ -92,7 +92,7 @@ namespace xtd{
       using vector = PROPERTY(vector_t);
       using category = PROPERTY(category_t);
       using part_of_speech = PROPERTY(part_of_speech_t);
-      using text = PROPERTY(xtd::string);
+      using text = PROPERTY(xtd::cstring);
 
     };
 
@@ -115,7 +115,7 @@ namespace xtd{
       using structure = PROPERTY(structure_t);
       using category = PROPERTY(category_t);
       using vector = PROPERTY(vector_t);
-      using text = PROPERTY(xtd::string);
+      using text = PROPERTY(xtd::cstring);
       
       virtual word::vector_t& words() = 0;
     };
@@ -154,7 +154,7 @@ namespace xtd{
       template <typename> friend class _StemmerT;
     public:
       using _my_t = word<_StemmerT>;
-      using original_text = WRAPPED(xtd::string);
+      using original_text = WRAPPED(xtd::cstring);
       using vector = std::vector<word>;
       using word_category = WRAPPED(word_category_t);
       using part_of_speech = WRAPPED(part_of_speech_t);
@@ -167,7 +167,7 @@ namespace xtd{
     public:
       using _my_t = sentence<_StemmerT>;
       using word_type = word<_StemmerT>;
-      using original_text = WRAPPED(xtd::string);
+      using original_text = WRAPPED(xtd::cstring);
       using vector = std::vector<sentence>;
 
     };
@@ -181,7 +181,7 @@ namespace xtd{
       using _my_t = paragraph<_SBDT, _StemmerT>;
       using sentence_type = sentence<_StemmerT>;
 
-      using original_text = WRAPPED(xtd::string);
+      using original_text = WRAPPED(xtd::cstring);
       
       using vector = std::vector<paragraph>;
 
@@ -213,14 +213,14 @@ namespace xtd{
       using paragraph_bound_detector_type = _PBDT<_my_t>;
       using paragraph_type = paragraph<_SBDT, _StemmerT>;
 
-      using original_text = WRAPPED(xtd::string);
+      using original_text = WRAPPED(xtd::cstring);
 
 
       document(const xtd::filesystem::path& oPath){
         std::ifstream in;
         in.exceptions(std::ios::badbit | std::ios::failbit);
         in.open(oPath, std::ios::in);
-        dynamic_object::item<original_text>() = std::move(xtd::string((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>())));
+        dynamic_object::item<original_text>() = std::move(xtd::cstring((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>())));
       }
 
       paragraph_bound_detector_type& paragraph_bound_detector(){
@@ -249,7 +249,7 @@ namespace xtd{
     public:
       inline static string format(const nlp::word::part_of_speech_t &iPOS){
         using namespace xtd::nlp;
-        xtd::string sRet = "(";
+        xtd::cstring sRet = "(";
         if (word::unknown_pos == iPOS) sRet += "unknown   ";
         if (word::noun & iPOS) sRet += "noun | ";
         if (word::plural & iPOS) sRet += "plural | ";

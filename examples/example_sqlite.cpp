@@ -27,7 +27,7 @@ int main(){
     }
     {
       auto oTransaction = oDB->begin_transaction();
-      auto oCmd = oDB->prepare<int, xtd::string>("Insert Into Fnord (Age, Name) Values (?, ?);");
+      auto oCmd = oDB->prepare<int, xtd::cstring>("Insert Into Fnord (Age, Name) Values (?, ?);");
       (*oCmd)(123, "Charlie Brown");
       (*oCmd)(234, "Homer Simpson");
       (*oCmd)(345, "George Bush");
@@ -35,7 +35,7 @@ int main(){
       oTransaction.commit();
     }
     {
-      auto oRS = oDB->execute_reader<int, xtd::string>("Select Age, Name From Fnord;");
+      auto oRS = oDB->execute_reader<int, xtd::cstring>("Select Age, Name From Fnord;");
       while (oRS->next()){
         INFO(oRS->get<0>(), " ", oRS->get<1>());
       }

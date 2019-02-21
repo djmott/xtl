@@ -109,7 +109,7 @@ namespace xtd{
     template <> class xstring_format<char, const unique_id&>{
     public:
       inline static string format(const unique_id& value){
-        xtd::string oRet(36, 0);
+        xtd::cstring oRet(36, 0);
         sprintf(&oRet[0], "%08hX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
                 *(uint32_t*)&value._uuid[0], *(uint16_t*)&value._uuid[4], *(uint16_t*)&value._uuid[6],
                 value._uuid[8], value._uuid[9], value._uuid[10], value._uuid[11],
@@ -121,9 +121,7 @@ namespace xtd{
 
 #elif (XTD_OS_WINDOWS & XTD_OS)
 
-  class unique_id : uuid_t{
-    template <typename, typename> friend class _::xstring_format;
-  public:
+  struct unique_id : uuid_t{
     unique_id(){
       xtd::exception::throw_if(UuidCreate(this), [](RPC_STATUS x){return (RPC_S_OK != x && RPC_S_UUID_LOCAL_ONLY != x && RPC_S_UUID_NO_ADDRESS != x); });
     }
@@ -167,19 +165,15 @@ namespace xtd{
     }
   };
 
-  namespace _{
-    template <> class xstring_format<char, const unique_id&>{
-    public:
-      inline static string format(const unique_id& value){
-        xtd::string oRet(36, 0);
-        sprintf_s(&oRet[0], 1+oRet.size(), "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
-                value.Data1, value.Data2, value.Data3,
-                value.Data4[0], value.Data4[1], value.Data4[2], value.Data4[3],
-                value.Data4[4], value.Data4[5], value.Data4[6], value.Data4[7]);
-        return oRet;
-      }
-    };
+  template <> template <> xstring<char>& xstring<char>::from<unique_id>(const unique_id& value){
+    resize(36, 0);
+    sprintf_s(&at(0), 1 + size(), "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+      value.Data1, value.Data2, value.Data3,
+      value.Data4[0], value.Data4[1], value.Data4[2], value.Data4[3],
+      value.Data4[4], value.Data4[5], value.Data4[6], value.Data4[7]);
+    return *this;
   }
+
 
 #endif
 

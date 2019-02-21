@@ -20,7 +20,7 @@ namespace xtd {
         public:
           using vector = std::vector<record>;
           using map = std::map<std::string, record>;
-          xtd::string _word;
+          xtd::cstring _word;
           part_of_speech_t _pos;
           record(const std::string& sWord) : _word(sWord), _pos(part_of_speech_t::unknown_pos) {}
         };
@@ -32,7 +32,7 @@ namespace xtd {
           xtd::filesystem::path oPath(XTD_ASSETS_DIR "/mpos/mobyposi.i");
           std::ifstream in(oPath.string());
           in.exceptions(std::ios::badbit | std::ios::failbit);
-          xtd::string sFile((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
+          xtd::cstring sFile((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
           for (auto sBegin = sFile.begin(); sBegin < sFile.end(); ++sBegin) {
             for (; ('\r' == *sBegin || '\n' == *sBegin) && sBegin < sFile.end(); ++sBegin);
             auto sEnd = sBegin;
@@ -84,7 +84,7 @@ namespace xtd {
           return _database;
         }
 
-        nlp::part_of_speech_t get_pos(const xtd::string& sWord) const {
+        nlp::part_of_speech_t get_pos(const xtd::cstring& sWord) const {
           auto oItem = records.find(sWord);
           if (records.end() == oItem) return part_of_speech_t::unknown_pos;
           return oItem->second._pos;

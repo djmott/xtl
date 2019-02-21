@@ -94,7 +94,8 @@ namespace xtd{
       }
 
       const xtd::tstring& tstring() const { return _str; }
-      xtd::string string() const { return string::format(_str); }
+
+      xtd::cstring string() const { return cstring().from(_str); }
 
       ///appends a perferred separator and path element
       path& append(const path& src) {
@@ -155,7 +156,7 @@ namespace xtd{
     inline path home_directory_path() {
       LPWSTR sRet = nullptr;
       xtd::windows::exception::throw_if(::SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &sRet), [](HRESULT h) { return FAILED(h); });
-      auto sTemp = xtd::tstring::format(sRet);
+      auto sTemp = xtd::tstring().from(sRet);
       ::CoTaskMemFree(sRet);
       return path(sTemp);
     }

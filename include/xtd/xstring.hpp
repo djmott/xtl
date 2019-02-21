@@ -3,7 +3,136 @@
   @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 
 */
+#pragma once
 
+#include <xtd/xtd.hpp>
+
+#if (XTD_OS_WINDOWS & XTD_OS)
+#include <windows.h>
+#endif
+
+#include <algorithm>
+#include <string>
+#include <type_traits>
+#include <cctype>
+#include <cwctype>
+
+namespace xtd {
+
+
+  template <typename _ch_t> struct xstring;
+
+  using cstring = xstring<char>;
+  using ustring = xstring<wchar_t>;
+  using tstring = xstring<tchar>;
+  using utf8 = xstring<char>;
+  using utf16 = xstring<wchar_t>;
+
+
+  template <typename _ch_t> struct xstring : std::basic_string<_ch_t>{
+    using _super_t = std::basic_string<_ch_t>;
+    template <typename ... _arg_ts> xstring(_arg_ts&&...args) : _super_t(std::forward<_arg_ts>(args)...){}
+
+    //template <typename _ty> void from(typename std::add_const<typename std::add_lvalue_reference<_ty>::type>::type val);
+    template <typename _ty> xstring& from(const _ty& val);
+
+    template <typename _ty, typename ... _arg_ts>
+    static xstring Format(const _ty& val, _arg_ts&&...args) {
+      return xstring().from(val) + Format(std::forward<_arg_ts>(args)...);
+    }
+
+    xstring& to_lower();
+
+    xstring& to_upper();
+
+    ///Trim leading whitespace
+    xstring& ltrim(); 
+
+    ///Trim trailing whitespace
+    xstring& rtrim();
+
+    //Trim leading and trailing whitespace
+    xstring& trim() {
+      ltrim();
+      rtrim();
+      return *this;
+    }
+
+    //replaces all occurrences of the characters in the oItems list with a specified character
+    xstring& replace(std::initializer_list<_ch_t> oItems, _ch_t chReplace) {
+      std::transform(begin(), end(), begin(), [&](const _ch_t& ch) {
+        auto i = std::find_if(oItems.begin(), oItems.end(), [ch](_ch_t item) { return ch == item; });
+        return (std::end(oItems) == i ? ch : chReplace);
+      });
+      return *this;
+    }
+  };
+
+  template <> xstring<char>& xstring<char>::to_lower() {
+    std::transform(begin(), end(), begin(), [](value_type&ch) { return ch = std::tolower(ch); });
+    return *this;
+  }
+
+  template <> xstring<wchar_t>& xstring<wchar_t>::to_lower() {
+    std::transform(begin(), end(), begin(), [](value_type&ch) { return ch = std::towlower(ch); });
+    return *this;
+  }
+
+  template <> xstring<char>& xstring<char>::to_upper() {
+    std::transform(begin(), end(), begin(), [](value_type&ch) { return ch = std::toupper(ch); });
+    return *this;
+  }
+
+  template <> xstring<wchar_t>& xstring<wchar_t>::to_upper() {
+    std::transform(begin(), end(), begin(), [](value_type&ch) { return ch = std::towupper(ch); });
+    return *this;
+  }
+  
+  template <> xstring<char>& xstring<char>::ltrim() {
+    erase(begin(), std::find_if(begin(), end(), [](value_type ch) { return !std::isspace(ch); }));
+    return *this;
+  }
+
+  template <> xstring<wchar_t>& xstring<wchar_t>::ltrim() {
+    erase(begin(), std::find_if(begin(), end(), [](value_type ch) { return !std::iswspace(ch); }));
+    return *this;
+  }
+
+  template <> xstring<char>& xstring<char>::rtrim() {
+    erase(std::find_if(rbegin(), rend(), [](value_type ch) {return !std::isspace(ch); }).base(), end());
+    return *this;
+  }
+
+  template <> xstring<wchar_t>& xstring<wchar_t>::rtrim() {
+    erase(std::find_if(rbegin(), rend(), [](value_type ch) {return !std::iswspace(ch); }).base(), end());
+    return *this;
+  }
+
+  template <> template <>
+  xstring<char>& xstring<char>::from<xstring<char>>(const xstring<char>& val) {
+    return (*this = val);
+  }
+
+  template <> template <>
+  xstring<wchar_t>& xstring<wchar_t>::from<xstring<wchar_t>>(const xstring<wchar_t>& val) {
+    return (*this = val);
+  }
+
+  template <> template <>
+  xstring<char>& xstring<char>::from<char *>( char * const& val) {
+    return (*this = val);
+  }
+
+  template <> template <>
+  xstring<wchar_t>& xstring<wchar_t>::from<wchar_t*>( wchar_t*const& val) {
+    return (*this = val);
+  }
+
+}
+
+
+
+#if 0
 #pragma once
 
 #include <xtd/xtd.hpp>
@@ -34,7 +163,7 @@
 
 namespace xtd{
 
-  template <typename _ChT> class xstring;
+  template <typename _ch_t> class xstring;
 
   using string = xstring<char>;
   using wstring = xstring<wchar_t>;
@@ -48,20 +177,20 @@ namespace xtd{
 #endif
 
   /** Extends std::string with some added functionality
-   @tparam _ChT character type
+   @tparam _ch_t character type
    */
-  template <typename _ChT> class xstring : public std::basic_string<_ChT>{
+  template <typename _ch_t> class xstring : public std::basic_string<_ch_t>{
   public:
-    using _super_t = std::basic_string<_ChT>;
+    using _super_t = std::basic_string<_ch_t>;
     using size_type = typename _super_t::size_type;
 
     ///Generic constructor forwards everything to the base class
-    template <typename ... _ArgsT>
-    xstring(_ArgsT&&...oArgs)
-      : _super_t(std::forward<_ArgsT>(oArgs)...){}
+    template <typename ... _arg_ts>
+    xstring(_arg_ts&&...oArgs)
+      : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
 
-    bool ends_with(const xtd::string& suffix) const{
+    bool ends_with(const xtd::cstring& suffix) const{
       
       auto sDest = _super_t::rbegin();
       auto sSrc = suffix.rbegin();
@@ -78,15 +207,15 @@ namespace xtd{
      */
 
     static xstring format(){
-      xstring sRet = ((_ChT*)"\0\0\0");
+      xstring sRet = ((_ch_t*)"\0\0\0");
       return sRet;
     }
 
 
-    template <typename _Ty, typename ... _ArgsT>
-    static xstring format(const _Ty & val, _ArgsT&&...oArgs){
-      xstring sRet = _::xstring_format<_ChT, const _Ty &>::format(static_cast<const _Ty &>(val));
-      sRet += format(std::forward<_ArgsT>(oArgs)...);
+    template <typename _ty, typename ... _arg_ts>
+    static xstring format(const _ty & val, _arg_ts&&...oArgs){
+      xstring sRet = _::xstring_format<_ch_t, const _ty &>::format(static_cast<const _ty &>(val));
+      sRet += format(std::forward<_arg_ts>(oArgs)...);
       return sRet;
     }
 
@@ -170,7 +299,7 @@ namespace xtd{
     }
 
     //replaces all occurrences of the characters in the oItems list with a specified character
-    xstring& replace(std::initializer_list<_ChT> oItems, _ChT chReplace) {
+    xstring& replace(std::initializer_list<_ch_t> oItems, _ch_t chReplace) {
       for (auto & oCh : *this) {
         bool bFound = false;
         for (const auto & oFind : oItems) {
@@ -187,7 +316,7 @@ namespace xtd{
     }
 
     ///replaces all instances of a sub-string with a character
-    xstring& replace(const xstring& src, _ChT chReplace) {
+    xstring& replace(const xstring& src, _ch_t chReplace) {
       forever{
         auto i = _super_t::find(src.c_str());
         if (_super_t::npos == i) break;
@@ -198,10 +327,10 @@ namespace xtd{
     }
 
     ///removes all occurrences of a list
-    xstring& remove(const std::initializer_list<_ChT>& chars) {
+    xstring& remove(const std::initializer_list<_ch_t>& chars) {
       forever{
         bool found = false;
-        for (_ChT ch : chars) {
+        for (_ch_t ch : chars) {
           auto i = _super_t::find(ch);
           if (_super_t::npos == i) continue;
           found = true;
@@ -213,9 +342,9 @@ namespace xtd{
     }
 
     ///finds the first occurrence of any item
-    size_type find_first_of(const std::initializer_list<_ChT>& delimiters, size_type pos = 0) const{
+    size_type find_first_of(const std::initializer_list<_ch_t>& delimiters, size_type pos = 0) const{
       size_type iRet = _super_t::npos;
-      for (const _ChT ch : delimiters){
+      for (const _ch_t ch : delimiters){
         auto x = _super_t::find_first_of(ch, pos);
         if ((_super_t::npos != x) && (_super_t::npos == iRet || x < iRet)){
           iRet = x;
@@ -224,16 +353,16 @@ namespace xtd{
       return iRet;
     }
     ///finds the first occurrence of an item from a user-defined visitor
-    size_type find_first_of(const std::function<bool(_ChT)>& VisitorFN, size_type pos = 0) const{
+    size_type find_first_of(const std::function<bool(_ch_t)>& VisitorFN, size_type pos = 0) const{
       for (size_type i = pos; i < _super_t::size(); ++i){
         if (VisitorFN(_super_t::at(i))) return i;
       }
       return _super_t::npos;
     }
 
-    size_type find_last_of(const std::initializer_list<_ChT>& delimiters, size_type pos = _super_t::npos) const {
+    size_type find_last_of(const std::initializer_list<_ch_t>& delimiters, size_type pos = _super_t::npos) const {
       size_type iRet = _super_t::npos;
-      for (const _ChT ch : delimiters){
+      for (const _ch_t ch : delimiters){
         auto x = _super_t::find_last_of(ch, pos);
         if ((_super_t::npos != x) && (_super_t::npos == iRet || x > iRet)){
           iRet = x;
@@ -243,10 +372,10 @@ namespace xtd{
     }
 
     ///splits the string by the specified delmiters into constituent elements
-    std::vector<xstring<_ChT>> split(const std::initializer_list<_ChT>& delimiters, bool trimEmpty = false) const {
-      using container_t = std::vector<xstring<_ChT>>;
+    std::vector<xstring<_ch_t>> split(const std::initializer_list<_ch_t>& delimiters, bool trimEmpty = false) const {
+      using container_t = std::vector<xstring<_ch_t>>;
       container_t oRet;
-      using _my_t = xstring<_ChT>;
+      using _my_t = xstring<_ch_t>;
       size_type pos;
       size_type lastPos = 0;
 
@@ -271,10 +400,10 @@ namespace xtd{
     }
 
     ///splits the string by the specified string into constituent elements
-    std::vector<xstring<_ChT>> split(const xstring<_ChT>& delim, bool trimEmpty = false) const {
-      using container_t = std::vector<xstring<_ChT>>;
+    std::vector<xstring<_ch_t>> split(const xstring<_ch_t>& delim, bool trimEmpty = false) const {
+      using container_t = std::vector<xstring<_ch_t>>;
       container_t oRet;
-      using _my_t = xstring<_ChT>;
+      using _my_t = xstring<_ch_t>;
       size_type pos;
       size_type lastPos = 0;
 
@@ -300,11 +429,11 @@ namespace xtd{
 
     ///splits the string by the user supplied unary function
 
-    std::vector<xstring<_ChT>> split(const std::function<bool(_ChT)>& VisitorFN) const{
-      using container_t = std::vector<xstring<_ChT>>;
+    std::vector<xstring<_ch_t>> split(const std::function<bool(_ch_t)>& VisitorFN) const{
+      using container_t = std::vector<xstring<_ch_t>>;
       using value_type = typename container_t::value_type;
       container_t oRet;
-      using _my_t = xstring<_ChT>;
+      using _my_t = xstring<_ch_t>;
       size_t iLast = 0;
       for (size_t iCurr = iLast; iCurr < _my_t::size(); ){
         if (!VisitorFN((*this)[iCurr])){
@@ -494,45 +623,45 @@ namespace xtd{
   #endif
 
 #if (XTD_OS_WINDOWS & XTD_OS)
-    template <> class xstring_format<char, const LPWSTR &> {
+    template <typename _ch_t> class xstring_format<_ch_t, const LPWSTR &> {
     public:
       static inline string format(const LPWSTR & src) {
-        return xstring_format<char, const wchar_t*const&>::format(src);
+        return xstring_format<_ch_t, const wchar_t*>::format(static_cast<const wchar_t*>(src));
       }
     };
 #endif
 
-    template <typename _ChT> class xstring_format<_ChT, const _ChT * const &> {
+    template <typename _ch_t> class xstring_format<_ch_t, const _ch_t * const &> {
     public:
-      inline static xstring<_ChT> format(const _ChT * const & src) {
-        return xstring<_ChT>(src);
+      inline static xstring<_ch_t> format(const _ch_t * const & src) {
+        return xstring<_ch_t>(src);
       }
     };
 
-    template <typename _ChT> class xstring_format<_ChT, const _ChT * > {
+    template <typename _ch_t> class xstring_format<_ch_t, const _ch_t * > {
     public:
-      inline static xstring<_ChT> format(const _ChT * src) {
-        return xstring<_ChT>(src);
+      inline static xstring<_ch_t> format(const _ch_t * src) {
+        return xstring<_ch_t>(src);
       }
     };
 
-    template <typename _ChT, typename _Ch2, size_t _Len> class xstring_format<_ChT, const _Ch2(&)[_Len]>{
+    template <typename _ch_t, typename _ch2_t, size_t _Len> class xstring_format<_ch_t, const _ch2_t(&)[_Len]>{
     public:
-      inline static xstring<_ChT> format(const _Ch2(&src)[_Len]){
-        return xstring_format<_ChT, const _Ch2 * const &>::format(src);
+      inline static xstring<_ch_t> format(const _ch2_t(&src)[_Len]){
+        return xstring_format<_ch_t, const _ch2_t * const &>::format(src);
       }
     };
 
-    template <typename _ChT, typename _Ch2> class xstring_format<_ChT, const xtd::xstring<_Ch2> &>{
+    template <typename _ch_t, typename _ch2_t> class xstring_format<_ch_t, const xtd::xstring<_ch2_t> &>{
     public:
-      inline static xstring<_ChT> format(const xtd::xstring<_Ch2> & src){
-        return xstring<_ChT>::format(src.c_str());
+      inline static xstring<_ch_t> format(const xtd::xstring<_ch2_t> & src){
+        return xstring<_ch_t>::format(src.c_str());
       }
     };
-    template <typename _ChT, typename _Ch2> class xstring_format<_ChT, const std::basic_string<_Ch2> &>{
+    template <typename _ch_t, typename _ch2_t> class xstring_format<_ch_t, const std::basic_string<_ch2_t> &>{
     public:
-      inline static xstring<_ChT> format(const std::basic_string<_Ch2> & src){
-        return xstring<_ChT>::format(src.c_str());
+      inline static xstring<_ch_t> format(const std::basic_string<_ch2_t> & src){
+        return xstring<_ch_t>::format(src.c_str());
       }
     };
 
@@ -643,5 +772,6 @@ namespace xtd{
 }
 
 namespace std{
-  template <typename _ChT> struct iterator_traits<xtd::xstring<_ChT>> : std::iterator_traits<std::basic_string<_ChT>>{};
+  template <typename _ch_t> struct iterator_traits<xtd::xstring<_ch_t>> : std::iterator_traits<std::basic_string<_ch_t>>{};
 }
+#endif
