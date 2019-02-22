@@ -17,7 +17,10 @@ TEST_CASE("can retrieve current pid", "[process]") {
   REQUIRE(oProc.id());
 }
 
+#if (XTD_OS_WINDOWS & XTD_OS)
+
 TEST_CASE("can enumerate loaded modules", "[process]") {
   auto oProc = xtd::process::this_process();
   REQUIRE(oProc.libraries().size());
 }
+#endif
