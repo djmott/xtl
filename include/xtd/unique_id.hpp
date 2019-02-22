@@ -10,6 +10,7 @@
 
 #if(XTD_OS_UNIX & XTD_OS)
   #include <fstream>
+  #include <stdio.h>
 #endif
 #if(XTD_OS_WINDOWS & XTD_OS)
   #include <rpc.h>
@@ -105,6 +106,15 @@ namespace xtd{
   };
 
   #endif
+  template <> template <> xstring<char>& xstring<char>::from<unique_id>(const unique_id& value){
+    resize(36, 0);
+    sprintf(&at(0), "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+              *(uint32_t*)&value._uuid[0], *(uint16_t*)&value._uuid[4], *(uint16_t*)&value._uuid[6],
+              value._uuid[8], value._uuid[9], value._uuid[10], value._uuid[11],
+              value._uuid[12], value._uuid[13], value._uuid[14], value._uuid[15]);
+    return *this;
+  }
+  /*
   namespace _{
     template <> class xstring_format<char, const unique_id&>{
     public:
@@ -118,7 +128,7 @@ namespace xtd{
       }
     };
   }
-
+*/
 #elif (XTD_OS_WINDOWS & XTD_OS)
 
   struct unique_id : uuid_t{

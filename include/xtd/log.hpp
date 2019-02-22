@@ -299,7 +299,7 @@ namespace xtd {
 
     template <typename ... _arg_ts>
     inline void write(type mesageType, const source_location& location, _arg_ts&&...oArgs) {
-      auto sMessage = xtd::cstring::format(std::forward<_arg_ts>(oArgs)...);
+      auto sMessage = xtd::cstring::Format(std::forward<_arg_ts>(oArgs)...);
       auto oMessage = std::make_shared<message>(mesageType, location, std::move(sMessage)); {
         std::lock_guard<std::mutex> oLock(_callback_lock);
         _callbacks.push_back([oMessage, this]() {

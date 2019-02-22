@@ -16,6 +16,8 @@
 #include <type_traits>
 #include <cctype>
 #include <cwctype>
+#include <vector>
+#include <functional>
 
 namespace xtd {
 
@@ -60,12 +62,97 @@ namespace xtd {
 
     //replaces all occurrences of the characters in the oItems list with a specified character
     xstring& replace(std::initializer_list<_ch_t> oItems, _ch_t chReplace) {
-      std::transform(begin(), end(), begin(), [&](const _ch_t& ch) {
+      std::transform(_super_t::begin(), _super_t::end(), _super_t::begin(), [&](const _ch_t& ch) {
         auto i = std::find_if(oItems.begin(), oItems.end(), [ch](_ch_t item) { return ch == item; });
         return (std::end(oItems) == i ? ch : chReplace);
       });
       return *this;
     }
+
+
+    ///splits the string by the specified delmiters into constituent elements
+    std::vector<xstring<_ch_t>> split(const std::initializer_list<_ch_t>& delimiters, bool trimEmpty = false) const {
+      using container_t = std::vector<xstring<_ch_t>>;
+      container_t oRet;
+      using _my_t = xstring<_ch_t>;
+      typename _super_t::size_type pos;
+      typename _super_t::size_type lastPos = 0;
+
+      using value_type = typename container_t::value_type;
+
+      forever{
+        pos = _super_t::find_first_of(delimiters, lastPos);
+        if (pos == _my_t::npos) {
+          pos = _super_t::length();
+          if (pos != lastPos || !trimEmpty) {
+            oRet.push_back(value_type(_super_t::data() + lastPos, (pos - lastPos)));
+          }
+          break;
+        }
+        else if (pos != lastPos || !trimEmpty) {
+          oRet.push_back(value_type(_super_t::data() + lastPos , (pos - lastPos)));
+        }
+
+        lastPos = pos + 1;
+      }
+      return oRet;
+    }
+
+    ///splits the string by the specified string into constituent elements
+    std::vector<xstring<_ch_t>> split(const xstring<_ch_t>& delim, bool trimEmpty = false) const {
+      using container_t = std::vector<xstring<_ch_t>>;
+      container_t oRet;
+      using _my_t = xstring<_ch_t>;
+      typename _super_t::size_type pos;
+      typename _super_t::size_type lastPos = 0;
+
+      using value_type = typename container_t::value_type;
+
+      forever{
+        pos = find(delim, lastPos);
+        if (pos == _my_t::npos) {
+          pos = _super_t::length();
+          if (pos != lastPos || !trimEmpty) {
+            oRet.push_back(value_type(_super_t::data() + lastPos, (pos - lastPos)));
+          }
+          break;
+        }
+        else if (pos != lastPos || !trimEmpty) {
+          oRet.push_back(value_type(_super_t::data() + lastPos , (pos - lastPos)));
+        }
+
+        lastPos = pos + 1;
+      }
+      return oRet;
+    }
+
+    ///splits the string by the user supplied unary function
+
+    std::vector<xstring<_ch_t>> split(const std::function<bool(_ch_t)>& VisitorFN) const{
+      using container_t = std::vector<xstring<_ch_t>>;
+      using value_type = typename container_t::value_type;
+      container_t oRet;
+      using _my_t = xstring<_ch_t>;
+      size_t iLast = 0;
+      for (size_t iCurr = iLast; iCurr < _my_t::size(); ){
+        if (!VisitorFN((*this)[iCurr])){
+          ++iCurr;
+          continue;
+        }
+        auto iLen = iCurr - iLast;
+        if (!iLen) ++iLen;
+        oRet.push_back(value_type(_super_t::data() + iLast, iLen));
+        if (iCurr != iLast){
+          oRet.push_back(value_type(_super_t::data() + iCurr, 1));
+        }
+        iLast = ++iCurr;
+      }
+      if (iLast < _my_t::size()){
+        oRet.push_back(value_type(_super_t::data() + iLast, _my_t::size() - iLast));
+      }
+      return oRet;
+    }
+
   };
 
   template <> xstring<char>& xstring<char>::to_lower() {

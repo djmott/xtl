@@ -12,9 +12,9 @@ TEST_CASE("can retrieve running processes", "[process]") {
 	REQUIRE(oProcs.size());
 }
 
-TEST_CASE("can retrieve current process", "[process]") {
+TEST_CASE("can retrieve current pid", "[process]") {
   auto oProc = xtd::process::this_process();
-  REQUIRE(oProc.handle());
+  REQUIRE(oProc.id());
 }
 
 TEST_CASE("can enumerate loaded modules", "[process]") {
