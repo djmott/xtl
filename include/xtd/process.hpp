@@ -210,7 +210,7 @@ namespace xtd {
       xtd::tstring sMutablePath = oPath.tstring();
       xtd::windows::exception::throw_if(::CreateProcess(nullptr, &sMutablePath[0], nullptr, nullptr, FALSE,
         (suspended ? CREATE_SUSPENDED : 0) |
-        (debug ? DEBUG_PROCESS | DEBUG_ONLY_THIS_PROCESS : 0)
+        (debug ? DEBUG_ONLY_THIS_PROCESS : 0)
         , nullptr, nullptr, &si, &pi), [](BOOL b) { return !b; });
       return process(oPath, pi.dwProcessId, pi.hProcess, pi.hThread);
     }

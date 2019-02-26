@@ -10,6 +10,8 @@ concurrently insert, query and delete items in an unordered hash map
 #include <cstdint>
 #include <vector>
 
+#include <xtd/meta.hpp>
+
 namespace xtd{
 
   namespace concurrent {
@@ -18,23 +20,23 @@ namespace xtd{
 
     /** Unsafe iterator
     iterating should be done on a constant hash_map since it's not thread-safe to use with insertion/deletion.
-    @tparam _HashMapT the hash_map type associated with this iterator.
+    @tparam _hashmap_t the hash_map type associated with this iterator.
     */
-    template<typename _HashMapT>
+    template<typename _hashmap_t>
     class hash_map_iterator {
       template<typename, typename, int> friend
       class hash_map;
 
-      static constexpr int key_nibbles = sizeof(typename _HashMapT::key_type) * 2;
-      const _HashMapT *_Map;
-      typename _HashMapT::value_type *_Current;
+      static constexpr int key_nibbles = sizeof(typename _hashmap_t::key_type) * 2;
+      const _hashmap_t *_Map;
+      typename _hashmap_t::value_type *_Current;
       std::vector<int8_t> _Key;
 
-      hash_map_iterator(const _HashMapT *pMap, typename _HashMapT::value_type *pCurrent,
+      hash_map_iterator(const _hashmap_t *pMap, typename _hashmap_t::value_type *pCurrent,
                         const std::vector<int8_t> &oKey) : _Map(pMap), _Current(pCurrent), _Key(oKey) {}
 
     public:
-      using value_type = typename _HashMapT::value_type;
+      using value_type = typename _hashmap_t::value_type;
 
       hash_map_iterator(const hash_map_iterator &src) : _Map(src._Map), _Current(src._Current), _Key(src._Key) {}
 
@@ -117,13 +119,13 @@ namespace xtd{
       /** thread-safe key-value pair container
       insertion and removal from multiple threads is safe but invalidates iterators.
       iteration from multiple threads is also safe but should not be done while mixing insertion and removal since they invalidate iterators.
-      @tparam _KeyT The key type
-      @tparam _ValueT The value type
+      @tparam _key_t The key type
+      @tparam _value_t The value type
       */
-      template<typename _KeyT, typename _ValueT, int _NibblePos = sizeof(_KeyT) * 2>
+      template<typename _key_t, typename _value_t, int _NibblePos = sizeof(_key_t) * 2>
       class hash_map {
-        using _my_t = hash_map<_KeyT, _ValueT, _NibblePos>;
-        using child_bucket_type = hash_map<_KeyT, _ValueT, _NibblePos - 1>;
+        using _my_t = hash_map<_key_t, _value_t, _NibblePos>;
+        using child_bucket_type = hash_map<_key_t, _value_t, _NibblePos - 1>;
         static constexpr int nibble_pos = _NibblePos;
         template<typename> friend
         class hash_map_iterator;
@@ -132,22 +134,22 @@ namespace xtd{
         class hash_map;
 
         static constexpr int8_t nibble_count = 16;
-        std::atomic<child_bucket_type *> _Buckets[nibble_count];
+        std::atomic<child_bucket_type *> _buckets[nibble_count];
 
       public:
-        using value_type = _ValueT;
-        using key_type = _KeyT;
+        using value_type = _value_t;
+        using key_type = _key_t;
         using iterator_type = hash_map_iterator<_my_t>;
 
         hash_map() {
-          for (auto &oItem : _Buckets) {
+          for (auto &oItem : _buckets) {
             oItem.store(nullptr);
           }
         }
 
         ~hash_map(){
           for (int8_t i=0 ; i<nibble_count ; ++i){
-            auto pItem = _Buckets[i].load();
+            auto pItem = _buckets[i].load();
             if (pItem){
               delete pItem;
             }
@@ -158,24 +160,34 @@ namespace xtd{
 
         hash_map &operator=(const hash_map &) = delete;
 
+        size_t unsafe_count() const {
+          size_t iRet = 0;
+          for (int8_t i = 0; i < nibble_count; ++i) {
+            auto pChild = _buckets[i].load();
+            if (!pChild) continue;
+            iRet += pChild->unsafe_count();
+          }
+          return iRet;
+        }
+
         /** concurrently insert a new value associated with a key
         @param Key key to use for indexing
         @param Value the value to insert
         @returns true if insert was successful
         */
-        bool insert(const key_type &Key, value_type &&Value) {
+        bool insert(const key_type &Key, const value_type &Value) {
           auto x = intrinsic_cast(Key);
           int Index = (x & 0xf);
-          auto pChild = _Buckets[Index].load();
+          auto pChild = _buckets[Index].load();
           if (!pChild) {
             pChild = new child_bucket_type;
             child_bucket_type *pNullBucket = nullptr;
-            if (!_Buckets[Index].compare_exchange_strong(pNullBucket, pChild)) {
+            if (!_buckets[Index].compare_exchange_strong(pNullBucket, pChild)) {
               delete pChild;
             }
           }
           x >>= 4;
-          return pChild->insert(intrinsic_cast(x), std::forward<value_type>(Value));
+          return pChild->insert(intrinsic_cast(x), Value);
         }
 
         /** concurrently search for an existing key
@@ -185,7 +197,7 @@ namespace xtd{
         bool exists(const key_type &Key) const {
           auto x = intrinsic_cast(Key);
           int Index = (x & 0xf);
-          auto pChild = _Buckets[Index].load();
+          auto pChild = _buckets[Index].load();
           x >>= 4;
           return (pChild ? pChild->exists(intrinsic_cast(x)) : false);
         }
@@ -197,7 +209,7 @@ namespace xtd{
         bool remove(const key_type &Key) {
           auto x = intrinsic_cast(Key);
           int Index = (x & 0xf);
-          auto pChild = _Buckets[Index].load();
+          auto pChild = _buckets[Index].load();
           if (pChild) {
             x >>= 4;
             return pChild->remove(intrinsic_cast(x));
@@ -213,10 +225,10 @@ namespace xtd{
         value_type &operator[](const key_type &Key) {
           auto x = intrinsic_cast(Key);
           int Index = (x & 0xf);
-          auto pChild = _Buckets[Index].load();
+          auto pChild = _buckets[Index].load();
           if (!pChild) {
             insert(Key, value_type());
-            pChild = _Buckets[Index].load();
+            pChild = _buckets[Index].load();
           }
           x >>= 4;
           return pChild->operator[](intrinsic_cast(x));
@@ -245,7 +257,7 @@ namespace xtd{
           child_bucket_type *pChildBucket;
           for (*pKey = 0; *pKey < nibble_count; ++*pKey) {
             value_type *pRet;
-            if ((pChildBucket = _Buckets[*pKey].load()) && (pRet = pChildBucket->_begin(1 + pKey))) {
+            if ((pChildBucket = _buckets[*pKey].load()) && (pRet = pChildBucket->_begin(1 + pKey))) {
               return pRet;
             }
           }
@@ -256,7 +268,7 @@ namespace xtd{
           child_bucket_type *pChildBucket;
           for (*pKey = nibble_count - 1; *pKey >= 0; --*pKey) {
             value_type *pRet;
-            if ((pChildBucket = _Buckets[*pKey].load()) && (pRet = pChildBucket->_back(1 + pKey))) {
+            if ((pChildBucket = _buckets[*pKey].load()) && (pRet = pChildBucket->_back(1 + pKey))) {
               return pRet;
             }
           }
@@ -270,7 +282,7 @@ namespace xtd{
           }
           for (; *pKey < nibble_count; ++*pKey) {
             value_type *pRet;
-            if ((pChildBucket = _Buckets[*pKey].load()) && (pRet = pChildBucket->_next(1 + pKey))) {
+            if ((pChildBucket = _buckets[*pKey].load()) && (pRet = pChildBucket->_next(1 + pKey))) {
               return pRet;
             }
           }
@@ -285,7 +297,7 @@ namespace xtd{
           }
           for (; *pKey >= 0; --*pKey) {
             value_type *pRet;
-            if ((pChildBucket = _Buckets[*pKey].load()) && (pRet = pChildBucket->_prev(1 + pKey))) {
+            if ((pChildBucket = _buckets[*pKey].load()) && (pRet = pChildBucket->_prev(1 + pKey))) {
               return pRet;
             }
           }
@@ -297,45 +309,53 @@ namespace xtd{
 
 #if (!DOXY_INVOKED)
 
-      template<typename _KeyT, typename _ValueT>
-      class hash_map<_KeyT, _ValueT, 1> {
+      template<typename _key_t, typename _value_t>
+      class hash_map<_key_t, _value_t, 1> {
         template<typename, typename, int> friend
         class hash_map;
 
         static constexpr int nibble_pos = 1;
         static constexpr int8_t nibble_count = 16;
-        std::atomic<_ValueT *> _Values[nibble_count];
+        std::atomic<_value_t *> _values[nibble_count];
       public:
-        using _my_t = hash_map<_KeyT, _ValueT, 1>;
-        using value_type = _ValueT;
-        using key_type = _KeyT;
+        using _my_t = hash_map<_key_t, _value_t, 1>;
+        using value_type = _value_t;
+        using key_type = _key_t;
 
 
         hash_map() {
-          for (auto &oItem : _Values) {
+          for (auto &oItem : _values) {
             oItem.store(nullptr);
           }
         }
 
         ~hash_map(){
           for (int8_t i=0 ; i<nibble_count ; ++i){
-            auto pItem = _Values[i].load();
+            auto pItem = _values[i].load();
             if (pItem){
               delete pItem;
             }
           }
         }
 
-        bool insert(const key_type &Key, value_type &&Value) {
+        size_t unsafe_count() const {
+          size_t iRet = 0;
+          for (int8_t i=0 ; i<nibble_count ; ++i){ 
+            if (_values[i].load()) ++iRet;
+          }
+          return iRet;
+        }
+
+        bool insert(const key_type &Key, const value_type &Value) {
           auto x = intrinsic_cast(Key);
           int Index = (x & 0xf);
-          auto pValue = _Values[Index].load();
+          auto pValue = _values[Index].load();
           if (pValue) {
             return false;
           }
-          pValue = new value_type(std::forward<value_type>(Value));
+          pValue = new value_type(Value);
           value_type *pNullValue = nullptr;
-          if (!_Values[Index].compare_exchange_strong(pNullValue, pValue)) {
+          if (!_values[Index].compare_exchange_strong(pNullValue, pValue)) {
             delete pValue;
             return false;
           }
@@ -345,9 +365,9 @@ namespace xtd{
         bool remove(const key_type &Key) {
           auto x = intrinsic_cast(Key);
           int Index = (x & 0xf);
-          auto pVal = _Values[Index].load();
+          auto pVal = _values[Index].load();
           value_type *pNullValue = nullptr;
-          if (pVal && _Values[Index].compare_exchange_strong(pVal, pNullValue)) {
+          if (pVal && _values[Index].compare_exchange_strong(pVal, pNullValue)) {
             delete pVal;
             return true;
           }
@@ -357,20 +377,20 @@ namespace xtd{
         bool exists(const key_type &Key) const {
           auto x = intrinsic_cast(Key);
           int Index = (x & 0xf);
-          auto pVal = _Values[Index].load();
+          auto pVal = _values[Index].load();
           return (pVal ? true : false);
         }
 
         value_type &operator[](const key_type &Key) {
           auto x = intrinsic_cast(Key);
           int Index = (x & 0xf);
-          auto pRet = _Values[Index].load();
+          auto pRet = _values[Index].load();
           if (!pRet) {
             pRet = new value_type;
             value_type *pNull = nullptr;
-            if (!_Values[Index].compare_exchange_strong(pNull, pRet)) {
+            if (!_values[Index].compare_exchange_strong(pNull, pRet)) {
               delete pRet;
-              pRet = _Values[Index].load();
+              pRet = _values[Index].load();
             }
           }
           XTD_ASSERT(pRet);
@@ -382,7 +402,7 @@ namespace xtd{
         value_type *_begin(int8_t *pKey) const {
           for (*pKey = 0; *pKey < nibble_count; ++*pKey) {
             value_type *pRet;
-            if ((pRet = _Values[*pKey].load())) {
+            if ((pRet = _values[*pKey].load())) {
               return pRet;
             }
           }
@@ -392,7 +412,7 @@ namespace xtd{
         value_type *_back(int8_t *pKey) const {
           for (*pKey = nibble_count - 1; *pKey >= 0; --*pKey) {
             value_type *pRet;
-            if ((pRet = _Values[*pKey].load())) {
+            if ((pRet = _values[*pKey].load())) {
               return pRet;
             }
           }
@@ -405,7 +425,7 @@ namespace xtd{
           }
           for (; *pKey < nibble_count; ++*pKey) {
             value_type *pRet;
-            if ((pRet = _Values[*pKey].load())) {
+            if ((pRet = _values[*pKey].load())) {
               return pRet;
             }
           }
@@ -419,7 +439,7 @@ namespace xtd{
           }
           for (; *pKey >= 0; --*pKey) {
             value_type *pRet;
-            if ((pRet = _Values[*pKey].load())) {
+            if ((pRet = _values[*pKey].load())) {
               return pRet;
             }
           }
@@ -428,6 +448,10 @@ namespace xtd{
         }
 
       };
+
+
+
+
     }
 #endif
 
