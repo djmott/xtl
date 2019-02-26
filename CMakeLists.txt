@@ -284,6 +284,10 @@ set(XTD_NLP_HEADERS
 set(XTD_WINDOWS_HEADERS
   include/xtd/windows/debug_help.hpp
   include/xtd/windows/image_help.hpp
+  include/xtd/windows/pipe.hpp
+  include/xtd/windows/registry.hpp
+  include/xtd/windows/service.hpp
+  include/xtd/windows/tool_help.hpp
 )
 
 set(XTD_HEADERS
