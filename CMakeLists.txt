@@ -92,6 +92,8 @@ if(XTL_BUILD_TESTS)
   add_subdirectory(tests)
 endif()
 
+add_subdirectory(src)
+
 #[[
 cmake_minimum_required(VERSION 3.0)
 

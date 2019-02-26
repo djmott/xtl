@@ -10,10 +10,10 @@ load and invoke methods in a dynamic library
 
 #if (XTD_OS_UNIX & XTD_OS)
   #include <dlfcn.h>
-  #include <memory>
 #endif
 
 #include <map>
+#include <memory>
 
 #if(XTD_OS_WINDOWS & XTD_OS)
   #include <xtd/exception.hpp>

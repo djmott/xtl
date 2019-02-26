@@ -1,12 +1,17 @@
 /** @file definitions common to win32 and win64
  * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
  */
-#include <xtd/windows/debug_help.hpp>
-#include <xtd/windows/image_help.hpp>
+#include <xtd/xtd.hpp>
+
 #include <string>
 #include <stack>
-#include <dbghelp.h>
 #include <unordered_map>
+#include <deque>
+#include <thread>
+#include <dbghelp.h>
+
+#include <xtd/windows/debug_help.hpp>
+#include <xtd/windows/image_help.hpp>
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -37,8 +42,7 @@ namespace {
         IMAGEHLP_LINE _LineInfo;
     };
     namespace {
-        thread_local std::stack<std::string> _ThreadStack;
-        thread_local bool _InTrace = false;
+		__declspec(thread) bool _InTrace = false;
 
         struct event_trace {
 
@@ -89,19 +93,10 @@ namespace {
 
             event_trace() {
                 SymSetOptions(SYMOPT_DEBUG | SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES);
-                TODO("Fix me")
-                if (
-                        !SymInitialize(xtd::process::this_process(), nullptr, TRUE) ||
-                        //        !SymRegisterCallback(xtd::process::this_process(), &sym_callback, this) ||
-                        !SymLoadModuleEx(xtd::process::this_process(), nullptr,
-                                         xtd::executable::this_executable().path().string().c_str(), nullptr, 0, 0,
-                                         nullptr, 0)
-                        ) {
-                    auto sErr = xtd::tstring::format("Unable to initialize symbol handler.\nGetLastError returned: ",
-                                                     static_cast<uint32_t>(GetLastError()));
-                    MessageBox(nullptr, sErr.c_str(), __("Error"), MB_OK | MB_ICONERROR);
-                }
-
+				xtd::windows::exception::throw_if(SymInitialize(xtd::process::this_process(), nullptr, TRUE), [](BOOL b){return !b; });
+				xtd::windows::exception::throw_if(SymLoadModuleEx(xtd::process::this_process(), nullptr,
+					xtd::executable::this_executable().path().string().c_str(), nullptr, 0, 0, nullptr, 0),
+					[](DWORD64 d){return !d; });
             }
 
 
@@ -124,12 +119,13 @@ namespace {
     }
 
     extern "C" {
-    void __xtd_EventEnter(void *pAddr) {
-        _EventTrace.enter(pAddr);
-    }
 
-    void __xtd_EventLeave(void *addr) {
-        _EventTrace.leave(addr);
-    }
-    }
+#if defined(_M_X64)
+    void __xtd_EventEnter(void *pAddr) { _EventTrace.enter(pAddr); }
+    void __xtd_EventLeave(void *addr) { _EventTrace.leave(addr); }
+#else
+		void _xtd_EventEnter(void *pAddr) { _EventTrace.enter(pAddr); }
+		void _xtd_EventLeave(void *addr) { _EventTrace.leave(addr); }
+#endif
+	}
 }

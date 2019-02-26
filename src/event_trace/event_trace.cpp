@@ -6,7 +6,5 @@
 #include <xtd/executable.hpp>
 #include <xtd/log.hpp>
 
-#if (XTD_USE_DBGHELP)
 #include "dbghelp_common.inl"
-#endif
 

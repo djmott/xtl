@@ -14,6 +14,7 @@ generic and special purpose exceptions
 
 #include <exception>
 #include <string>
+#include <cstdint>
 
 #include <xtd/source_location.hpp>
 

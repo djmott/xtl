@@ -311,83 +311,11 @@ namespace xtd{
     #define XTD_HAS_EXP_FILESYSTEM @XTD_HAS_EXP_FILESYSTEM@
 #endif
 
-TODO("Move these")
-#if 0
-
-//System
-#if (XTD_OS_UNIX & XTD_OS)
-  #if !defined(_GNU_SOURCE)
-    #define _GNU_SOURCE
-  #endif
-#endif
-
-#if (XTD_OS_WINDOWS & XTD_OS || XTD_COMPILER_MINGW & XTD_COMPILER)
-  #if !defined(_WIN32_WINNT)
-    #define _WIN32_WINNT 0x600
-  #endif
-
-  #include <winsock2.h>
-  #include <windows.h>
-  #include <Shlwapi.h>
-  #include <Shlobj.h>
-#endif
-
-
-
-#if !defined(interface)
-  #define interface struct
-#endif
-
-
-
-#if !defined(XTD_LOG_TARGET_SYSLOG)
-    #define XTD_LOG_TARGET_SYSLOG @XTD_LOG_TARGET_SYSLOG@
-#endif
-
-#if !defined(XTD_LOG_TARGET_WINDBG)
-    #define XTD_LOG_TARGET_WINDBG @XTD_LOG_TARGET_WINDBG@
-#endif
-
-#if !defined(XTD_LOG_TARGET_CSV)
-    #define XTD_LOG_TARGET_CSV @XTD_LOG_TARGET_CSV@
-#endif
-
-#if !defined(XTD_LOG_TARGET_COUT)
-    #define XTD_LOG_TARGET_COUT @XTD_LOG_TARGET_COUT@
-#endif
-
-#if !defined(XTD_LOG_TARGET_XML)
-    #define XTD_LOG_TARGET_XML @XTD_LOG_TARGET_XML@
-#endif
-
-#if !defined(XTD_HAS_UUID)
-    #define XTD_HAS_UUID @XTD_HAS_UUID@
-#endif
-
-#if !defined(XTD_COLOR_MESSAGES)
-    #define XTD_COLOR_MESSAGES @XTD_COLOR_MESSAGES@
-#endif
-
-#if !defined(XTD_HAS_CODECVT)
-    #define XTD_HAS_CODECVT @XTD_HAS_CODECVT@
-#endif
-
-#if !defined(XTD_HAS_EXP_CODECVT)
-    #define XTD_HAS_EXP_CODECVT @XTD_HAS_EXP_CODECVT@
-#endif
-
-#if !defined(XTD_HAS_ICONV)
-    #define XTD_HAS_ICONV @XTD_HAS_ICONV@
-#endif
-
-
-
-#if !defined(XTD_USE_DBGHELP)
-    #define XTD_USE_DBGHELP @XTD_USE_DBGHELP@
-#endif
-
-#if (XTD_HAS_UUID)
-  #include "@XTD_UUID_H@"
-#endif
-
+#if (XTD_COMPILER_MSVC == XTD_COMPILER)
+	#if (1800 == _MSC_VER)
+		#define _ALLOW_KEYWORD_MACROS
+		#define thread_local __declspec(thread)
+		#define constexpr const
+		#define noexcept
+	#endif
 #endif
