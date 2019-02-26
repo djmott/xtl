@@ -31,6 +31,10 @@
 
 #include <xtd/source_location.hpp>
 #include <xtd/xstring.hpp>
+#include <xtd/filesystem.hpp>
+#include <xtd/executable.hpp>
+#include <xtd/meta.hpp>
+#include <xtd/process.hpp>
 
 #define FATAL(...) xtd::log::get().write(xtd::log::type::fatal, here(), __VA_ARGS__)
 #define ERR(...)  xtd::log::get().write(xtd::log::type::error, here(), __VA_ARGS__)
@@ -209,13 +213,12 @@ namespace xtd {
       std::mutex _FileLock;
     public:
 
-
       void operator()(const message::pointer_type& oMsg) override {
         static thread_local size_t _StackDepth = 1;
         if (type::leave == oMsg->_type) --_StackDepth;
         std::string sMsgPrefix(_StackDepth, ',');
         std::hash<std::thread::id> oHash;
-        auto sMsg = xtd::cstring::format(oHash(oMsg->_tid), ",", oMsg->_time.time_since_epoch().count(), ",", type_string(oMsg->_type), ",", oMsg->_location.file(), ",", oMsg->_location.line(), sMsgPrefix, oMsg->_text);
+        auto sMsg = xtd::cstring::Format(oHash(oMsg->_tid), ",", oMsg->_time.time_since_epoch().count(), ",", type_string(oMsg->_type), ",", oMsg->_location.file(), ",", oMsg->_location.line(), sMsgPrefix, oMsg->_text);
         if (type::enter == oMsg->_type) ++_StackDepth;
         std::unique_lock<std::mutex> oLock(_FileLock);
         _logfile << sMsg << '\n';
@@ -225,7 +228,7 @@ namespace xtd {
         auto oLogPath = xtd::filesystem::home_directory_path();
         oLogPath /= xtd::executable::this_executable().path().filename();
         if (!xtd::filesystem::exists(oLogPath)) xtd::filesystem::create_directories(oLogPath);
-        oLogPath /= xtd::tstring::format(intrinsic_cast(xtd::process::this_process().id()), __(".csv"));
+        oLogPath /= xtd::tstring::Format(intrinsic_cast(xtd::process::this_process().id()), __(".csv"));
         _logfile.open(oLogPath.tstring(), std::ios::out);
       }
     };
@@ -252,7 +255,7 @@ namespace xtd {
     }
 
     log() : _messages(), _callbacks(), _callbackThread(), _callback_lock(), _callbackCheck(), _logTargets()
-        ,_callbackThreadStarted(), _callbackThreadFinished()
+      , _callbackThreadStarted(), _callbackThreadFinished(), _callbackThreadExit(false)
     {
 
 #if (XTD_LOG_TARGET_SYSLOG)
@@ -288,7 +291,7 @@ namespace xtd {
     log_target::vector_type _logTargets;
     std::promise<void> _callbackThreadStarted;
     std::promise<void> _callbackThreadFinished;
-    bool _callbackThreadExit = false;
+    bool _callbackThreadExit;
 
   public:
 

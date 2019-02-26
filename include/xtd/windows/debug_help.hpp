@@ -59,17 +59,17 @@ namespace xtd {
       struct source_file : xtd::filesystem::path {
         using vector = std::vector<source_file>;
 
-        source_file(const source_file& src) noexcept : xtd::filesystem::path(src), _base(src._base) {}
-        source_file(source_file&& src) noexcept : xtd::filesystem::path(std::move(src)), _base(src._base) {}
+        source_file(const source_file& src)  : xtd::filesystem::path(src), _base(src._base) {}
+        source_file(source_file&& src) : xtd::filesystem::path(std::move(src)), _base(src._base) {}
 
-        source_file& operator=(const source_file& src) noexcept {
+        source_file& operator=(const source_file& src) {
           if (this == &src) return *this;
           xtd::filesystem::path::operator=(src);
           _base = src._base;
           return *this;
         }
 
-        source_file& operator=(source_file&& src) noexcept {
+        source_file& operator=(source_file&& src) {
           if (this == &src) return *this;
           _base = src._base;
           xtd::filesystem::path::operator=(std::move(src));
