@@ -8,8 +8,9 @@ specializations of std::basic_string for advanced and common string handling
 #include <xtd/xtd.hpp>
 
 #if (XTD_OS_WINDOWS & XTD_OS)
-#include <tchar.h>
-#include <windows.h>
+  #include <tchar.h>
+  #include <windows.h>
+  #pragma comment(lib, "crypt32")
 #pragma comment(lib, "crypt32")
 #endif
 
@@ -266,6 +267,11 @@ namespace xtd {
 
   template <> template <>
   inline xstring<char>& xstring<char>::from<char *>(char * const& val) {
+    return (*this = val);
+  }
+  
+  template <> template <>
+  inline xstring<wchar_t>& xstring<wchar_t>::from<wchar_t*>(wchar_t*const& val) {
     return (*this = val);
   }
 

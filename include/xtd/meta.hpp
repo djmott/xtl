@@ -7,6 +7,7 @@
 #include <xtd/xtd.hpp>
 
 #include <cstdint>
+
 #include <functional>
 
 /// @def RAII general purpose Resource Acquisition Is Initialization idiom to perform exception safe cleanup by executing arbitrary code when a scope exits
