@@ -11,6 +11,7 @@ handle necessary filesystem and path functionality until C++17 is finalized
   #include <windows.h>
 	#include <ShlObj.h>
 	#include <Shlwapi.h>
+  #pragma comment(lib, "shlwapi")
 #endif
 
 #if (XTD_OS_UNIX & XTD_OS)
@@ -97,7 +98,7 @@ namespace xtd{
 
       xtd::cstring string() const { return cstring().from(_str); }
 
-      ///appends a perferred separator and path element
+      ///appends a preferred separator and path element
       path& append(const path& src) {
         if (preferred_separator != _str.back() && not_preferred_separator != _str.back()
             && preferred_separator != src._str.front() && not_preferred_separator != src._str.front())
@@ -110,6 +111,7 @@ namespace xtd{
       }
 
       path& operator/=(const path& src) { return append(src); }
+      path& operator/=(const xtd::tstring& src){ return append(src); }
       path& operator+=(const path& src) { _str.append(src._str); return *this; }
 
       //replaces all non-preferred separators with preferred separators
@@ -127,6 +129,15 @@ namespace xtd{
         if (xtd::tstring::npos != isep) _str.erase(isep);
         return *this;
       }
+
+#if (XTD_OS_WINDOWS & XTD_OS)
+      path& remove_path(){
+        make_preferred();
+        auto i = _str.rfind(preferred_separator, _str.length());
+        if (xtd::tstring::npos != i) *this = _str.substr(1 + i, _str.length() - i);
+        return *this;
+      }
+#endif
 
       path& replace_filename(const path& replacement){
         remove_filename();
@@ -159,6 +170,13 @@ namespace xtd{
       auto sTemp = xtd::tstring().from(sRet);
       ::CoTaskMemFree(sRet);
       return path(sTemp);
+    }
+
+    inline path data_directory_path(){
+      tstring sTemp(MAX_PATH, 0);
+      xtd::windows::exception::throw_if(SHGetSpecialFolderPath(nullptr, &sTemp[0], CSIDL_COMMON_APPDATA, FALSE), [](BOOL b){ return !b; });
+      //xtd::windows::exception::throw_if(::SHGetKnownFolderPath(FOLDERID_ProgramData, KF_FLAG_CREATE, nullptr, &sTemp[0]), [](HRESULT h) { return FAILED(h); });
+      return path(sTemp.c_str());
     }
 
     inline path temp_directory_path() {

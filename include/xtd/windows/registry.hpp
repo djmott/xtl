@@ -13,14 +13,12 @@ namespace xtd {
 			template <typename _ty> struct value_proxy;
 			template <> struct value_proxy<ustring> {
 				static void set(HKEY hKey, const tstring& name, const ustring& newval) {
-					xtd::windows::exception::throw_if(RegSetValueExW(hKey, ustring().from(name).c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(ustring().from(newval).c_str()), sizeof(TCHAR) * static_cast<DWORD>(1 + newval.size())),
-						[](LONG l) { return ERROR_SUCCESS != l; });
+					xtd::windows::exception::throw_err(RegSetValueExW(hKey, ustring().from(name).c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(ustring().from(newval).c_str()), sizeof(TCHAR) * static_cast<DWORD>(1 + newval.size())));
 				}
 			};
 			template <> struct value_proxy<cstring> {
 				static void set(HKEY hKey, const tstring& name, const cstring& newval) {
-					xtd::windows::exception::throw_if(RegSetValueExA(hKey, cstring().from(name).c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(cstring().from(newval).c_str()), static_cast<DWORD>(1 + newval.size())),
-						[](LONG l) { return ERROR_SUCCESS != l; });
+					xtd::windows::exception::throw_err(RegSetValueExA(hKey, cstring().from(name).c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(cstring().from(newval).c_str()), static_cast<DWORD>(1 + newval.size())));
 				}
 			};
 
@@ -30,15 +28,13 @@ namespace xtd {
 
 			template <> struct value_proxy<std::string> {
 				static void set(HKEY hKey, const tstring& name, const std::string& newval) {
-					xtd::windows::exception::throw_if(RegSetValueExA(hKey, cstring().from(name).c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(cstring().from(newval).c_str()), static_cast<DWORD>(1 + newval.size())),
-						[](LONG l) { return ERROR_SUCCESS != l; });
+					xtd::windows::exception::throw_err(RegSetValueExA(hKey, cstring().from(name).c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(cstring().from(newval).c_str()), static_cast<DWORD>(1 + newval.size())));
 				}
 			};
 
 			template <> struct value_proxy<int> {
 				static void set(HKEY hKey, const tstring& name, const int& newval) {
-					xtd::windows::exception::throw_if(RegSetValueExW(hKey, ustring().from(name).c_str(), 0, REG_DWORD, reinterpret_cast<const BYTE*>(&newval), sizeof(int)),
-						[](LONG l) { return ERROR_SUCCESS != l; });
+					xtd::windows::exception::throw_err(RegSetValueExW(hKey, ustring().from(name).c_str(), 0, REG_DWORD, reinterpret_cast<const BYTE*>(&newval), sizeof(int)));
 				}
 			};
 		}
@@ -55,7 +51,7 @@ namespace xtd {
 			struct value_proxy {
 				void Delete() const {
 					assert(_parent);
-					xtd::windows::exception::throw_if(::RegDeleteValue(*_parent, _name.c_str()), [](LONG l) {return ERROR_SUCCESS != l; });
+					xtd::windows::exception::throw_err(::RegDeleteValue(*_parent, _name.c_str()));
 				}
 				template <typename _ty> void operator=(const _ty& newval) { _::value_proxy<_ty>::set(*_parent, _name, newval); }
 				template <typename _ty> operator _ty();
@@ -74,8 +70,7 @@ namespace xtd {
 
 			ptr CreateKey(const tstring& path) {
 				HKEY hKey;
-				xtd::windows::exception::throw_if(RegCreateKeyEx(_key, path.c_str(), 0, nullptr, 0, KEY_ALL_ACCESS, nullptr, &hKey, nullptr),
-					[](LONG l){ return ERROR_SUCCESS != l; });
+				xtd::windows::exception::throw_err(RegCreateKeyEx(_key, path.c_str(), 0, nullptr, 0, KEY_ALL_ACCESS, nullptr, &hKey, nullptr));
 				return ptr(new registry(shared_from_this(), hKey));
 			}
 
@@ -94,21 +89,21 @@ namespace xtd {
 
 			bool ValueExists(const tstring& name) const {
 				DWORD dwNameLen = 0;
-				xtd::windows::exception::throw_if(RegQueryInfoKey(_key, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, &dwNameLen, nullptr, nullptr, nullptr), [](LONG l){ return ERROR_SUCCESS != l; });
+				xtd::windows::exception::throw_err(RegQueryInfoKey(_key, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, &dwNameLen, nullptr, nullptr, nullptr));
 				LONG lRet = ERROR_SUCCESS;
 				for (DWORD i = 0; ERROR_SUCCESS == lRet; ++i) {
 					tstring sValueName(dwNameLen, 0);
 					auto iLen = dwNameLen;
 					iLen++;
-					xtd::windows::exception::throw_if(lRet = RegEnumValue(_key, i, &sValueName[0], &iLen, 0, nullptr, nullptr, nullptr), [](LONG l){ return ERROR_SUCCESS != l; });
+					xtd::windows::exception::throw_err(lRet = RegEnumValue(_key, i, &sValueName[0], &iLen, 0, nullptr, nullptr, nullptr));
 					if (!name.compare(sValueName.c_str())) return true;
 				}
 				return false;
 			}
 
-			void DeleteKey(const tstring& name) const { xtd::windows::exception::throw_if(RegDeleteKey(_key, name.c_str()), [](LONG l){ return ERROR_SUCCESS != l; }); }
+			void DeleteKey(const tstring& name) const { xtd::windows::exception::throw_err(RegDeleteKey(_key, name.c_str())); }
 
-			void DeleteValue(const tstring& name) const { xtd::windows::exception::throw_if(RegDeleteValue(_key, name.c_str()), [](LONG l){ return ERROR_SUCCESS != l; }); }
+			void DeleteValue(const tstring& name) const { xtd::windows::exception::throw_err(RegDeleteValue(_key, name.c_str())); }
 		private:
 			registry(weak_ptr oParent, HKEY hKey) : _parent(oParent), _key(hKey){}
 			registry(HKEY hKey) : _key(hKey){}

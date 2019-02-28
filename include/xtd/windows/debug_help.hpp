@@ -12,8 +12,14 @@ object oriented access to the dbghelp library
 #include <mutex>
 #include <map>
 
+#if((XTD_COMPILER_MSVC | XTD_COMPILER_INTEL | XTD_COMPILER_CLANG) & XTD_COMPILER)
+  #pragma comment(lib, "dbghelp")
+#endif
+
+#include <xtd/meta.hpp>
 #include <xtd/callback.hpp>
 #include <xtd/process.hpp>
+
 
 namespace xtd {
   namespace windows {
@@ -33,27 +39,26 @@ namespace xtd {
       private:
 
         TODO("fix me");
-//        using sym_callback_fn_type = typename xtd::get_parameter<1, decltype(SymRegisterCallback)>::type;
+        //using sym_callback_fn_type = get_parameter<1, decltype(SymRegisterCallback)>::type;
 
 
         initializer() {
           xtd::windows::exception::throw_if(SymInitialize(xtd::process::this_process(), nullptr, TRUE), [](BOOL b) { return !b; });
           TODO("Fix me")
-//           xtd::windows::exception::throw_if(SymRegisterCallback(xtd::process::this_process(), &sym_callback, this), [](BOOL b) { return !b; });
-
+          //xtd::windows::exception::throw_if(SymRegisterCallback(xtd::process::this_process(), &sym_callback, this), [](BOOL b) { return !b; });
         }
+
         TODO("Fix me")
-/*
-        static BOOL CALLBACK sym_callback(HANDLE hProcess, ULONG ActionCode, 
-          typename xtd::get_parameter<2, sym_callback_fn_type>::type CallbackData,
-          PVOID UserContext) {
+          /*
+        static BOOL CALLBACK sym_callback(HANDLE hProcess, ULONG ActionCode, get_parameter<2, sym_callback_fn_type>::type CallbackData,PVOID UserContext) {
           auto pThis = reinterpret_cast<initializer*>(UserContext);
           if (CBA_DEBUG_INFO == ActionCode) {
             pThis->on_debug_info(reinterpret_cast<const TCHAR*>(CallbackData));
           }
           return TRUE;
         }
-*/
+        */
+
       };
 
       struct source_file : xtd::filesystem::path {

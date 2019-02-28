@@ -7,7 +7,6 @@
 #include <xtd/xtd.hpp>
 
 #include <cstdint>
-
 #include <functional>
 
 /// @def RAII general purpose Resource Acquisition Is Initialization idiom to perform exception safe cleanup by executing arbitrary code when a scope exits
@@ -21,8 +20,8 @@ namespace xtd{
      */
     class _RAII{
     public:
-      template <typename _Ty>
-      _RAII(_Ty newval) : _fn(newval){}
+      template <typename _ty>
+      _RAII(_ty newval) : _fn(newval){}
       ~_RAII(){ _fn(); }
       std::function<void()> _fn;
     };
@@ -31,21 +30,21 @@ namespace xtd{
 
   template <typename...> using void_t = void;
 
-  template <typename _Ty> constexpr uint32_t hidword(_Ty value){
-    static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
+  template <typename _ty> constexpr uint32_t hidword(_ty value){
+    static_assert(sizeof(_ty) > 4, "parameter is <= 32 bits wide");
     return ((uint32_t)(((value) >> 32) & 0xffffffff));
   }
-  template <typename _Ty> constexpr uint32_t lodword(_Ty value){
-    static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
+  template <typename _ty> constexpr uint32_t lodword(_ty value){
+    static_assert(sizeof(_ty) > 4, "parameter is <= 32 bits wide");
     return ((uint32_t)((value) & 0xffffffff));
   }
 
 
   /** meta-function to get the intrinsic of a specified size
-  @tparam _Size size
+  @tparam _size size
   @return intrinsic of specified size
   */
-  template <int _Size> struct intrinsic_of_size;
+  template <int _size> struct intrinsic_of_size;
 #if (!DOXY_INVOKED)
   template <> struct intrinsic_of_size<1>{ using type = uint8_t; };
   template <> struct intrinsic_of_size<2>{ using type = uint16_t; };
@@ -56,37 +55,37 @@ namespace xtd{
 #endif
 
   /** meta-function to get the processor intrinsic storage for a type. should work with 8, 16, 32 and 64 bit processors
-  @tparam _Ty type
+  @tparam _ty type
   @return intrinsic storage
   */
-  template <typename _Ty> struct processor_intrinsic{
+  template <typename _ty> struct processor_intrinsic{
     /// processor intrinsic of pointer type
-    using type = typename intrinsic_of_size<sizeof(_Ty)>::type;
+    using type = typename intrinsic_of_size<sizeof(_ty)>::type;
   };
 #if (!DOXY_INVOKED)
-  template <typename _Ty> struct processor_intrinsic<_Ty*>{
-    using type = typename intrinsic_of_size<sizeof(_Ty*)>::type;
+  template <typename _ty> struct processor_intrinsic<_ty*>{
+    using type = typename intrinsic_of_size<sizeof(_ty*)>::type;
   };
 #endif
   /** casts a pointer to the processor intrinsic storage type
   * @param src
   * @return
   */
-  template <typename _Ty> constexpr typename processor_intrinsic<_Ty>::type intrinsic_cast(_Ty src){
+  template <typename _ty> constexpr typename processor_intrinsic<_ty>::type intrinsic_cast(_ty src){
     return src;
   } 
-  template <typename _Ty> constexpr typename processor_intrinsic<_Ty*>::type intrinsic_cast(const _Ty * src){
-    return reinterpret_cast<typename processor_intrinsic<_Ty>::type>(src);
+  template <typename _ty> constexpr typename processor_intrinsic<_ty*>::type intrinsic_cast(const _ty * src){
+    return reinterpret_cast<typename processor_intrinsic<_ty>::type>(src);
   }
 
   /// gets the last element of a parameter pack
   namespace _{
     template <size_t, typename ...> struct last_t;
-    template <size_t _index, typename _HeadT, typename ... _TailT> struct last_t<_index, _HeadT, _TailT...>{
-      using type = typename last_t<_index - 1, _TailT...>::type;
+    template <size_t _index, typename _head_t, typename ... _tail_t> struct last_t<_index, _head_t, _tail_t...>{
+      using type = typename last_t<_index - 1, _tail_t...>::type;
     };
-    template <typename _HeadT> struct last_t<1, _HeadT>{
-      using type = _HeadT;
+    template <typename _head_t> struct last_t<1, _head_t>{
+      using type = _head_t;
     };
   }
   template <typename ... _Tys> struct last{
@@ -98,17 +97,17 @@ namespace xtd{
 
   template <typename ...> struct task;
   template <> struct task<>{
-    template <typename _Ty> _Ty&& operator()(_Ty&& src){ return std::move(src); }
+    template <typename _ty> _ty&& operator()(_ty&& src){ return std::move(src); }
   };
 
-  template <typename _HeadT, typename ... _TailT> struct task<_HeadT, _TailT...>{
-    using final_task = typename last<_HeadT, _TailT...>::type;
+  template <typename _head_t, typename ... _tail_t> struct task<_head_t, _tail_t...>{
+    using final_task = typename last<_head_t, _tail_t...>::type;
     using return_type = decltype( typename std::decay<final_task>::type() );
 
     template <typename _ParamT>
     return_type operator()(_ParamT oParam) const{
-      _HeadT oHead;
-      task<_TailT...> oTail;
+      _head_t oHead;
+      task<_tail_t...> oTail;
       return oTail(oHead(oParam));
     }
 
@@ -118,9 +117,9 @@ namespace xtd{
 
   /// Determine if a type is specified in a list
   template <typename, typename...> struct is_a;
-  template <typename _Ty> struct is_a<_Ty> : std::false_type {};
-  template <typename _Ty, typename ... _TailT> struct is_a<_Ty, _Ty, _TailT...> : std::true_type{ using type = _Ty; };
-  template <typename _Ty, typename _HeadT, typename ... _TailT> struct is_a<_Ty, _HeadT, _TailT...> : is_a<_Ty, _TailT...>{ using type = _Ty; };
+  template <typename _ty> struct is_a<_ty> : std::false_type {};
+  template <typename _ty, typename ... _tail_t> struct is_a<_ty, _ty, _tail_t...> : std::true_type{ using type = _ty; };
+  template <typename _ty, typename _head_t, typename ... _tail_t> struct is_a<_ty, _head_t, _tail_t...> : is_a<_ty, _tail_t...>{ using type = _ty; };
 
 
   
@@ -128,51 +127,51 @@ namespace xtd{
 
   /// Gets the type of a parameter in a method declaration
   namespace _ {
-    template <uint8_t _ParamNum, typename _Ty> struct _get_parameter;
+    template <uint8_t _param_num, typename _ty> struct _get_parameter;
 
-    template <typename _ReturnT, typename _HeadT, typename ... _TailT> struct _get_parameter<0, _ReturnT(_HeadT, _TailT...)> {
-      using type = _HeadT;
+    template <typename _return_t, typename _head_t, typename ... _tail_t> struct _get_parameter<0, _return_t(_head_t, _tail_t...)> {
+      using type = _head_t;
     };
-    template <uint8_t _ParamNum, typename _ReturnT, typename _HeadT, typename ... _TailT> struct _get_parameter<_ParamNum, _ReturnT(_HeadT, _TailT...)> {
-      using type = typename _::template _get_parameter<_ParamNum - 1, _ReturnT(_TailT...)>::type;
+    template <uint8_t _param_num, typename _return_t, typename _head_t, typename ... _tail_t> struct _get_parameter<_param_num, _return_t(_head_t, _tail_t...)> {
+      using type = typename _::template _get_parameter<_param_num - 1, _return_t(_tail_t...)>::type;
     };
   }
 
-  template <uint8_t _ParamNum, typename _Ty> struct get_parameter;
+  template <uint8_t _param_num, typename _ty> struct get_parameter;
 
-  template <uint8_t _ParamNum, typename _ReturnT, typename ... _ArgTs> struct get_parameter<_ParamNum, _ReturnT(_ArgTs...) noexcept> {
-    static_assert(sizeof...(_ArgTs) >= _ParamNum, "Specified parameter index exceeds number of parameters in function");
-    using type = typename _::template _get_parameter<_ParamNum, _ReturnT(_ArgTs...)>::type;
+  template <uint8_t _param_num, typename _return_t, typename ... _ArgTs> struct get_parameter<_param_num, _return_t(_ArgTs...) noexcept> {
+    static_assert(sizeof...(_ArgTs) >= _param_num, "Specified parameter index exceeds number of parameters in function");
+    using type = typename _::template _get_parameter<_param_num, _return_t(_ArgTs...)>::type;
   };
 
   //test for t::type member
   template <typename, typename = void> struct has_type_member : std::false_type{};
-  template <typename _Ty> struct has_type_member<_Ty, void_t<typename _Ty::type>> : std::true_type{};
+  template <typename _ty> struct has_type_member<_ty, void_t<typename _ty::type>> : std::true_type{};
 
   //test for copy assignment
-  template <typename _Ty> using copy_assignment_t = decltype(std::declval<_Ty&>() = std::declval<_Ty const&>());
+  template <typename _ty> using copy_assignment_t = decltype(std::declval<_ty&>() = std::declval<_ty const&>());
   template <typename, typename = void> struct is_copy_assignable : std::false_type{};
-  template <typename _Ty> struct is_copy_assignable<_Ty, void_t<copy_assignment_t<_Ty>>> : std::is_same<copy_assignment_t<_Ty>, _Ty&>{};
+  template <typename _ty> struct is_copy_assignable<_ty, void_t<copy_assignment_t<_ty>>> : std::is_same<copy_assignment_t<_ty>, _ty&>{};
 
   //test for move assignment
-  template <typename _Ty> using move_assignment_t = decltype(std::declval<_Ty&>() = std::declval<_Ty&&>());
+  template <typename _ty> using move_assignment_t = decltype(std::declval<_ty&>() = std::declval<_ty&&>());
   template <typename, typename = void> struct is_move_assignable : std::false_type{};
-  template <typename _Ty> struct is_move_assignable<_Ty, void_t<move_assignment_t<_Ty>>> : std::is_same<move_assignment_t<_Ty>, _Ty&&>{};
+  template <typename _ty> struct is_move_assignable<_ty, void_t<move_assignment_t<_ty>>> : std::is_same<move_assignment_t<_ty>, _ty&&>{};
 
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
 #if (_MSC_VER>1800) //vc2013
   //test for invocation operator
-  template <typename _Ty> using invokation_operator_t = decltype(std::declval<_Ty&>()());
+  template <typename _ty> using invokation_operator_t = decltype(std::declval<_ty&>()());
   template <typename, typename = void> struct is_invokable : std::false_type{};
-  template <typename _Ty> struct is_invokable<_Ty, void_t<invokation_operator_t<_Ty>>> : std::true_type{};
+  template <typename _ty> struct is_invokable<_ty, void_t<invokation_operator_t<_ty>>> : std::true_type{};
 #endif
 #endif
   /**
     meta-function to convert a static upper case ascii character to lower case
-    \tparam _ChT character type
-    \tparam _val value of type _ChT to convert
+    \tparam _ch_t character type
+    \tparam _val value of type _ch_t to convert
    */
-  template <typename _ChT, _ChT _val> struct lower_case { static const _ChT value = _val; };
+  template <typename _ch_t, _ch_t _val> struct lower_case { static const _ch_t value = _val; };
 #if (!DOXY_INVOKED)
   template <> struct lower_case < char, 'A' > { static constexpr char value = 'a'; };
   template <> struct lower_case < char, 'B' > { static constexpr char value = 'b'; };

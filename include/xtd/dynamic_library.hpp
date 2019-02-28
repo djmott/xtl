@@ -126,9 +126,7 @@ public:
     }
   #if (XTD_OS_WINDOWS & XTD_OS)
     ~dynamic_library(){
-      if (_handle){
-        FreeLibrary(_handle);
-      }
+      if (_handle) FreeLibrary(_handle);
     }
   #elif (XTD_OS_UNIX & XTD_OS)
     ~dynamic_library(){
