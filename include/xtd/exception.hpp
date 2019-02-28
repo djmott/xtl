@@ -150,7 +150,7 @@ namespace xtd{
     struct exception : xtd::exception{
     public:
 
-      inline static LRESULT _throw_err(const xtd::source_location& source, LRESULT test, const char * code){
+      inline static LRESULT _throw_err(const xtd::source_location& source, uint32_t test, const char * code){
         if (ERROR_SUCCESS == test) return test;
         throw exception(source, code, test);
       }

@@ -210,156 +210,93 @@ namespace xtd {
 
   };
 
-  template <> inline xstring<char>& xstring<char>::to_lower() {
+  template <> inline cstring& cstring::to_lower() {
     std::transform(begin(), end(), begin(), [](value_type&ch) { return ch = std::tolower(ch); });
     return *this;
   }
 
-  template <> inline xstring<wchar_t>& xstring<wchar_t>::to_lower() {
+  template <> inline ustring& ustring::to_lower() {
     std::transform(begin(), end(), begin(), [](value_type&ch) { return ch = std::towlower(ch); });
     return *this;
   }
 
-  template <> inline xstring<char>& xstring<char>::to_upper() {
+  template <> inline cstring& cstring::to_upper() {
     std::transform(begin(), end(), begin(), [](value_type&ch) { return ch = std::toupper(ch); });
     return *this;
   }
 
-  template <> inline xstring<wchar_t>& xstring<wchar_t>::to_upper() {
+  template <> inline ustring& ustring::to_upper() {
     std::transform(begin(), end(), begin(), [](value_type&ch) { return ch = std::towupper(ch); });
     return *this;
   }
 
-  template <> inline xstring<char>& xstring<char>::ltrim() {
+  template <> inline cstring& cstring::ltrim() {
     erase(begin(), std::find_if(begin(), end(), [](value_type ch) { return !std::isspace(ch); }));
     return *this;
   }
 
-  template <> inline xstring<wchar_t>& xstring<wchar_t>::ltrim() {
+  template <> inline ustring& ustring::ltrim() {
     erase(begin(), std::find_if(begin(), end(), [](value_type ch) { return !std::iswspace(ch); }));
     return *this;
   }
 
-  template <> inline xstring<char>& xstring<char>::rtrim() {
+  template <> inline cstring& cstring::rtrim() {
     erase(std::find_if(rbegin(), rend(), [](value_type ch) {return !std::isspace(ch); }).base(), end());
     return *this;
   }
 
-  template <> inline xstring<wchar_t>& xstring<wchar_t>::rtrim() {
+  template <> inline ustring& ustring::rtrim() {
     erase(std::find_if(rbegin(), rend(), [](value_type ch) {return !std::iswspace(ch); }).base(), end());
     return *this;
   }
 
-  template <> template <>
-  inline xstring<char>& xstring<char>::from<xstring<char>>(const xstring<char>& val) {
-    return (*this = val);
-  }
+  template <> template <> inline cstring& cstring::from<cstring>(const cstring& val) { return (*this = val); }
 
-  template <> template <>
-  inline xstring<char>& xstring<char>::from<std::basic_string<char>>(const std::basic_string<char>& val) {
-    return (*this = val);
-  }
+  template <> template <> inline ustring& ustring::from<ustring>(const ustring& val) { return (*this = val); }
 
-  template <> template <>
-  inline xstring<wchar_t>& xstring<wchar_t>::from<xstring<wchar_t>>(const xstring<wchar_t>& val) {
-    return (*this = val);
-  }
+  template <> template <> inline cstring& cstring::from<std::string>(const std::string& val) { return (*this = val); }
 
-  template <> template <>
-  inline xstring<char>& xstring<char>::from<char *>(char * const& val) {
-    return (*this = val);
-  }
-  
-  template <> template <>
-  inline xstring<wchar_t>& xstring<wchar_t>::from<wchar_t*>(wchar_t*const& val) {
-    return (*this = val);
-  }
+  template <> template <> inline ustring& ustring::from<std::wstring>(const std::wstring& val) { return (*this = val); }
 
-  template <> template <>
-  inline xstring<wchar_t>& xstring<wchar_t>::from<wchar_t*>(wchar_t*const& val) {
-    return (*this = val);
-  }
+  template <> template <> inline cstring& cstring::from<char *>(char * const& val) { return (*this = val); }
 
-  template<> template <>
-  inline cstring& cstring::from<int8_t>(const int8_t& val){
-    return (*this = std::to_string(val));
-  }
+  template <> template <> inline ustring& ustring::from<wchar_t*>(wchar_t*const& val) { return (*this = val); }
 
-  template<> template <>
-  inline ustring& ustring::from<int8_t>(const int8_t& val){
-    return (*this = std::to_wstring(val));
-  }
+  template <> template <> inline ustring& ustring::from<const wchar_t*>(const wchar_t*const& val) { return (*this = val); }
 
-  template<> template <>
-  inline cstring& cstring::from<int16_t>(const int16_t& val){
-    return (*this = std::to_string(val));
-  }
+  template <> template <> inline cstring& cstring::from<const char *>(const char * const& val) { return (*this = val); }
 
-  template<> template <>
-  inline ustring& ustring::from<int16_t>(const int16_t& val){
-    return (*this = std::to_wstring(val));
-  }
+  template<> template <> inline cstring& cstring::from<int8_t>(const int8_t& val){ return (*this = std::to_string(val)); }
 
-  template<> template <>
-  inline cstring& cstring::from<int32_t>(const int32_t& val){
-    return (*this = std::to_string(val));
-  }
+  template<> template <> inline ustring& ustring::from<int8_t>(const int8_t& val){ return (*this = std::to_wstring(val)); }
 
-  template<> template <>
-  inline ustring& ustring::from<int32_t>(const int32_t& val){
-    return (*this = std::to_wstring(val));
-  }
+  template<> template <> inline cstring& cstring::from<uint8_t>(const uint8_t& val) { return (*this = std::to_string(val)); }
 
-  template<> template <>
-  inline cstring& cstring::from<int64_t>(const int64_t& val){
-    return (*this = std::to_string(val));
-  }
+  template<> template <> inline ustring& ustring::from<uint8_t>(const uint8_t& val) { return (*this = std::to_wstring(val)); }
 
-  template<> template <>
-  inline ustring& ustring::from<int64_t>(const int64_t& val){
-    return (*this = std::to_wstring(val));
-  }
+  template<> template <> inline cstring& cstring::from<int16_t>(const int16_t& val){ return (*this = std::to_string(val)); }
 
+  template<> template <> inline ustring& ustring::from<int16_t>(const int16_t& val){ return (*this = std::to_wstring(val)); }
 
-  template<> template <>
-  inline cstring& cstring::from<uint8_t>(const uint8_t& val){
-    return (*this = std::to_string(val));
-  }
+  template<> template <> inline cstring& cstring::from<uint16_t>(const uint16_t& val) { return (*this = std::to_string(val)); }
 
-  template<> template <>
-  inline ustring& ustring::from<uint8_t>(const uint8_t& val){
-    return (*this = std::to_wstring(val));
-  }
+  template<> template <> inline ustring& ustring::from<uint16_t>(const uint16_t& val) { return (*this = std::to_wstring(val)); }
 
-  template<> template <>
-  inline cstring& cstring::from<uint16_t>(const uint16_t& val){
-    return (*this = std::to_string(val));
-  }
+  template<> template <> inline cstring& cstring::from<int32_t>(const int32_t& val){ return (*this = std::to_string(val)); }
 
-  template<> template <>
-  inline ustring& ustring::from<uint16_t>(const uint16_t& val){
-    return (*this = std::to_wstring(val));
-  }
+  template<> template <> inline ustring& ustring::from<int32_t>(const int32_t& val){ return (*this = std::to_wstring(val)); }
 
-  template<> template <>
-  inline cstring& cstring::from<uint32_t>(const uint32_t& val){
-    return (*this = std::to_string(val));
-  }
+  template<> template <> inline cstring& cstring::from<uint32_t>(const uint32_t& val) { return (*this = std::to_string(val)); }
 
-  template<> template <>
-  inline ustring& ustring::from<uint32_t>(const uint32_t& val){
-    return (*this = std::to_wstring(val));
-  }
+  template<> template <> inline ustring& ustring::from<uint32_t>(const uint32_t& val) { return (*this = std::to_wstring(val)); }
 
-  template<> template <>
-  inline cstring& cstring::from<uint64_t>(const uint64_t& val){
-    return (*this = std::to_string(val));
-  }
+  template<> template <> inline cstring& cstring::from<int64_t>(const int64_t& val){ return (*this = std::to_string(val)); }
 
-  template<> template <>
-  inline ustring& ustring::from<uint64_t>(const uint64_t& val){
-    return (*this = std::to_wstring(val));
-  }
+  template<> template <> inline ustring& ustring::from<int64_t>(const int64_t& val){ return (*this = std::to_wstring(val)); }
+
+  template<> template <> inline cstring& cstring::from<uint64_t>(const uint64_t& val){ return (*this = std::to_string(val)); }
+
+  template<> template <> inline ustring& ustring::from<uint64_t>(const uint64_t& val){ return (*this = std::to_wstring(val)); }
 
 
 #if (XTD_OS_WINDOWS & XTD_OS)
@@ -390,9 +327,7 @@ namespace xtd {
     return *this;
   }
 
-  template <> template <> inline ustring& ustring::from<std::string>(const std::string& src){
-    return from(src.c_str());
-  }
+  template <> template <> inline ustring& ustring::from<std::string>(const std::string& src) { return from(src.c_str()); }
 
   template <> template <> inline cstring& cstring::from<ustring>(const ustring& src) {
     int iLen;
@@ -441,14 +376,4 @@ namespace xtd {
 #endif
 
 
-
-  template <> template<> inline cstring& cstring::from<const char*>(const char * const& src){
-    return (*this = src);
-  }
-
-  /*
-  template <> template<> inline cstring& cstring::from<std::string>(const std::string& src){
-    return (*this = src);
-  }
-  */
 }
