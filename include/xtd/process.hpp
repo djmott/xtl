@@ -65,6 +65,21 @@ namespace xtd {
       return _this_process;
     }
 
+    static process create(const xtd::cstring& sPath, std::initializer_list<cstring> cmd_args){
+      if (!xtd::filesystem::exists(sPath)) throw xtd::exception(here(), sPath + " not found.");
+      std::vector<const char*> oArgs;
+      oArgs.push_back(sPath.c_str());
+      for (auto & oItem : cmd_args) oArgs.push_back(oItem.c_str());
+      oArgs.push_back(nullptr);
+      pid_type oPid = fork();
+      if (0==oPid){
+        auto pArgs = &oArgs[0];
+        execv(sPath.c_str(), (char* const*)pArgs);
+      }else{
+        return process(oPid);
+      }
+    }
+
   private:
     pid_type _pid;
 
@@ -74,9 +89,7 @@ namespace xtd {
       void operator()(DIR * d){ closedir(d); }
     };
 
-    explicit process(pid_type hPid) : _pid(hPid) {
-
-    }
+    explicit process(pid_type oPid) : _pid(oPid) {}
   };
 #elif (XTD_OS_WINDOWS & XTD_OS)
 
@@ -118,8 +131,11 @@ namespace xtd {
       _hProcess(hProc), 
       _hMainThread(hMainThread) 
     {}
+
     process(pid_type hPid, handle_type hProc, handle_type hMainThread) : _pid(hPid), _hProcess(hProc), _hMainThread(hMainThread) {}
+
     process(pid_type hPid, handle_type hProc) : process(hPid,hProc,nullptr) {}
+
     explicit process(pid_type hPid) : process(hPid, nullptr, nullptr) {}
 
     process(const process& src) : _pid(src._pid), _hProcess(nullptr), _hMainThread(nullptr) {
@@ -136,6 +152,7 @@ namespace xtd {
       src._hProcess = nullptr;
       src._hMainThread = nullptr;
     }
+
     process& operator=(const process& src){
       _pid = src._pid;
       _hProcess = nullptr;
@@ -148,6 +165,7 @@ namespace xtd {
       }
       return *this;
     }
+
     process& operator=(process&& src){
       std::swap(_pid, src._pid);
       std::swap(_hProcess, src._hProcess);
@@ -214,8 +232,6 @@ namespace xtd {
         , nullptr, nullptr, &si, &pi), [](BOOL b) { return !b; });
       return process(oPath, pi.dwProcessId, pi.hProcess, pi.hThread);
     }
-
-
 
     unowned_thread::vector threads() const {}
 

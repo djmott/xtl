@@ -13,6 +13,7 @@ transport neutral light weight IPC/RPC library
 #include <future>
 #include <cassert>
 #include <vector>
+#include <xtd/concurrent/hash_map.hpp>
 
 #if(XTD_OS_WINDOWS & XTD_OS)
   #include <xtd/windows/pipe.hpp>
@@ -83,6 +84,7 @@ namespace xtd{
       }
     };
 
+
     //string&
     template <typename ... _tail_ts> struct marshaler<false, std::string&, _tail_ts...> {
       static void marshal(payload_t& oPayload, const std::string& oHead, _tail_ts&&...oTail) {
@@ -122,6 +124,7 @@ namespace xtd{
     };
 
     struct payload : std::vector<uint8_t> {
+      using _super_t = std::vector<uint8_t>;
       payload() : vector(sizeof(size_t), 0) {}
       template <typename _ty> _ty peek() const {
         static_assert(std::is_pod<_ty>::value, "Invalid POD type for peek");
@@ -133,7 +136,7 @@ namespace xtd{
       }
     };
 
-#if 0
+
     /** tcp/ip transport
     */
     class tcp_transport {
@@ -164,7 +167,7 @@ namespace xtd{
             std::shared_ptr<xtd::socket::ipv4_tcp_stream> oClientSocket(new xtd::socket::ipv4_tcp_stream(std::move(oClient)));
             std::thread oClientThread([&, oClientSocket, &oServer]() {
               oClientSocket->onError.connect([&ExitThread]() {
-                ERR("Socket error");
+                throw xtd::socket::exception(here(), "socket connect failure");
                 ExitThread = true;
               });
               oClientSocket->onRead.connect([&]() {
@@ -202,7 +205,7 @@ namespace xtd{
       }
 
     };
-#endif
+
 
     TODO("Create generic named pipe wrapper that works on windows and linux")
 #if(XTD_OS_WINDOWS & XTD_OS)
@@ -327,7 +330,8 @@ namespace xtd{
         }
       };
 
-      template <typename _function_t, typename _return_t, typename _head_t, typename ... _tail_ts> struct invoker<_function_t, _return_t, _head_t, _tail_ts...> {
+      template <typename _function_t, typename _return_t, typename _head_t, typename ... _tail_ts>
+      struct invoker<_function_t, _return_t, _head_t, _tail_ts...> {
 
         template <typename ... _arg_ts>
         static bool invoke(_function_t& oFN, payload& oPayload, _arg_ts&&...oArgs) {
@@ -346,7 +350,7 @@ namespace xtd{
       template <typename _impl_t> using server_from_impl = rpc_server < _transport_t>;
 
       template <typename ... _arg_ts> rpc_server(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
-    protected:
+
       bool invoke(payload& oPayload) {
         return false;
       }
@@ -371,7 +375,6 @@ namespace xtd{
       void start_server() { transport_type::template start_server<_this_t>(*this); }
       void stop_server() { transport_type::stop_server(); }
 
-    protected:
       friend struct pipe_transport;
       friend struct pipe_transport;
       call_type _call;
@@ -400,7 +403,7 @@ namespace xtd{
         *this = _super_t(std::forward<_arg_ts>(oArgs)...);
       }
 
-    protected:
+
       template <typename, typename...> friend struct rpc_server;
 
       bool invoke(payload& oPayload) {

@@ -35,11 +35,11 @@ script:
   - $TRAVIS_BUILD_DIR/build/tests/unit_tests --xml:$TRAVIS_BUILD_DIR/docs/reports/gtest
   - cd $TRAVIS_BUILD_DIR/
   - valgrind --tool=memcheck -v --trace-children=yes --xml=yes --xml-file=docs/reports/valgrind/unit_tests.memcheck.xml $TRAVIS_BUILD_DIR/build/tests/unit_tests
-  - for item in $(find src -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
+  - for item in $(find build_config -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
   - for item in $(find include -type f); do vera++ -x docs/reports/vera++/$(basename $item).xml $item > /dev/null; done
   - for item in $(find include -name *.hpp); do cppcheck --inline-suppr --suppressions-list=assets/cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
-  - for item in $(find src -name *.cpp); do cppcheck --inline-suppr --suppressions-list=assets/cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
-  - rats --xml -w 3 src include > docs/reports/rats/rats.xml
+  - for item in $(find build_config -name *.cpp); do cppcheck --inline-suppr --suppressions-list=assets/cppcheck-suppressions.txt --std=c++11 --platform=unix64 --enable=all --xml-version=2 $item 2> docs/reports/cppcheck/$(basename $item).xml; done
+  - rats --xml -w 3 build_config include > docs/reports/rats/rats.xml
   - cd $TRAVIS_BUILD_DIR/build/tests
   - if [ -e "$(ls *.xml)" ]; then cp *.xml $TRAVIS_BUILD_DIR/docs/reports/gtest; fi
   - for item in $( find -name '*.gcda' ); do gcov -l $item; done

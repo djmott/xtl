@@ -1,6 +1,6 @@
 
 
-add_library(event_trace STATIC event_trace.cpp)
+add_library(event_trace STATIC event_trace_client.cpp)
 
 if(WIN32)
 	if(MSVC AND 8 EQUAL ${CMAKE_SIZEOF_VOID_P})
@@ -20,3 +20,9 @@ if(MSVC)
 elseif(GNU)
 	target_compile_options(event_trace INTERFACE -finstrument-functions)
 endif()
+
+add_executable(event_trace_server event_trace_server.cpp)
+target_link_libraries(event_trace_server PRIVATE xtl)
+
+add_executable(event_trace_test event_trace_test.cpp)
+target_link_libraries(event_trace_test PRIVATE xtl event_trace)

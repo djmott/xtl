@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <memory>
+
 #define XTD_GIT_IDENT "$Id$"
 
 #if !defined(ON)
@@ -260,6 +262,8 @@ auto _dupenv_s = [](char **buffer, std::size_t *numberOfElements, const char *va
     The main namespace of the XTL library
 */
 namespace xtd{
+    template <typename _ty, typename ... _arg_ts>
+    constexpr std::unique_ptr<_ty> make_unique(_arg_ts&&...args) {  return std::unique_ptr<_ty>(new _ty(std::forward<_arg_ts>(args)...)); }
     /// @internal
     /// @namespace xtd::_
     /// private namespace not for external consumption
