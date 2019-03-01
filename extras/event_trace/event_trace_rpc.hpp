@@ -16,7 +16,7 @@ namespace  xtd {
             pid_type, std::string )>{};
 
       using server = xtd::rpc::rpc_server<xtd::rpc::tcp_transport, quit, add_name, post_message>;
-      using client = typename server::client_type;
+      using client = server::client_type;
 
     };
 

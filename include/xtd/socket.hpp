@@ -244,8 +244,8 @@ namespace xtd{
         _socket = xtd::crt_exception::throw_if(::socket(address_type::address_family, (int)type, (int)protocol), [](SOCKET s){ return static_cast<SOCKET>(-1) == s; });
       }
 
-      explicit socket_base(socket_base&& src) : _socket(src._socket){
-        src._socket = 0;
+      explicit socket_base(socket_base&& src) : _socket(0){
+        std::swap(_socket, src._socket);
       }
 
 
@@ -343,6 +343,12 @@ namespace xtd{
     template <typename _super_t>
     class polling_socket : public _super_t{
     public:
+
+      template<typename ... _arg_ts>
+      explicit polling_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
+
+      polling_socket(const polling_socket&) = delete;
+
       /// callback event fires when data is ready to read data
       callback<void()> read_event;
       /// callback event fires when socket is ready to write data
@@ -373,9 +379,7 @@ namespace xtd{
           write_event();
         }
       }
-      ///ctor
-      template<typename ... _arg_ts>
-      explicit polling_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
+
 
 #if (XTD_OS_WINDOWS & XTD_OS)
       int poll(POLLFD *ufds, unsigned int nfds, int timeout){ return ::WSAPoll(ufds, nfds, timeout); }
@@ -391,6 +395,8 @@ namespace xtd{
       /// ctor
       template<typename ... _arg_ts>
       explicit bindable_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
+
+      bindable_socket(const bindable_socket&) = delete;
 
       /// binds the socket to an address and port
       void bind(const typename _super_t::address_type& addr){
@@ -408,6 +414,8 @@ namespace xtd{
       template<typename ... _arg_ts>
       explicit connectable_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
+      connectable_socket(const connectable_socket&) = delete;
+
       /// initiates connection to a socket
       void connect(const typename _super_t::address_type& addr){
         exception::throw_if(::connect(_super_t::_socket, reinterpret_cast<const sockaddr*>(&addr), sizeof(typename _super_t::address_type)), [](int i){ return i < 0; });
@@ -423,6 +431,8 @@ namespace xtd{
       /// ctor
       template<typename ... _arg_ts>
       explicit listening_socket(_arg_ts &&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
+
+      listening_socket(const listening_socket&) = delete;
 
       /// begins listening on the socket
       void listen(int Backlog = SOMAXCONN){
@@ -512,6 +522,8 @@ namespace xtd{
       template<typename ... _arg_ts>
       explicit selectable_socket(_arg_ts&&...oArgs)
         : _super_t(std::forward<_arg_ts>(oArgs)...), onRead(), onWrite(), onError() {}
+      
+      selectable_socket(const selectable_socket&) = delete;
 
       /// callback event fired when data is ready to be read
       xtd::callback<void()> onRead;

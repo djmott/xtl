@@ -25,7 +25,8 @@ namespace xtd{
     };
 
     static void start(){
-      xtd::process::create("./event_trace_server", { xtd::cstring::Format("-", pthread_self()) });
+      std::hash<std::thread::id> tid_hash;
+      xtd::process::create("event_trace_server", { xtd::cstring::Format("-", tid_hash(std::this_thread::get_id())) });
     }
 
   };

@@ -233,6 +233,20 @@ namespace xtd {
       return process(oPath, pi.dwProcessId, pi.hProcess, pi.hThread);
     }
 
+    static process create(const xtd::cstring& sPath, std::initializer_list<cstring> cmd_args){
+      if (!xtd::filesystem::exists(sPath)) throw xtd::exception(here(), sPath + " not found.");
+      STARTUPINFO si;
+      PROCESS_INFORMATION pi;
+      memset(&si, 0, sizeof(STARTUPINFO));
+      si.cb = sizeof(STARTUPINFO);
+      memset(&pi, 0, sizeof(PROCESS_INFORMATION));
+      xtd::tstring sCmd = sPath;
+      for (auto & oItem : cmd_args) sCmd += oItem + " ";
+      xtd::windows::exception::throw_if(::CreateProcess(nullptr, &sCmd[0], nullptr, nullptr, FALSE,
+        0, nullptr, nullptr, &si, &pi), [](BOOL b) { return !b; });
+      return process(sPath, pi.dwProcessId, pi.hProcess, pi.hThread);
+    }
+
     unowned_thread::vector threads() const {}
 
   private:

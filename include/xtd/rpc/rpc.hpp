@@ -150,13 +150,15 @@ namespace xtd{
     public:
       using pointer_type = std::shared_ptr<tcp_transport>;
 
+      tcp_transport(const tcp_transport&) = delete;
+
       tcp_transport(const socket::ipv4address& oAddress)
         : _address(oAddress), _socket(), _server_thread(), _stop_server(false), _clients(), _client_connected(false) {}
 
       template <typename _server_t> void start_server(_server_t& oServer) {
         _stop_server = false;
         std::shared_ptr<std::promise<void>> oServerStarted(new std::promise<void>);
-        _server_thread = xtd::make_unique<std::thread>([&, &oServer, oServerStarted] {
+        _server_thread = xtd::make_unique<std::thread>([&oServer, &oServerStarted, this] {
           oServerStarted->set_value();
           _socket.bind(_address);
           bool ExitThread = false;
@@ -165,16 +167,16 @@ namespace xtd{
             _socket.listen();
             auto oClient = _socket.accept<xtd::socket::ipv4_tcp_stream>();
             std::shared_ptr<xtd::socket::ipv4_tcp_stream> oClientSocket(new xtd::socket::ipv4_tcp_stream(std::move(oClient)));
-            std::thread oClientThread([&, oClientSocket, &oServer]() {
+            std::thread oClientThread([&oServer, &oClientSocket, &ExitThread, &oPayload, this]() {
               oClientSocket->onError.connect([&ExitThread]() {
                 throw xtd::socket::exception(here(), "socket connect failure");
                 ExitThread = true;
               });
-              oClientSocket->onRead.connect([&]() {
+              oClientSocket->onRead.connect([&oServer, &oClientSocket, &oPayload, this]() {
                 oClientSocket->read<payload::_super_t>(oPayload);
                 oServer.invoke(oPayload);
               });
-              oClientSocket->onWrite.connect([&]() {
+              oClientSocket->onWrite.connect([&oServer, &oClientSocket, &oPayload, this]() {
                 if (oPayload.size()) {
                   oClientSocket->write<payload::_super_t>(oPayload);
                 }
@@ -349,9 +351,10 @@ namespace xtd{
     template <typename _transport_t> struct rpc_server < _transport_t> : _transport_t {
       template <typename _impl_t> using server_from_impl = rpc_server < _transport_t>;
 
+      rpc_server(const rpc_server&) = delete;
       template <typename ... _arg_ts> rpc_server(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
 
-      bool invoke(payload& oPayload) {
+      bool invoke(payload& oPayload) const {
         return false;
       }
     };
@@ -364,6 +367,7 @@ namespace xtd{
       using call_type = _head_t;
       template <typename _impl_t> using server_from_impl = typename std::conditional< std::is_same<_impl_t, _head_t>::value, _this_t, typename _super_t::template server_from_impl<_impl_t>>::type;
 
+      rpc_server(const rpc_server&) = delete;
       template <typename ... _arg_ts> rpc_server(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
 
       template <typename ... _arg_ts> void attach(_arg_ts&&...oArgs) {
@@ -379,7 +383,7 @@ namespace xtd{
       friend struct pipe_transport;
       call_type _call;
 
-      bool invoke(payload& oPayload) {
+      bool invoke(payload& oPayload) const {
         if (typeid(_head_t).hash_code() != oPayload.peek<size_t>()) return _super_t::invoke(oPayload);
         size_t iCallID;
         marshaler<false, size_t>::unmarshal(oPayload, iCallID);
@@ -406,7 +410,7 @@ namespace xtd{
 
       template <typename, typename...> friend struct rpc_server;
 
-      bool invoke(payload& oPayload) {
+      bool invoke(payload& oPayload) const {
         return _::invoker<_my_t, _return_t, _fnarg_ts...>::invoke(*this, oPayload);
       }
     };

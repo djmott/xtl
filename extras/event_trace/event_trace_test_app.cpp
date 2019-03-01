@@ -11,7 +11,7 @@ int debug(int argc, char * argv[]) {
   evt::rpc::client oClient(xtd::socket::ipv4address("127.0.0.1", 9977));
   oClient.call<evt::rpc::quit>();
 
-
+  return 0;
 }
 
 int main(int argc, char * argv[]){

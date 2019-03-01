@@ -24,5 +24,5 @@ endif()
 add_executable(event_trace_server event_trace_server.cpp)
 target_link_libraries(event_trace_server PRIVATE xtl)
 
-add_executable(event_trace_test event_trace_test.cpp)
-target_link_libraries(event_trace_test PRIVATE xtl event_trace)
+add_executable(event_trace_test_app event_trace_test_app.cpp)
+target_link_libraries(event_trace_test_app PRIVATE xtl event_trace)
