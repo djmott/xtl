@@ -186,6 +186,19 @@ set(XTD_WINDOWS_HEADERS
   include/xtd/windows/tool_help.hpp
 )
 
+set(XTD_RPC_HEADERS
+  include/xtd/rpc/client.hpp
+  include/xtd/rpc/call.hpp
+  include/xtd/rpc/dummy_xport.hpp
+  include/xtd/rpc/interface.hpp
+  include/xtd/rpc/named_pipe_xport.hpp
+  include/xtd/rpc/payload.hpp
+  include/xtd/rpc/rpc.hpp
+  include/xtd/rpc/server.hpp
+  include/xtd/rpc/server_context.hpp
+  include/xtd/rpc/tcp_xport.hpp
+)
+
 set(XTD_HEADERS
   include/xtd/btree.hpp
   include/xtd/callback.hpp
@@ -205,7 +218,6 @@ set(XTD_HEADERS
   include/xtd/meta.hpp
   include/xtd/parse.hpp
   include/xtd/process.hpp
-  include/xtd/rpc.hpp
   include/xtd/shared_mem_obj.hpp
   include/xtd/socket.hpp
   include/xtd/source_location.hpp
@@ -257,10 +269,11 @@ install(FILES ${XTD_CONCURRENT_HEADERS} DESTINATION include/xtd/concurrent)
 install(FILES ${XTD_GRAMMARS} DESTINATION include/xtd/grammars)
 install(FILES ${XTD_NLP_HEADERS} DESTINATION include/xtd/nlp)
 install(FILES ${XTD_WINDOWS_HEADERS} DESTINATION include/xtd/windows)
+install(FILES ${XTD_RPC_HEADERS} DESTINATION include/xtd/rpc)
 install(FILES ${XTD_HEADERS} DESTINATION include/xtd)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/xtd/xtd.hpp DESTINATION include/xtd)
 
 foreach(item ${XTD_COM_HEADERS} ${XTD_CONCURRENT_HEADERS} ${XTD_GRAMMARS} ${XTD_NLP_HEADERS}
-  ${XTD_WINDOWS_HEADERS} ${XTD_HEADERS})
+  ${XTD_WINDOWS_HEADERS} ${XTD_RPC_HEADERS} ${XTD_HEADERS})
   target_sources(xtl INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/${item})
 endforeach()

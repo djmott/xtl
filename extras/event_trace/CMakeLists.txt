@@ -26,3 +26,10 @@ target_link_libraries(event_trace_server PRIVATE xtl)
 
 add_executable(event_trace_test_app event_trace_test_app.cpp)
 target_link_libraries(event_trace_test_app PRIVATE xtl event_trace)
+
+target_sources(event_trace_server PRIVATE ${XTD_COM_HEADERS} ${XTD_CONCURRENT_HEADERS} ${XTD_GRAMMARS} ${XTD_NLP_HEADERS}
+  ${XTD_WINDOWS_HEADERS} ${XTD_RPC_HEADERS} ${XTD_HEADERS})
+
+target_sources(event_trace_test_app PRIVATE ${XTD_COM_HEADERS} ${XTD_CONCURRENT_HEADERS} ${XTD_GRAMMARS} ${XTD_NLP_HEADERS}
+  ${XTD_WINDOWS_HEADERS} ${XTD_RPC_HEADERS} ${XTD_HEADERS})
+

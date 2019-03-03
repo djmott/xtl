@@ -1,4 +1,22 @@
 
+
+
+
+#include <xtd/rpc/rpc.hpp>
+#include <xtd/xstring.hpp>
+
+int debug(int argc, char * argv[]) {
+  return 0;
+}
+int main(int argc, char * argv[]) {
+  for (int i = 1; i < argc; ++i) {
+    xtd::cstring sArg = argv[i];
+    if ("-debug" == sArg) return debug(argc, argv);
+  }
+  return 1;
+}
+
+#if 0
 #include <xtd/socket.hpp>
 #include <xtd/rpc.hpp>
 #include <xtd/process.hpp>
@@ -20,3 +38,4 @@ int main(int argc, char * argv[]){
     if ("-debug" == sArg) return debug(argc, argv);
   }
 }
+#endif
