@@ -8,6 +8,9 @@
 
 #include <vector>
 #include <functional>
+#include <string>
+#include <future>
+#include <atomic>
 #include <cassert>
 
 #if !defined(__XTD_RPC_HPP_INCLUDED__)
@@ -20,11 +23,12 @@ namespace xtd {
       client,
       server,
     };
+
+
   }
 }
 
 #include "payload.hpp"
-#include "server_context.hpp"
 #include "call.hpp"
 #include "client.hpp"
 #include "server.hpp"
@@ -36,14 +40,14 @@ namespace xtd {
 namespace xtd {
   namespace rpc {
 
-    template <template <template <typename> typename> typename _interface_t, template <typename> typename _transport_t, typename ... _arg_ts>
-    inline server<_interface_t<_transport_t>> make_server(_arg_ts&&...args) {
-      return server<_interface_t<_transport_t>>(std::forward<_arg_ts>(args)...);
+    template <template <stub, template <stub, typename> typename> typename _interface_t, template <stub,typename> typename _transport_t, typename ... _arg_ts>
+    inline server<_interface_t<stub::server, _transport_t>> make_server(_arg_ts&&...args) {
+      return server<_interface_t<stub::server, _transport_t>>(std::forward<_arg_ts>(args)...);
     }
 
-    template <template <template <typename> typename> typename _interface_t, template <typename> typename _transport_t, typename ... _arg_ts>
-    inline client<_interface_t<_transport_t>> make_client(_arg_ts&&...args) {
-      return client<_interface_t<_transport_t>>(std::forward<_arg_ts>(args)...);
+    template <template <stub, template <stub, typename> typename> typename _interface_t, template <stub, typename> typename _transport_t, typename ... _arg_ts>
+    inline client<_interface_t<stub::server, _transport_t>> make_client(_arg_ts&&...args) {
+      return client<_interface_t<stub::server, _transport_t>>(std::forward<_arg_ts>(args)...);
     }
 
   }

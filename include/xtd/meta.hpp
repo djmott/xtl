@@ -113,8 +113,7 @@ namespace xtd{
     }
 
   };
-
-
+  
 
   /// Determine if a type is specified in a list
   template <typename, typename...> struct is_a;
@@ -123,10 +122,7 @@ namespace xtd{
   template <typename _ty, typename _head_t, typename ... _tail_t> struct is_a<_ty, _head_t, _tail_t...> : is_a<_ty, _tail_t...>{ using type = _ty; };
 
 
-  
-
-
-  /// Gets the type of a parameter in a method declaration
+    /// Gets the type of a parameter in a method declaration
   namespace _ {
     template <uint8_t _param_num, typename _ty> struct _get_parameter;
 
@@ -144,6 +140,7 @@ namespace xtd{
     static_assert(sizeof...(_ArgTs) >= _param_num, "Specified parameter index exceeds number of parameters in function");
     using type = typename _::template _get_parameter<_param_num, _return_t(_ArgTs...)>::type;
   };
+
 
   //test for t::type member
   template <typename, typename = void> struct has_type_member : std::false_type{};

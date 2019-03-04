@@ -16,9 +16,6 @@ namespace xtd{
         client& operator=(const client&) = delete;
         client(client&& src) : _impl_t(std::move(src)) {}
 
-        void start(bool async) {}
-
-        void stop(bool wait) {}
       };
 
     }

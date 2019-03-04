@@ -25,25 +25,27 @@
 namespace xtd {
   namespace rpc {
 
-    struct icall{};
+    namespace _ {
+      template <size_t argc, typename _return_t, typename ... _fnarg_ts> struct call_handler;
+    }
+
+    struct icall{
+      using vector = std::vector<icall*>;
+      virtual ~icall() = default;
+      virtual size_t callid() const = 0;
+      virtual void invoke(payload&) const = 0;
+    };
 
     template <typename _impl_t, typename _interface_t, typename _sig> struct call;
 
-
     template < typename _impl_t, typename _interface_t, typename _return_t, typename ... _arg_ts>
     struct call<_impl_t, _interface_t, _return_t(_arg_ts...)> : icall {
-      using function_type = std::function<_return_t(server_context&, _arg_ts...)>;
-      ~call() {
-        std::remove_if(_parent->_calls.begin(), _parent->_calls.end(), [this](icall*pCall) { return this == pCall; });
-      }
-      explicit call(_interface_t* const pParent) : _parent(pParent) { 
-        _parent->_calls.push_back(this);
-      }
+      using function_type = std::function<_return_t(_arg_ts...)>;
+      ~call() { _parent->remove_call(this); }
+      explicit call(_interface_t* const pParent) : _parent(pParent) { _parent->add_call(this); }
       call() = delete;
       call(const call&) = delete;
-      call(call&& src) : _parent(src._parent){
-        _parent->_calls.push_back(this);
-      }
+      call(call&& src) : _parent(src._parent) { _parent->add_call(this); }
       call& operator=(call&&) = delete;
       call& operator=(const call&) = delete;
 
@@ -51,7 +53,7 @@ namespace xtd {
 
       _return_t operator()(_arg_ts&&...args) {
         payload oPayload;
-        oPayload.marshal(typeid(_impl_t).hash_code(), std::forward<_arg_ts>(args)...);
+        oPayload.marshal(std::forward<_arg_ts>(args)..., typeid(_impl_t).hash_code());
         _parent->write(oPayload);
         _parent->read(oPayload);
         auto iCallID = oPayload.unmarshal<size_t>();
@@ -59,24 +61,27 @@ namespace xtd {
         return oPayload.unmarshal<_return_t>();;
       }
 
+      size_t callid() const override { return typeid(_impl_t).hash_code(); }
+
+      void invoke(payload& oPayload) const override {
+        oPayload.marshal(_::call_handler<sizeof...(_arg_ts)-1, _return_t, _arg_ts...>::invoke(oPayload, _handler));
+      }
+
     private:
       _interface_t * const _parent;
       function_type _handler;
     };
 
 
-
+    //void() specialization
     template < typename _impl_t, typename _interface_t, typename ... _arg_ts>
     struct call<_impl_t, _interface_t, void(_arg_ts...)> : icall {
-      using function_type = std::function<void(server_context&, _arg_ts...)>;
-      explicit call(_interface_t* const pParent) : _parent(pParent) {
-        _parent->_calls.push_back(this);
-      }
+      using function_type = std::function<void(_arg_ts...)>;
+      ~call() { _parent->remove_call(this); }
+      explicit call(_interface_t* const pParent) : _parent(pParent) { _parent->add_call(this); }
       call() = delete;
       call(const call&) = delete;
-      call(call&& src) : _parent(src._parent) {
-        _parent->_calls.push_back(this);
-      }
+      call(call&& src) : _parent(src._parent) { _parent->add_call(this); }
       call& operator=(call&&) = delete;
       call& operator=(const call&) = delete;
 
@@ -84,17 +89,70 @@ namespace xtd {
 
       void operator()(_arg_ts&&...args) {
         payload oPayload;
-        oPayload.marshal(typeid(_impl_t).hash_code(), std::forward<_arg_ts>(args)...);
+        oPayload.marshal(std::forward<_arg_ts>(args)..., typeid(_impl_t).hash_code());
         _parent->write(oPayload);
         _parent->read(oPayload);
         auto iCallID = oPayload.unmarshal<size_t>();
         assert(typeid(_impl_t).hash_code() != iCallID);
       }
 
+      size_t callid() const override { return typeid(_impl_t).hash_code(); }
+
+      void invoke(payload& oPayload) const override {
+        _::call_handler<sizeof...(_arg_ts)-1, void, _arg_ts...>::invoke(oPayload, _handler);
+      }
+
     private:
       _interface_t * const _parent;
       function_type _handler;
     };
+
+
+    namespace _ {
+
+      template <size_t, typename ...> struct argn;
+
+      template <typename _head_t, typename ... _tail_t> struct argn<0, _head_t, _tail_t...> {
+        using type = _head_t;
+      };
+
+      template <size_t N, typename _head_t, typename ... _tail_t> struct argn<N, _head_t, _tail_t...> {
+        using type = typename argn<N - 1, _tail_t...>::type;
+      };
+
+      template <typename _return_t, typename ... _arg_ts> struct call_handler<0, _return_t, _arg_ts...> {
+        template <typename ... _invoke_args>
+        static _return_t invoke(payload& oPayload, const std::function<_return_t(_arg_ts...)>& oFN, _invoke_args&&...args) {
+          return oFN(oPayload.unmarshal< typename argn<0,_arg_ts...>::type >(), std::forward<_invoke_args>(args)...);
+        }
+      };
+
+      template <size_t argc, typename _return_t, typename ... _arg_ts> struct call_handler{
+        template <typename ... _invoke_args>
+        static _return_t invoke(payload& oPayload, const std::function<_return_t(_arg_ts...)>& oFN, _invoke_args&&...args) {
+          return call_handler<argc - 1, _return_t, _arg_ts...>::invoke(oPayload, oFN, 
+            oPayload.unmarshal<typename argn<argc, _arg_ts...>::type>(), std::forward<_invoke_args>(args)...);
+        }
+      };
+
+      //void specialization
+
+      template <typename ... _arg_ts> struct call_handler<0, void, _arg_ts...> {
+        template <typename ... _invoke_args>
+        static void invoke(payload& oPayload, const std::function<void(_arg_ts...)>& oFN, _invoke_args&&...args) {
+          oFN(oPayload.unmarshal< typename argn<0, _arg_ts...>::type >(), std::forward<_invoke_args>(args)...);
+        }
+      };
+
+      template <size_t argc, typename ... _arg_ts> struct call_handler<argc, void, _arg_ts...> {
+        template <typename ... _invoke_args>
+        static void invoke(payload& oPayload, const std::function<void(_arg_ts...)>& oFN, _invoke_args&&...args) {
+          call_handler<argc - 1, void, _arg_ts...>::invoke(oPayload, oFN,
+            oPayload.unmarshal<typename argn<argc, _arg_ts...>::type>(), std::forward<_invoke_args>(args)...);
+        }
+      };
+
+    }
 
 
 

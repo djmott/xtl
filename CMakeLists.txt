@@ -195,7 +195,6 @@ set(XTD_RPC_HEADERS
   include/xtd/rpc/payload.hpp
   include/xtd/rpc/rpc.hpp
   include/xtd/rpc/server.hpp
-  include/xtd/rpc/server_context.hpp
   include/xtd/rpc/tcp_xport.hpp
 )
 

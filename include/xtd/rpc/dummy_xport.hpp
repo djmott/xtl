@@ -11,7 +11,7 @@
 namespace xtd {
   namespace rpc {
 
-    template <typename _impl_t>
+    template <stub _stub, typename _impl_t>
     struct dummy_transport{
       void write(const payload&){}
       void read(payload&){}

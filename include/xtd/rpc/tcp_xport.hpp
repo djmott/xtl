@@ -10,7 +10,7 @@
 
 namespace xtd{
     namespace rpc{
-      template <typename _impl_t, stub _stub>
+      template <stub _stub, typename _impl_t>
       struct tcp_transport{};
     }
 }
