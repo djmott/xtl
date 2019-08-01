@@ -116,8 +116,6 @@ endif()
 
 option(XTD_COLOR_MESSAGES "Use colored console" FALSE)
 
-configure_file(include/xtd/xtd.hpp.in include/xtd/xtd.hpp @ONLY)
-
 set(XTD_COM_HEADERS
   include/xtd/com/com.hpp
   include/xtd/com/com_class_factory.hpp
@@ -259,14 +257,16 @@ set(XTD_TEST_HEADERS
   tests/test_var.hpp
 )
 
-
+configure_file(include/xtd/xtd.hpp.in include/xtd/xtd.hpp @ONLY)
 
 add_library(xtl SHARED src/xtl.cpp)
 
-install(FILES ${XTD_COM_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd/com)
-install(FILES ${XTD_CONCURRENT_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd/concurrent)
-install(FILES ${XTD_GRAMMARS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd/grammars)
-install(FILES ${XTD_NLP_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd/nlp)
-install(FILES ${XTD_WINDOWS_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd/windows)
-install(FILES ${XTD_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/xtd)
+target_include_directories(xtl PUBLIC ${CMAKE_BINARY_DIR}/include)
 
+install(FILES ${XTD_COM_HEADERS}          DESTINATION include/xtd/com)
+install(FILES ${XTD_COM_HEADERS}          DESTINATION include/xtd/com)
+install(FILES ${XTD_CONCURRENT_HEADERS}   DESTINATION include/xtd/concurrent)
+install(FILES ${XTD_GRAMMARS}             DESTINATION include/xtd/grammars)
+install(FILES ${XTD_NLP_HEADERS}          DESTINATION include/xtd/nlp)
+install(FILES ${XTD_WINDOWS_HEADERS}      DESTINATION include/xtd/windows)
+install(FILES ${XTD_HEADERS} ${CMAKE_BINARY_DIR}/include/xtd/xtd.hpp DESTINATION include/xtd)
