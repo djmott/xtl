@@ -92,11 +92,13 @@ namespace xtd{
         }
       };
 
+/*
       template <> struct sqlite_field_loader<std::vector<uint8_t>>{
         template <int Index> static std::vector<uint8_t>& get(sqlite3_stmt* st){ 
           return reinterpret_cast<const char *>(sqlite3_column_text(st, Index)); 
         }
       };
+*/
 
       template <> struct sqlite_field_loader<std::string> {
         template <int Index> static const char * get(sqlite3_stmt* st) {

@@ -158,9 +158,11 @@ namespace xtd{
   template <typename _Ty> struct is_move_assignable<_Ty, void_t<move_assignment_t<_Ty>>> : std::is_same<move_assignment_t<_Ty>, _Ty&&>{};
 
   //test for invocation operator
-  template <typename _Ty> using invokation_operator_t = decltype(std::declval<_Ty&>()());
+/*
+  template <typename _Ty> using invokation_operator_t = decltype((std::declval<_Ty&>())());
   template <typename, typename = void> struct is_invokable : std::false_type{};
   template <typename _Ty> struct is_invokable<_Ty, void_t<invokation_operator_t<_Ty>>> : std::true_type{};
+*/
 
   /**
     meta-function to convert a static upper case ascii character to lower case

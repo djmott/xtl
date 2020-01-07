@@ -36,6 +36,12 @@ include(ExternalProject)
 
 include_directories(include)
 
+option(XTD_VERBOSE_BUILD "Verbose builds" TRUE)
+set(XTD_HAS_CODECVT 0)
+set(XTD_HAS_EXP_CODECVT 0)
+set(XTD_HAS_ICONV 0)
+set(XTD_HAS_FILESYSTEM 1)
+
 option(XTD_BUILD_EXAMPLES "Build examples" FALSE)
 if(XTD_BUILD_EXAMPLES)
   add_subdirectory(examples)  
@@ -259,9 +265,9 @@ set(XTD_TEST_HEADERS
 
 configure_file(include/xtd/xtd.hpp.in include/xtd/xtd.hpp @ONLY)
 
-add_library(xtl SHARED src/xtl.cpp)
+add_library(xtl STATIC src/xtl.cpp)
 
-target_include_directories(xtl PUBLIC ${CMAKE_BINARY_DIR}/include)
+target_include_directories(xtl PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 install(FILES ${XTD_COM_HEADERS}          DESTINATION include/xtd/com)
 install(FILES ${XTD_COM_HEADERS}          DESTINATION include/xtd/com)
@@ -269,4 +275,4 @@ install(FILES ${XTD_CONCURRENT_HEADERS}   DESTINATION include/xtd/concurrent)
 install(FILES ${XTD_GRAMMARS}             DESTINATION include/xtd/grammars)
 install(FILES ${XTD_NLP_HEADERS}          DESTINATION include/xtd/nlp)
 install(FILES ${XTD_WINDOWS_HEADERS}      DESTINATION include/xtd/windows)
-install(FILES ${XTD_HEADERS} ${CMAKE_BINARY_DIR}/include/xtd/xtd.hpp DESTINATION include/xtd)
+install(FILES ${XTD_HEADERS} ${CMAKE_CURRENT_BINARY_DIR}/include/xtd/xtd.hpp DESTINATION include/xtd)
