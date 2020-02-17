@@ -423,17 +423,18 @@ namespace xtd{
         forever{
           //srclen = wcstombs_s(&sRet[0], sRet.size(), src, sRet.size());
           //wcstombs_s(&srclen, &sRet[0], sRet.size(), src, sRet.size());
+
           std::wcstombs(&sRet[0], src, sRet.size());
-        if (static_cast<size_t>(-1) == srclen){
-          throw std::runtime_error("A string conversion error occurred");
-        }
-        if (srclen < sRet.size()){
-          break;
-        }
-        sRet.resize(srclen * 2);
-        }
-        sRet.resize(srclen);
-        return sRet;
+          if (static_cast<size_t>(-1) == srclen){
+            throw std::runtime_error("A string conversion error occurred");
+          }
+          if (srclen < sRet.size()){
+            break;
+          }
+          sRet.resize(srclen * 2);
+          }
+          sRet.resize(srclen);
+          return sRet;
       }
     };
 
