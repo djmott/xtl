@@ -37,7 +37,7 @@ handle necessary filesystem and path functionality until C++17 is finalized
 
 namespace xtd {
   namespace filesystem {
-    using namespace xtd::filesystem;
+    using namespace std::filesystem;
     using path = std::filesystem::path;
   }
 }

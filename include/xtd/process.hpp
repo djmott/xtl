@@ -18,6 +18,10 @@
 #include <Psapi.h>
 #endif
 
+#if (XTD_COMPILER_MSVC & XTD_COMPILER)
+#pragma comment(lib, "psapi")
+#endif
+
 #include <regex>
 #include <memory>
 #include <map>

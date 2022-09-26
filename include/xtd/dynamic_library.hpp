@@ -19,10 +19,14 @@ load and invoke methods in a dynamic library
 #include <xtd/filesystem.hpp>
 #include <filesystem>
 
+#if (XTD_OS_WINDOWS & XTD_OS)
+#include <xtd/windows/exception.hpp>
+#endif
+
 namespace xtd{
 
   class dynamic_library_exception
-#if (XTD_OS_WINDOWS & XTD_COMPILER)
+#if (XTD_OS_WINDOWS & XTD_OS)
     : public xtd::windows::exception{
       using _super_t = xtd::windows::exception;
 #else
@@ -143,7 +147,7 @@ namespace xtd{
 #if (XTD_OS_WINDOWS & XTD_OS)
     explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::exception::throw_if(LoadLibraryA(sPath.string().c_str()), [](HMODULE h){ return (INVALID_HANDLE_VALUE == h || nullptr == h); })){}
 #else
-    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.tstring().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
+    explicit dynamic_library(const xtd::filesystem::path& sPath) : _Handle(xtd::dynamic_library_exception::throw_if(dlopen(sPath.string().c_str(), RTLD_LAZY), [](native_handle_type h){ return nullptr == h; })){}
 #endif
 
     explicit dynamic_library(native_handle_type hHandle) : _Handle(hHandle){}

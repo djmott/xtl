@@ -5,13 +5,14 @@ add_library(dummy_library_example SHARED dummy_library.cpp)
 
 add_dependencies(examples dummy_library_example)
 
-
+target_link_libraries(dummy_library_example PUBLIC xtl)
 
 function(build_example target)
   option(BUILD_${target}_EXAMPLE "Build ${target}" TRUE)
   if(BUILD_${target}_EXAMPLE)
     add_executable("example_${target}" EXCLUDE_FROM_ALL "example_${target}.cpp")
     add_dependencies(examples "example_${target}")
+    target_link_libraries("example_${target}" PUBLIC xtl)
   endif()
 endfunction()
 

@@ -17,7 +17,7 @@ Debugging
 /// @def XTD_ASSERT debug assertion. The expression is expanded and checked for debug builds
 #if (XTD_CONFIG_RELEASE & XTD_CONFIG)
   #define XTD_ASSERT(...)
-#elif ((XTD_COMPILER_CLANG | XTD_COMPILER_GCC | XTD_COMPILER_MINGW) & XTD_COMPILER)
+#elif ((XTD_COMPILER_CLANG | XTD_COMPILER_GNU) & XTD_COMPILER)
   #define XTD_ASSERT( expression , ... ) while ( !xtd::Debug::Assert( here(), !(!(expression)), #expression , ##__VA_ARGS__ ) ){}
 #else
   #define XTD_ASSERT( expression , ... ) while ( !xtd::Debug::Assert( here(), !(!(expression)), #expression , __VA_ARGS__ ) ){}

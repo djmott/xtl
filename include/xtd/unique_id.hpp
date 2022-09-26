@@ -19,7 +19,7 @@
 
 namespace xtd{
 
-#if ((XTD_OS_WINDOWS | XTD_OS_CYGWIN) & XTD_OS)
+#if (XTD_OS_WINDOWS  & XTD_OS)
 
   class unique_id : uuid_t{
     template <typename, typename> friend class _::xstring_format;

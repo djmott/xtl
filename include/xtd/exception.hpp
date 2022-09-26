@@ -74,7 +74,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
 
         ///explanation of the exception
         const char * what() const
-#if ((XTD_COMPILER_CLANG | XTD_COMPILER_GCC | XTD_COMPILER_MINGW ) & XTD_COMPILER)
+#if ((XTD_COMPILER_CLANG | XTD_COMPILER_GNU ) & XTD_COMPILER)
         noexcept
 #endif
         override{
@@ -83,7 +83,7 @@ Throws exception if the test expression returns true. _throw_if methods are pres
 
 ///location in source that caused the exception
         virtual const source_location& location() const
-#if ((XTD_COMPILER_CLANG | XTD_COMPILER_GCC | XTD_COMPILER_MINGW) & XTD_COMPILER)
+#if ((XTD_COMPILER_CLANG | XTD_COMPILER_GNU) & XTD_COMPILER)
         noexcept
 #endif
         {

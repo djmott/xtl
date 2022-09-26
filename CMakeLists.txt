@@ -1,20 +1,9 @@
 ### cmake config
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.23)
 
-set(CMAKE_CXX_STANDARD 11)
-
-if(POLICY CMP0048)
-  cmake_policy(SET CMP0048 NEW)
-endif()
-if(POLICY CMP0054)
-  cmake_policy(SET CMP0054 NEW)
-endif()
-if(POLICY CMP0056)
-  cmake_policy(SET CMP0056 NEW)
-endif()
-
-message(STATUS "Host system is ${CMAKE_HOST_SYSTEM_NAME}")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 enable_language(CXX)
 
@@ -27,86 +16,32 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
-message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
 
 project(XTL)
 
 include(CheckIncludeFile)
 include(CheckIncludeFileCXX)
 include(ExternalProject)
+include(FetchContent)
+include(GenerateExportHeader)
 
 include_directories(include)
 
-option(XTD_VERBOSE_BUILD "Verbose builds" TRUE)
-set(XTD_HAS_CODECVT 0)
-set(XTD_HAS_EXP_CODECVT 0)
-set(XTD_HAS_ICONV 0)
-set(XTD_HAS_FILESYSTEM 1)
+option(XTD_VERBOSE_BUILD "Verbose builds" ${CMAKE_VERBOSE_MAKEFILE})
 
-option(XTD_BUILD_EXAMPLES "Build examples" FALSE)
-if(XTD_BUILD_EXAMPLES)
-  add_subdirectory(examples)  
-endif()
+check_include_file_cxx(uuid/uuid.h XTD_HAS_UUID)
+check_include_file_cxx(codecvt XTD_HAS_CODECVT)
+check_include_file_cxx(experimental/codecvt XTD_HAS_EXP_CODECVT)
+check_include_file_cxx(iconv.h XTD_HAS_ICONV)
+check_include_file_cxx(filesystem XTD_HAS_FILESYSTEM)
+check_include_file_cxx(experimental/filesystem XTD_HAS_EXP_FILESYSTEM)
 
-option(XTD_BUILD_TESTS "Build tests" FALSE)
-if(XTD_BUILD_TESTS)
-  add_subdirectory(tests)
-endif()
 
-set(XTD_OS "XTD_OS_BAREMETAL")
-if(ANDROID)
-  set(XTD_OS "XTD_OS_ANDROID")
-elseif(MINGW)
-  set(XTD_OS "XTD_OS_MINGW")
-elseif(CYGWIN)
-  set(XTD_OS "XTD_OS_CYGWIN")
-elseif(WIN32)
-  set(XTD_OS "XTD_OS_WINDOWS")
-elseif(UNIX)
-  set(XTD_OS "XTD_OS_UNIX")
-elseif(APPLE)
-  set(XTD_OS "XTD_OS_IOS")
+option(UNICODE "define UNICODE and UNICODE." FALSE)
+if(UNICODE)
+  add_compile_definitions(UNICODE _UNICODE)
 else()
-  message(FATAL_ERROR "Target OS not supported")
-endif()
-
-if("MSYS" STREQUAL "${CMAKE_HOST_SYSTEM_NAME}" OR "CYGWIN" STREQUAL "${CMAKE_HOST_SYSTEM_NAME}")
-  set(XTD_OS "XTD_OS_CYGWIN")
-endif()
-
-
-set(XTD_COMPILER "XTD_COMPILER_UNKNOWN")
-if("MSVC" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-  set(XTD_COMPILER "XTD_COMPILER_MSVC")
-elseif("GNU" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-  set(XTD_COMPILER "XTD_COMPILER_GCC")
-elseif("Clang" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-  set(XTD_COMPILER "XTD_COMPILER_CLANG")
-elseif("Intel" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-  set(XTD_COMPILER "XTD_COMPILER_INTEL")
-elseif("OpenWatcom" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-  set(XTD_COMPILER "XTD_COMPILER_WATCOM")
-elseif("Embarcadero" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-  set(XTD_COMPILER "XTD_COMPILER_BORLAND")
-elseif("Borland" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-  set(XTD_COMPILER "XTD_COMPILER_BORLAND")
-elseif("ARMCC" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-  set(XTD_COMPILER "XTD_COMPILER_ARM")
-else()
-  message(FATAL_ERROR "Compiler not supported")
-endif()
-
-
-set(XTD_CHARSET "XTD_CHARSET_UNICODE" CACHE STRING "Default character set." FORCE)
-set_property(CACHE XTD_CHARSET PROPERTY STRINGS "XTD_CHARSET_UNICODE" "XTD_CHARSET_MBCS")
-
-set(XTD_CONFIG "XTD_CONFIG_DEBUG")
-if("Release" STREQUAL "${CMAKE_BUILD_TYPE}")
-  set(XTD_CONFIG "XTD_CONFIG_RELEASE")
-elseif("MinSizeRel" STREQUAL "${CMAKE_BUILD_TYPE}")
-  set(XTD_CONFIG "XTD_CONFIG_MINSIZE")
-elseif("RelWithDebInfo" STREQUAL "${CMAKE_BUILD_TYPE}")
-  set(XTD_CONFIG "XTD_CONFIG_RELDEBUG")
+  add_compile_definitions(MBCS)
 endif()
 
 option(XTD_LOG_TARGET_SYSLOG "Use syslog debug target")
@@ -273,11 +208,66 @@ set(XTD_TEST_HEADERS
   tests/test_var.hpp
 )
 
+# helper macro to set some values for config file replacements
+macro(falsify_undefined _name)
+  if(${_name})
+  else()
+    set(${_name} FALSE)
+  endif()
+endmacro()
+
+set(GCC FALSE)
+if("GNU" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
+  set(GCC TRUE)
+endif()
+
+falsify_undefined(MINGW)
+falsify_undefined(MSYS)
+falsify_undefined(MSVC)
+falsify_undefined(UNIX)
+falsify_undefined(WIN32)
+falsify_undefined(GCC)
+falsify_undefined(CLANG)
+falsify_undefined(INTEL)
+falsify_undefined(IOS)
+falsify_undefined(XCODE)
+falsify_undefined(APPLE)
+falsify_undefined(WINCE)
+falsify_undefined(DARWIN)
+falsify_undefined(ANDROID)
+falsify_undefined(BARE_METAL)
+
+falsify_undefined(XTD_HAS_CODECVT)
+falsify_undefined(XTD_HAS_EXP_CODECVT)
+falsify_undefined(XTD_HAS_ICONV)
+falsify_undefined(XTD_HAS_FILESYSTEM)
+falsify_undefined(XTD_HAS_EXP_FILESYSTEM)
+falsify_undefined(XTD_USE_DBGHELP)
+falsify_undefined(XTD_HAS_UUID)
+falsify_undefined(CMAKE_COLOR_MAKEFILE)
+
 configure_file(include/xtd/xtd.hpp.in include/xtd/xtd.hpp @ONLY)
 
-add_library(xtl STATIC src/xtl.cpp)
+add_library(xtl STATIC src/xtl.cpp ${CMAKE_CURRENT_BINARY_DIR}/include/xtd/xtd.hpp)
 
 target_include_directories(xtl PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/include)
+
+option(XTD_BUILD_EXAMPLES "Build examples" FALSE)
+if(XTD_BUILD_EXAMPLES)
+  add_subdirectory(examples)  
+endif()
+
+option(XTD_BUILD_TESTS "Build tests" FALSE)
+if(XTD_BUILD_TESTS)
+  FetchContent_Declare(gtest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        release-1.12.1
+  )
+  set(BUILD_GMOCK FALSE CACHE INTERNAL "" FORCE )
+  FetchContent_MakeAvailable(gtest)
+  add_subdirectory(tests)
+endif()
+
 
 install(FILES ${XTD_COM_HEADERS}          DESTINATION include/xtd/com)
 install(FILES ${XTD_COM_HEADERS}          DESTINATION include/xtd/com)
@@ -286,3 +276,18 @@ install(FILES ${XTD_GRAMMARS}             DESTINATION include/xtd/grammars)
 install(FILES ${XTD_NLP_HEADERS}          DESTINATION include/xtd/nlp)
 install(FILES ${XTD_WINDOWS_HEADERS}      DESTINATION include/xtd/windows)
 install(FILES ${XTD_HEADERS} ${CMAKE_CURRENT_BINARY_DIR}/include/xtd/xtd.hpp DESTINATION include/xtd)
+
+
+include(FeatureSummary)
+
+set_property(GLOBAL APPEND PROPERTY FeatureSummary_PKG_TYPES BUILD)
+#find_package(FOO)
+#set_package_properties(FOO PROPERTIES TYPE BUILD)
+#[[
+feature_summary(WHAT BUILD_PACKAGES_FOUND
+                Description "Build tools found:"
+                QUIET_ON_EMPTY)
+feature_summary(WHAT BUILD_PACKAGES_NOT_FOUND
+                Description "Build tools not found:"
+                QUIET_ON_EMPTY)
+]]

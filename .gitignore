@@ -11,3 +11,4 @@ include/xtd/xtd.hpp
 CMakeSettings.json
 tests/gtest
 /Testing/Temporary/*.log
+/out

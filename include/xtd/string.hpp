@@ -345,7 +345,7 @@ namespace xtd{
 
   namespace _{
 
-  #if (XTD_HAS_CODECVT || XTD_HAS_EXP_CODECVT)
+  #if (XTD_HAS_CODECVT | XTD_HAS_EXP_CODECVT)
     template <> class xstring_format<char, const wchar_t * const &> {
     public:
       static inline string format(const wchar_t * const & src) {
@@ -463,12 +463,14 @@ namespace xtd{
 
   #endif
 
+#if (XTD_OS_WINDOWS & XTD_OS)
     template <> class xstring_format<char, const LPWSTR &> {
     public:
       static inline string format(const LPWSTR & src) {
         return xstring_format<char, const wchar_t*const&>::format(src);
       }
     };
+#endif
 
     template <typename _ChT> class xstring_format<_ChT, const _ChT * const &> {
     public:

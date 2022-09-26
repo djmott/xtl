@@ -1,7 +1,7 @@
 /** @file
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
-
+#if 0
 #define XTD_VERBOSE_BUILD 1
 #include <xtd/xtd.hpp>
 
@@ -48,3 +48,4 @@ DUMP_DEFINE(XTD_LOG_TARGET_WINDBG);
 DUMP_DEFINE(XTD_LOG_TARGET_CSV);
 DUMP_DEFINE(XTD_LOG_TARGET_COUT);
 DUMP_DEFINE(XTD_LOG_TARGET_XML);
+#endif

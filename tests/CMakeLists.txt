@@ -3,21 +3,10 @@ enable_testing()
 
 option(XTD_INSTALL_TESTS "Install tests?" FALSE)
 
-ExternalProject_Add(googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_SHALLOW TRUE
-  GIT_TAG release-1.8.1
-  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/googletest
-)
 
-include_directories(
-  "${CMAKE_CURRENT_BINARY_DIR}/googletest/include"
-)
-
-link_directories("${CMAKE_CURRENT_BINARY_DIR}/googletest/lib")
 
 add_library(dummy_library_test SHARED dummy_library.cpp)
-add_dependencies(dummy_library_test xtl googletest)
+target_link_libraries(dummy_library_test PRIVATE xtl gtest)
 
 if(XTD_OS STREQUAL "XTD_OS_WINDOWS")
   if(XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW")
@@ -101,27 +90,28 @@ endif()
 
 build_option(TEST_VAR "test xtd::var")
 
-if(XTD_OS STREQUAL "XTD_OS_WINDOWS" AND (XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" OR XTD_COMPILER STREQUAL "XTD_COMPILER_MINGW" ))
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Wall -O3 -Wa,-mbig-obj -std=gnu++11" )
+if(XTD_OS STREQUAL "XTD_OS_WINDOWS" AND (XTD_COMPILER STREQUAL "XTD_COMPILER_GNU" ))
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -Wall -O3 -Wa,-mbig-obj" )
 endif()
 
 add_executable(unit_tests ${TEST_SOURCE})
-add_test(unit_tests "" ${TEST_SOURCE})
+add_test(NAME unit_tests COMMAND $<TARGET_FILE:unit_tests>)
 add_dependencies(unit_tests dummy_library_test)
+target_link_libraries(unit_tests PRIVATE xtl)
 
 if("Debug" STREQUAL "${CMAKE_BUILD_TYPE}")
-  target_link_libraries(unit_tests gtestd gmockd)
+  target_link_libraries(unit_tests PRIVATE gtest)
 else()
-  target_link_libraries(unit_tests gtest gmock)
+  target_link_libraries(unit_tests PRIVATE gtest)
 endif()
 
 if(XTD_OS STREQUAL "XTD_OS_WINDOWS" AND BUILD_TEST_COVERAGE)
   target_compile_options(unit_tests PRIVATE -coverage -fprofile-arcs -ftest-coverage)
-  target_link_libraries(unit_tests gcov)
+  target_link_libraries(unit_tests PRIVATE gcov)
 endif()
 
 if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" AND (XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM))
-  target_link_libraries(unit_tests stdc++fs)
+  target_link_libraries(unit_tests PRIVATE stdc++fs)
 endif()
 
 

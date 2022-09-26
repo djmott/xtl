@@ -8,9 +8,10 @@ text parsing and AST generation
 #pragma once
 
 #include <xtd/xtd.hpp>
-#include <memory>
-#include <vector>
 #include <xtd/meta.hpp>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace xtd{
 
