@@ -48,7 +48,7 @@ make
 ```
 
 **Configuration:**
-- The main header `include/xtd/xtd.hpp` is generated from `xtd.hpp.in` by CMake
+- The main header `include/xtd/xtd.hpp` is generated from `xtd.hpp.in` by CMake and contains platform detection macros (e.g., `XTD_OS_WINDOWS`, `XTD_COMPILER_MSVC`) that are crucial for cross-platform development
 - Platform detection and feature detection handled during CMake configuration
 - Optional dependencies: libiconv (Unicode on POSIX), libuuid (UUID support on POSIX)
 
@@ -235,7 +235,8 @@ The `xtd::xstring` class extends `std::basic_string`:
 ```cpp
 xtd::string str = "hello";
 bool ends = str.ends_with("lo");  // true
-auto formatted = xtd::string::format(/* args */);
+// Format concatenates multiple values into a string
+auto formatted = xtd::string::format("Value: ", 42, " Name: ", str);
 ```
 
 ### Resource Management
