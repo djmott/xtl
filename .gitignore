@@ -5,6 +5,7 @@ docs/html
 !.gitignore
 !.gitattributes
 !.gitmodules
+!.github
 docs/Doxyfile
 doxygen_sqlite3.db
 include/xtd/xtd.hpp
@@ -12,3 +13,4 @@ CMakeSettings.json
 tests/gtest
 /Testing/Temporary/*.log
 /out
+/build
