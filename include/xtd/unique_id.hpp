@@ -130,7 +130,7 @@ namespace xtd{
       std::string sTemp;
       std::getline(oFile, sTemp);
       //289248a1-379e-4775-bcf5-c6348cf5272b
-      sscanf(sTemp.c_str(), "%08hX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+      sscanf(sTemp.c_str(), "%08X-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
         (uint32_t*)&_uuid[0], (uint16_t*)&_uuid[4], (uint16_t*)&_uuid[6],
         &_uuid[8], &_uuid[9], &_uuid[10], &_uuid[11], &_uuid[12], &_uuid[13], &_uuid[14], &_uuid[15]);
 
