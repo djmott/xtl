@@ -261,7 +261,7 @@ option(XTD_BUILD_TESTS "Build tests" FALSE)
 if(XTD_BUILD_TESTS)
   FetchContent_Declare(gtest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        release-1.12.1
+    GIT_TAG        v1.17.0
   )
   set(BUILD_GMOCK FALSE CACHE INTERNAL "" FORCE )
   FetchContent_MakeAvailable(gtest)
