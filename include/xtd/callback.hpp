@@ -9,6 +9,7 @@ Single producer - multiple subscriber callback
 
 #include <memory>
 #include <vector>
+#include <stdexcept>
 
 
 namespace xtd{
@@ -86,13 +87,16 @@ namespace xtd{
     callback& operator=(const callback&) = delete;
     /// Invokes all the attached targets and returns the result of the target as specified by the result policy
     _return_t operator()(result_policy result, _arg_ts...oArgs) const{
-      _return_t oRet;
+      if (_invokers.empty()){
+        throw std::runtime_error("callback invoked with no receivers");
+      }
+      _return_t oRet{};
       typename invoker::vector::size_type i = 0;
       for (const auto & oInvoker : _invokers){
-        if ((result_policy::first == result && 0 == i) || (result_policy::last == result && (_invokers.size() - 1) == i)){
+        if ((result_policy::return_first == result && 0 == i) || (result_policy::return_last == result && (_invokers.size() - 1) == i)){
           oRet = oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
         } else{
-          oInvoker->invoke(oArgs...);
+          oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
         }
         ++i;
       }
@@ -100,9 +104,12 @@ namespace xtd{
     }
     //invokes all the attached targets and returns the result of the last target
     _return_t operator()(_arg_ts...oArgs) const{
-      _return_t oRet;
+      if (_invokers.empty()){
+        throw std::runtime_error("callback invoked with no receivers");
+      }
+      _return_t oRet{};
       for (const auto & oInvoker : _invokers){
-        oRet = oInvoker->invoke(oArgs...);
+        oRet = oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
       }
       return oRet;
     }
@@ -175,11 +182,11 @@ namespace xtd{
       _dest_t * _dest;
     };
 
-    typename invoker::vector _invokers;
+    typename invoker::vector _invokers{};
 
   public:
     ~callback() = default;
-    callback() : _invokers(){}
+    callback() = default;
     callback(const callback&) = delete;
     callback(callback&& src) : _invokers(std::move(src._invokers)){}
     callback& operator=(const callback&) = delete;

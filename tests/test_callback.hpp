@@ -100,3 +100,43 @@ TEST(test_callback, multiple_labda_destinations){
   ASSERT_EQ(x, 5);
 }
 
+/// callback test empty invoker with return type throws exception
+TEST(test_callback, empty_invokers_with_return_type_throws){
+  xtd::callback<int()> c1;
+  ASSERT_THROW(c1(), std::runtime_error);
+}
+
+/// callback test result policy return first
+TEST(test_callback, result_policy_return_first){
+  xtd::callback<int()> c;
+  c.connect([](){ return 1; });
+  c.connect([](){ return 2; });
+  c.connect([](){ return 3; });
+  ASSERT_EQ(c(xtd::callback<int()>::result_policy::return_first), 1);
+}
+
+/// callback test result policy return last
+TEST(test_callback, result_policy_return_last){
+  xtd::callback<int()> c;
+  c.connect([](){ return 1; });
+  c.connect([](){ return 2; });
+  c.connect([](){ return 3; });
+  ASSERT_EQ(c(xtd::callback<int()>::result_policy::return_last), 3);
+}
+
+/// callback test result policy with parameters
+TEST(test_callback, result_policy_with_parameters){
+  xtd::callback<int(int, int)> c;
+  c.connect([](int x, int y){ return x + y; });
+  c.connect([](int x, int y){ return x * y; });
+  c.connect([](int x, int y){ return x - y; });
+  ASSERT_EQ(c(xtd::callback<int(int, int)>::result_policy::return_first, 5, 3), 8);
+  ASSERT_EQ(c(xtd::callback<int(int, int)>::result_policy::return_last, 5, 3), 2);
+}
+
+/// callback test result policy with empty callback throws
+TEST(test_callback, result_policy_empty_throws){
+  xtd::callback<int()> c;
+  ASSERT_THROW(c(xtd::callback<int()>::result_policy::return_first), std::runtime_error);
+  ASSERT_THROW(c(xtd::callback<int()>::result_policy::return_last), std::runtime_error);
+}
