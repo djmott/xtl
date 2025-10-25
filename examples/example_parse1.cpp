@@ -1,14 +1,15 @@
 /** @file
-demonstrates a simple command line parser
-@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+ * demonstrates a simple command line parser
+ * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0.
  */
 
+#include <iostream>
 #include <xtd/parse.hpp>
 
 namespace command_line {
   using namespace xtd::parse;
 
-//termnals
+  // Terminals
   STRING(red, "red");
   STRING(green, "green");
   STRING(blue, "blue");
@@ -17,7 +18,8 @@ namespace command_line {
   STRING(five, "5");
   STRING(dash_color, "--color=");
   STRING(dash_prime, "--prime=");
-//rules
+
+  // Rules
   using rgb = or_<red, green, blue>;
   using prime_num = or_<one, three, five>;
   using color_param = and_<dash_color, rgb>;
@@ -25,14 +27,42 @@ namespace command_line {
   using parameter = or_<color_param, prime_param>;
 }
 
-int main(int, char * argv[]){
-  std::string sParam = argv[1];
-  auto oAST = xtd::parser<command_line::parameter>::parse(sParam.cbegin(), sParam.cend());
-  if (!oAST){
-    //parse failed, show usage or error
+int main(int argc, char* argv[]) {
+  if (argc < 2) {
+    std::cerr << "Usage: " << argv[0] << " <parameter>\n"
+      << "Example: --color=red   or   --prime=3\n";
     return 1;
-  }else{
-    //work with parsed parameters
-    return 0;
   }
+
+  std::string sParam = argv[1];
+
+  // AST pointer and error list
+  command_line::parameter::pointer_type oAST;
+  xtd::parse::parse_error<std::string::const_iterator>::vector errors;
+
+  // The parser type alias
+  using parser_t = xtd::parser<command_line::parameter>;
+
+  bool success = parser_t::parse(sParam.cbegin(), sParam.cend(), oAST, errors);
+
+  if (!success) {
+    std::cerr << "Parse failed for input: " << sParam << "\n";
+
+    // Display errors
+    for (auto& err : errors) {
+      auto posOffset = std::distance(sParam.cbegin(), err->position);
+      std::cerr << "  Error: rule " << err->failed_rule.name()
+        << " at position " << posOffset << "\n";
+    }
+    return 1;
+  }
+
+  std::cout << "Parse succeeded for input: " << sParam << "\n";
+
+  // Example: show the top-level rule type
+  if (oAST) {
+    std::cout << "AST root type: " << oAST->type().name() << "\n";
+  }
+
+  return 0;
 }

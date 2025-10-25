@@ -1,6 +1,8 @@
 /** @file
 text parsing and AST generation
-@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+@copyright David Mott (c) 2016.
+Distributed under the Boost Software License Version 1.0.
+See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 @example example_parse1.cpp
 @example example_parse2.cpp
  */
@@ -12,765 +14,558 @@ text parsing and AST generation
 #include <memory>
 #include <string>
 #include <vector>
+#include <regex>
+#include <typeinfo>
+#include <string_view>
+#include <cctype>
 
-namespace xtd{
+namespace xtd {
 
   template <typename, bool, typename> class parser;
 
+  namespace parse {
 
-  /// @addtogroup Parsing
-  /// @{
-  namespace parse{
-
-
-/** Declares a string terminal with the value equal to the name.
- Must be used at namespace scope
- @param x name and value of the terminal
- */
-#define STRING_(x) \
-      namespace _{ char x[] = #x; } \
-      using x = xtd::parse::string< decltype(_::x), _::x>;
-/**
- @def STRING(_name, _value)
- Declares a string terminal
- Must be used at namespace scope
- @param _name name of the terminal
- @param _value string value of the terminal. Must be enclosed in double quotes.
- */
-#define STRING(_name, _value) \
-      namespace _{ char _name[] = _value; } \
-      using _name = xtd::parse::string< decltype(_::_name), _::_name>;
-
-
-/**
- @def CHARACTER_(_name, _value)
- Declares a single character terminal.
- Must be used at namespace scope.
- @param _name name of the terminal.
- @param _value value of the terminal. Must be a single character enclosed in single quotes.
- */
-#define CHARACTER_(_name, _value) \
-  using _name = xtd::parse::character<_value>
-
-    /**
- @def CHARACTERS_(_name, _first, _last)
- Declares a range of character from _first to _last (inclusive)
- Must be used at namespace scope.
- @param _name name of the terminal.
- @param _first value of the first terminal. Must be a single character enclosed in single quotes.
- */
-#define CHARACTERS_(_name, _first, _last) \
-  using _name = xtd::parse::characters<_first, _last>
-
- /**
- @def REGEX(_name, _value)
- Declares a regular expression terminal.
- Must be used at namespace scope.
- @param _name name of the terminal.
- @param _value regular expression of the terminal.
- */
-#define REGEX(_name, _value) \
-      namespace _{ char _name[] = _value; } \
-      using _name = xtd::parse::regex< decltype(_::_name), _::_name>;
-
+    // Forward declarations
     class rule_base;
 
+    // Skip whitespace helper function
+    template<typename Iterator>
+    void skip_ws(Iterator& begin, Iterator& end, bool ignore_whitespace) {
+      if (!ignore_whitespace) return;
+      while (begin != end && (*begin == ' ' || *begin == '\t' || *begin == '\n' || *begin == '\r')) {
+        ++begin;
+      }
+    }
+
+    // Parse error structure
     template <typename iterator_t>
-    struct parse_error{
+    struct parse_error {
       using iterator_type = iterator_t;
       using ptr = std::shared_ptr<parse_error>;
       using vector = std::vector<ptr>;
       const std::type_info& failed_rule;
       const iterator_type position;
-      parse_error(const std::type_info& oFailedRule, const iterator_type oPosition) : failed_rule(oFailedRule), position(oPosition){}
-      parse_error(const parse_error& src) : failed_rule(src.failed_rule), position(src.position){}
-      parse_error(parse_error&& src) : failed_rule(std::move(src.failed_rule)), position(std::move(src.position)){}
-      parse_error& operator=(const parse_error&) = delete;
-      parse_error& operator=(parse_error&& src) = delete;
+      std::string expected;
+      std::string found;
+
+      parse_error(const std::type_info& failRule, const iterator_type pos,
+        std::string expected_msg = "", std::string found_msg = "")
+        : failed_rule(failRule), position(pos),
+        expected(std::move(expected_msg)), found(std::move(found_msg)) {
+      }
     };
 
+    // Context structure
     template <typename iterator_t>
-    struct context{
+    struct context {
       using iterator_type = iterator_t;
       iterator_type begin;
       iterator_type end;
+      bool ignore_whitespace;
       std::shared_ptr<rule_base> start_rule;
       typename parse_error<iterator_t>::vector parse_errors;
-      context(const context& src) : begin(src.begin), end(src.end), start_rule(src.start_rule), parse_errors(src.parse_errors){}
-      context(context&& src) : begin(std::move(src.begin)), end(std::move(src.end)), start_rule(std::move(src.start_rule)), parse_errors(std::move(src.parse_errors)){}
-      context& operator=(const context& src){
-        if (this == &src) return *this;
-        begin = src.begin;
-        end = src.end;
-        start_rule = src.start_rule;
-        parse_errors = src.parse_errors;
-        return *this;
+
+      context(iterator_type b, iterator_type e, bool ignore_ws = true)
+        : begin(b), end(e), ignore_whitespace(ignore_ws) {
       }
-      context& operator=(context&& src){
-        begin = std::move(src.begin);
-        end = std::move(src.end);
-        start_rule = std::move(src.start_rule);
-        parse_errors = std::move(src.parse_errors);
-        return *this;
-      }
-      context(iterator_t& oBegin, iterator_t& oEnd) : begin(oBegin), end(oEnd), start_rule(nullptr), parse_errors(){}
     };
 
-
-    /** Base class of both rules and terminals
-     Though rules and terminals are technically different they share the rule_base ancestor in XTL to have a cleaner object model and simpler parsing algorithms.
-     Its an abstract interface of parsable text or containers of same satisfying various rules (one or more, zero or more, exactly one, etc).
-     */
-    class rule_base : public std::vector<std::shared_ptr<rule_base>>, public std::enable_shared_from_this<rule_base>{
+    // Rule base class
+    class rule_base
+      : public std::vector<std::shared_ptr<rule_base>>,
+      public std::enable_shared_from_this<rule_base> {
     public:
+      using iterator_type = std::string::const_iterator;
       using pointer_type = std::shared_ptr<rule_base>;
       using weak_ptr_t = std::weak_ptr<rule_base>;
       using super_t = std::vector<pointer_type>;
       using vector_type = super_t;
 
-      /** Constructor
-      @param[in] oChildRules list of child rules that successfully parsed to satisfy the current parse rule. The child rules are stored in a local variable and accessible via the items() member.
-      */
       template <typename ... _child_ts>
-      rule_base(_child_ts&& ... oChildRules) : super_t{ std::forward<_child_ts>(oChildRules)... }, _parent(){}
+      rule_base(_child_ts&& ... oChildRules)
+        : super_t{ std::forward<_child_ts>(oChildRules)... },
+        _parent() {
+      }
 
       virtual ~rule_base() = default;
-      /** Determines if the interface is implemented by a concrete type
-       @param[in] oType type to test
-      @returns true if the implementation's is the specified type
-      */
+
       virtual bool isa(const std::type_info& oType) const = 0;
-      /** Gets the type info of the concrete implementation */
       virtual const std::type_info& type() const = 0;
-      /** Accessor for child parse elements
-      @returns a vector of the parsed child rules and terminals
-      */
+
       pointer_type parent() { return _parent.lock(); }
+
+      virtual bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) = 0;
+
+      virtual std::string_view get_text() const { return ""; }
+
     private:
-      template <typename, bool, typename> friend class xtd::parser;
-      void set_parent(weak_ptr_t oParent){
+      void set_parent(weak_ptr_t oParent) {
         _parent = oParent;
         auto oThis = shared_from_this();
-        for (auto & oChild : static_cast<super_t&>(*this)){
+        for (auto& oChild : static_cast<super_t&>(*this)) {
           oChild->set_parent(oThis);
         }
       }
       std::weak_ptr<rule_base> _parent;
     };
 
+    // Helper to clone rules for AST building
+    template <typename RuleT>
+    std::shared_ptr<RuleT> clone_rule(const std::shared_ptr<RuleT>& src) {
+      auto clone = std::make_shared<RuleT>(*src);
+      clone->set_parent(src->parent());
+      return clone;
+    }
 
-    /** Curiously recurring template pattern to simplify creation of rule_base implementations
-    Rules and terminals implement the rule_base interface through this pattern. It provides boiler plate pointer_type, isa() and type() members.
-    @tparam _decl_t The type declaration. Permits access to the implementation from the rule class template. Declaration pass their name in the form of: class SomeRule : rule<SomeRule>
-    @tparam _impl_t The declaration used by the parsing algorithms. The library instantiates type of _decl_t when _impl_t successfully parses.
-    */
+    // Rule template using CRTP
     template <typename _decl_t, typename _impl_t = _decl_t>
-    class rule : public rule_base{
+    class rule : public rule_base {
     public:
       using decl_type = _decl_t;
       using impl_type = _impl_t;
       using rule_type = rule<_decl_t, _impl_t>;
 
       template <typename ... _child_rule_ts>
-      explicit rule(_child_rule_ts&& ... oChildRules) : rule_base(std::forward<_child_rule_ts>(oChildRules)...){}
+      explicit rule(_child_rule_ts&& ... oChildRules)
+        : rule_base(std::forward<_child_rule_ts>(oChildRules)...) {
+      }
 
       virtual ~rule() = default;
 
-      virtual bool isa(const std::type_info& oType) const override{
-        return (typeid(rule) == oType) || (typeid(decl_type) == oType) || (typeid(impl_type) == oType) || (typeid(rule_base) == oType);
+      bool isa(const std::type_info& oType) const override {
+        return (typeid(rule) == oType) || (typeid(decl_type) == oType) ||
+          (typeid(impl_type) == oType) || (typeid(rule_base) == oType);
       }
 
-      virtual const std::type_info& type() const override{
+      const std::type_info& type() const override {
         return typeid(_decl_t);
       }
 
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        for (auto& child : *this) {
+          if (!child->parse(ctx, begin, end)) {
+            ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+              this->type(), backup, "Sequence element failed",
+              begin != end ? std::string(1, *begin) : "EOF"));
+            begin = backup;
+            return false;
+          }
+        }
+        return true;
+      }
     };
 
-    /** Represents a parse algorithm where none of the specified elements should parse.
-     * Parsing fails if any constituent parsers succeed
-     * @tparam ... list of child rules and terminals that should fail to parse for this rule to succeed
-     */
+    // NOT combinator
     template <typename ...> class not_;
 
-#if (!DOXY_INVOKED)
-    template <> class not_<> : public rule<not_<>>{
+    template <> class not_<> : public rule<not_<>> {
     public:
       using _super_t = rule<not_<>>;
       template <typename ... _child_rule_ts>
-      explicit not_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
+      explicit not_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
+
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        if (empty() || this->front()->parse(ctx, begin, end)) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, "Negative assertion failed",
+            begin != end ? std::string(1, *begin) : "EOF"));
+          begin = backup;
+          return false;
+        }
+        begin = backup;
+        return true;
+      }
     };
 
-    template <typename _head_t, typename ... _tail_ts> class not_<_head_t, _tail_ts...> : public rule<not_<_head_t, _tail_ts...>>{
+    template <typename _head_t, typename ... _tail_ts>
+    class not_<_head_t, _tail_ts...> : public rule<not_<_head_t, _tail_ts...>> {
     public:
       using _super_t = rule<not_<_head_t, _tail_ts...>>;
       template <typename ... _child_rule_ts>
-      explicit not_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
-    };
-#endif
+      explicit not_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
-    /** Represents a parse algorithm where all specified elements parse are contiguously present in the input stream
-     All the terminals and rules listed in the parameter pack must parse successfully to satisfy the parse rule
-     @tparam ... list of child rules and terminals to parse
-    */
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+
+        auto temp_begin = begin;
+        bool all_matched = true;
+        for (auto& child : *this) {
+          if (!child->parse(ctx, temp_begin, end)) {
+            all_matched = false;
+            break;
+          }
+        }
+
+        if (all_matched) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, "Negative assertion failed",
+            begin != end ? std::string(1, *begin) : "EOF"));
+          begin = backup;
+          return false;
+        }
+
+        begin = backup;
+        return true;
+      }
+    };
+
+    // AND combinator (uses default sequence implementation)
     template <typename ...> class and_;
-#if (!DOXY_INVOKED)
-    template <> class and_<> : public rule<and_<>>{
-    public:
-      using _super_t = rule<and_<>>;
-      template <typename ... _child_rule_ts>
-      explicit and_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
-    };
+    template <> class and_<> : public rule<and_<>> {};
+    template <typename _head_t, typename ... _tail_ts>
+    class and_<_head_t, _tail_ts...> : public rule<and_<_head_t, _tail_ts...>> {};
 
-    template <typename _head_t, typename ... _tail_ts> class and_<_head_t, _tail_ts...> : public rule<and_<_head_t, _tail_ts...>>{
-    public:
-      using _super_t = rule<and_<_head_t, _tail_ts...>>;
-      template <typename ... _child_rule_ts>
-      explicit and_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
-
-    };
-#endif
-
-    /**Represents a parse algorithm where one of the listed elements is present in the input stream
-    One of the terminals or rules listed in the parameter pack must parse successfully to satisfy the parse rule
-    @tparam ... list of child rules and terminals to parse
-    */
+    // OR combinator
     template <typename ...> class or_;
-#if (!DOXY_INVOKED)
-    template <> class or_<> : public rule<or_<>>{
+
+    template <> class or_<> : public rule<or_<>> {
     public:
       using _super_t = rule<or_<>>;
       template <typename ... _child_rule_ts>
-      explicit or_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
+      explicit or_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
+
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        typename parse_error<iterator_type>::vector branch_errors;
+        for (auto& child : *this) {
+          auto child_backup = begin;
+          if (child->parse(ctx, begin, end)) return true;
+          branch_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            child->type(), child_backup, "Alternative branch failed",
+            child_backup != end ? std::string(1, *child_backup) : "EOF"));
+          begin = backup;
+        }
+        ctx.parse_errors.insert(ctx.parse_errors.end(), branch_errors.begin(), branch_errors.end());
+        begin = backup;
+        return false;
+      }
     };
 
-    template <typename _head_t, typename ... _tail_ts> class or_<_head_t, _tail_ts...> : public rule<or_<_head_t, _tail_ts...>>{
-    public:
-      using _super_t = rule<or_<_head_t, _tail_ts...>>;
-      template <typename ... _child_rule_ts>
-      explicit or_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
-    };
-#endif
+    template <typename _head_t, typename ... _tail_ts>
+    class or_<_head_t, _tail_ts...> : public rule<or_<_head_t, _tail_ts...>> {};
 
-
-    /**
-    Represents a parse algorithm where where the terminal or rule is repeated one or more times in the input stream
-    The specified item must parse successfully at least once to satisfy the parse rule. Consecutive occurrences are attempted and permitted if present.
-    @tparam _ty The rule or terminal to parse
-    */
-    template <typename _ty> class one_or_more_ : public rule<one_or_more_<_ty>>{
+    // ONE_OR_MORE combinator
+    template <typename _ty>
+    class one_or_more_ : public rule<one_or_more_<_ty>> {
     public:
       using _super_t = rule<one_or_more_<_ty>>;
       template <typename ... _child_rule_ts>
-      explicit one_or_more_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
+      explicit one_or_more_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
+
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        if (empty()) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, "One_or_more rule has no child", ""));
+          begin = backup;
+          return false;
+        }
+        auto child = this->front();
+
+        if (!child->parse(ctx, begin, end)) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, "One_or_more requires at least one match",
+            begin != end ? std::string(1, *begin) : "EOF"));
+          begin = backup;
+          return false;
+        }
+        this->push_back(clone_rule(child));
+
+        while (true) {
+          auto loop_backup = begin;
+          if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+          if (begin == end || !child->parse(ctx, begin, end)) {
+            begin = loop_backup;
+            break;
+          }
+          if (begin == loop_backup) break;
+          this->push_back(clone_rule(child));
+        }
+        return true;
+      }
     };
 
-
-
-    /**
-    Represents a parse algorithm where the terminal or rule repeats zero or more times in the input stream
-    Always successfully parses whether or not the element parses. Data in the input stream is consumed if present.
-    @tparam _ty the rule or terminal to parse
-    */
-    template <typename _ty> class zero_or_more_ : public rule<zero_or_more_<_ty>>{
+    // ZERO_OR_MORE combinator
+    template <typename _ty>
+    class zero_or_more_ : public rule<zero_or_more_<_ty>> {
     public:
       using _super_t = rule<zero_or_more_<_ty>>;
       template <typename ... _child_rule_ts>
-      explicit zero_or_more_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
+      explicit zero_or_more_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
+
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        if (empty()) return true;
+        auto child = this->front();
+        while (true) {
+          auto backup = begin;
+          if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+          if (begin == end || !child->parse(ctx, begin, end)) {
+            begin = backup;
+            break;
+          }
+          if (begin == backup) break;
+          this->push_back(clone_rule(child));
+        }
+        return true;
+      }
     };
 
-
-    /** Represents a parse algorithm where the terminal or rule repeats exactly zero or one time in the input stream
-    Always successfully parses whether or not the element parses.
-    @tparam _ty the rule or terminal to parse
-    */
-    template <typename _ty> class zero_or_one_ : public rule<zero_or_one_<_ty>>{
+    // ZERO_OR_ONE combinator
+    template <typename _ty>
+    class zero_or_one_ : public rule<zero_or_one_<_ty>> {
     public:
       using _super_t = rule<zero_or_one_<_ty>>;
       template <typename ... _child_rule_ts>
-      explicit zero_or_one_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...){}
+      explicit zero_or_one_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
+
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        if (empty()) return true;
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        auto child = this->front();
+        if (child->parse(ctx, begin, end)) {
+          this->push_back(clone_rule(child));
+          return true;
+        }
+        begin = backup;
+        return true;
+      }
     };
 
+    // STRING terminal
+    template <typename _ty, _ty&> class string;
+    template <size_t _len, char(&_str)[_len]>
+    class string<char[_len], _str> : public rule<string<char[_len], _str>> {
+    private:
+      std::string _matched;
 
-    /** list of whitespace characters to ignore in the input stream.
-    Whitespace characters are parsed and discarded from the input stream when encountered between rules or terminals.
-    A typical whitespace declaration for written language might be: whitespace<'\\r', '\\n', '\\t', ' '>;
-    @tparam _chs... list of characters to ignore.
-    */
-    template <char..._chs> class whitespace{
+    public:
+      using _super_t = rule<string<char[_len], _str>>;
+      static constexpr size_t length = _len - 1;
+      string() = default;
+
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        constexpr const char* lit = _str;
+        for (size_t i = 0; i < length; ++i) {
+          if (begin == end || *begin != lit[i]) {
+            ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+              this->type(), backup, std::string("Expected string: ") + lit,
+              begin != end ? std::string(1, *begin) : "EOF"));
+            begin = backup;
+            return false;
+          }
+          ++begin;
+        }
+        _matched = std::string(lit, length);
+        return true;
+      }
+
+      std::string_view get_text() const override { return _matched; }
+    };
+
+    // CHARACTER terminal
+    template <char _value>
+    class character : public rule<character<_value>> {
+    private:
+      char _matched = 0;
+
+    public:
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        if (begin == end || *begin != _value) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, std::string("Expected character: '") + _value + "'",
+            begin != end ? std::string(1, *begin) : "EOF"));
+          begin = backup;
+          return false;
+        }
+        _matched = *begin;
+        ++begin;
+        return true;
+      }
+
+      std::string_view get_text() const override { return std::string_view(&_matched, 1); }
+    };
+
+    // CHARACTERS range terminal
+    template <char _first, char _last>
+    class characters : public rule<characters<_first, _last>> {
+    private:
+      char _matched = 0;
+
+    public:
+      using _super_t = rule<characters<_first, _last>>;
+
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        if (begin == end) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, "Expected character in range",
+            "EOF"));
+          begin = backup;
+          return false;
+        }
+
+        char c = *begin;
+        if constexpr (_first <= _last) {
+          if (c < _first || c > _last) {
+            ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+              this->type(), backup,
+              std::string("Expected character in range [") + _first + "-" + _last + "]",
+              std::string(1, c)));
+            begin = backup;
+            return false;
+          }
+        }
+        else {
+          if (c > _first || c < _last) {
+            ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+              this->type(), backup,
+              std::string("Expected character in range [") + _last + "-" + _first + "]",
+              std::string(1, c)));
+            begin = backup;
+            return false;
+          }
+        }
+
+        _matched = c;
+        ++begin;
+        return true;
+      }
+
+      std::string_view get_text() const override { return std::string_view(&_matched, 1); }
+    };
+
+    // REGEX terminal
+    template <typename _ty, _ty&> class regex;
+    template <size_t _len, char(&_str)[_len]>
+    class regex<char[_len], _str> : public rule<regex<char[_len], _str>> {
+    private:
+      std::string _matched;
+      static std::regex& get_pattern() {
+        static std::regex pattern(_str);
+        return pattern;
+      }
+
+    public:
+      using _super_t = rule<regex<char[_len], _str>>;
+      static constexpr size_t length = _len - 1;
+
+      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+
+        if (begin == end) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, "Expected regex match", "EOF"));
+          begin = backup;
+          return false;
+        }
+
+        std::match_results<iterator_type> matches;
+        auto& pattern = get_pattern();
+
+        if (!std::regex_search(begin, end, matches, pattern,
+          std::regex_constants::match_continuous)) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, std::string("Expected regex: ") + _str,
+            begin != end ? std::string(begin, begin + std::min<size_t>(10, end - begin)) + "..." : "EOF"));
+          begin = backup;
+          return false;
+        }
+
+        if (matches.empty() || matches.position(0) != 0) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, "Regex match not at beginning",
+            std::string(begin, begin + std::min<size_t>(10, end - begin)) + "..."));
+          begin = backup;
+          return false;
+        }
+
+        _matched = matches.str(0);
+        begin += _matched.length();
+        return true;
+      }
+
+      std::string_view get_text() const override { return _matched; }
+    };
+
+    // WHITESPACE definition
+    template <char..._chs>
+    class whitespace {
     public:
       using whitespace_type = whitespace<_chs...>;
     };
 
+    // Macros for convenience
+#define STRING_(x) \
+        namespace _ { char x[] = #x; } \
+        using x = xtd::parse::string<decltype(_::x), _::x>;
 
-    /** String terminal parsing algorithm.
-    This template is infrequently used directly. The STRING and STRING_ macros are provided to declare string terminals.
-    */
-    template <typename _ty, _ty &> class string;
-#if (!DOXY_INVOKED)
-    template <size_t _len, char(&_str)[_len]> class string<char[_len], _str> : public rule<string<char[_len], _str>>{
-    public:
-      using _super_t = rule<string<char[_len], _str>>;
-      static constexpr size_t length = _len;
-      string() = default;
-    };
-#endif
+#define STRING(_name, _value) \
+        namespace _ { char _name[] = _value; } \
+        using _name = xtd::parse::string<decltype(_::_name), _::_name>;
 
+#define CHARACTER_(_name, _value) \
+        using _name = xtd::parse::character<_value>
 
-    /** Character terminal parsing algorithm.
-    This template is infrequently used directly. The CHARACTER macro is provided to declare a character terminal.
-    */
-    template <char _value> class character : public rule<character<_value>>{};
+#define CHARACTERS_(_name, _first, _last) \
+        using _name = xtd::parse::characters<_first, _last>
 
-    /** Character range terminal parsing algorithm.
-    This template is infrequently used directly. The CHARACTERS macro is provided to declare a character terminal.
-    */
-    template <char _first, char _last> class characters : public rule<characters<_first, _last>>{
-    public:
-      using _super_t = rule<characters<_first, _last>>;
-      explicit characters(char ch) : _super_t(), _ch(ch){}
-      char value() const { return _ch; }
-    protected:
-      char _ch;
-    };
+#define REGEX(_name, _value) \
+        namespace _ { char _name[] = _value; } \
+        using _name = xtd::parse::regex<decltype(_::_name), _::_name>;
 
-    /** regular expression parsing algorithm.
-    This template is infrequently used directly. The REGEX macro is provided to declare a regular expression terminal.
-    */
-    template <typename _ty, _ty &> class regex;
-#if (!DOXY_INVOKED)
-    template <size_t _len, char(&_str)[_len]> class regex<char[_len], _str> : public rule<regex<char[_len], _str>>{
-    public:
-      using _super_t = rule<regex<char[_len], _str>>;
-      static constexpr size_t length = _len;
-      regex(const std::string& newval) : _super_t(), _value(newval){}
-      const std::string& value() const{ return _value; }
-    protected:
-      std::string _value;
-    };
-#endif
-
+    // End of file marker
     struct EndOfFile {
       using impl_type = EndOfFile;
     };
 
+  } // namespace parse
 
-#if (!DOXY_INVOKED)
-    /**@internal
-    Internal parsing algorithms are specializations of parse_helper that partially specialize the built in rules and terminals
-     */
-
-    namespace _{
-
-      template <typename _decl_t, typename _impl_t, bool _ignore_case, typename _whitespace_t> class parse_helper;
-
-      ///case sensitive string
-      template <typename _decl_t, size_t _len, char(&_str)[_len], typename _whitespace_t>
-      class parse_helper<_decl_t, xtd::parse::string<char[_len], _str>, false, _whitespace_t>{
-      public:
-        template<typename _iterator_t> static bool _parse(context<_iterator_t> &oOuter) {
-          context <_iterator_t> oContext(oOuter);
-          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-
-          for (size_t i = 0; (i < (_len-1)) && (oContext.begin < oContext.end); ++i, ++oContext.begin){
-            if (_str[i] != *oContext.begin){
-              oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>>(typeid(_decl_t), oContext.begin));
-              return false;
-            }
-          }
-
-          /*
-          Problem: The string comparison algorithms compare character by character and skip any leading or trailing whitespace between terminals.
-            Rules 'ABC' + 'XYZ' maybe defined expecting the two terminals be separated by whitespace but this algorithm could parse the string 'ABCXYZ' as two separate terminals.
-            There's a number of traditional approaches to solving this such as tokenizing before parsing or creating parse tables.
-            A proper handling would compound the complexity of this library beyond it's intended scope, there are plenty of complex parsers around.
-            Currently, the last character parsed is checked against the next character in the stream to see if they're of the same 'class' and fail if so.
-            This isn't ideal because it maybe perfectly valid in some grammars to expect 'ABCXYZ' to appear in the input stream yet successfully parse into independent terminals.
-            This library assumes contiguous alpha-numeric terminals constitute a single terminal so the input stream of 'ABCXYZ' will fail to parse without grammar definition trickery
-          */
-          if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 2])){
-            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
-            return false;
-          }
-          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-          oContext.start_rule = std::make_shared<_decl_t>();
-          oOuter = oContext;
-          return true;
-        }
-      };
-
-
-      ///ignore case string
-      template <typename _decl_t, size_t _len, char(&_str)[_len], typename _whitespace_t>
-      class parse_helper<_decl_t, parse::string<char[_len], _str>, true, _whitespace_t>{
-      public:
-        template<typename _iterator_t> static bool _parse(context<_iterator_t> &oOuter) {
-          context <_iterator_t> oContext(oOuter);
-          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-          if (oContext.begin >= oContext.end){
-            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
-            return false;
-          }
-          for (size_t i = 0; (i < _len-1) && (oContext.begin < oContext.end); ++i, ++oContext.begin){
-            if (tolower(_str[i]) != tolower(*oContext.begin)){
-              oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
-              return false;
-            }
-          }
-          ///ensure there's an identifiable separation between terminals. this should be done differently
-          if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 2])){
-            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
-            return false;
-          }
-          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-          oContext.start_rule = std::make_shared<_decl_t>();
-          oOuter = oContext;
-          return true;
-        }
-      };
-#if 0
-      ///regex
-      template <typename _decl_t, size_t _len, char(&_str)[_len], bool _ignore_case, typename _whitespace_t>
-      class parse_helper<_decl_t, parse::regex<char[_len], _str>, _ignore_case, _whitespace_t> {
-      public:
-        template<typename _iterator_t> static bool _parse(context<_iterator_t> &oOuter) {
-          context <_iterator_t> oContext(oOuter);
-          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-          static constexpr auto iFlags = boost::regex_constants::ECMAScript | (_ignore_case ? boost::regex_constants::icase : 0);
-          static const boost::regex oRE(_str, iFlags);
-          //boost::match_results<std::string::iterator> oMatches;
-          boost::smatch oMatches;
-          //if (!boost::regex_search(oContext.begin, oContext.end, oMatches, oRE, boost::regex_constants::match_continuous | boost::regex_constants::match_not_null)) {
-          std::string sTemp(oContext.begin, oContext.end);
-          if (!boost::regex_search(sTemp, oMatches, oRE, boost::regex_constants::match_default)) {
-            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
-            return false;
-          }
-          
-          oMatches.
-
-          for (const auto & oMatch : oMatches) {
-            std::cout << "Match : " << oMatch << " length:" << oMatch.length()  << "\n";
-            std::cout << "   first : " << *oMatch.first << "\n";
-            std::cout << "   second : " << *oMatch.second << "\n";
-//            std::cout << "   str: " << oMatch.str() << " prefix: " << oMatch.prefix() << " suffix: " << oMatch.suffix() << "\n";
-          }
-
-          return false;
-/*
-        
-          auto oMatch = oMatches[0];
-          auto foo = oMatches.length(0);
-          auto iLen = std::distance(std::cbegin(oMatches), std::cend(oMatches));
-          auto iMax = oMatches.max_size();
-          auto oFirst = *oMatch.first;
-          auto oSecond = *oMatch.second;
-
-          auto x = false;
-          //std::string sval = *oMatches[0].first;
-          auto sVal = std::string(oMatch.begin(), oMatch.end());
-          oContext.begin += sVal.length();
-*/
-          //need to do this oContext.begin += oMatches.length(0);
-
-          ///ensure there's an identifiable separation between terminals. this should be done differently
-/*
-          if (oContext.begin < oContext.end && isalnum(*oContext.begin) && isalnum(_str[_len - 1])) {
-            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oContext.begin));
-            return false;
-          }
-          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-*/
-          oContext.start_rule = std::make_shared<_decl_t>("");
-          oOuter = oContext;
-          return true;
-        }
-      };
-#endif
-      ///whitespace
-      template <bool _ignore_case>
-      class parse_helper<whitespace<>, void, _ignore_case, void>{
-      public:
-        template <typename ... _argTs>
-        static bool _parse(_argTs...) { return false; }
-      };
-
-      template <char _head_ch, char... _tail_chs, bool _ignore_case>
-      class parse_helper<whitespace<_head_ch, _tail_chs...>, void, _ignore_case, void>{
-      public:
-        template <typename _iterator_t>
-        static bool _parse(context<_iterator_t>& oContext) {
-          while (oContext.begin < oContext.end){
-            if (*oContext.begin == _head_ch) {
-              oContext.begin++;
-              continue;
-            }
-            if (parse_helper<whitespace<_tail_chs...>, void, _ignore_case, void>::_parse(oContext)) continue;
-            break;
-          }
-          return false;
-        }
-      };
-
-      //characters
-      template <typename _decl_t, char _first, char _last, typename _whitespace_t>
-      class parse_helper<_decl_t, characters<_first, _last>, true, _whitespace_t>{
-      public:
-        template <typename _iterator_t>
-        static bool _parse(context<_iterator_t>& oOuter) {
-          context<_iterator_t> oContext(oOuter);
-          parse_helper< _whitespace_t, void, true, void>::_parse(oContext);
-          if (oContext.begin < oContext.end && tolower(*oContext.begin) >= tolower(_first) && tolower(*oContext.begin) <= tolower(_last)){
-            oContext.parse_errors.clear();
-            oContext.start_rule = std::make_shared<_decl_t>(*oContext.begin);
-            oContext.begin++;
-            oOuter = oContext;
-            return true;
-          }
-          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(characters<_first, _last>), oContext.begin));
-          return false;
-        }
-      };
-      template <typename _decl_t, char _first, char _last, typename _whitespace_t>
-      class parse_helper<_decl_t, characters<_first, _last>, false, _whitespace_t>{
-      public:
-        template <typename _iterator_t>
-        static bool _parse(context<_iterator_t>& oOuter) {
-          context<_iterator_t> oContext(oOuter);
-          parse_helper< _whitespace_t, void, true, void>::_parse(oContext);
-          if (oContext.begin < oContext.end && *oContext.begin >= _first && *oContext.begin <= _last){
-            oContext.parse_errors.clear();
-            oContext.start_rule = std::make_shared<_decl_t>(*oContext.begin);
-            oContext.begin++;
-            oOuter = oContext;
-            return true;
-          }
-          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(characters<_first, _last>), oContext.begin));
-          return false;
-        }
-      };
-
-
-      //character
-      template <typename _decl_t, char _ch, typename _whitespace_t>
-      class parse_helper<_decl_t, character<_ch>, true, _whitespace_t> {
-        static constexpr char _lower = tolower(_ch);
-      public:
-        template <typename _iterator_t>
-        static bool _parse(context<_iterator_t>& oOuter) {
-          context<_iterator_t> oContext(oOuter);
-          parse_helper< _whitespace_t, void, true, void>::_parse(oContext);
-          if (oContext.begin < oContext.end && tolower(*oContext.begin) == _lower) {
-            oContext.parse_errors.clear();
-            oContext.start_rule = std::make_shared<_decl_t>();
-            oContext.begin++;
-            oOuter = oContext;
-            return true;
-          }
-          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(character<_ch>), oContext.begin));
-          return false;
-        }
-      };
-
-      template <typename _decl_t, char _ch, typename _whitespace_t>
-      class parse_helper<_decl_t, character<_ch>, false, _whitespace_t> {
-      public:
-        template <typename _iterator_t>
-        static bool _parse(context<_iterator_t>& oOuter) {
-          context<_iterator_t> oContext(oOuter);
-          parse_helper< _whitespace_t, void, true, void>::_parse(oContext);
-          if (oContext.begin < oContext.end && *oContext.begin == _ch) {
-            oContext.parse_errors.clear();
-            oContext.start_rule = std::make_shared<_decl_t>();
-            oContext.begin++;
-            oOuter = oContext;
-            return true;
-          }
-          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(character<_ch>), oContext.begin));
-          return false;
-        }
-      };
-
-
-
-      //not
-      template <typename _decl_t, typename ... _ParamTs, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::not_<_ParamTs...>, _ignore_case, _whitespace_t> {
-      public:
-        template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool _parse(context<_iterator_t>& oOuter) {
-          context<_iterator_t> oContext(oOuter);
-          if (!parse_helper<and_<_ParamTs...>, and_<_ParamTs...>, _ignore_case, _whitespace_t>::_parse(oContext)) return true;
-          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oOuter.begin));
-          return false;
-        }
-      };
-
-      ///and
-      template <typename _decl_t, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::and_<>, _ignore_case, _whitespace_t>{
-      public:
-        template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool _parse(context<_iterator_t>& oOuter, _child_rule_ts&& ... oChildRules) {
-          oOuter.start_rule = std::make_shared<_decl_t>(std::forward<_child_rule_ts>(oChildRules)...);
-          oOuter.parse_errors.clear();
-          return true;
-        }
-      };
-
-      template <typename _decl_t, typename _head_t, typename ... _tail_ts, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::and_<_head_t, _tail_ts...>, _ignore_case, _whitespace_t> {
-      public:
-        template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool _parse(context<_iterator_t>& oOuter, _child_rule_ts&& ... oChildRules) {
-          context<_iterator_t> oContext(oOuter);
-          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oContext);
-          if (!bRet) {
-            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(and_<_decl_t>), oOuter.begin));
-            return false;
-          }
-          bRet = parse_helper<_decl_t, parse::and_<_tail_ts...>, _ignore_case, _whitespace_t>::_parse(oContext, std::forward<_child_rule_ts>(oChildRules)..., oContext.start_rule);
-          if (!bRet) {
-            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(and_<_tail_ts...>), oOuter.begin));
-            return false;
-          }
-          oOuter = oContext;
-          return true;
-        }
-      };
-
-
-      ///or
-      template <typename _decl_t, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::or_<>, _ignore_case, _whitespace_t>{
-      public:
-        template <typename ... _argTs>
-        static bool _parse(_argTs...){ return false; }
-      };
-
-      template <typename _decl_t, typename _head_t, typename ... _tail_ts, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::or_<_head_t, _tail_ts...>, _ignore_case, _whitespace_t>{
-      public:
-        template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool _parse(context<_iterator_t>& oOuter){
-          context<_iterator_t> oContext(oOuter);
-          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oContext);
-          if (bRet){
-            oOuter = oContext;
-            oOuter.parse_errors.clear();
-            oOuter.start_rule = std::make_shared<_decl_t>(oOuter.start_rule);
-            return true;
-          }
-          oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_head_t), oOuter.begin));
-          return parse_helper<_decl_t, parse::or_<_tail_ts...>, _ignore_case, _whitespace_t>::_parse(oOuter);
-        }
-      };
-
-
-      ///zero_or_one_
-      template <typename _decl_t, typename _head_t, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::zero_or_one_<_head_t>, _ignore_case, _whitespace_t> {
-      public:
-        template <typename _iterator_t>
-        static bool _parse(context<_iterator_t>& oOuter){
-          if (parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oOuter)) {
-            oOuter.start_rule = std::make_shared<_decl_t>(oOuter.start_rule);
-          }else {
-            oOuter.start_rule = std::make_shared<_decl_t>();
-          }
-          oOuter.parse_errors.clear();
-          return true;
-        }
-      };
-
-
-      ///one_or_more_
-      template <typename _decl_t, typename _head_t, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::one_or_more_<_head_t>, _ignore_case, _whitespace_t> {
-      public:
-        template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool _parse(context<_iterator_t>& oOuter,_child_rule_ts&&...oChildren ){
-          context<_iterator_t> oContext(oOuter);
-          auto bRet = parse_helper<_head_t, typename _head_t::impl_type, _ignore_case, _whitespace_t>::_parse(oContext);
-          if (!bRet) {
-            oOuter.parse_errors.push_back(std::make_shared<parse::parse_error<_iterator_t>>(typeid(_decl_t), oOuter.begin));
-            oOuter.start_rule = std::make_shared<_decl_t>(std::forward<_child_rule_ts>(oChildren)...);
-            return false;
-          }
-          _parse(oContext, std::forward<_child_rule_ts>(oChildren)..., oContext.start_rule);
-          oContext.parse_errors.clear();
-          oOuter = oContext;
-          return true;
-        }
-      };
-
-      ///zero or more
-      template <typename _decl_t, typename _ty, bool _ignore_case, typename _whitespace_t >
-      class parse_helper < _decl_t, parse::zero_or_more_<_ty>, _ignore_case, _whitespace_t>{
-      public:
-
-        template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool _parse(context<_iterator_t>& oOuter, _child_rule_ts&&...oChildren){
-          context<_iterator_t> oContext(oOuter);
-          auto oParent = std::make_shared<parse::zero_or_more_<_ty>>();
-          while(parse_helper<_ty, typename _ty::impl_type, _ignore_case, _whitespace_t>::_parse(oContext)){
-            oParent->push_back(oContext.start_rule);
-          }
-          oOuter = oContext;
-          oOuter.parse_errors.clear();
-          oOuter.start_rule = oParent;
-          return true;
-        }
-      };
-
-      ///EOF
-/*
-      template <bool _ignore_case, typename _whitespace_t >
-      class parse_helper < EndOfFile, EndOfFile, _ignore_case, _whitespace_t> {
-      public:
-
-        template <typename _iterator_t, typename ... _child_rule_ts>
-        static bool _parse(context<_iterator_t>& oOuter, _child_rule_ts&&...oChildren) {
-          context <_iterator_t> oContext(oOuter);
-          parse_helper<_whitespace_t, void, true, void>::_parse(oContext);
-          if (oContext.end() !=)
-        }
-      };*/
-    }
-#endif
-  }
-  /** Main parser class
-
-  The xtd::parser is used to perform the parse and return a constructed AST if the parse succeeds
-  @tparam _rule_t The start rule of the grammar
-  @tparam _ignore_case Specifies whether case should be ignored during the parse
-  @tparam _whitespace_t A specialization of xtd::parse::whitespace that specifies the characters to ignore
-  */
-  template <typename _rule_t, bool _ignore_case = false, typename _whitespace_t = xtd::parse::whitespace<>> class  parser {
+  // Main parser class
+  template <typename _rule_t, bool _ignore_case = false, typename _whitespace_t = parse::whitespace<' ', '\t', '\n', '\r'>>
+  class parser {
   public:
+    template <typename _iterator_t>
+    static bool parse(_iterator_t begin, _iterator_t end,
+      std::shared_ptr<_rule_t>& ast,
+      typename parse::parse_error<_iterator_t>::vector& errors) {
+      parse::context<_iterator_t> ctx(begin, end, true);
+      auto start_rule = std::make_shared<_rule_t>();
 
-    /** Parses text
-    @param begin the beginning iterator of the text to parse
-    @param end the end iterator of the text to parse
-    @returns a fully constructed AST of type _RuleT if the parse succeeds or a nullptr if failed
-    */
-    template <typename _iterator_t> static bool parse(_iterator_t begin, _iterator_t end, typename _rule_t::pointer_type& ast, typename parse::parse_error<_iterator_t>::vector& errors) {
-      typename parse::context<_iterator_t> oContext{begin, end};
+      if (!start_rule->parse(ctx, begin, end)) {
+        errors = ctx.parse_errors;
+        return false;
+      }
 
-      auto bRet = parse::_::parse_helper<_rule_t, typename _rule_t::impl_type, _ignore_case, _whitespace_t>::_parse(oContext);
-      errors = oContext.parse_errors;
-      if (oContext.begin  < oContext.end) return false;
-      auto oAST = oContext.start_rule;
-      oAST->set_parent(oAST);
-      ast = oAST;
-      return bRet;
+      if (begin != end) {
+        errors.emplace_back(std::make_shared<parse::parse_error<_iterator_t>>(
+          typeid(_rule_t), begin, "Expected end of input",
+          std::string(begin, begin + std::min<size_t>(10, end - begin)) + "..."));
+        return false;
+      }
+
+      ast = start_rule;
+      return true;
     }
-    template <typename _iterator_t> static bool parse(_iterator_t begin, _iterator_t end, typename _rule_t::pointer_type& ast) {
-      typename parse::parse_error<_iterator_t>::vector oErrors;
-      return parse(begin, end, ast, oErrors);
-    }
 
+    template <typename _iterator_t>
+    static bool parse(_iterator_t begin, _iterator_t end, std::shared_ptr<_rule_t>& ast) {
+      typename parse::parse_error<_iterator_t>::vector errors;
+      return parse(begin, end, ast, errors);
+    }
   };
-  ///@}
 
-}
-
+} // namespace xtd
