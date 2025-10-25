@@ -20,7 +20,7 @@ int main(){
     xtd::filesystem::path oFile = xtd::filesystem::temp_directory_path() /= "tmp_mapped_file.dat";
 
     {
-      xtd::mapped_file<-1> oMappedFile(oFile);
+      xtd::mapped_file<static_cast<size_t>(-1)> oMappedFile(oFile);
       auto oPerson = oMappedFile.get<person>(0);
       oPerson->age = 123;
       oPerson->ssn = 456;
@@ -28,7 +28,7 @@ int main(){
       strcpy(oPerson->last_name, "Marx");
     }
     {
-      xtd::mapped_file<-1> oMappedFile(oFile);
+      xtd::mapped_file<static_cast<size_t>(-1)> oMappedFile(oFile);
       auto oPerson = oMappedFile.get<person>(1);
       oPerson->age = 456;
       oPerson->ssn = 789;
@@ -36,7 +36,7 @@ int main(){
       strcpy(oPerson->last_name, "Marx");
     }
 
-    xtd::mapped_file<-1> oMappedFile(oFile);
+    xtd::mapped_file<static_cast<size_t>(-1)> oMappedFile(oFile);
     auto oGroucho = oMappedFile.get<person>(0);
     DBG(oGroucho->first_name, " ", oGroucho->last_name);
     auto oHarpo = oMappedFile.get<person>(1);

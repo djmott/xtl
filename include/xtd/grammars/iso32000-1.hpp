@@ -6,6 +6,14 @@
 #include "xtd/xtd.hpp"
 #include "xtd/parse.hpp"
 
+// Undefine conflicting macros
+#ifdef False
+#undef False
+#endif
+#ifdef True
+#undef True
+#endif
+
 namespace xtd{
   namespace grammar{
     namespace iso32000{
