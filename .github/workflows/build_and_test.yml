@@ -1,0 +1,41 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master, fix/callback-bugs-and-aarch64-support ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        build_type: [Debug, Release]
+        include:
+          - os: ubuntu-latest
+            generator: Ninja
+          - os: macos-latest
+            generator: Unix Makefiles
+          - os: windows-latest
+            generator: Visual Studio 17 2022
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G "${{ matrix.generator }}" -DXTD_BUILD_TESTS=TRUE -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} .
+
+    - name: Build
+      run: cmake --build build --config ${{ matrix.build_type }} --parallel $(nproc)
+
+    - name: Test
+      working-directory: build
+      run: |
+        if [ "${{ runner.os }}" = "Windows" ]; then
+          ctest -C ${{ matrix.build_type }}
+        else
+          ctest
+        fi
