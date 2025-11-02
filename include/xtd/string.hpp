@@ -56,8 +56,16 @@ namespace xtd{
       : _super_t(std::forward<_ArgsT>(oArgs)...){}
 
 
-    bool ends_with(const xtd::string& suffix) const{
-      
+    /** @brief Checks if the string ends with the given suffix
+     * @param suffix The suffix to check for
+     * @return true if the string ends with suffix, false otherwise
+     */
+#if __cpp_lib_string_ends_with >= 201711L
+    [[nodiscard]] bool ends_with(const xtd::string& suffix) const{
+      return _super_t::ends_with(suffix);
+    }
+#else
+    [[nodiscard]] bool ends_with(const xtd::string& suffix) const{
       auto sDest = _super_t::rbegin();
       auto sSrc = suffix.rbegin();
       for (; suffix.rend() != sSrc && sDest != _super_t::rend(); ++sSrc, ++sDest){
@@ -65,6 +73,7 @@ namespace xtd{
       }
       return (sSrc == suffix.rend());
     }
+#endif
 
     /**
     Type safe formatting
@@ -72,9 +81,11 @@ namespace xtd{
     @param oArgs variable elements appended together
      */
 
-    static xstring format(){
-      xstring sRet = ((_ChT*)"\0\0\0");
-      return sRet;
+    /** @brief Empty format function
+     * @return Empty string
+     */
+    [[nodiscard]] static constexpr xstring format(){
+      return xstring{};
     }
 
 
@@ -101,9 +112,20 @@ namespace xtd{
     }
 #endif
 
-    xstring& reverse(){
+    /** @brief Reverses the string in-place
+     * @return Reference to this string
+     */
+    xstring& reverse() & {
       std::reverse(_super_t::begin(), _super_t::end());
       return *this;
+    }
+    
+    /** @brief Returns a reversed copy of the string
+     * @return Reversed string
+     */
+    [[nodiscard]] xstring reverse() && {
+      std::reverse(_super_t::begin(), _super_t::end());
+      return std::move(*this);
     }
     /**
     Converts the string to lower case

@@ -85,8 +85,13 @@ namespace xtd{
     ///@}
     ~callback() = default;
     callback& operator=(const callback&) = delete;
-    /// Invokes all the attached targets and returns the result of the target as specified by the result policy
-    _return_t operator()(result_policy result, _arg_ts...oArgs) const{
+    /** @brief Invokes all attached targets and returns result per policy
+     * @param result Policy for which result to return (first or last)
+     * @param oArgs Arguments to forward to callbacks
+     * @return Result from the callback specified by the policy
+     * @throws std::runtime_error if no receivers are attached
+     */
+    [[nodiscard]] _return_t operator()(result_policy result, _arg_ts...oArgs) const{
       if (_invokers.empty()){
         throw std::runtime_error("callback invoked with no receivers");
       }
@@ -102,8 +107,13 @@ namespace xtd{
       }
       return oRet;
     }
-    //invokes all the attached targets and returns the result of the last target
-    _return_t operator()(_arg_ts...oArgs) const{
+    
+    /** @brief Invokes all attached targets and returns the last result
+     * @param oArgs Arguments to forward to callbacks
+     * @return Result from the last callback
+     * @throws std::runtime_error if no receivers are attached
+     */
+    [[nodiscard]] _return_t operator()(_arg_ts...oArgs) const{
       if (_invokers.empty()){
         throw std::runtime_error("callback invoked with no receivers");
       }

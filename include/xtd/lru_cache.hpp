@@ -60,8 +60,10 @@ namespace xtd{
      * 
      * @param key The key to look up
      * @return Reference to the cached value
+     * @note This operation has O(n) complexity where n is the cache size.
+     *       Consider using a hash-based cache for O(1) lookup.
      */
-    _value_t& operator[](const _key_t& key){
+    [[nodiscard]] _value_t& operator[](const _key_t& key){
       for (typename _super_t::iterator oItem = _super_t::begin(); _super_t::end() != oItem; ++oItem){
         if (key == oItem->first){
           value_type oRet = oItem->second;

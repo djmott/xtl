@@ -9,28 +9,34 @@
 
 #pragma once
 #include <xtd/xtd.hpp>
+#include <source_location>
+#include <string>
 #include <string.h>
 namespace xtd{
 
 /** @def here()
- *  @brief Creates an xtd::source_location at the call site
+ *  @brief Creates a source_location at the call site using C++20 std::source_location
  *  
- *  Macro that expands to a source_location object with the current file
- *  and line number. Useful for error reporting and logging.
+ *  Uses std::source_location::current() for better standardization.
+ *  Falls back to xtd::source_location for compatibility if needed.
  *  
  *  @code{.cpp}
  *  throw exception(here(), "Something went wrong");
  *  @endcode
  */
-#define here() xtd::source_location(__FILE__,__LINE__)
+#if __cpp_lib_source_location >= 201907L
+  #define here() std::source_location::current()
+#else
+  #define here() xtd::source_location(__FILE__,__LINE__)
+#endif
 
   /** @brief Contains information about a location in source code
    * 
    * Used primarily for error reporting and logging. Stores the file name
    * and line number where an object was created.
    * 
-   * @note On C++20, consider using std::source_location for better
-   *       standardization, but this class maintains C++17 compatibility.
+   * @note With C++20+, prefer using std::source_location directly via here() macro.
+   *       This class maintains backward compatibility.
    */
   class source_location{
   public:

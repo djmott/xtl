@@ -9,6 +9,7 @@ generic and special purpose exceptions
 #include <xtd/xtd.hpp>
 
 #include <exception>
+#include <source_location>
 #include <xtd/source_location.hpp>
 #include <xtd/string.hpp>
 /**
@@ -41,8 +42,26 @@ Throws exception if the test expression returns true. _throw_if methods are pres
 @param expstr String value passed to the exceptions constructor when thrown
 @returns ret if no exception is thrown
 */
+        /** @brief Helper function to test and throw exception
+         * @tparam _return_t Return type
+         * @tparam _expression_t Expression type (typically lambda)
+         * @param source Source location (std::source_location or xtd::source_location)
+         * @param ret Return value to test
+         * @param exp Expression that evaluates ret
+         * @param expstr Error message
+         * @return ret if no exception thrown
+         */
         template <typename _return_t, typename _expression_t>
-        inline static _return_t _throw_if(const xtd::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
+#if __cpp_lib_source_location >= 201907L
+        inline static _return_t _throw_if(const std::source_location& source, _return_t ret, _expression_t exp, const char* expstr){
+          if (exp(ret)){
+            throw exception(source, expstr);
+          }
+          return ret;
+        }
+        template <typename _return_t, typename _expression_t>
+#endif
+        inline static _return_t _throw_if(const source_location& source, _return_t ret, _expression_t exp, const char* expstr){
           if (exp(ret)){
             throw exception(source, expstr);
           }
@@ -50,11 +69,42 @@ Throws exception if the test expression returns true. _throw_if methods are pres
         }
 
 /// Constructors @{
+#if __cpp_lib_source_location >= 201907L
+        /** @brief Constructs exception with std::source_location
+         * @param Source Source location from std::source_location::current()
+         * @param What Error message
+         */
+        exception(const std::source_location& Source, const std::string& What)
+                :  _super_t()
+                , _errnum(errno)
+                , _source(_convert_source_location(Source))
+                , _what(What){}
+        
+        /** @brief Constructs exception with std::source_location and error code
+         * @param Source Source location
+         * @param What Error message
+         * @param iErr Error code
+         */
+        exception(const std::source_location& Source, const std::string& What, uint32_t iErr)
+                :  _super_t()
+                , _errnum(iErr)
+                , _source(_convert_source_location(Source))
+                , _what(What){}
+#endif
+        /** @brief Constructs exception with xtd::source_location
+         * @param Source Source location
+         * @param What Error message
+         */
         exception(const source_location& Source, const std::string& What)
                 :  _super_t()
                 , _errnum(errno)
                 , _source(Source)
                 , _what(What){}
+        /** @brief Constructs exception with xtd::source_location and error code
+         * @param Source Source location
+         * @param What Error message
+         * @param iErr Error code
+         */
         exception(const source_location& Source, const std::string& What, uint32_t iErr)
                 :  _super_t()
                 , _errnum(iErr)
@@ -90,6 +140,12 @@ Throws exception if the test expression returns true. _throw_if methods are pres
           return _source;
         }
 
+    private:
+#if __cpp_lib_source_location >= 201907L
+        static source_location _convert_source_location(const std::source_location& loc){
+          return source_location(loc.file_name(), static_cast<int>(loc.line()));
+        }
+#endif
     protected:
         //_errnum needs to be in the base class before heap allocations such as std::string in _what
         int _errnum;

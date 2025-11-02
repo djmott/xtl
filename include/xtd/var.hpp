@@ -54,19 +54,19 @@ namespace xtd {
     /** @brief Gets the type information of the stored value
      * @return Reference to std::type_info for the stored type
      */
-    const std::type_info& get_type() const { return _inner->get_type(); }
+    [[nodiscard]] const std::type_info& get_type() const noexcept { return _inner->get_type(); }
 
     /** @brief Checks if the stored value is a POD (Plain Old Data) type
      * @return true if the stored type is trivial and standard layout
      * @throws std::runtime_error if var is empty
      */
-    bool is_pod() const { return _inner->is_pod(); }
+    [[nodiscard]] bool is_pod() const { return _inner->is_pod(); }
 
     /** @brief Gets the size of the stored value
      * @return Size in bytes of the stored type
      * @throws std::runtime_error if var is empty
      */
-    size_t size() const { return _inner->size(); }
+    [[nodiscard]] size_t size() const { return _inner->size(); }
 
     /** @brief Retrieves the stored value with type checking
      * @tparam _ty The expected type of the stored value

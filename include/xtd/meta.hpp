@@ -43,9 +43,10 @@ namespace xtd{
    * @param value The value to extract the high word from
    * @return High 32 bits of the value
    */
-  template <typename _Ty> constexpr uint32_t hidword(_Ty value){
+  template <typename _Ty> 
+  [[nodiscard]] constexpr uint32_t hidword(_Ty value) noexcept {
     static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
-    return ((uint32_t)(((value) >> 32) & 0xffffffff));
+    return static_cast<uint32_t>((value >> 32) & 0xffffffff);
   }
   
   /** @brief Gets the low-order 32-bit word from a 64-bit value
@@ -53,9 +54,10 @@ namespace xtd{
    * @param value The value to extract the low word from
    * @return Low 32 bits of the value
    */
-  template <typename _Ty> constexpr uint32_t lodword(_Ty value){
+  template <typename _Ty> 
+  [[nodiscard]] constexpr uint32_t lodword(_Ty value) noexcept {
     static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
-    return ((uint32_t)((value) & 0xffffffff));
+    return static_cast<uint32_t>(value & 0xffffffff);
   }
 
 
