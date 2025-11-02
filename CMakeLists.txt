@@ -270,7 +270,6 @@ endif()
 
 
 install(FILES ${XTD_COM_HEADERS}          DESTINATION include/xtd/com)
-install(FILES ${XTD_COM_HEADERS}          DESTINATION include/xtd/com)
 install(FILES ${XTD_CONCURRENT_HEADERS}   DESTINATION include/xtd/concurrent)
 install(FILES ${XTD_GRAMMARS}             DESTINATION include/xtd/grammars)
 install(FILES ${XTD_NLP_HEADERS}          DESTINATION include/xtd/nlp)

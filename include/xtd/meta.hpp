@@ -1,6 +1,10 @@
 /** @file
- * template meta-programming utilities
- * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+  @brief Template metaprogramming utilities
+  
+  Provides type traits, template metafunctions, and compile-time type
+  manipulation utilities to complement the standard library's type traits.
+  
+  @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
  */
 
 #pragma once
@@ -27,22 +31,41 @@ namespace xtd{
 
   }
 
+  /** @brief Type alias for void that is useful in SFINAE contexts
+   * 
+   * Similar to std::void_t (C++17), but available for C++11/C++14 compatibility.
+   * Useful for detecting types in SFINAE expressions.
+   */
   template <typename...> using void_t = void;
 
+  /** @brief Gets the high-order 32-bit word from a 64-bit value
+   * @tparam _Ty The type of value (must be at least 64 bits)
+   * @param value The value to extract the high word from
+   * @return High 32 bits of the value
+   */
   template <typename _Ty> constexpr uint32_t hidword(_Ty value){
     static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
     return ((uint32_t)(((value) >> 32) & 0xffffffff));
   }
+  
+  /** @brief Gets the low-order 32-bit word from a 64-bit value
+   * @tparam _Ty The type of value (must be at least 64 bits)
+   * @param value The value to extract the low word from
+   * @return Low 32 bits of the value
+   */
   template <typename _Ty> constexpr uint32_t lodword(_Ty value){
     static_assert(sizeof(_Ty) > 4, "parameter is <= 32 bits wide");
     return ((uint32_t)((value) & 0xffffffff));
   }
 
 
-  /** meta-function to get the intrinsic of a specified size
-  @tparam _Size size
-  @return intrinsic of specified size
-  */
+  /** @brief Metafunction to get the unsigned integer type of a specified size
+   * 
+   * Maps size in bytes to the corresponding unsigned integer type.
+   * 
+   * @tparam _Size Size in bytes (1, 2, 4, or 8)
+   * @return Type member typedef containing uint8_t, uint16_t, uint32_t, or uint64_t
+   */
   template <int _Size> struct intrinsic_of_size;
 #if (!DOXY_INVOKED)
   template <> struct intrinsic_of_size<1>{ using type = uint8_t; };
@@ -53,12 +76,16 @@ namespace xtd{
 
 #endif
 
-  /** meta-function to get the processor intrinsic storage for a type. should work with 8, 16, 32 and 64 bit processors
-  @tparam _Ty type
-  @return intrinsic storage
-  */
+  /** @brief Metafunction to get the processor intrinsic storage type for a given type
+   * 
+   * Returns the unsigned integer type that can store a value of the given type
+   * without loss of information. Works with 8, 16, 32, and 64-bit processors.
+   * 
+   * @tparam _Ty The type to get the intrinsic storage for
+   * @return Type member typedef containing the intrinsic storage type
+   */
   template <typename _Ty> struct processor_intrinsic{
-    /// processor intrinsic of pointer type
+    /** @brief Processor intrinsic type for value storage */
     using type = typename intrinsic_of_size<sizeof(_Ty)>::type;
   };
 #if (!DOXY_INVOKED)
@@ -66,18 +93,31 @@ namespace xtd{
     using type = typename intrinsic_of_size<sizeof(_Ty*)>::type;
   };
 #endif
-  /** casts a pointer to the processor intrinsic storage type
-  * @param src
-  * @return
-  */
+  /** @brief Casts a value to its processor intrinsic storage type
+   * @tparam _Ty The type of the value
+   * @param src The value to cast
+   * @return Value cast to intrinsic storage type
+   */
   template <typename _Ty> constexpr typename processor_intrinsic<_Ty>::type intrinsic_cast(_Ty src){
     return src;
-  } 
+  }
+  
+  /** @brief Casts a pointer to its processor intrinsic storage type
+   * @tparam _Ty The type pointed to
+   * @param src Pointer to cast
+   * @return Pointer value cast to intrinsic storage type
+   */
   template <typename _Ty> constexpr typename processor_intrinsic<_Ty*>::type intrinsic_cast(const _Ty * src){
     return reinterpret_cast<typename processor_intrinsic<_Ty>::type>(src);
   }
 
-  /// gets the last element of a parameter pack
+  /** @brief Gets the last element of a parameter pack
+   * 
+   * Metafunction that extracts the last type from a variadic template parameter pack.
+   * 
+   * @tparam _Tys Variadic template parameter pack
+   * @return Type member typedef containing the last type in the pack
+   */
   namespace _{
     template <size_t, typename ...> struct last_t;
     template <size_t _index, typename _HeadT, typename ... _TailT> struct last_t<_index, _HeadT, _TailT...>{
@@ -92,8 +132,13 @@ namespace xtd{
   };
 
   
-  /// chains together multiple methods in a single task
-
+  /** @brief Chains together multiple callable objects in a single task
+   * 
+   * Allows composing multiple functions into a pipeline where the output
+   * of one function becomes the input to the next.
+   * 
+   * @tparam ... Function or functor types to chain together
+   */
   template <typename ...> struct task;
   template <> struct task<>{
     template <typename _Ty> _Ty&& operator()(_Ty&& src){ return std::move(src); }
@@ -114,7 +159,15 @@ namespace xtd{
 
 
 
-  /// Determine if a type is specified in a list
+  /** @brief Determines if a type appears in a type list
+   * 
+   * Type trait that checks whether a given type appears in a variadic
+   * template parameter pack.
+   * 
+   * @tparam _Ty The type to search for
+   * @tparam ... Variadic type list to search in
+   * @return std::true_type if _Ty is found, std::false_type otherwise
+   */
   template <typename, typename...> struct is_a;
   template <typename _Ty> struct is_a<_Ty> : std::false_type {};
   template <typename _Ty, typename ... _TailT> struct is_a<_Ty, _Ty, _TailT...> : std::true_type{ using type = _Ty; };

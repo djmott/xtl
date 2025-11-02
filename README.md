@@ -34,7 +34,9 @@ XTL is a series of C++ template metaprogramming patterns, idioms, algorithms and
 
 ### Getting started
 
-XTL works with modern C++11 compilers and has been tested with MinGW, GCC, Intel C++, Cygwin and Microsoft Visual C++. The library can be used out-of-the-box in many cases by simply including the desired header since most components are header-only. A few components require linking to a run-time component so they will need to be compiled.
+XTL works with modern C++17 compilers and has been tested with MinGW, GCC, Intel C++, Cygwin and Microsoft Visual C++. The library can be used out-of-the-box in many cases by simply including the desired header since most components are header-only. A few components require linking to a run-time component so they will need to be compiled.
+
+**Note**: While XTL currently targets C++17, some deprecated features have been replaced with modern equivalents. The codebase uses `std::is_trivial_v` and `std::is_standard_layout_v` instead of the deprecated `std::is_pod`.
 
 ### Requirements
 

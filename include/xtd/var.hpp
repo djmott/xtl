@@ -1,7 +1,10 @@
 /** @file
-  multi-type variant using type-erasure
+  @brief Multi-type variant using type-erasure
+  
+  Provides a type-erased container similar to std::variant or std::any that can hold
+  values of arbitrary types at runtime.
+  
   @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
-
 */
 
 #pragma once
@@ -14,12 +17,22 @@
 
 namespace xtd {
 
-  /** The var class implements a minimal type erasure idiom.
-   *  A var is a container-wrapper for arbitrary value types similar to a ~variant~ or ~any~ type.
+  /** @brief Type-erased value container
+   * 
+   * The var class implements a minimal type erasure idiom. A var is a container-wrapper 
+   * for arbitrary value types similar to std::variant or std::any. It allows storing 
+   * values of different types at runtime and retrieving them with type safety.
+   * 
+   * @note Unlike std::any, var uses dynamic_cast for type checking which may have
+   * different performance characteristics.
    */
   class var {
   public:
-    ///Default constructs a var object with an underlying empty object
+    /** @brief Default constructs a var object with an underlying empty object
+     * 
+     * Creates a var instance that does not contain any value. Attempting to access
+     * the value will result in an exception.
+     */
     var() : _inner(new empty) {}
 
     var(const var& src) : _inner(src._inner->clone()) {}
@@ -38,20 +51,44 @@ namespace xtd {
       return *this;
     }
 
+    /** @brief Gets the type information of the stored value
+     * @return Reference to std::type_info for the stored type
+     */
     const std::type_info& get_type() const { return _inner->get_type(); }
 
+    /** @brief Checks if the stored value is a POD (Plain Old Data) type
+     * @return true if the stored type is trivial and standard layout
+     * @throws std::runtime_error if var is empty
+     */
     bool is_pod() const { return _inner->is_pod(); }
 
+    /** @brief Gets the size of the stored value
+     * @return Size in bytes of the stored type
+     * @throws std::runtime_error if var is empty
+     */
     size_t size() const { return _inner->size(); }
 
+    /** @brief Retrieves the stored value with type checking
+     * @tparam _ty The expected type of the stored value
+     * @return Reference to the stored value of type _ty
+     * @throws std::bad_cast if the stored type does not match _ty
+     */
     template <typename _ty> _ty& as() {
       return *dynamic_cast<inner<_ty>&>(*_inner);
     }
 
+    /** @brief Retrieves the stored value with type checking (const version)
+     * @tparam _ty The expected type of the stored value
+     * @return Const reference to the stored value of type _ty
+     * @throws std::bad_cast if the stored type does not match _ty
+     */
     template <typename _ty> const _ty& as() const {
       return *dynamic_cast<inner<_ty>&>(*_inner);
     }
 
+    /** @brief Base class for type-erased value storage
+     * @internal
+     */
     class inner_base {
     public:
       using ptr = std::unique_ptr < inner_base >;
@@ -65,6 +102,9 @@ namespace xtd {
       inner_base() = default;
     };
 
+    /** @brief Represents an empty var (no stored value)
+     * @internal
+     */
     class empty : public inner_base{
     public:
       ~empty() override = default;
@@ -74,6 +114,10 @@ namespace xtd {
       size_t size() const override { throw std::runtime_error("reference to uninitialized variable"); }
     };
 
+    /** @brief Type-specific storage for a value in var
+     * @tparam _ty The type of value to store
+     * @internal
+     */
     template <typename _ty> class inner : public inner_base {
     public:
       explicit inner(_ty newval) : _value(newval) {}
@@ -85,7 +129,7 @@ namespace xtd {
       const std::type_info& get_type() const override { return typeid(_ty); }
       _ty & operator * () { return _value; }
       const _ty & operator * () const { return _value; }
-      bool is_pod() const override { return std::is_pod<_ty>::value; }
+      bool is_pod() const override { return std::is_trivial_v<_ty> && std::is_standard_layout_v<_ty>; }
       size_t size() const override { return sizeof(_ty); }
     private:
       _ty _value;
