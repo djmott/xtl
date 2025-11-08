@@ -47,7 +47,8 @@ namespace xtd{
     template <size_t> friend class mapped_file;
     explicit mapped_page(void * addr) : _super_t(reinterpret_cast<_ty*>(addr), [](void*addr) { munmap(addr, 1);}) {}
   public:
-    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){} // cppcheck-suppress noExplicitConstructor
+    // cppcheck-suppress noExplicitConstructor
+    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
     mapped_page& operator=(const mapped_page& src){
       _super_t::operator =(src);
@@ -119,7 +120,8 @@ namespace xtd{
     explicit mapped_page(void * addr) : _super_t(reinterpret_cast<_ty*>(addr), &UnmapViewOfFile){}
   public:
 
-    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){} // cppcheck-suppress noExplicitConstructor
+    // cppcheck-suppress noExplicitConstructor
+    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
 
     mapped_page& operator=(const mapped_page& src){
       _super_t::operator =(src);

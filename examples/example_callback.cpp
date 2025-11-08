@@ -13,7 +13,8 @@ xtd::callback<int(int, int)> oMultiply;
 
 
 //receiver static function
-int Adder(int x, int y){ return x + y; } // cppcheck-suppress unusedFunction - used via function pointer
+// cppcheck-suppress unusedFunction - used via function pointer
+int Adder(int x, int y){ return x + y; }
 
 //class with receiver member function
 struct Multiplier{

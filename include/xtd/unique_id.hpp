@@ -130,9 +130,16 @@ namespace xtd{
       std::string sTemp;
       std::getline(oFile, sTemp);
       //289248a1-379e-4775-bcf5-c6348cf5272b
+      unsigned int u32_val;
+      unsigned int u16_val1, u16_val2;
       sscanf(sTemp.c_str(), "%08X-%04X-%04X-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
-        (uint32_t*)&_uuid[0], (uint16_t*)&_uuid[4], (uint16_t*)&_uuid[6],
+        &u32_val, &u16_val1, &u16_val2,
         &_uuid[8], &_uuid[9], &_uuid[10], &_uuid[11], &_uuid[12], &_uuid[13], &_uuid[14], &_uuid[15]);
+      // Copy the 32-bit value to bytes 0-3
+      std::memcpy(&_uuid[0], &u32_val, sizeof(uint32_t));
+      // Copy the 16-bit values to bytes 4-5 and 6-7
+      std::memcpy(&_uuid[4], &u16_val1, sizeof(uint16_t));
+      std::memcpy(&_uuid[6], &u16_val2, sizeof(uint16_t));
 
     }
     explicit unique_id(const uuid_t& oID) {
@@ -161,8 +168,14 @@ namespace xtd{
     public:
       inline static string format(const unique_id& value) {
         xtd::string oRet(36, 0);
+        // Extract values with proper type safety
+        uint32_t u32_val;
+        uint16_t u16_val1, u16_val2;
+        std::memcpy(&u32_val, &value._uuid[0], sizeof(uint32_t));
+        std::memcpy(&u16_val1, &value._uuid[4], sizeof(uint16_t));
+        std::memcpy(&u16_val2, &value._uuid[6], sizeof(uint16_t));
         sprintf(&oRet[0], "%08X-%04X-%04X-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
-          *(uint32_t*)&value._uuid[0], *(uint16_t*)&value._uuid[4], *(uint16_t*)&value._uuid[6],
+          u32_val, u16_val1, u16_val2,
           value._uuid[8], value._uuid[9], value._uuid[10], value._uuid[11],
           value._uuid[12], value._uuid[13], value._uuid[14], value._uuid[15]);
         return oRet;

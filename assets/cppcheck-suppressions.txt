@@ -33,7 +33,7 @@ uninitMemberVar:include/xtd/callback.hpp
 redundantAssignment:include/xtd/callback.hpp
 
 # string.hpp: useStlAlgorithm - false positive, initializer_list requires different approach
-useStlAlgorithm:include/xtd/string.hpp:173
+useStlAlgorithm:include/xtd/string.hpp:175
 
 # callback.hpp: useStlAlgorithm - false positive, intentionally getting last result
 useStlAlgorithm:include/xtd/callback.hpp:105
