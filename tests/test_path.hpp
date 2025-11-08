@@ -19,44 +19,70 @@ TEST(test_path, Initialization){
 TEST(test_path, append){
   using namespace xtd::filesystem;
   {
+    // Test appending absolute path (should replace, matches std::filesystem::path behavior)
     path p1 = "/a";
     ASSERT_NO_THROW(p1.append("/b"));
-    ASSERT_PATH_EQ(p1, path("/a/b"));
+    ASSERT_PATH_EQ(p1, path("/b"));  // Absolute path replaces
   }
   {
+    // Test appending relative path (should append)
     path p1 = "/a";
     ASSERT_NO_THROW(p1.append("b/c"));
     ASSERT_PATH_EQ(p1, path("/a/b/c"));
   }
   {
+    // Test operator/= with relative path (should append)
     path p1 = "/a/b";
     p1 /= "c";
     ASSERT_PATH_EQ(p1, path("/a/b/c"));
   }
   {
+    // Test operator/= with absolute path (should replace, matches std::filesystem::path behavior)
     path p1 = "/a/b";
     p1 /= "/c";
-    ASSERT_PATH_EQ(p1, path("/a/b/c"));
+    ASSERT_PATH_EQ(p1, path("/c"));  // Absolute path replaces
   }
   {
+    // Test operator+= (string concatenation, always appends)
     path p1 = "/a/b";
     p1 += "/c";
     ASSERT_PATH_EQ(p1, path("/a/b/c"));
   }
   {
+    // Test operator+= with relative string
     path p1 = "/a/b";
     p1 += "c";
     ASSERT_PATH_EQ(p1, path("/a/bc"));
   }
   {
+    // Test operator+= with absolute string (still concatenates, doesn't replace)
     path p1 = "/a/b";
     p1 += "/c/d";
     ASSERT_PATH_EQ(p1, path("/a/b/c/d"));
   }
   {
+    // Test operator+= with relative string
     path p1 = "/a/b";
     p1 += "c/d";
     ASSERT_PATH_EQ(p1, path("/a/bc/d"));
+  }
+  {
+    // Test appending relative path to empty path
+    path p1;
+    p1.append("a/b");
+    ASSERT_PATH_EQ(p1, path("a/b"));
+  }
+  {
+    // Test appending absolute path to empty path
+    path p1;
+    p1.append("/a/b");
+    ASSERT_PATH_EQ(p1, path("/a/b"));
+  }
+  {
+    // Test appending relative path without leading separator
+    path p1 = "/a/b";
+    p1.append("c");
+    ASSERT_PATH_EQ(p1, path("/a/b/c"));
   }
 }
 
@@ -96,17 +122,42 @@ TEST(test_path, replace_filename){
 
 TEST(test_path, operator_plus){
   using namespace xtd::filesystem;
-  path p1("/a/b");
-  path p2("/c/d");
-  auto p3 = p1 /= p2;
-  ASSERT_PATH_EQ(p3, path("/a/b/c/d"));
+  {
+    // Test operator/= with absolute path (should replace, matches std::filesystem::path behavior)
+    path p1("/a/b");
+    path p2("/c/d");
+    auto p3 = p1 /= p2;
+    ASSERT_PATH_EQ(p3, path("/c/d"));  // Absolute path replaces
+  }
+  {
+    // Test operator/= with relative path (should append)
+    path p1("/a/b");
+    path p2("c/d");
+    auto p3 = p1 /= p2;
+    ASSERT_PATH_EQ(p3, path("/a/b/c/d"));  // Relative path appends
+  }
 }
 
 TEST(test_path, operator_diveq){
   using namespace xtd::filesystem;
-  path p1("/a/b");  
-  p1 /= path("/c/d");
-  ASSERT_PATH_EQ(p1, path("/a/b/c/d"));
+  {
+    // Test operator/= with absolute path (should replace, matches std::filesystem::path behavior)
+    path p1("/a/b");  
+    p1 /= path("/c/d");
+    ASSERT_PATH_EQ(p1, path("/c/d"));  // Absolute path replaces
+  }
+  {
+    // Test operator/= with relative path (should append)
+    path p1("/a/b");
+    p1 /= path("c/d");
+    ASSERT_PATH_EQ(p1, path("/a/b/c/d"));  // Relative path appends
+  }
+  {
+    // Test operator/= with relative single component (should append)
+    path p1("/a/b");
+    p1 /= path("c");
+    ASSERT_PATH_EQ(p1, path("/a/b/c"));
+  }
 }
 
 

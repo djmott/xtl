@@ -51,7 +51,9 @@ XTL is a C++17 header-only template library that supplements and extends the STL
   - `cpplint` (Python package: `pip install cpplint`)
 - For clang-tidy to work properly, ensure `compile_commands.json` exists:
   - Configure CMake with: `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B .build`
-- The hook uses existing cppcheck suppressions from `assets/cppcheck-suppressions.txt` if available
+- The hook uses existing suppressions files if available:
+  - `assets/cppcheck-suppressions.txt` for cppcheck
+  - `assets/clang-tidy-suppressions.yaml` for clang-tidy
 
 ### Cppcheck Inline Suppressions
 
@@ -65,6 +67,31 @@ XTL is a C++17 header-only template library that supplements and extends the STL
   ```
 - For suppressions file (`assets/cppcheck-suppressions.txt`), use format: `errorType:file:line`
 - Example: `noExplicitConstructor:include/xtd/var.hpp:27`
+
+### Clang-tidy Suppressions
+
+- **Inline suppressions** can be added directly in the source code:
+  - `// NOLINT(check-name)` - suppress on the same line
+  - `// NOLINTNEXTLINE(check-name)` - suppress on the next line
+  - `// NOLINT` - suppress all checks on the same line
+  - `// NOLINTNEXTLINE` - suppress all checks on the next line
+- For global suppressions, use the configuration file (`assets/clang-tidy-suppressions.yaml`)
+- The file uses YAML format and can disable checks globally using the `Checks` section with negative patterns
+- Format: Add `-check-name` to the `Checks` list to disable a specific check globally
+- Example:
+  ```yaml
+  Checks: >
+    '*',
+    '-readability-identifier-naming',
+    '-modernize-use-auto'
+  ```
+- The pre-commit hook automatically uses `assets/clang-tidy-suppressions.yaml` if it exists
+- For file-specific suppressions, prefer inline `NOLINT` comments in the source code
+- Example inline suppression:
+  ```cpp
+  // NOLINT(readability-identifier-naming)
+  void myFunction() { }
+  ```
 
 ## Documentation
 

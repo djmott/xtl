@@ -79,11 +79,23 @@ else
         report_warning "clang-tidy may not work correctly. Run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B .build"
     fi
     
+    # Set up clang-tidy arguments
+    TIDY_SUPPRESSIONS="assets/clang-tidy-suppressions.yaml"
+    TIDY_CONFIG_ARGS=""
+    
+    if [ -f "$TIDY_SUPPRESSIONS" ]; then
+        # Read config file and pass to clang-tidy using --config option
+        # Use a here-string to properly handle YAML with newlines and special characters
+        TIDY_CONFIG_CONTENT=$(cat "$TIDY_SUPPRESSIONS")
+        TIDY_CONFIG_ARGS="--config=$TIDY_CONFIG_CONTENT"
+    fi
+    
     TIDY_ERRORS=0
     for file in $STAGED_FILES; do
         if [ -f "$file" ]; then
             # Run clang-tidy and capture output
-            TIDY_OUTPUT=$(clang-tidy "$file" -- -std=c++17 2>&1 || true)
+            # clang-tidy options come before the file, compiler flags come after --
+            TIDY_OUTPUT=$(clang-tidy $TIDY_CONFIG_ARGS "$file" -- -std=c++17 2>&1 || true)
             if [ -n "$TIDY_OUTPUT" ] && ! echo "$TIDY_OUTPUT" | grep -q "No issues found"; then
                 # Filter out warnings about missing compile_commands.json if file doesn't exist
                 if [ ! -f "$COMPILE_COMMANDS" ]; then
