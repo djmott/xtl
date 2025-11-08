@@ -53,6 +53,19 @@ XTL is a C++17 header-only template library that supplements and extends the STL
   - Configure CMake with: `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B .build`
 - The hook uses existing cppcheck suppressions from `assets/cppcheck-suppressions.txt` if available
 
+### Cppcheck Inline Suppressions
+
+- **Inline suppressions must be on the line BEFORE the code**, not on the same line
+- Always use the `--inline-suppr` flag when running cppcheck manually
+- Format: `// cppcheck-suppress <warningId> - optional explanation`
+- Example:
+  ```cpp
+  // cppcheck-suppress noExplicitConstructor
+  template <typename _ty> var(_ty src) : _inner(new inner<_ty>(src)) {}
+  ```
+- For suppressions file (`assets/cppcheck-suppressions.txt`), use format: `errorType:file:line`
+- Example: `noExplicitConstructor:include/xtd/var.hpp:27`
+
 ## Documentation
 
 - **Always add Doxygen-style comments** for:
@@ -101,6 +114,21 @@ When writing code:
 - Use standard C++17 features
 - Test compatibility considerations for all supported compilers
 - Use platform detection macros (`XTD_OS_WINDOWS`, `XTD_OS_Linux`, etc.) when needed
+
+### Format String Safety
+
+- **Always use correct format specifiers** that match the argument types exactly
+- For `sscanf`/`sprintf` with `%X` or `%x`, use `unsigned int*` (not `uint16_t*` or `unsigned short*`)
+- When reading into byte arrays, use temporary variables with correct types, then copy with `memcpy`
+- Example:
+  ```cpp
+  unsigned int u32_val;
+  unsigned int u16_val1, u16_val2;
+  sscanf(str, "%08X-%04X-%04X-...", &u32_val, &u16_val1, &u16_val2, ...);
+  std::memcpy(&_uuid[0], &u32_val, sizeof(uint32_t));
+  std::memcpy(&_uuid[4], &u16_val1, sizeof(uint16_t));
+  ```
+- This ensures cross-platform compatibility and avoids undefined behavior
 
 ## CMake Configuration
 
