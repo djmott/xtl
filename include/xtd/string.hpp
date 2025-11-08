@@ -12,6 +12,7 @@
 #include <vector>
 #include <stdexcept>
 #include <functional>
+#include <algorithm>
 
 #if (XTD_HAS_CODECVT)
   #include <codecvt>
@@ -52,6 +53,7 @@ namespace xtd{
 
     ///Generic constructor forwards everything to the base class
     template <typename ... _ArgsT>
+    // cppcheck-suppress noExplicitConstructor
     xstring(_ArgsT&&...oArgs)
       : _super_t(std::forward<_ArgsT>(oArgs)...){}
 
@@ -168,6 +170,7 @@ namespace xtd{
     xstring& replace(std::initializer_list<_ChT> oItems, _ChT chReplace) {
       for (auto & oCh : *this) {
         bool bFound = false;
+        // cppcheck-suppress useStlAlgorithm - checking membership in initializer_list, std::any_of would require different structure
         for (const auto & oFind : oItems) {
           if (oFind == oCh) {
             bFound = true;

@@ -42,8 +42,8 @@ namespace xtd{
       using EOL = parse::and_<CR,LF>;
       REGEX(COMMENT, "\\%[^\\r\\n]*");
 
-      STRING(True, "true");
-      STRING(False, "false");
+      STRING(True, "true"); // cppcheck-suppress syntaxError - false positive, macro expansion
+      STRING(False, "false"); // cppcheck-suppress syntaxError - false positive, macro expansion
 
       using number = one_or_more_<DIGIT>;
       struct Integer : rule<Integer, and_< zero_or_one_<or_<PLUS, HYPHEN>>, number>>{};

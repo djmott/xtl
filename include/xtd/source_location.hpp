@@ -6,6 +6,11 @@ maintains info about locations within source code
 #pragma once
 #include <xtd/xtd.hpp>
 #include <string.h>
+
+#if __cplusplus >= 202002L
+#include <source_location>
+#endif
+
 namespace xtd{
 
 /// @def here() creates an xtd::source_location at the definition site
@@ -27,9 +32,11 @@ namespace xtd{
       return *this;
     }
     const char * file() const{ return _file; }
+    // cppcheck-suppress unusedFunction - public API setter method
     void file(const char * newval) { _file = newval; }
 
     int line() const{ return _line; }
+    // cppcheck-suppress unusedFunction - public API setter method
     void line(int newval) { _line = newval; }
 
     bool operator==(const source_location& src) const{

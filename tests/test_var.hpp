@@ -34,7 +34,7 @@ TEST(test_var, assignments){
   ASSERT_EQ(v1.size(), sizeof(int));
   ASSERT_TRUE(v1.is_pod());
   v1 = (double)3.14;
-  var v2=v1;
+  [[maybe_unused]] var v2=v1;
   ASSERT_EQ(v1.get_type(), typeid(double));
   ASSERT_EQ(v1.as<double>(), 3.14);
   v1 = "abc123";
@@ -75,7 +75,7 @@ TEST(test_var, is_pod){
   ASSERT_TRUE(v1.is_pod());
   struct s2 : s1{
     double d;
-    s2() : s1(), d(0.0) {}
+    s2() : s1{0,0,0,0}, d(0.0) {}
   };
   s2 oS2;
   v1 = oS2;

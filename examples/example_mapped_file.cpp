@@ -11,8 +11,7 @@ struct person{
   int age;
   char first_name[50];
   char last_name[50];
-  int ssn;
-
+  int ssn; // cppcheck-suppress unusedStructMember - used in example code
 };
 
 int main(){

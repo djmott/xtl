@@ -1,0 +1,65 @@
+# Clang-tidy suppressions for false positives and intentional design choices
+#
+# This file contains clang-tidy configuration to suppress specific checks
+# that are false positives or represent intentional design decisions.
+#
+# Format: YAML configuration file
+# The file can disable checks globally using the Checks section with negative patterns
+# Example: Checks: '-check-name' to disable a specific check
+#
+# For file-specific suppressions, use inline comments in the source code:
+#   // NOLINT(check-name) - suppress on the same line
+#   // NOLINTNEXTLINE(check-name) - suppress on the next line
+#
+# The pre-commit hook automatically uses this file if it exists.
+#
+# Suppression Strategy:
+# - Prefer inline suppressions (NOLINT comments) for specific cases
+# - Use global suppressions only when inline suppressions would cause an explosion
+#   of code changes (e.g., 100+ occurrences across many files)
+# - Global suppressions are used for:
+#   1. Tool-specific checks (Altera, LLVM libc) that don't apply to general C++
+#   2. Style preferences that conflict with existing codebase style
+#   3. Checks that would require massive refactoring without clear benefit
+#
+# Common checks that may need suppression:
+# - readability-*: Code readability checks
+# - modernize-*: Modern C++ style suggestions
+# - cppcoreguidelines-*: C++ Core Guidelines checks
+# - performance-*: Performance-related checks
+# - misc-*: Miscellaneous checks
+#
+# Currently suppressed checks (global):
+# - altera-*: Altera-specific checks (not applicable to general C++)
+# - llvmlibc-*: LLVM libc-specific checks (not applicable to general C++)
+# - modernize-use-trailing-return-type: Style preference, would require massive refactoring (528 occurrences)
+# - modernize-concat-nested-namespaces: Existing code uses old namespace style (64 occurrences)
+# - llvm-header-guard: LLVM-specific header guard style (124 occurrences)
+# - google-readability-namespace-comments,llvm-namespace-comment: Style preference (169 occurrences)
+# - readability-identifier-length: Codebase intentionally uses short names (176 occurrences)
+
+Checks: >
+  '*',
+  # Altera-specific checks (not applicable to general C++)
+  '-altera-*',
+  # LLVM libc-specific checks (not applicable to general C++)
+  '-llvmlibc-*',
+  # Style preferences that conflict with existing codebase
+  '-modernize-use-trailing-return-type',
+  '-modernize-concat-nested-namespaces',
+  '-llvm-header-guard',
+  '-google-readability-namespace-comments',
+  '-llvm-namespace-comment',
+  '-readability-identifier-length',
+  # LLVM include order (conflicts with existing style)
+  '-llvm-include-order'
+
+# Note: The following checks should be handled with inline suppressions (NOLINT):
+# - cppcoreguidelines-init-variables: Use inline suppression or fix initialization
+# - misc-unused-parameters: Use [[maybe_unused]] or inline suppression
+# - bugprone-reserved-identifier: Use inline suppression for intentional uses (e.g., template parameters)
+# - cppcoreguidelines-avoid-non-const-global-variables: Use inline suppression for intentional globals
+# - cppcoreguidelines-avoid-magic-numbers: Use inline suppression or named constants
+# - google-explicit-constructor: Use inline suppression when implicit conversion is intentional
+# - hicpp-*: Use inline suppression for specific cases
+# - fuchsia-*: Use inline suppression for specific cases

@@ -43,9 +43,9 @@ TEST(test_hash_map, exists) {
 TEST(test_hash_map_iterator, initialization){
   hash_map_type oMap;
   {
-    auto oIt = oMap.begin();
-    auto oEnd = oMap.end();
-    auto oBack = oMap.back();
+    [[maybe_unused]] auto oIt = oMap.begin();
+    [[maybe_unused]] auto oEnd = oMap.end();
+    [[maybe_unused]] auto oBack = oMap.back();
   }
   {
     hash_map_type::iterator_type oEnd;

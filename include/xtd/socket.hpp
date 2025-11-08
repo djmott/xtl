@@ -83,11 +83,7 @@ namespace xtd{
         using value_type = _ty;
         static value_type get(SOCKET s){
           value_type iRet;
-#if  (XTD_COMPILER_MSVC & XTD_COMPILER)
           int iSize = sizeof(value_type);
-#else
-          std::remove_pointer<typename xtd::template get_parameter<4, decltype(getsockopt)>::type>::type iSize = sizeof(value_type);
-#endif
           socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
           return iRet;
         }

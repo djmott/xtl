@@ -1,11 +1,10 @@
 ### cmake config
 
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.22)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-enable_language(CXX)
 
 set(default_build_type "Release")
 if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
@@ -18,6 +17,26 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 project(XTL)
+enable_language(CXX)
+
+# Install git pre-commit hook if .git directory exists and hook is not already installed
+if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
+  set(GIT_HOOKS_DIR "${CMAKE_SOURCE_DIR}/.git/hooks")
+  set(PRE_COMMIT_HOOK "${GIT_HOOKS_DIR}/pre-commit")
+  set(PRE_COMMIT_HOOK_SOURCE "${CMAKE_SOURCE_DIR}/cmake/pre-commit")
+  
+  if(EXISTS "${PRE_COMMIT_HOOK_SOURCE}")
+    if(NOT EXISTS "${PRE_COMMIT_HOOK}")
+      message(STATUS "Installing git pre-commit hook...")
+      file(COPY "${PRE_COMMIT_HOOK_SOURCE}"
+           DESTINATION "${GIT_HOOKS_DIR}"
+           FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+      message(STATUS "Git pre-commit hook installed successfully")
+    else()
+      message(STATUS "Git pre-commit hook already exists, skipping installation")
+    endif()
+  endif()
+endif()
 
 include(CheckIncludeFile)
 include(CheckIncludeFileCXX)
@@ -28,6 +47,41 @@ include(GenerateExportHeader)
 include_directories(include)
 
 option(XTD_VERBOSE_BUILD "Verbose builds" ${CMAKE_VERBOSE_MAKEFILE})
+
+# Warning level configuration (similar to MSVC W0-W4)
+set(XTD_WARNING_LEVEL 2 CACHE STRING "Compiler warning level (0-4, similar to MSVC)")
+set_property(CACHE XTD_WARNING_LEVEL PROPERTY STRINGS "0" "1" "2" "3" "4")
+
+# Function to set warning flags based on compiler and warning level
+function(set_warning_level target_name)
+  if(MSVC)
+    # MSVC warning levels
+    if(XTD_WARNING_LEVEL EQUAL 0)
+      target_compile_options(${target_name} PRIVATE /W0)
+    elseif(XTD_WARNING_LEVEL EQUAL 1)
+      target_compile_options(${target_name} PRIVATE /W1)
+    elseif(XTD_WARNING_LEVEL EQUAL 2)
+      target_compile_options(${target_name} PRIVATE /W2)
+    elseif(XTD_WARNING_LEVEL EQUAL 3)
+      target_compile_options(${target_name} PRIVATE /W3)
+    elseif(XTD_WARNING_LEVEL EQUAL 4)
+      target_compile_options(${target_name} PRIVATE /W4)
+    endif()
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU|Intel")
+    # Clang, GCC, and Intel warning levels
+    if(XTD_WARNING_LEVEL EQUAL 0)
+      target_compile_options(${target_name} PRIVATE -w)
+    elseif(XTD_WARNING_LEVEL EQUAL 1)
+      target_compile_options(${target_name} PRIVATE -Wall)
+    elseif(XTD_WARNING_LEVEL EQUAL 2)
+      target_compile_options(${target_name} PRIVATE -Wall -Wextra)
+    elseif(XTD_WARNING_LEVEL EQUAL 3)
+      target_compile_options(${target_name} PRIVATE -Wall -Wextra -Wpedantic)
+    elseif(XTD_WARNING_LEVEL EQUAL 4)
+      target_compile_options(${target_name} PRIVATE -Wall -Wextra -Wpedantic -Weffc++)
+    endif()
+  endif()
+endfunction()
 
 check_include_file_cxx(uuid/uuid.h XTD_HAS_UUID)
 check_include_file_cxx(codecvt XTD_HAS_CODECVT)
@@ -246,11 +300,17 @@ falsify_undefined(XTD_USE_DBGHELP)
 falsify_undefined(XTD_HAS_UUID)
 falsify_undefined(CMAKE_COLOR_MAKEFILE)
 
+# Map CMake compiler ID to uppercase for template macro name
+string(TOUPPER "${CMAKE_CXX_COMPILER_ID}" XTD_COMPILER_ID_MACRO)
+
 configure_file(include/xtd/xtd.hpp.in include/xtd/xtd.hpp @ONLY)
 
 add_library(xtl STATIC src/xtl.cpp ${CMAKE_CURRENT_BINARY_DIR}/include/xtd/xtd.hpp)
 
 target_include_directories(xtl PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/include)
+
+# Apply warning level to the main library
+set_warning_level(xtl)
 
 option(XTD_BUILD_EXAMPLES "Build examples" FALSE)
 if(XTD_BUILD_EXAMPLES)

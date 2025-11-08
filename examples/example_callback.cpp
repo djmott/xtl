@@ -13,6 +13,7 @@ xtd::callback<int(int, int)> oMultiply;
 
 
 //receiver static function
+// cppcheck-suppress unusedFunction - used via function pointer
 int Adder(int x, int y){ return x + y; }
 
 //class with receiver member function

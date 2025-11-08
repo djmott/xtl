@@ -51,9 +51,9 @@ TEST(test_rw_lock, scope_read){
   {
     xtd::concurrent::rw_lock::scope_read oLock(rw);
     {
-      xtd::concurrent::rw_lock::scope_read oLock(rw);
+      xtd::concurrent::rw_lock::scope_read oLockInner(rw);
       {
-        xtd::concurrent::rw_lock::scope_read oLock(rw);
+        xtd::concurrent::rw_lock::scope_read oLockInner2(rw);
         ASSERT_EQ(rw.readers(), static_cast<uint32_t>(3));
       }
       ASSERT_EQ(rw.readers(), static_cast<uint32_t>(2));

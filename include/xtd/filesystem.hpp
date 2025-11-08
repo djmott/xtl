@@ -95,13 +95,49 @@ namespace xtd{
 
       ///appends a perferred separator and path element
       path& append(const path& src) {
-        if (preferred_separator != _str.back() && not_preferred_separator != _str.back()
-            && preferred_separator != src._str.front() && not_preferred_separator != src._str.front())
-        {
+        if (!src._str.length()) return *this;
+        
+        // Check if source path should replace current path (matches std::filesystem::path behavior)
+        bool should_replace = false;
+#if (XTD_OS_WINDOWS & XTD_OS)
+        // On Windows: replace if starts with drive letter (C:), UNC (\\), or root-relative (/)
+        if (src._str.length() >= 2) {
+          if ((src._str[0] >= 'A' && src._str[0] <= 'Z' || src._str[0] >= 'a' && src._str[0] <= 'z') && src._str[1] == ':') {
+            should_replace = true; // Drive letter
+          } else if (src._str[0] == preferred_separator && src._str[1] == preferred_separator) {
+            should_replace = true; // UNC path
+          } else if (src._str[0] == not_preferred_separator) {
+            should_replace = true; // Root-relative path (/) - replaces on Windows
+          }
+        } else if (src._str.length() == 1 && src._str[0] == not_preferred_separator) {
+          should_replace = true; // Just "/"
+        }
+#else
+        // On Unix: replace if starts with '/' (absolute path)
+        if (src._str.length() > 0 && preferred_separator == src._str.front()) {
+          should_replace = true;
+        }
+#endif
+        
+        // If source should replace current path (std::filesystem behavior)
+        if (should_replace) {
+          _str = src._str;
+          return *this;
+        }
+        
+        // If current path is empty, just assign the source
+        if (!_str.length()) {
+          _str = src._str;
+          return *this;
+        }
+        
+        // Source is relative, append it
+        // Add separator if needed
+        if (preferred_separator != _str.back() && not_preferred_separator != _str.back()) {
           _str.append(1, preferred_separator);
         }
+        
         _str.append(src._str);
-        _str.trim();
         return *this;
       }
 

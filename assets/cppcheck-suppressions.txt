@@ -1,1 +1,49 @@
+# Cppcheck suppressions for false positives
 
+# Note: parse.hpp and iso32000-1.hpp false positives are handled with inline suppressions
+# in those files since the pre-commit hook checks files individually
+
+# rpc.hpp: constParameter warnings are false positives
+# oPayload is modified by recursive marshal/unmarshal calls, cannot be const
+# Format: errorType:file:line
+constParameter:include/xtd/rpc.hpp:41
+constParameter:include/xtd/rpc.hpp:44
+constParameter:include/xtd/rpc.hpp:51
+constParameter:include/xtd/rpc.hpp:54
+constParameter:include/xtd/rpc.hpp:78
+constParameter:include/xtd/rpc.hpp:81
+
+# Example files: unusedStructMember - example structs with intentionally unused members
+unusedStructMember:examples/example_mapped_file.cpp
+unusedStructMember:examples/example_mapped_vector.cpp
+
+# Library functions: unusedFunction - these are used by external code, not within the file
+unusedFunction:include/xtd/concurrent/hash_map.hpp
+unusedFunction:include/xtd/concurrent/stack.hpp
+unusedFunction:include/xtd/dynamic_library.hpp
+unusedFunction:include/xtd/string.hpp
+
+# Example files: unusedFunction - example functions
+unusedFunction:examples/example_nlp.cpp
+
+# callback.hpp: uninitMemberVar - false positives, members are initialized in constructors
+uninitMemberVar:include/xtd/callback.hpp
+
+# callback.hpp: redundantAssignment - false positive, intentional design
+redundantAssignment:include/xtd/callback.hpp
+
+# string.hpp: useStlAlgorithm - false positive, initializer_list requires different approach
+useStlAlgorithm:include/xtd/string.hpp:175
+
+# callback.hpp: useStlAlgorithm - false positive, intentionally getting last result
+useStlAlgorithm:include/xtd/callback.hpp:105
+
+# test_var.hpp: uninitDerivedMemberVar - false positive, base class is initialized with aggregate initialization
+uninitDerivedMemberVar:tests/test_var.hpp
+
+# source_location.hpp: unusedFunction - public API methods, part of the interface
+# These are public API methods that may not be used within this file but are part of the public interface
+unusedFunction:include/xtd/source_location.hpp
+
+# test_callback.hpp: unusedFunction - test functions used via function pointers/callbacks
+unusedFunction:tests/test_callback.hpp

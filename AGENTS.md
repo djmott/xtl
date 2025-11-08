@@ -1,0 +1,184 @@
+# XTL Project - AI Agent Guidelines
+
+This document provides guidelines for AI agents working on the XTL (eXtended Template Library) project.
+
+## CRITICAL: Development Container Requirement
+
+**THE MOST IMPORTANT RULE: All code execution MUST occur in a development container, NEVER on the host system.**
+
+- **NEVER execute code, build commands, or run tests on the host system**
+- **NEVER modify system files, install packages, or change host configuration**
+- **ONLY source files may be changed on the host** (via mapped drive/volume)
+- **ALL builds, tests, and executions MUST happen inside the dev container**
+- The host system must remain completely unchanged and protected from manipulation
+- This prevents host corruption, security issues, and ensures a clean development environment
+
+**Violation of this rule is a critical error.**
+
+## Project Context
+
+XTL is a C++17 header-only template library that supplements and extends the STL. It provides frequently used components that are otherwise absent from the standard library. The project uses template metaprogramming patterns, idioms, algorithms, and libraries to solve various programming tasks.
+
+## Build System
+
+- **Always use `.build` folder** for CMake builds. Never use `build` or other directory names.
+- When configuring CMake, use: `cmake -S . -B .build`
+- Always enable `compile_commands.json` for better IDE support: `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
+- The project uses CMake 3.22 or higher
+
+## Code Style
+
+- **Follow existing patterns strictly** - maintain consistency with the current codebase
+- Match the coding style, naming conventions, and formatting of existing files
+- When in doubt, examine similar files in the codebase for reference
+- Use the same indentation, brace style, and comment style as existing code
+
+## Static Analysis
+
+- **All C++ source files must pass static analysis before commits**
+- A git pre-commit hook automatically runs static analysis tools on staged C++ files
+- **Commits will be blocked if any static analysis tool finds issues**
+- The following tools are required and will be run on staged files:
+  - **clang-format**: Checks code formatting (use `clang-format -i <file>` to auto-fix)
+  - **clang-tidy**: Performs static analysis and suggests improvements
+  - **cppcheck**: Detects bugs, undefined behavior, and dangerous coding patterns
+  - **cpplint**: Checks for Google C++ style guide violations and other issues
+- Only staged C++ files (`.cpp`, `.hpp`, `.h`, `.cc`, `.cxx`, `.c++`) are checked
+- Ensure all required tools are installed in the development container:
+  - `clang-format` (part of clang tools)
+  - `clang-tidy` (part of clang tools)
+  - `cppcheck`
+  - `cpplint` (Python package: `pip install cpplint`)
+- For clang-tidy to work properly, ensure `compile_commands.json` exists:
+  - Configure CMake with: `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B .build`
+- The hook uses existing suppressions files if available:
+  - `assets/cppcheck-suppressions.txt` for cppcheck
+  - `assets/clang-tidy-suppressions.yaml` for clang-tidy
+
+### Cppcheck Inline Suppressions
+
+- **Inline suppressions must be on the line BEFORE the code**, not on the same line
+- Always use the `--inline-suppr` flag when running cppcheck manually
+- Format: `// cppcheck-suppress <warningId> - optional explanation`
+- Example:
+  ```cpp
+  // cppcheck-suppress noExplicitConstructor
+  template <typename _ty> var(_ty src) : _inner(new inner<_ty>(src)) {}
+  ```
+- For suppressions file (`assets/cppcheck-suppressions.txt`), use format: `errorType:file:line`
+- Example: `noExplicitConstructor:include/xtd/var.hpp:27`
+
+### Clang-tidy Suppressions
+
+- **Inline suppressions** can be added directly in the source code:
+  - `// NOLINT(check-name)` - suppress on the same line
+  - `// NOLINTNEXTLINE(check-name)` - suppress on the next line
+  - `// NOLINT` - suppress all checks on the same line
+  - `// NOLINTNEXTLINE` - suppress all checks on the next line
+- For global suppressions, use the configuration file (`assets/clang-tidy-suppressions.yaml`)
+- The file uses YAML format and can disable checks globally using the `Checks` section with negative patterns
+- Format: Add `-check-name` to the `Checks` list to disable a specific check globally
+- Example:
+  ```yaml
+  Checks: >
+    '*',
+    '-readability-identifier-naming',
+    '-modernize-use-auto'
+  ```
+- The pre-commit hook automatically uses `assets/clang-tidy-suppressions.yaml` if it exists
+- For file-specific suppressions, prefer inline `NOLINT` comments in the source code
+- Example inline suppression:
+  ```cpp
+  // NOLINT(readability-identifier-naming)
+  void myFunction() { }
+  ```
+
+## Documentation
+
+- **Always add Doxygen-style comments** for:
+  - New functions and methods
+  - New classes and structs
+  - Complex logic and algorithms
+  - Template parameters and constraints
+- Use `@param`, `@return`, `@throws`, `@tparam` tags where appropriate
+- Include brief descriptions and detailed explanations for non-trivial code
+
+## Testing
+
+- **Only write or update tests when explicitly requested** by the user
+- Do not automatically create tests for new code
+- When tests are requested, use the Google Test framework (gtest) as used in the `tests/` directory
+- Tests should be placed in the appropriate test file in the `tests/` directory
+
+## Error Handling
+
+- Use **standard C++ exceptions** where appropriate:
+  - `std::exception` for base exceptions
+  - `std::runtime_error` for runtime errors
+  - `std::invalid_argument` for invalid arguments
+  - `std::logic_error` for logic errors
+  - Other standard exception types as appropriate
+- Do not use `xtd::exception` unless the existing code in a file already uses it
+
+## Warning Levels
+
+- Respect the configurable warning level set in CMake (`XTD_WARNING_LEVEL`)
+- The warning level can be set from 0-4 (similar to MSVC warning levels)
+- Default warning level is 2
+- When adding new code, ensure it compiles cleanly at the configured warning level
+- Do not suppress warnings unless absolutely necessary and with proper justification
+
+## Compiler Support
+
+Code must work with the following compilers on Windows and Linux:
+- **MSVC** (Microsoft Visual C++)
+- **Clang** (LLVM Clang)
+- **GCC** (GNU Compiler Collection)
+- **Intel C++** (Intel C++ Compiler)
+
+When writing code:
+- Avoid compiler-specific extensions unless absolutely necessary
+- Use standard C++17 features
+- Test compatibility considerations for all supported compilers
+- Use platform detection macros (`XTD_OS_WINDOWS`, `XTD_OS_Linux`, etc.) when needed
+
+### Format String Safety
+
+- **Always use correct format specifiers** that match the argument types exactly
+- For `sscanf`/`sprintf` with `%X` or `%x`, use `unsigned int*` (not `uint16_t*` or `unsigned short*`)
+- When reading into byte arrays, use temporary variables with correct types, then copy with `memcpy`
+- Example:
+  ```cpp
+  unsigned int u32_val;
+  unsigned int u16_val1, u16_val2;
+  sscanf(str, "%08X-%04X-%04X-...", &u32_val, &u16_val1, &u16_val2, ...);
+  std::memcpy(&_uuid[0], &u32_val, sizeof(uint32_t));
+  std::memcpy(&_uuid[4], &u16_val1, sizeof(uint16_t));
+  ```
+- This ensures cross-platform compatibility and avoids undefined behavior
+
+## CMake Configuration
+
+When configuring CMake:
+- Always use the `.build` directory: `cmake -S . -B .build`
+- Enable compile commands: `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
+- Enable tests if needed: `cmake -DXTD_BUILD_TESTS=ON`
+- Enable examples if needed: `cmake -DXTD_BUILD_EXAMPLES=ON`
+- Set warning level if needed: `cmake -DXTD_WARNING_LEVEL=3`
+
+## File Structure
+
+- Header files: `include/xtd/`
+- Source files: `src/`
+- Tests: `tests/`
+- Examples: `examples/`
+- Build output: `.build/`
+
+## Additional Notes
+
+- The project uses C++17 standard (`CMAKE_CXX_STANDARD 17`)
+- Most components are header-only
+- Some components require linking to runtime components
+- The project uses Boost Software License Version 1.0
+- Online documentation: http://djmott.github.io/xtl
+

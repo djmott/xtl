@@ -99,6 +99,10 @@ add_test(NAME unit_tests COMMAND $<TARGET_FILE:unit_tests>)
 add_dependencies(unit_tests dummy_library_test)
 target_link_libraries(unit_tests PRIVATE xtl)
 
+# Apply warning level to test targets
+set_warning_level(unit_tests)
+set_warning_level(dummy_library_test)
+
 if("Debug" STREQUAL "${CMAKE_BUILD_TYPE}")
   target_link_libraries(unit_tests PRIVATE gtest)
 else()
@@ -112,6 +116,10 @@ endif()
 
 if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" AND (XTD_HAS_FILESYSTEM OR XTD_HAS_EXP_FILESYSTEM))
   target_link_libraries(unit_tests PRIVATE stdc++fs)
+endif()
+
+if(WIN32)
+  target_link_libraries(unit_tests PRIVATE ws2_32 psapi rpcrt4)
 endif()
 
 

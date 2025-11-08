@@ -14,3 +14,7 @@ tests/gtest
 /Testing/Temporary/*.log
 /out
 /build
+
+
+#Ignore cursor AI rules
+.cursor\rules\codacy.mdc

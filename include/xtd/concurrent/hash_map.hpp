@@ -51,15 +51,17 @@ namespace xtd{
         _Map = src._Map;
         _Current = src._Current;
         _Key = src._Key;
+        return *this;
       }
 
-      hash_map_iterator &operator==(hash_map_iterator &&src) {
+      hash_map_iterator &operator=(hash_map_iterator &&src) {
         if (this == &src) {
           return *this;
         }
         _Map = src._Map;
         _Current = src._Current;
         _Key = std::move(src._Key);
+        return *this;
       }
 
       bool operator==(const hash_map_iterator &rhs) const {

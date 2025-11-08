@@ -6,7 +6,7 @@ base exception system and unit tests
 #include <xtd/exception.hpp>
 
 TEST(test_exception, Initialization){
-  xtd::exception ex1(here(), "");
+  [[maybe_unused]] xtd::exception ex1(here(), "");
   xtd::crt_exception(here(), "");
 }
 
@@ -24,9 +24,9 @@ TEST(test_exception, copy_construct){
 
 TEST(test_exception, move_construct){
   xtd::exception ex1(here(), "");
-  xtd::exception ex2(std::move(ex1));
+  [[maybe_unused]] xtd::exception ex2(std::move(ex1));
   xtd::crt_exception crtex1(here(), "");
-  xtd::crt_exception crtex2(std::move(crtex1));
+  [[maybe_unused]] xtd::crt_exception crtex2(std::move(crtex1));
 }
 
 
