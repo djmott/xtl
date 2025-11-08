@@ -12,6 +12,7 @@
 #include <vector>
 #include <stdexcept>
 #include <functional>
+#include <algorithm>
 
 #if (XTD_HAS_CODECVT)
   #include <codecvt>

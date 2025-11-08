@@ -114,4 +114,8 @@ if(XTD_COMPILER STREQUAL "XTD_COMPILER_GCC" AND (XTD_HAS_FILESYSTEM OR XTD_HAS_E
   target_link_libraries(unit_tests PRIVATE stdc++fs)
 endif()
 
+if(WIN32)
+  target_link_libraries(unit_tests PRIVATE ws2_32 psapi rpcrt4)
+endif()
+
 
