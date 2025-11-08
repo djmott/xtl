@@ -7,12 +7,17 @@ add_dependencies(examples dummy_library_example)
 
 target_link_libraries(dummy_library_example PUBLIC xtl)
 
+# Apply warning level to dummy_library_example
+set_warning_level(dummy_library_example)
+
 function(build_example target)
   option(BUILD_${target}_EXAMPLE "Build ${target}" TRUE)
   if(BUILD_${target}_EXAMPLE)
     add_executable("example_${target}" EXCLUDE_FROM_ALL "example_${target}.cpp")
     add_dependencies(examples "example_${target}")
     target_link_libraries("example_${target}" PUBLIC xtl)
+    # Apply warning level to example targets
+    set_warning_level("example_${target}")
   endif()
 endfunction()
 
