@@ -3,6 +3,7 @@
  */
 
 #include <xtd/rpc.hpp>
+#include <numeric>
 
 
 
@@ -29,8 +30,7 @@ int main(){
     oServer.attach<rpc_interface::Add>([](int a, int b){ return a + b; });
     oServer.attach<rpc_interface::Echo>([](const std::string& sval) -> std::string{ return std::string(sval); });
     oServer.attach<rpc_interface::Average>([](const std::vector<double>& oVals) -> double{
-      double dRet = 0;
-      for (auto & oVal : oVals){ dRet += oVal; }
+      double dRet = std::accumulate(oVals.begin(), oVals.end(), 0.0);
       dRet /= oVals.size();
       return dRet;
     });

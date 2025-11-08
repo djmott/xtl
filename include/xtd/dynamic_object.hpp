@@ -67,7 +67,7 @@ namespace xtd{
 	}
 
 
-  template <typename ... _arg_ts> dynamic_object(_arg_ts&&...oArgs) : map_type(std::forward<_arg_ts>(oArgs)...){}
+  template <typename ... _arg_ts> explicit dynamic_object(_arg_ts&&...oArgs) : map_type(std::forward<_arg_ts>(oArgs)...){}
 
   private:
 

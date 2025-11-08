@@ -130,12 +130,12 @@ namespace xtd{
       std::string sTemp;
       std::getline(oFile, sTemp);
       //289248a1-379e-4775-bcf5-c6348cf5272b
-      sscanf(sTemp.c_str(), "%08hX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+      sscanf(sTemp.c_str(), "%08X-%04X-%04X-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
         (uint32_t*)&_uuid[0], (uint16_t*)&_uuid[4], (uint16_t*)&_uuid[6],
         &_uuid[8], &_uuid[9], &_uuid[10], &_uuid[11], &_uuid[12], &_uuid[13], &_uuid[14], &_uuid[15]);
 
     }
-    unique_id(const uuid_t& oID) {
+    explicit unique_id(const uuid_t& oID) {
       memcpy(_uuid, &oID, sizeof(uuid_t));
     }
     unique_id(const unique_id& src) {
@@ -161,7 +161,7 @@ namespace xtd{
     public:
       inline static string format(const unique_id& value) {
         xtd::string oRet(36, 0);
-        sprintf(&oRet[0], "%08hX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+        sprintf(&oRet[0], "%08X-%04X-%04X-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
           *(uint32_t*)&value._uuid[0], *(uint16_t*)&value._uuid[4], *(uint16_t*)&value._uuid[6],
           value._uuid[8], value._uuid[9], value._uuid[10], value._uuid[11],
           value._uuid[12], value._uuid[13], value._uuid[14], value._uuid[15]);

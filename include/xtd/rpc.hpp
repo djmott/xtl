@@ -239,10 +239,10 @@ namespace xtd{
         _server_thread = std::make_unique<std::thread>([this, &oServer]() {
           auto oFuture = _stop_server_thread->get_future();
 
-          size_t iPayloadSize;
           payload oPayload;
           for (; std::future_status::timeout == oFuture.wait_for(std::chrono::milliseconds(1));) {
-            if ((iPayloadSize = _server_pipe->bytes_available()) < sizeof(size_t)) continue;
+            size_t iPayloadSize = _server_pipe->bytes_available();
+            if (iPayloadSize < sizeof(size_t)) continue;
             oPayload.resize(iPayloadSize);
             _server_pipe->read(oPayload);
             marshaler<false, size_t>::unmarshal(oPayload, iPayloadSize);
@@ -266,7 +266,7 @@ namespace xtd{
      * rpc_client
      */
     template <typename _transport_t> struct rpc_client < _transport_t> : _transport_t {
-      template <typename ... _arg_ts> rpc_client(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
+      template <typename ... _arg_ts> explicit rpc_client(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
       template <typename _impl_t> using client_from_impl = rpc_client < _transport_t>;
     };
 
@@ -274,7 +274,7 @@ namespace xtd{
       using transport_type = _transport_t;
       using _super_t = rpc_client<_transport_t, _tail_ts...>;
       using _this_t = rpc_client<transport_type, _head_t, _tail_ts...>;
-      template <typename ... _arg_ts> rpc_client(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
+      template <typename ... _arg_ts> explicit rpc_client(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
 
       template <typename _impl_t> using client_from_impl = typename std::conditional< std::is_same<_impl_t, _head_t>::value, _this_t, typename _super_t::template client_from_impl<_impl_t>>::type;
 
@@ -342,7 +342,7 @@ namespace xtd{
     template <typename _transport_t> struct rpc_server < _transport_t> : _transport_t {
       template <typename _impl_t> using server_from_impl = rpc_server < _transport_t>;
 
-      template <typename ... _arg_ts> rpc_server(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
+      template <typename ... _arg_ts> explicit rpc_server(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
     protected:
       bool invoke(payload& oPayload) {
         return false;
@@ -357,7 +357,7 @@ namespace xtd{
       using call_type = _head_t;
       template <typename _impl_t> using server_from_impl = typename std::conditional< std::is_same<_impl_t, _head_t>::value, _this_t, typename _super_t::template server_from_impl<_impl_t>>::type;
 
-      template <typename ... _arg_ts> rpc_server(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
+      template <typename ... _arg_ts> explicit rpc_server(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
 
       template <typename ... _arg_ts> void attach(_arg_ts&&...oArgs) {
         _call.attach(std::forward<_arg_ts>(oArgs)...);
@@ -390,7 +390,7 @@ namespace xtd{
       using _my_t = rpc_call<_impl_t, _return_t(_fnarg_ts...)>;
       using return_type = _return_t;
       using impl_type = _impl_t;
-      template <typename ... _arg_ts> rpc_call(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
+      template <typename ... _arg_ts> explicit rpc_call(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
 
 
       template <typename ... _arg_ts> void attach(_arg_ts&&...oArgs) {

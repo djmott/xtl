@@ -13,7 +13,7 @@
 
 using char_histogram = std::vector<size_t>;
 
-char_histogram get_char_histogram(const xtd::string& src){
+char_histogram get_char_histogram(const xtd::string& src){ // cppcheck-suppress unusedFunction - used in commented code
   char_histogram oRet(255, 0);
   for (char ch : src){
     oRet[128+ch]++;
@@ -23,7 +23,7 @@ char_histogram get_char_histogram(const xtd::string& src){
 
 
 using word_histogram = std::map<xtd::string, size_t>;
-word_histogram get_word_histogram(const xtd::string& src){
+[[maybe_unused]] word_histogram get_word_histogram(const xtd::string& src){
   word_histogram oRet;
   return oRet;
 }

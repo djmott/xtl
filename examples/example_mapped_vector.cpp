@@ -5,12 +5,12 @@
 
 #include <xtd/mapped_vector.hpp>
 
+// cppcheck-suppress unusedStructMember - example struct definition
 struct person{
   int age;
   char first_name[50];
   char last_name[50];
   int ssn;
-
 };
 
 int main(){

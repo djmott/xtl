@@ -33,6 +33,26 @@ XTL is a C++17 header-only template library that supplements and extends the STL
 - When in doubt, examine similar files in the codebase for reference
 - Use the same indentation, brace style, and comment style as existing code
 
+## Static Analysis
+
+- **All C++ source files must pass static analysis before commits**
+- A git pre-commit hook automatically runs static analysis tools on staged C++ files
+- **Commits will be blocked if any static analysis tool finds issues**
+- The following tools are required and will be run on staged files:
+  - **clang-format**: Checks code formatting (use `clang-format -i <file>` to auto-fix)
+  - **clang-tidy**: Performs static analysis and suggests improvements
+  - **cppcheck**: Detects bugs, undefined behavior, and dangerous coding patterns
+  - **cpplint**: Checks for Google C++ style guide violations and other issues
+- Only staged C++ files (`.cpp`, `.hpp`, `.h`, `.cc`, `.cxx`, `.c++`) are checked
+- Ensure all required tools are installed in the development container:
+  - `clang-format` (part of clang tools)
+  - `clang-tidy` (part of clang tools)
+  - `cppcheck`
+  - `cpplint` (Python package: `pip install cpplint`)
+- For clang-tidy to work properly, ensure `compile_commands.json` exists:
+  - Configure CMake with: `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B .build`
+- The hook uses existing cppcheck suppressions from `assets/cppcheck-suppressions.txt` if available
+
 ## Documentation
 
 - **Always add Doxygen-style comments** for:

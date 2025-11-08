@@ -101,7 +101,7 @@ namespace xtd{
     //invokes all the attached targets and returns the result of the last target
     _return_t operator()(_arg_ts...oArgs) const{
       _return_t oRet;
-      for (const auto & oInvoker : _invokers){
+      for (const auto & oInvoker : _invokers){ // cppcheck-suppress useStlAlgorithm - intentionally getting last result, not accumulating
         oRet = oInvoker->invoke(oArgs...);
       }
       return oRet;
@@ -143,7 +143,7 @@ namespace xtd{
     template <typename _method_t, _method_t * _method> class method_invoker : public invoker{
     public:
       ~method_invoker() override = default;
-      virtual return_type invoke(_arg_ts...oArgs) const override { (*_method)(std::forward<_arg_ts>(oArgs)...); }
+      virtual return_type invoke(_arg_ts...oArgs) const override { return (*_method)(std::forward<_arg_ts>(oArgs)...); }
     };
 
     template <typename _lambda_t> class lamdba_invoker : public invoker{
@@ -171,7 +171,7 @@ namespace xtd{
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}
       member_invoker(const member_invoker& oSrc) : _dest(oSrc._dest){}
       explicit member_invoker(_dest_t* dest) : _dest(dest){}
-      virtual return_type invoke(_arg_ts...oArgs)const override { (_dest->*_member)(oArgs...); }
+      virtual return_type invoke(_arg_ts...oArgs)const override { return (_dest->*_member)(oArgs...); }
       _dest_t * _dest;
     };
 

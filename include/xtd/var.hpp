@@ -24,7 +24,7 @@ namespace xtd {
 
     var(const var& src) : _inner(src._inner->clone()) {}
 
-    template <typename _ty> var(_ty src) : _inner(new inner<_ty>(src)) {}
+    template <typename _ty> var(_ty src) : _inner(new inner<_ty>(src)) {} // cppcheck-suppress noExplicitConstructor
 
     template <typename _ty> var& operator = (_ty src) {
       var oTmp(std::forward<_ty>(src));

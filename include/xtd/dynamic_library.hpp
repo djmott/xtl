@@ -135,7 +135,7 @@ namespace xtd{
 #if (XTD_OS_WINDOWS & XTD_OS)
       auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(GetProcAddress(_Handle, name), [](FARPROC p){ return nullptr == p; }));
 #elif (XTD_OS_UNIX & XTD_OS)
-      auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(dlsym(_Handle, name), [](void * p){ return nullptr == p; }));
+      auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(dlsym(_Handle, name), [](const void * p){ return nullptr == p; }));
 #endif
       return return_type(fnptr, shared_from_this());
     }

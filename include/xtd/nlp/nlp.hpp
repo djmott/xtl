@@ -11,7 +11,7 @@ namespace xtd{
     struct raw_document : dynamic_object{
       using text = PROPERTY(xtd::string);
 
-      template <typename..._ParamTs> raw_document(_ParamTs&&...oParams) : dynamic_object(std::forward<_ParamTs>(oParams)...){}
+      template <typename..._ParamTs> explicit raw_document(_ParamTs&&...oParams) : dynamic_object(std::forward<_ParamTs>(oParams)...){}
 
     };
 
@@ -31,7 +31,7 @@ namespace xtd{
     struct itokenizer{
 
       struct document : raw_document{
-        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
+        template <typename..._ParamTs> explicit document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
 
         using tokens = PROPERTY(std::vector<xtd::string>);
 
@@ -42,7 +42,7 @@ namespace xtd{
     struct istemmer{
 
       struct document : raw_document{
-        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
+        template <typename..._ParamTs> explicit document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
       };
 
     };
@@ -51,7 +51,7 @@ namespace xtd{
     struct isentence_boundary_detector{
 
       struct document : raw_document{
-        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
+        template <typename..._ParamTs> explicit document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
       };
 
     };

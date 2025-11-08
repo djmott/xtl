@@ -47,7 +47,7 @@ namespace xtd{
     template <size_t> friend class mapped_file;
     explicit mapped_page(void * addr) : _super_t(reinterpret_cast<_ty*>(addr), [](void*addr) { munmap(addr, 1);}) {}
   public:
-    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
+    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){} // cppcheck-suppress noExplicitConstructor
 
     mapped_page& operator=(const mapped_page& src){
       _super_t::operator =(src);
@@ -91,7 +91,7 @@ namespace xtd{
       return mapped_page<_ty>(
         xtd::crt_exception::throw_if(
           mmap(nullptr, iPageSize, PROT_READ|PROT_WRITE, MAP_SHARED,  _file_num, (pageNum * iPageSize)),
-          [](void*addr){ return nullptr==addr || MAP_FAILED==addr; }));
+          [](const void*addr){ return nullptr==addr || MAP_FAILED==addr; }));
     }
 
     template <typename _ty> mapped_page<_ty> append(size_t& newpage){
@@ -105,7 +105,7 @@ namespace xtd{
       return mapped_page<_ty>(
           xtd::crt_exception::throw_if(
               mmap(nullptr, iPageSize, PROT_READ|PROT_WRITE, MAP_SHARED,  _file_num, oStat.st_size),
-              [](void*addr){ return nullptr==addr || MAP_FAILED==addr; }), 
+              [](const void*addr){ return nullptr==addr || MAP_FAILED==addr; }), 
         [](_ty*addr){ munmap(addr, _::mapped_file_base<_page_size>::page_size()); });
     }
   };
@@ -119,7 +119,7 @@ namespace xtd{
     explicit mapped_page(void * addr) : _super_t(reinterpret_cast<_ty*>(addr), &UnmapViewOfFile){}
   public:
 
-    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
+    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){} // cppcheck-suppress noExplicitConstructor
 
     mapped_page& operator=(const mapped_page& src){
       _super_t::operator =(src);

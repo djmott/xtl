@@ -1,0 +1,230 @@
+include/xtd/callback.hpp:146:68: error: Found a exit path from function with non-void return type that has missing return statement [missingReturn]
+      virtual return_type invoke(_arg_ts...oArgs) const override { (*_method)(std::forward<_arg_ts>(oArgs)...); }
+                                                                   ^
+include/xtd/callback.hpp:174:67: error: Found a exit path from function with non-void return type that has missing return statement [missingReturn]
+      virtual return_type invoke(_arg_ts...oArgs)const override { (_dest->*_member)(oArgs...); }
+                                                                  ^
+include/xtd/callback.hpp:171:7: warning: Member variable 'member_invoker::_dest' is not initialized in the constructor. [uninitMemberVar]
+      member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}
+      ^
+include/xtd/callback.hpp:172:7: warning: Member variable 'member_invoker::_dest' is not initialized in the constructor. [uninitMemberVar]
+      member_invoker(const member_invoker& oSrc) : _dest(oSrc._dest){}
+      ^
+include/xtd/callback.hpp:173:16: warning: Member variable 'member_invoker::_dest' is not initialized in the constructor. [uninitMemberVar]
+      explicit member_invoker(_dest_t* dest) : _dest(dest){}
+               ^
+include/xtd/callback.hpp:93:16: style: Variable 'oInvoker->invoke' is reassigned a value before the old one has been used. [redundantAssignment]
+          oRet = oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
+               ^
+include/xtd/callback.hpp:93:16: note: oInvoker->invoke is assigned
+          oRet = oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
+               ^
+include/xtd/callback.hpp:93:16: note: oInvoker->invoke is overwritten
+          oRet = oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
+               ^
+include/xtd/callback.hpp:105:14: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+        oRet = oInvoker->invoke(oArgs...);
+             ^
+include/xtd/meta.hpp:23:7: style: Class '_RAII' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+      _RAII(_Ty newval) : _fn(newval){}
+      ^
+include/xtd/string.hpp:56:5: style: Class 'xstring < char >' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    xstring(_ArgsT&&...oArgs)
+    ^
+include/xtd/string.hpp:56:5: style: Class 'xstring < wchar_t >' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    xstring(_ArgsT&&...oArgs)
+    ^
+include/xtd/dynamic_library.hpp:138:114: style: Parameter 'p' can be declared with const [constParameter]
+      auto fnptr = reinterpret_cast<typename return_type::function_pointer_type>(xtd::dynamic_library_exception::throw_if(dlsym(_Handle, name), [](void * p){ return nullptr == p; }));
+                                                                                                                 ^
+include/xtd/string.hpp:173:29: style: Consider using std::any_of algorithm instead of a raw loop. [useStlAlgorithm]
+          if (oFind == oCh) {
+                            ^
+include/xtd/mapped_file.hpp:50:37: style: Class 'mapped_page' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
+                                    ^
+include/xtd/mapped_file.hpp:92:29: style: Parameter 'addr' can be declared with const [constParameter]
+        xtd::crt_exception::throw_if(
+                            ^
+include/xtd/mapped_file.hpp:106:31: style: Parameter 'addr' can be declared with const [constParameter]
+          xtd::crt_exception::throw_if(
+                              ^
+examples/example_mapped_file.cpp:11:7: style: struct member 'person::age' is never used. [unusedStructMember]
+  int age;
+      ^
+examples/example_mapped_file.cpp:12:8: style: struct member 'person::first_name' is never used. [unusedStructMember]
+  char first_name[50];
+       ^
+examples/example_mapped_file.cpp:13:8: style: struct member 'person::last_name' is never used. [unusedStructMember]
+  char last_name[50];
+       ^
+examples/example_mapped_file.cpp:14:7: style: struct member 'person::ssn' is never used. [unusedStructMember]
+  int ssn;
+      ^
+include/xtd/mapped_file.hpp:50:37: style: Class 'mapped_page < page >' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    template <typename ... _arg_ts> mapped_page(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...){}
+                                    ^
+examples/example_mapped_vector.cpp:9:7: style: struct member 'person::age' is never used. [unusedStructMember]
+  int age;
+      ^
+examples/example_mapped_vector.cpp:10:8: style: struct member 'person::first_name' is never used. [unusedStructMember]
+  char first_name[50];
+       ^
+examples/example_mapped_vector.cpp:11:8: style: struct member 'person::last_name' is never used. [unusedStructMember]
+  char last_name[50];
+       ^
+examples/example_mapped_vector.cpp:12:7: style: struct member 'person::ssn' is never used. [unusedStructMember]
+  int ssn;
+      ^
+include/xtd/var.hpp:27:29: style: Class 'var' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    template <typename _ty> var(_ty src) : _inner(new inner<_ty>(src)) {}
+                            ^
+include/xtd/dynamic_object.hpp:70:35: style: Struct 'dynamic_object' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+  template <typename ... _arg_ts> dynamic_object(_arg_ts&&...oArgs) : map_type(std::forward<_arg_ts>(oArgs)...){}
+                                  ^
+include/xtd/nlp/nlp.hpp:14:38: style: Struct 'raw_document' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+      template <typename..._ParamTs> raw_document(_ParamTs&&...oParams) : dynamic_object(std::forward<_ParamTs>(oParams)...){}
+                                     ^
+include/xtd/nlp/nlp.hpp:34:40: style: Struct 'document' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
+                                       ^
+include/xtd/nlp/nlp.hpp:45:40: style: Struct 'document' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
+                                       ^
+include/xtd/nlp/nlp.hpp:54:40: style: Struct 'document' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+        template <typename..._ParamTs> document(_ParamTs&&...oParams) : raw_document(std::forward<_ParamTs>(oParams)...){}
+                                       ^
+include/xtd/parse.hpp:125:23: error: Syntax Error: AST broken, binary operator '=' doesn't have two operands. [internalAstError]
+      using impl_type = _impl_t;
+                      ^
+include/xtd/grammars/iso32000-1.hpp:45:7: error: syntax error: 1 = [syntaxError]
+      STRING(True, "true");
+      ^
+include/xtd/concurrent/stack.hpp:41:0: error: Found a exit path from function with non-void return type that has missing return statement [missingReturn]
+        if (&src == this) return *this;
+^
+include/xtd/concurrent/hash_map.hpp:50:9: error: Found a exit path from function with non-void return type that has missing return statement [missingReturn]
+        }
+        ^
+include/xtd/concurrent/hash_map.hpp:59:9: error: Found a exit path from function with non-void return type that has missing return statement [missingReturn]
+        }
+        ^
+include/xtd/rpc.hpp:269:39: style: Struct 'rpc_client' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+      template <typename ... _arg_ts> rpc_client(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
+                                      ^
+include/xtd/rpc.hpp:277:39: style: Struct 'rpc_client' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+      template <typename ... _arg_ts> rpc_client(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
+                                      ^
+include/xtd/rpc.hpp:345:39: style: Struct 'rpc_server' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+      template <typename ... _arg_ts> rpc_server(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
+                                      ^
+include/xtd/rpc.hpp:360:39: style: Struct 'rpc_server' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+      template <typename ... _arg_ts> rpc_server(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
+                                      ^
+include/xtd/rpc.hpp:393:39: style: Struct 'rpc_call' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+      template <typename ... _arg_ts> rpc_call(_arg_ts&&...oArgs) : _super_t(std::forward<_arg_ts>(oArgs)...) {}
+                                      ^
+include/xtd/rpc.hpp:242:18: style: The scope of the variable 'iPayloadSize' can be reduced. [variableScope]
+          size_t iPayloadSize;
+                 ^
+include/xtd/rpc.hpp:41:38: style: Parameter 'oPayload' can be declared with const [constParameter]
+      static void marshal(payload_t& oPayload, const _head_t&, _tail_ts&&...oTail) {
+                                     ^
+include/xtd/rpc.hpp:44:40: style: Parameter 'oPayload' can be declared with const [constParameter]
+      static void unmarshal(payload_t& oPayload, const _head_t&, _tail_ts&&...oTail) {
+                                       ^
+include/xtd/rpc.hpp:51:38: style: Parameter 'oPayload' can be declared with const [constParameter]
+      static void marshal(payload_t& oPayload, const _head_t&, _tail_ts&&...oTail) {
+                                     ^
+include/xtd/rpc.hpp:54:40: style: Parameter 'oPayload' can be declared with const [constParameter]
+      static void unmarshal(payload_t& oPayload, const _head_t&, _tail_ts&&...oTail) {
+                                       ^
+include/xtd/rpc.hpp:78:38: style: Parameter 'oPayload' can be declared with const [constParameter]
+      static void marshal(payload_t& oPayload, const _head_t& oHead, _tail_ts&&...oTail) {
+                                     ^
+include/xtd/rpc.hpp:81:40: style: Parameter 'oPayload' can be declared with const [constParameter]
+      static void unmarshal(payload_t& oPayload, _head_t& oHead, _tail_ts&&...oTail) {
+                                       ^
+include/xtd/rpc.hpp:81:59: style: Parameter 'oHead' can be declared with const [constParameter]
+      static void unmarshal(payload_t& oPayload, _head_t& oHead, _tail_ts&&...oTail) {
+                                                          ^
+examples/example_rpc.cpp:33:39: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+      for (auto & oVal : oVals){ dRet += oVal; }
+                                      ^
+.build/_deps/gtest-src/googletest/include/gtest/internal/gtest-port.h:2308:0: error: failed to evaluate #if condition [preprocessorErrorDirective]
+#if __has_include(<any>) && __cplusplus >= 201703L
+^
+tests/test_var.hpp:78:5: warning: Member variable 's1::c' is not initialized in the constructor. Maybe it should be initialized directly in the class s1? [uninitDerivedMemberVar]
+    s2() : s1(), d(0.0) {}
+    ^
+tests/test_var.hpp:78:5: warning: Member variable 's1::s' is not initialized in the constructor. Maybe it should be initialized directly in the class s1? [uninitDerivedMemberVar]
+    s2() : s1(), d(0.0) {}
+    ^
+tests/test_var.hpp:78:5: warning: Member variable 's1::i' is not initialized in the constructor. Maybe it should be initialized directly in the class s1? [uninitDerivedMemberVar]
+    s2() : s1(), d(0.0) {}
+    ^
+tests/test_var.hpp:78:5: warning: Member variable 's1::l' is not initialized in the constructor. Maybe it should be initialized directly in the class s1? [uninitDerivedMemberVar]
+    s2() : s1(), d(0.0) {}
+    ^
+include/xtd/unique_id.hpp:138:5: style: Struct 'unique_id' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    unique_id(const uuid_t& oID) {
+    ^
+include/xtd/unique_id.hpp:133:7: warning: %hX in format string (no. 1) requires 'unsigned short *' but the argument type is 'unsigned int *'. [invalidScanfArgType_int]
+      sscanf(sTemp.c_str(), "%08hX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+      ^
+include/xtd/unique_id.hpp:164:9: warning: %hX in format string (no. 1) requires 'unsigned short' but the argument type is 'unsigned int'. [invalidPrintfArgType_uint]
+        sprintf(&oRet[0], "%08hX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+        ^
+tests/test_rw_lock.hpp:54:44: style: Local variable 'oLock' shadows outer variable [shadowVariable]
+      xtd::concurrent::rw_lock::scope_read oLock(rw);
+                                           ^
+tests/test_rw_lock.hpp:52:42: note: Shadowed declaration
+    xtd::concurrent::rw_lock::scope_read oLock(rw);
+                                         ^
+tests/test_rw_lock.hpp:54:44: note: Shadow variable
+      xtd::concurrent::rw_lock::scope_read oLock(rw);
+                                           ^
+tests/test_rw_lock.hpp:56:46: style: Local variable 'oLock' shadows outer variable [shadowVariable]
+        xtd::concurrent::rw_lock::scope_read oLock(rw);
+                                             ^
+tests/test_rw_lock.hpp:54:44: note: Shadowed declaration
+      xtd::concurrent::rw_lock::scope_read oLock(rw);
+                                           ^
+tests/test_rw_lock.hpp:56:46: note: Shadow variable
+        xtd::concurrent::rw_lock::scope_read oLock(rw);
+                                             ^
+tests/test_executable.hpp:13:10: style: Variable 'oExec' can be declared with const [constVariable]
+  auto & oExec = xtd::executable::this_executable();
+         ^
+tests/test_hash_map.hpp:46:14: style: Variable 'oIt' is assigned a value that is never used. [unreadVariable]
+    auto oIt = oMap.begin();
+             ^
+tests/test_hash_map.hpp:47:15: style: Variable 'oEnd' is assigned a value that is never used. [unreadVariable]
+    auto oEnd = oMap.end();
+              ^
+tests/test_hash_map.hpp:48:16: style: Variable 'oBack' is assigned a value that is never used. [unreadVariable]
+    auto oBack = oMap.back();
+               ^
+tests/test_exception.hpp:9:21: style: Variable 'ex1' is assigned a value that is never used. [unreadVariable]
+  xtd::exception ex1(here(), "");
+                    ^
+tests/test_exception.hpp:27:21: style: Variable 'ex2' is assigned a value that is never used. [unreadVariable]
+  xtd::exception ex2(std::move(ex1));
+                    ^
+tests/test_exception.hpp:29:28: style: Variable 'crtex2' is assigned a value that is never used. [unreadVariable]
+  xtd::crt_exception crtex2(std::move(crtex1));
+                           ^
+tests/test_var.hpp:37:9: style: Variable 'v2' is assigned a value that is never used. [unreadVariable]
+  var v2=v1;
+        ^
+examples/example_callback.cpp:16:0: style: The function 'Adder' is never used. [unusedFunction]
+
+^
+examples/example_nlp.cpp:16:0: style: The function 'get_char_histogram' is never used. [unusedFunction]
+
+^
+examples/example_nlp.cpp:26:0: style: The function 'get_word_histogram' is never used. [unusedFunction]
+
+^
+nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingInclude]
+

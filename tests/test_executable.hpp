@@ -10,7 +10,7 @@ TEST(test_executable, initialization) {
 }
 
 TEST(test_executable, path) {
-  auto & oExec = xtd::executable::this_executable();
+  const auto & oExec = xtd::executable::this_executable();
   ASSERT_STRNE("", oExec.path().string().c_str());
 }
 

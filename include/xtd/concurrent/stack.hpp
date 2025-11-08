@@ -40,6 +40,7 @@ namespace xtd{
       stack& operator=(stack&& src){
         if (&src == this) return *this;
         std::swap(_root, src._root);
+        return *this;
       }
 
       stack(const stack&) = delete;

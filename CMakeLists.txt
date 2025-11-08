@@ -19,6 +19,25 @@ endif()
 project(XTL)
 enable_language(CXX)
 
+# Install git pre-commit hook if .git directory exists and hook is not already installed
+if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
+  set(GIT_HOOKS_DIR "${CMAKE_SOURCE_DIR}/.git/hooks")
+  set(PRE_COMMIT_HOOK "${GIT_HOOKS_DIR}/pre-commit")
+  set(PRE_COMMIT_HOOK_SOURCE "${CMAKE_SOURCE_DIR}/cmake/pre-commit")
+  
+  if(EXISTS "${PRE_COMMIT_HOOK_SOURCE}")
+    if(NOT EXISTS "${PRE_COMMIT_HOOK}")
+      message(STATUS "Installing git pre-commit hook...")
+      file(COPY "${PRE_COMMIT_HOOK_SOURCE}"
+           DESTINATION "${GIT_HOOKS_DIR}"
+           FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+      message(STATUS "Git pre-commit hook installed successfully")
+    else()
+      message(STATUS "Git pre-commit hook already exists, skipping installation")
+    endif()
+  endif()
+endif()
+
 include(CheckIncludeFile)
 include(CheckIncludeFileCXX)
 include(ExternalProject)

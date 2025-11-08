@@ -122,7 +122,7 @@ namespace xtd {
     class rule : public rule_base {
     public:
       using decl_type = _decl_t;
-      using impl_type = _impl_t;
+      using impl_type = _impl_t; // cppcheck-suppress internalAstError - false positive, valid C++ type alias
       using rule_type = rule<_decl_t, _impl_t>;
 
       template <typename ... _child_rule_ts>
