@@ -40,3 +40,7 @@ useStlAlgorithm:include/xtd/callback.hpp:105
 
 # test_var.hpp: uninitDerivedMemberVar - false positive, base class is initialized with aggregate initialization
 uninitDerivedMemberVar:tests/test_var.hpp
+
+# source_location.hpp: unusedFunction - public API methods, part of the interface
+# These are public API methods that may not be used within this file but are part of the public interface
+unusedFunction:include/xtd/source_location.hpp

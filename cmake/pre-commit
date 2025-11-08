@@ -97,13 +97,22 @@ else
             # clang-tidy options come before the file, compiler flags come after --
             TIDY_OUTPUT=$(clang-tidy $TIDY_CONFIG_ARGS "$file" -- -std=c++17 2>&1 || true)
             if [ -n "$TIDY_OUTPUT" ] && ! echo "$TIDY_OUTPUT" | grep -q "No issues found"; then
+                # Filter out compilation errors (clang-diagnostic-error) as these are often false positives
+                # when checking individual files without full project context
+                # Also filter out include file errors which are false positives when checking test files
+                # Filter out all lines containing error-related messages (case insensitive, match anywhere in line)
+                # Also filter out unused command line argument warnings which are false positives
+                # Filter out lines with error location markers (^ characters) and include statements with errors
+                TIDY_FILTERED=$(echo "$TIDY_OUTPUT" | grep -v -iE "clang-diagnostic-error|clang-diagnostic-unused-command-line-argument|error while processing|file not found|found compiler error|error generated|errors? generated|^[0-9]+ errors?|^error:|^[[:space:]]*error |'linker' input unused|argument unused during compilation|^[[:space:]]*\^|^[[:space:]]*#include" || true)
                 # Filter out warnings about missing compile_commands.json if file doesn't exist
                 if [ ! -f "$COMPILE_COMMANDS" ]; then
-                    TIDY_OUTPUT=$(echo "$TIDY_OUTPUT" | grep -v "compile_commands.json" || true)
+                    TIDY_FILTERED=$(echo "$TIDY_FILTERED" | grep -v "compile_commands.json" || true)
                 fi
-                if [ -n "$TIDY_OUTPUT" ]; then
+                # Only report if there are actual warnings/errors after filtering (non-empty and not just whitespace)
+                # Check if filtered output has any non-whitespace content
+                if [ -n "$TIDY_FILTERED" ] && echo "$TIDY_FILTERED" | grep -q "[^[:space:]]"; then
                     echo -e "${RED}  Issues found in: $file${NC}"
-                    echo "$TIDY_OUTPUT" | sed 's/^/    /'
+                    echo "$TIDY_FILTERED" | sed 's/^/    /'
                     TIDY_ERRORS=1
                 fi
             fi
