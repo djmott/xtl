@@ -52,6 +52,7 @@
 #define XTD_CPU_AMD64   (XTD_CPU_INTEL << 1)
 #define XTD_CPU_x86_64  XTD_CPU_AMD64
 #define XTD_CPU_ARM     (XTD_CPU_INTEL << 2)
+#define XTD_CPU_aarch64 XTD_CPU_ARM
 
 #define XTD_CPU XTD_CPU_@CMAKE_SYSTEM_PROCESSOR@
 
@@ -60,6 +61,7 @@ enum class target_cpus{
   AMD64 = XTD_CPU_AMD64,
   x86_64 = AMD64,
   arm = XTD_CPU_ARM,
+  aarch64 = XTD_CPU_ARM,
 };
 
 static constexpr target_cpus target_cpu = target_cpus::@CMAKE_SYSTEM_PROCESSOR@;

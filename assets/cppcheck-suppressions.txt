@@ -44,3 +44,6 @@ uninitDerivedMemberVar:tests/test_var.hpp
 # source_location.hpp: unusedFunction - public API methods, part of the interface
 # These are public API methods that may not be used within this file but are part of the public interface
 unusedFunction:include/xtd/source_location.hpp
+
+# test_callback.hpp: unusedFunction - test functions used via function pointers/callbacks
+unusedFunction:tests/test_callback.hpp
