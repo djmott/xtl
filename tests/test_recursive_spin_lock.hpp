@@ -26,9 +26,9 @@ TEST(test_recursive_spin_lock, nested_locking){
     auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
     EXPECT_FALSE(fn.get());
     {
-      sl::scope_locker locker(oLock);
-      auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
-      EXPECT_FALSE(fn.get());
+      sl::scope_locker inner_locker(oLock);
+      auto inner_fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
+      EXPECT_FALSE(inner_fn.get());
 
     }
   }

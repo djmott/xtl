@@ -83,7 +83,7 @@ namespace xtd{
         using value_type = _ty;
         static value_type get(SOCKET s){
           value_type iRet;
-          int iSize = sizeof(value_type);
+          socklen_t iSize = sizeof(value_type);
           socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
           return iRet;
         }
@@ -96,7 +96,7 @@ namespace xtd{
         using value_type = std::string;
         static value_type get(SOCKET s){
           value_type iRet;
-          int iSize = 0;
+          socklen_t iSize = 0;
           socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
           return iRet;
         }
