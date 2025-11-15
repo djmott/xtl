@@ -1,0 +1,922 @@
+{
+  "timestamp": "2025-11-15T15:08:17.201228",
+  "statistics": {
+    "files_analyzed": 150,
+    "lines_analyzed": 15113,
+    "issues_found": 0
+  },
+  "issues": {
+    "errors": [
+      {
+        "file": "/workspace/examples/dummy_library.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_btree.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_callback.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_dynamic_library.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_event_trace.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_exception.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_logging.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_mapped_file.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_mapped_vector.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_nlp.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_parse1.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_parse2.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_pdf.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_rfc1035.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_rfc2229.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_rpc.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_sqlite.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/examples/example_string.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/btree.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/callback.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/com/com.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/com/com_class_factory.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/com/com_data_object.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/com/com_dll.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/com/com_exception.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/com/com_initializer.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/com/com_object.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/com/com_pointer.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/concurrent/concurrent.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/concurrent/hash_map.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/concurrent/queue.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/concurrent/recursive_spin_lock.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/concurrent/rw_lock.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/concurrent/spin_lock.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/concurrent/stack.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/debug.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/decorated_object.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/dynamic_library.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/dynamic_object.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/event_trace.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/exception.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/executable.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/filesystem.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC1035.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC1123.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC1950.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC1951.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC1952.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC2234.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC2460.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC2616.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC3066.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC3513.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC3986.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC4647.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC5234.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC5322.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC5646.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC7230.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC7231.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC7232.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC7233.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC7234.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC7235.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC822.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/RFC850.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/XMLParse.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/iso32000-1.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/grammars/rfc2229.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/log.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/lru_cache.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/mapped_file.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/mapped_vector.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/memory.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/meta.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/case_converter.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/doc_filter/acronym.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/doc_filter/doc_filter.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/doc_filter/hyphenated_word.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/document.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/moby.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/ngram_stemmer.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/nlp.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/porter_stemmer.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/scowl_pos_tagger.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/simple_PBD.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/simple_SBD.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/simple_tokenizer.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/statistical_stemmer.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/text_processor.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/wordnet.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/nlp/wordnet_old.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/parse.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/process.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/rpc.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/shared_mem_obj.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/singleton.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/socket.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/source_location.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/sqlite.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/string.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/tuple.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/type_info.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/unique_id.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/var.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/windows/console.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/windows/debug_help.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/windows/exception.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/windows/image_help.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/windows/pipe.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/windows/service.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/include/xtd/wrapped_type.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/src/event_trace/event_trace.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/src/event_trace/evt_gcc.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/src/event_trace/evt_vc32.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/src/xtl.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/dummy_library.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/mocks/rpc.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_btree.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_callback.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_com.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_concurrent_stack.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_debug_help.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_dynamic_library.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_event_trace.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_exception.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_executable.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_hash_map.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_logging.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_lru_cache.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_mapped_file.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_mapped_vector.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_meta.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_parse.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_path.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_process.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_recursive_spin_lock.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_rpc.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_rw_lock.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_shared_mem_obj.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_socket.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_source_location.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_spin_lock.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_stack.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_string.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_unique_id.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/test_var.hpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/tests/tests.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/utils/scowl_importer/main.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      },
+      {
+        "file": "/workspace/utils/wordnet_importer/main.cpp",
+        "line": 0,
+        "severity": "error",
+        "message": "Failed to analyze file: invalid group reference 1 at position 28"
+      }
+    ]
+  },
+  "summary": {
+    "total_files": 150,
+    "total_lines": 15113,
+    "total_issues": 0,
+    "issues_by_severity": {
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    }
+  }
+}

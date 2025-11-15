@@ -1,0 +1,1 @@
+Build with: -pg, then run: gprof ./test_executable gmon.out > analysis.txt

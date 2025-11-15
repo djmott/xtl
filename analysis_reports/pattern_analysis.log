@@ -1,0 +1,9 @@
+Starting C++ code analysis...
+Scanning directory: /workspace
+Found 151 C++ files
+
+Analysis complete!
+Files analyzed: 150
+Issues found: 0
+
+Reports generated in analysis_reports/

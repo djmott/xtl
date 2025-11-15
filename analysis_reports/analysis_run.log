@@ -1,0 +1,14 @@
+comprehensive_analysis.sh: line 4: $'\r': command not found
+comprehensive_analysis.sh: line 5: set: -: invalid option
+set: usage: set [-abefhkmnptuvxBCEHPT] [-o option-name] [--] [-] [arg ...]
+comprehensive_analysis.sh: line 6: $'\r': command not found
+comprehensive_analysis.sh: line 9: $'\r': command not found
+==========================================
+C++ Comprehensive Analysis Framework
+==========================================
+Started: Sat Nov 15 03:07:53 PM UTC 2025
+
+comprehensive_analysis.sh: line 15: $'\r': command not found
+comprehensive_analysis.sh: line 22: $'\r': command not found
+comprehensive_analysis.sh: line 106: syntax error near unexpected token `elif'
+comprehensive_analysis.sh: line 106: `elif command -v cpplint &> /dev/null; then'
