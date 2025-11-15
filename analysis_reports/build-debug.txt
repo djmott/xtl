@@ -1,0 +1,46 @@
+[ 20%] Built target xtl
+[ 40%] Built target gtest
+[ 50%] Building CXX object _deps/gtest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+[ 60%] Building CXX object tests/CMakeFiles/dummy_library_test.dir/dummy_library.cpp.o
+[ 70%] Linking CXX shared library libdummy_library_test.so
+[ 70%] Built target dummy_library_test
+[ 80%] Building CXX object tests/CMakeFiles/unit_tests.dir/tests.cpp.o
+[ 90%] Linking CXX static library ../../../lib/libgtest_main.a
+[ 90%] Built target gtest_main
+In file included from /workspace/include/xtd/dynamic_library.hpp:18,
+                 from /workspace/tests/test_dynamic_library.hpp:6,
+                 from /workspace/tests/tests.cpp:48:
+/workspace/include/xtd/socket.hpp: In instantiation of ‘static xtd::socket::_::socket_option<_ty, level, optname>::value_type xtd::socket::_::socket_option<_ty, level, optname>::get(xtd::socket::SOCKET) [with _ty = int; int level = 1; int optname = 9; value_type = int; xtd::socket::SOCKET = int]’:
+/workspace/include/xtd/socket.hpp:443:92:   required from ‘bool xtd::socket::socket_options<_super_t>::keep_alive() const [with _super_t = xtd::socket::socket_base<xtd::socket::ipv4address, xtd::socket::socket_type::stream, xtd::socket::socket_protocol::tcp, xtd::socket::ip_options, xtd::socket::tcp_options, xtd::socket::connectable_socket, xtd::socket::bindable_socket, xtd::socket::listening_socket, xtd::socket::selectable_socket>]’
+/workspace/tests/test_socket.hpp:18:3:   required from here
+/workspace/include/xtd/socket.hpp:87:101: error: invalid conversion from ‘int*’ to ‘socklen_t*’ {aka ‘unsigned int*’} [-fpermissive]
+   87 |           socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
+      |                                                                                                     ^~~~~~
+      |                                                                                                     |
+      |                                                                                                     int*
+/workspace/include/xtd/exception.hpp:22:56: note: in definition of macro ‘throw_if’
+   22 | #define throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
+      |                                                        ^~~~~
+In file included from /workspace/include/xtd/socket.hpp:21,
+                 from /workspace/tests/test_socket.hpp:9,
+                 from /workspace/tests/tests.cpp:108:
+/usr/include/x86_64-linux-gnu/sys/socket.h:257:46: note:   initializing argument 5 of ‘int getsockopt(int, int, int, void*, socklen_t*)’
+  257 |                        socklen_t *__restrict __optlen) __THROW;
+      |                        ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/workspace/include/xtd/socket.hpp: In instantiation of ‘static xtd::socket::_::socket_option<_ty, level, optname>::value_type xtd::socket::_::socket_option<_ty, level, optname>::get(xtd::socket::SOCKET) [with _ty = int; int level = 6; int optname = 1; value_type = int; xtd::socket::SOCKET = int]’:
+/workspace/include/xtd/socket.hpp:476:90:   required from ‘bool xtd::socket::tcp_options<_super_t>::no_delay() const [with _super_t = xtd::socket::socket_base<xtd::socket::ipv4address, xtd::socket::socket_type::stream, xtd::socket::socket_protocol::tcp, xtd::socket::connectable_socket, xtd::socket::bindable_socket, xtd::socket::listening_socket, xtd::socket::selectable_socket>]’
+/workspace/tests/test_socket.hpp:34:3:   required from here
+/workspace/include/xtd/socket.hpp:87:101: error: invalid conversion from ‘int*’ to ‘socklen_t*’ {aka ‘unsigned int*’} [-fpermissive]
+   87 |           socket::exception::throw_if(getsockopt(s, level, optname, reinterpret_cast<char*>(&iRet), &iSize), [](int i){ return (i<0); });
+      |                                                                                                     ^~~~~~
+      |                                                                                                     |
+      |                                                                                                     int*
+/workspace/include/xtd/exception.hpp:22:56: note: in definition of macro ‘throw_if’
+   22 | #define throw_if(_test, _expression) _throw_if(here(), _test, _expression, #_test)
+      |                                                        ^~~~~
+/usr/include/x86_64-linux-gnu/sys/socket.h:257:46: note:   initializing argument 5 of ‘int getsockopt(int, int, int, void*, socklen_t*)’
+  257 |                        socklen_t *__restrict __optlen) __THROW;
+      |                        ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+make[2]: *** [tests/CMakeFiles/unit_tests.dir/build.make:76: tests/CMakeFiles/unit_tests.dir/tests.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:244: tests/CMakeFiles/unit_tests.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

@@ -1,0 +1,645 @@
+=== CLANG-FORMAT ANALYSIS ===
+Checking code formatting...
+./src/xtl.cpp:2:77: error: code should be clang-formatted [-Wclang-format-violations]
+@copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+                                                                            ^
+./src/xtl.cpp:28:49: error: code should be clang-formatted [-Wclang-format-violations]
+#define DUMP_DEFINE2(prefix, x) PRAGMA_(message( prefix QUOTE(x)))
+                                                ^
+./src/xtl.cpp:29:49: error: code should be clang-formatted [-Wclang-format-violations]
+#define DUMP_DEFINE(x) DUMP_DEFINE2("#define " # x " ", x)
+                                                ^
+./src/event_trace/event_trace.cpp:2:80: error: code should be clang-formatted [-Wclang-format-violations]
+ * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+                                                                               ^
+./src/event_trace/event_trace.cpp:5:1: error: code should be clang-formatted [-Wclang-format-violations]
+#include <xtd/process.hpp>
+^
+./src/event_trace/event_trace.cpp:11:7: error: code should be clang-formatted [-Wclang-format-violations]
+#endif
+      ^
+./src/event_trace/evt_gcc.cpp:2:80: error: code should be clang-formatted [-Wclang-format-violations]
+ * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+                                                                               ^
+./src/event_trace/evt_gcc.cpp:3:4: error: code should be clang-formatted [-Wclang-format-violations]
+ */
+   ^
+./src/event_trace/evt_gcc.cpp:6:13: error: code should be clang-formatted [-Wclang-format-violations]
+extern "C" {
+            ^
+./src/event_trace/evt_gcc.cpp:9:37: error: code should be clang-formatted [-Wclang-format-violations]
+  void __xtd_EventEnter(const char * fn);
+                                    ^
+./src/event_trace/evt_gcc.cpp:9:42: error: code should be clang-formatted [-Wclang-format-violations]
+  void __xtd_EventEnter(const char * fn);
+                                         ^
+./src/event_trace/evt_gcc.cpp:10:27: error: code should be clang-formatted [-Wclang-format-violations]
+  void __xtd_EventLeave();
+                          ^
+./src/event_trace/evt_gcc.cpp:13:38: error: code should be clang-formatted [-Wclang-format-violations]
+  // cppcheck-suppress unusedFunction
+                                     ^
+./src/event_trace/evt_gcc.cpp:14:62: error: code should be clang-formatted [-Wclang-format-violations]
+  void __cyg_profile_func_enter(void *, void * /*call_site*/){
+                                                             ^
+./src/event_trace/evt_gcc.cpp:14:63: error: code should be clang-formatted [-Wclang-format-violations]
+  void __cyg_profile_func_enter(void *, void * /*call_site*/){
+                                                              ^
+./src/event_trace/evt_gcc.cpp:15:28: error: code should be clang-formatted [-Wclang-format-violations]
+    //__xtd_EventEnter("");
+                           ^
+./src/event_trace/evt_gcc.cpp:16:4: error: code should be clang-formatted [-Wclang-format-violations]
+  }
+   ^
+./src/event_trace/evt_gcc.cpp:18:38: error: code should be clang-formatted [-Wclang-format-violations]
+  // cppcheck-suppress unusedFunction
+                                     ^
+./src/event_trace/evt_gcc.cpp:19:61: error: code should be clang-formatted [-Wclang-format-violations]
+  void __cyg_profile_func_exit(void *, void * /*call_site*/){
+                                                            ^
+./src/event_trace/evt_gcc.cpp:19:62: error: code should be clang-formatted [-Wclang-format-violations]
+  void __cyg_profile_func_exit(void *, void * /*call_site*/){
+                                                             ^
+./src/event_trace/evt_gcc.cpp:20:25: error: code should be clang-formatted [-Wclang-format-violations]
+   //__xtd_EventLeave();
+                        ^
+./src/event_trace/evt_vc32.cpp:2:80: error: code should be clang-formatted [-Wclang-format-violations]
+ * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+                                                                               ^
+./src/event_trace/evt_vc32.cpp:8:34: error: code should be clang-formatted [-Wclang-format-violations]
+#pragma intrinsic(_ReturnAddress)
+                                 ^
+./src/event_trace/evt_vc32.cpp:11:13: error: code should be clang-formatted [-Wclang-format-violations]
+extern "C" {
+            ^
+./src/event_trace/evt_vc32.cpp:13:28: error: code should be clang-formatted [-Wclang-format-violations]
+  void _xtd_EventEnter(void* addr);
+                           ^
+./src/event_trace/evt_vc32.cpp:13:29: error: code should be clang-formatted [-Wclang-format-violations]
+  void _xtd_EventEnter(void* addr);
+                            ^
+./src/event_trace/evt_vc32.cpp:13:36: error: code should be clang-formatted [-Wclang-format-violations]
+  void _xtd_EventEnter(void* addr);
+                                   ^
+./src/event_trace/evt_vc32.cpp:14:28: error: code should be clang-formatted [-Wclang-format-violations]
+  void _xtd_EventLeave(void* addr);
+                           ^
+./src/event_trace/evt_vc32.cpp:14:29: error: code should be clang-formatted [-Wclang-format-violations]
+  void _xtd_EventLeave(void* addr);
+                            ^
+./src/event_trace/evt_vc32.cpp:14:36: error: code should be clang-formatted [-Wclang-format-violations]
+  void _xtd_EventLeave(void* addr);
+                                   ^
+./src/event_trace/evt_vc32.cpp:16:55: error: code should be clang-formatted [-Wclang-format-violations]
+  void __declspec(naked, dllexport) _cdecl _penter() {
+                                                      ^
+./src/event_trace/evt_vc32.cpp:21:13: error: code should be clang-formatted [-Wclang-format-violations]
+      PUSHAD
+            ^
+./src/event_trace/evt_vc32.cpp:22:6: error: code should be clang-formatted [-Wclang-format-violations]
+    }
+     ^
+./src/event_trace/evt_vc32.cpp:23:26: error: code should be clang-formatted [-Wclang-format-violations]
+Formatting issues found (see details above)
+
+=== CLANG-TIDY ANALYSIS ===
+[1/30] Processing file /workspace/src/xtl.cpp.
+[2/30] Processing file /workspace/src/event_trace/event_trace.cpp.
+1 error generated.
+Error while processing /workspace/src/event_trace/event_trace.cpp.
+[3/30] Processing file /workspace/src/event_trace/evt_gcc.cpp.
+1 error generated.
+Error while processing /workspace/src/event_trace/evt_gcc.cpp.
+[4/30] Processing file /workspace/src/event_trace/evt_vc32.cpp.
+2 errors generated.
+Error while processing /workspace/src/event_trace/evt_vc32.cpp.
+[5/30] Processing file /workspace/tests/test_executable.hpp.
+3 errors generated.
+Error while processing /workspace/tests/test_executable.hpp.
+[6/30] Processing file /workspace/tests/test_process.hpp.
+4 errors generated.
+Error while processing /workspace/tests/test_process.hpp.
+[7/30] Processing file /workspace/tests/tests.cpp.
+5 errors generated.
+Error while processing /workspace/tests/tests.cpp.
+[8/30] Processing file /workspace/tests/test_unique_id.hpp.
+6 errors generated.
+Error while processing /workspace/tests/test_unique_id.hpp.
+[9/30] Processing file /workspace/tests/test_path.hpp.
+7 errors generated.
+Error while processing /workspace/tests/test_path.hpp.
+[10/30] Processing file /workspace/tests/test_dynamic_library.hpp.
+8 errors generated.
+Error while processing /workspace/tests/test_dynamic_library.hpp.
+[11/30] Processing file /workspace/tests/test_shared_mem_obj.hpp.
+8 errors generated.
+Error while processing /workspace/tests/test_shared_mem_obj.hpp.
+[12/30] Processing file /workspace/tests/test_lru_cache.hpp.
+9 errors generated.
+Error while processing /workspace/tests/test_lru_cache.hpp.
+[13/30] Processing file /workspace/tests/test_concurrent_stack.hpp.
+9 errors generated.
+Error while processing /workspace/tests/test_concurrent_stack.hpp.
+[14/30] Processing file /workspace/tests/test_meta.hpp.
+13 errors generated.
+Error while processing /workspace/tests/test_meta.hpp.
+[15/30] Processing file /workspace/tests/mocks/rpc.hpp.
+3 warnings and 33 errors generated.
+Error while processing /workspace/tests/mocks/rpc.hpp.
+[16/30] Processing file /workspace/tests/test_event_trace.hpp.
+3 warnings and 37 errors generated.
+Error while processing /workspace/tests/test_event_trace.hpp.
+[17/30] Processing file /workspace/tests/test_rw_lock.hpp.
+3 warnings and 38 errors generated.
+Error while processing /workspace/tests/test_rw_lock.hpp.
+[18/30] Processing file /workspace/tests/test_parse.hpp.
+3 warnings and 39 errors generated.
+Error while processing /workspace/tests/test_parse.hpp.
+[19/30] Processing file /workspace/tests/test_spin_lock.hpp.
+3 warnings and 40 errors generated.
+Error while processing /workspace/tests/test_spin_lock.hpp.
+[20/30] Processing file /workspace/tests/test_var.hpp.
+3 warnings and 41 errors generated.
+Error while processing /workspace/tests/test_var.hpp.
+[21/30] Processing file /workspace/tests/test_mapped_file.hpp.
+3 warnings and 42 errors generated.
+Error while processing /workspace/tests/test_mapped_file.hpp.
+[22/30] Processing file /workspace/tests/test_hash_map.hpp.
+3 warnings and 43 errors generated.
+Error while processing /workspace/tests/test_hash_map.hpp.
+[23/30] Processing file /workspace/tests/test_callback.hpp.
+3 warnings and 44 errors generated.
+Error while processing /workspace/tests/test_callback.hpp.
+[24/30] Processing file /workspace/tests/test_btree.hpp.
+3 warnings and 44 errors generated.
+Error while processing /workspace/tests/test_btree.hpp.
+[25/30] Processing file /workspace/tests/dummy_library.cpp.
+3 warnings and 44 errors generated.
+Error while processing /workspace/tests/dummy_library.cpp.
+[26/30] Processing file /workspace/tests/test_logging.hpp.
+3 warnings and 45 errors generated.
+Error while processing /workspace/tests/test_logging.hpp.
+[27/30] Processing file /workspace/tests/test_mapped_vector.hpp.
+3 warnings and 46 errors generated.
+Error while processing /workspace/tests/test_mapped_vector.hpp.
+[28/30] Processing file /workspace/tests/test_rpc.hpp.
+3 warnings and 47 errors generated.
+Error while processing /workspace/tests/test_rpc.hpp.
+[29/30] Processing file /workspace/tests/test_com.hpp.
+3 warnings and 47 errors generated.
+Error while processing /workspace/tests/test_com.hpp.
+[30/30] Processing file /workspace/tests/test_stack.hpp.
+3 warnings and 48 errors generated.
+Error while processing /workspace/tests/test_stack.hpp.
+error: too many errors emitted, stopping now [clang-diagnostic-error]
+/workspace/include/xtd/callback.hpp:10:10: error: 'memory' file not found [clang-diagnostic-error]
+   10 | #include <memory>
+      |          ^~~~~~~~
+/workspace/include/xtd/concurrent/concurrent.hpp:9:10: error: 'thread' file not found [clang-diagnostic-error]
+    9 | #include <thread>
+      |          ^~~~~~~~
+/workspace/include/xtd/debug.hpp:10:10: error: 'iostream' file not found [clang-diagnostic-error]
+   10 | #include <iostream>
+      |          ^~~~~~~~~~
+/workspace/include/xtd/dynamic_library.hpp:15:10: error: 'memory' file not found [clang-diagnostic-error]
+   15 | #include <memory>
+      |          ^~~~~~~~
+/workspace/include/xtd/log.hpp:12:10: error: 'chrono' file not found [clang-diagnostic-error]
+   12 | #include <chrono>
+      |          ^~~~~~~~
+/workspace/include/xtd/lru_cache.hpp:9:10: error: 'deque' file not found [clang-diagnostic-error]
+    9 | #include <deque>
+      |          ^~~~~~~
+/workspace/include/xtd/meta.hpp:8:10: error: 'cstdint' file not found [clang-diagnostic-error]
+    8 | #include <cstdint>
+      |          ^~~~~~~~~
+/workspace/include/xtd/process.hpp:25:10: error: 'regex' file not found [clang-diagnostic-error]
+   25 | #include <regex>
+      |          ^~~~~~~
+/workspace/include/xtd/rpc.hpp:10:10: error: 'thread' file not found [clang-diagnostic-error]
+   10 | #include <thread>
+      |          ^~~~~~~~
+/workspace/include/xtd/string.hpp:11:10: error: 'string' file not found [clang-diagnostic-error]
+   11 | #include <string>
+      |          ^~~~~~~~
+/workspace/include/xtd/var.hpp:11:10: error: 'memory' file not found [clang-diagnostic-error]
+   11 | #include <memory>
+      |          ^~~~~~~~
+/workspace/src/event_trace/evt_vc32.cpp:5:10: error: 'cstdint' file not found [clang-diagnostic-error]
+    5 | #include <cstdint>
+      |          ^~~~~~~~~
+/workspace/tests/mocks/rpc.hpp:13:42: warning: unused parameter 'oArgs' [clang-diagnostic-unused-parameter]
+   13 |         mock_protocol_exception(_ArgTs...oArgs){}
+      |                                          ^
+/workspace/tests/mocks/rpc.hpp:19:41: warning: unused parameter 'oArgs' [clang-diagnostic-unused-parameter]
+   19 |         mock_malformed_payload(_ArgTs...oArgs) { }
+      |                                         ^
+/workspace/tests/mocks/rpc.hpp:25:32: warning: unused parameter 'oArgs' [clang-diagnostic-unused-parameter]
+   25 |         mock_bad_call(_ArgTs...oArgs) {}
+      |                                ^
+/workspace/tests/mocks/rpc.hpp:31:26: error: use of undeclared identifier 'std'; did you mean 'xtd'? [clang-diagnostic-error]
+   31 |         using _super_t = std::vector<uint8_t>;
+      |                          ^~~
+      |                          xtd
+/workspace/tests/mocks/rpc.hpp:4:13: note: 'xtd' declared here
+    4 |   namespace xtd {
+      |             ^
+/workspace/tests/mocks/rpc.hpp:31:31: error: no template named 'vector' in namespace 'mock::xtd' [clang-diagnostic-error]
+   31 |         using _super_t = std::vector<uint8_t>;
+      |                          ~~~~~^
+/workspace/tests/mocks/rpc.hpp:31:38: error: use of undeclared identifier 'uint8_t' [clang-diagnostic-error]
+   31 |         using _super_t = std::vector<uint8_t>;
+      |                                      ^
+/workspace/tests/mocks/rpc.hpp:35:18: error: use of undeclared identifier '_super_t' [clang-diagnostic-error]
+   35 |           assert(_super_t::size() >= sizeof(_Ty));
+      |                  ^
+/workspace/tests/mocks/rpc.hpp:36:15: error: use of undeclared identifier '_super_t' [clang-diagnostic-error]
+   36 |           if (_super_t::size() < sizeof(_Ty)) {
+      |               ^
+/workspace/tests/mocks/rpc.hpp:37:37: error: use of undeclared identifier 'here' [clang-diagnostic-error]
+   37 |             throw malformed_payload(here(), "Invalid peek");
+      |                                     ^
+/workspace/tests/mocks/rpc.hpp:39:50: error: use of undeclared identifier 'at' [clang-diagnostic-error]
+   39 |           return *reinterpret_cast<const _Ty *>(&at(0));
+      |                                                  ^
+/workspace/tests/mocks/rpc.hpp:53:29: error: unknown type name 'payload' [clang-diagnostic-error]
+   53 |         static void marshal(payload &) { /*this specialization is a recursion terminator so has no implementation*/}
+      |                             ^
+/workspace/tests/mocks/rpc.hpp:55:31: error: unknown type name 'payload' [clang-diagnostic-error]
+   55 |         static void unmarshal(payload &) {/*this specialization is a recursion terminator so has no implementation*/}
+      |                               ^
+/workspace/tests/mocks/rpc.hpp:65:29: error: unknown type name 'payload' [clang-diagnostic-error]
+   65 |         static void marshal(payload &oPayload, const _Ty &val) {
+      |                             ^
+/workspace/tests/mocks/rpc.hpp:66:25: error: use of undeclared identifier 'std'; did you mean 'xtd'? [clang-diagnostic-error]
+   66 |           static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
+      |                         ^~~
+      |                         xtd
+/workspace/tests/mocks/rpc.hpp:4:13: note: 'xtd' declared here
+    4 |   namespace xtd {
+      |             ^
+/workspace/tests/mocks/rpc.hpp:66:30: error: no member named 'is_pod' in namespace 'mock::xtd' [clang-diagnostic-error]
+   66 |           static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
+      |                         ~~~~~^
+/workspace/tests/mocks/rpc.hpp:66:37: error: '_Ty' does not refer to a value [clang-diagnostic-error]
+   66 |           static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
+      |                                     ^
+/workspace/tests/mocks/rpc.hpp:62:25: note: declared here
+   62 |       template<typename _Ty>
+      |                         ^
+/workspace/tests/mocks/rpc.hpp:66:43: error: no member named 'value' in the global namespace [clang-diagnostic-error]
+   66 |           static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
+      |                                         ~~^
+/workspace/tests/mocks/rpc.hpp:67:66: error: unknown type name 'uint8_t' [clang-diagnostic-error]
+   67 |           oPayload.insert(oPayload.end(), reinterpret_cast<const uint8_t *>(&val),
+      |                                                                  ^
+/workspace/tests/mocks/rpc.hpp:68:64: error: unknown type name 'uint8_t' [clang-diagnostic-error]
+   68 |                           sizeof(_Ty) + reinterpret_cast<const uint8_t *>(&val));
+      |                                                                ^
+/workspace/tests/mocks/rpc.hpp:71:30: error: unknown type name 'payload' [clang-diagnostic-error]
+   71 |         static _Ty unmarshal(payload &oPayload) {
+      |                              ^
+/workspace/tests/mocks/rpc.hpp:72:25: error: use of undeclared identifier 'std'; did you mean 'xtd'? [clang-diagnostic-error]
+   72 |           static_assert(std::is_pod<_Ty>::value, "Invalid specialization");
+      |                         ^~~
+      |                         xtd
+
+=== CPPCHECK ANALYSIS ===
+Checking src/xtl.cpp ...
+1/20 files checked 3% done
+Checking src/event_trace/event_trace.cpp ...
+Checking src/event_trace/event_trace.cpp: XTD_USE_DBGHELP...
+2/20 files checked 4% done
+Checking src/event_trace/evt_gcc.cpp ...
+3/20 files checked 5% done
+Checking src/event_trace/evt_vc32.cpp ...
+4/20 files checked 7% done
+Checking tests/test_executable.hpp ...
+5/20 files checked 8% done
+Checking tests/test_process.hpp ...
+6/20 files checked 9% done
+Checking tests/tests.cpp ...
+tests/tests.cpp:8:0: information: Include file: "xtd/xtd.hpp" not found. [missingInclude]
+#include "xtd/xtd.hpp"
+^
+tests/tests.cpp:12:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+tests/tests.cpp:136:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+tests/test_source_location.hpp:41:19: style: Condition 'a==b' is always true [knownConditionTrueFalse]
+    ASSERT_TRUE(a == b);
+                  ^
+tests/test_source_location.hpp:40:7: note: b is assigned 'a' here.
+    b = a;
+      ^
+tests/test_source_location.hpp:41:19: note: Condition 'a==b' is always true
+    ASSERT_TRUE(a == b);
+                  ^
+tests/test_source_location.hpp:20:5: style: Redundant initialization for 'b'. The initialized value is overwritten before it is read. [redundantInitialization]
+  b = a;
+    ^
+tests/test_source_location.hpp:19:10: note: b is initialized
+  auto b = here();
+         ^
+tests/test_source_location.hpp:20:5: note: b is overwritten
+  b = a;
+    ^
+tests/test_source_location.hpp:29:5: warning: Redundant assignment of 'b' to itself. [selfAssignment]
+  b = a;
+    ^
+tests/test_recursive_spin_lock.hpp:29:24: style: Local variable 'locker' shadows outer variable [shadowVariable]
+      sl::scope_locker locker(oLock);
+                       ^
+tests/test_recursive_spin_lock.hpp:25:22: note: Shadowed declaration
+    sl::scope_locker locker(oLock);
+                     ^
+tests/test_recursive_spin_lock.hpp:29:24: note: Shadow variable
+      sl::scope_locker locker(oLock);
+                       ^
+tests/test_recursive_spin_lock.hpp:30:12: style: Local variable 'fn' shadows outer variable [shadowVariable]
+      auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
+           ^
+tests/test_recursive_spin_lock.hpp:26:10: note: Shadowed declaration
+    auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
+         ^
+tests/test_recursive_spin_lock.hpp:30:12: note: Shadow variable
+      auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
+           ^
+tests/test_rpc.hpp:29:19: style: Variable 'oVal' can be declared as reference to const [constVariableReference]
+      for (auto & oVal : oVals) { dRet += oVal; }
+                  ^
+tests/test_rpc.hpp:29:40: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+      for (auto & oVal : oVals) { dRet += oVal; }
+                                       ^
+7/20 files checked 14% done
+Checking tests/test_unique_id.hpp ...
+tests/test_unique_id.hpp:25:20: style: Condition 'id1<id2' is always false [knownConditionTrueFalse]
+  ASSERT_FALSE(id1 < id2);
+                   ^
+tests/test_unique_id.hpp:24:22: note: id2 is assigned 'id1' here.
+  xtd::unique_id id2 = id1;
+                     ^
+tests/test_unique_id.hpp:25:20: note: Condition 'id1<id2' is always false
+  ASSERT_FALSE(id1 < id2);
+                   ^
+tests/test_unique_id.hpp:26:20: style: Condition 'id2<id1' is always false [knownConditionTrueFalse]
+  ASSERT_FALSE(id2 < id1);
+                   ^
+tests/test_unique_id.hpp:24:22: note: id2 is assigned 'id1' here.
+  xtd::unique_id id2 = id1;
+                     ^
+tests/test_unique_id.hpp:26:20: note: Condition 'id2<id1' is always false
+  ASSERT_FALSE(id2 < id1);
+                   ^
+8/20 files checked 16% done
+Checking tests/test_path.hpp ...
+9/20 files checked 26% done
+Checking tests/test_dynamic_library.hpp ...
+10/20 files checked 28% done
+Checking tests/test_shared_mem_obj.hpp ...
+11/20 files checked 29% done
+Checking tests/test_lru_cache.hpp ...
+12/20 files checked 29% done
+Checking tests/test_concurrent_stack.hpp ...
+13/20 files checked 30% done
+Checking tests/test_meta.hpp ...
+14/20 files checked 30% done
+Checking tests/mocks/rpc.hpp ...
+tests/mocks/rpc.hpp:288:11: error: There is an unknown macro here somewhere. Configuration is required. If TODO is a macro then please configure it. [unknownMacro]
+          TODO("empty out payload and return a marshaled 'invalid call' exception")
+          ^
+15/20 files checked 62% done
+Checking tests/test_event_trace.hpp ...
+16/20 files checked 63% done
+Checking tests/test_rw_lock.hpp ...
+17/20 files checked 68% done
+Checking tests/test_parse.hpp ...
+18/20 files checked 94% done
+Checking tests/test_spin_lock.hpp ...
+19/20 files checked 95% done
+Checking tests/test_var.hpp ...
+20/20 files checked 100% done
+src/event_trace/dbghelp_common.inl:109:0: style: The function 'sym_callback' is never used. [unusedFunction]
+            sym_callback(HANDLE
+^
+tests/test_mapped_file.hpp:11:0: style: The function 'SetUpTestCase' is never used. [unusedFunction]
+  static void SetUpTestCase(){}
+^
+tests/test_mapped_file.hpp:13:0: style: The function 'TearDownTestCase' is never used. [unusedFunction]
+  static void TearDownTestCase() {
+^
+src/event_trace/evt_gcc.cpp:14:0: information: Unmatched suppression: unusedFunction [unmatchedSuppression]
+  void __cyg_profile_func_enter(void *, void * /*call_site*/){
+^
+src/event_trace/evt_gcc.cpp:19:0: information: Unmatched suppression: unusedFunction [unmatchedSuppression]
+  void __cyg_profile_func_exit(void *, void * /*call_site*/){
+^
+tests/test_var.hpp:-1:0: information: Unmatched suppression: uninitDerivedMemberVar [unmatchedSuppression]
+
+^
+nofile:0:0: information: Active checkers: There was critical errors (use --checkers-report=<filename> to see details) [checkersReport]
+
+
+=== CPPLINT ANALYSIS ===
+examples/dummy_library.cpp:8:  Missing space before {  [whitespace/braces] [5]
+examples/dummy_library.cpp:9:  Missing space before {  [whitespace/braces] [5]
+examples/example_btree.cpp:7:  Missing space before {  [whitespace/braces] [5]
+examples/example_btree.cpp:14:  Missing space before {  [whitespace/braces] [5]
+examples/example_btree.cpp:15:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_btree.cpp:17:  Missing space before {  [whitespace/braces] [5]
+examples/example_btree.cpp:19:  Empty loop bodies should use {} or continue  [whitespace/empty_loop_body] [5]
+examples/example_btree.cpp:22:  Missing space before {  [whitespace/braces] [5]
+examples/example_btree.cpp:23:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_btree.cpp:25:  Missing space before {  [whitespace/braces] [5]
+examples/example_btree.cpp:28:  Missing space before {  [whitespace/braces] [5]
+examples/example_callback.cpp:15:  Should have a space between // and comment  [whitespace/comments] [4]
+examples/example_callback.cpp:17:  Missing space before {  [whitespace/braces] [5]
+examples/example_callback.cpp:19:  Should have a space between // and comment  [whitespace/comments] [4]
+examples/example_callback.cpp:25:  Missing space before {  [whitespace/braces] [5]
+examples/example_callback.cpp:26:  Redundant blank line at the start of a code block should be deleted.  [whitespace/blank_line] [2]
+examples/example_callback.cpp:27:  Should have a space between // and comment  [whitespace/comments] [4]
+examples/example_callback.cpp:30:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_callback.cpp:32:  Should have a space between // and comment  [whitespace/comments] [4]
+examples/example_callback.cpp:35:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_callback.cpp:37:  Should have a space between // and comment  [whitespace/comments] [4]
+examples/example_callback.cpp:40:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_callback.cpp:40:  Should have a space between // and comment  [whitespace/comments] [4]
+examples/example_callback.cpp:43:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_dynamic_library.cpp:8:  Missing space before {  [whitespace/braces] [5]
+examples/example_event_trace.cpp:10:  Missing space before {  [whitespace/braces] [5]
+examples/example_event_trace.cpp:16:  Missing space before {  [whitespace/braces] [5]
+examples/example_event_trace.cpp:17:  Missing space before {  [whitespace/braces] [5]
+examples/example_event_trace.cpp:22:  Missing space before {  [whitespace/braces] [5]
+examples/example_event_trace.cpp:27:  Missing space before {  [whitespace/braces] [5]
+examples/example_exception.cpp:4:  Missing space before {  [whitespace/braces] [5]
+examples/example_logging.cpp:7:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_file.cpp:14:  At least two spaces is best between code and comments  [whitespace/comments] [2]
+examples/example_mapped_file.cpp:17:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_file.cpp:18:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_file.cpp:19:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_mapped_file.cpp:26:  Almost always, snprintf is better than strcpy  [runtime/printf] [4]
+examples/example_mapped_file.cpp:27:  Almost always, snprintf is better than strcpy  [runtime/printf] [4]
+examples/example_mapped_file.cpp:34:  Almost always, snprintf is better than strcpy  [runtime/printf] [4]
+examples/example_mapped_file.cpp:35:  Almost always, snprintf is better than strcpy  [runtime/printf] [4]
+examples/example_mapped_file.cpp:46:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_file.cpp:50:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_vector.cpp:16:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_vector.cpp:17:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_vector.cpp:18:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_mapped_vector.cpp:22:  Missing spaces around <  [whitespace/operators] [3]
+examples/example_mapped_vector.cpp:22:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_vector.cpp:28:  Missing space before {  [whitespace/braces] [5]
+examples/example_mapped_vector.cpp:32:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:16:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_nlp.cpp:16:  At least two spaces is best between code and comments  [whitespace/comments] [2]
+examples/example_nlp.cpp:16:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:18:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:26:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:31:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:32:  Do not use namespace using-directives.  Use using-declarations instead.  [build/namespaces] [5]
+examples/example_nlp.cpp:36:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_nlp.cpp:37:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_nlp.cpp:37:  Missing space after ,  [whitespace/comma] [3]
+examples/example_nlp.cpp:40:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:45:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:55:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:63:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:68:  Line ends in whitespace.  Consider deleting these extra spaces.  [whitespace/end_of_line] [4]
+examples/example_nlp.cpp:70:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:73:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_nlp.cpp:74:  Missing space before {  [whitespace/braces] [5]
+examples/example_nlp.cpp:77:  Redundant blank line at the end of a code block should be deleted.  [whitespace/blank_line] [3]
+examples/example_nlp.cpp:54:  Add #include <string> for string  [build/include_what_you_use] [4]
+examples/example_nlp.cpp:64:  Add #include <utility> for make_pair  [build/include_what_you_use] [4]
+examples/example_parse1.cpp:10:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:10:  Do not use namespace using-directives.  Use using-declarations instead.  [build/namespaces] [5]
+examples/example_parse1.cpp:13:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:14:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:15:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:16:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:17:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:18:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:19:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:20:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:23:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:24:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:25:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:26:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:27:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse1.cpp:28:  Namespace should be terminated with "// namespace command_line"  [readability/namespace] [5]
+examples/example_parse1.cpp:41:  Add #include <string> for string  [build/include_what_you_use] [4]
+examples/example_parse2.cpp:9:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:9:  Do not use namespace using-directives.  Use using-declarations instead.  [build/namespaces] [5]
+examples/example_parse2.cpp:10:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:11:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:12:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:13:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:14:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:15:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:16:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:18:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:19:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:20:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:21:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:22:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:23:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:25:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+examples/example_parse2.cpp:27:  Namespace should be terminated with "// namespace command_line"  [readability/namespace] [5]
+examples/example_parse2.cpp:30:  Missing space before {  [whitespace/braces] [5]
+examples/example_parse2.cpp:31:  Missing spaces around <  [whitespace/operators] [3]
+examples/example_parse2.cpp:31:  Missing space before {  [whitespace/braces] [5]
+examples/example_parse2.cpp:33:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_parse2.cpp:32:  Add #include <string> for string  [build/include_what_you_use] [4]
+examples/example_pdf.cpp:7:  Missing space before {  [whitespace/braces] [5]
+examples/example_pdf.cpp:8:  Redundant blank line at the start of a code block should be deleted.  [whitespace/blank_line] [2]
+examples/example_pdf.cpp:8:  Redundant blank line at the end of a code block should be deleted.  [whitespace/blank_line] [3]
+examples/example_rfc1035.cpp:12:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_rfc2229.cpp:22:  Missing space before {  [whitespace/braces] [5]
+examples/example_rfc2229.cpp:27:  Missing space before {  [whitespace/braces] [5]
+examples/example_rfc2229.cpp:28:  Redundant blank line at the start of a code block should be deleted.  [whitespace/blank_line] [2]
+examples/example_rfc2229.cpp:28:  Redundant blank line at the end of a code block should be deleted.  [whitespace/blank_line] [3]
+examples/example_rfc2229.cpp:31:  Redundant blank line at the start of a code block should be deleted.  [whitespace/blank_line] [2]
+examples/example_rfc2229.cpp:31:  Redundant blank line at the end of a code block should be deleted.  [whitespace/blank_line] [3]
+examples/example_rfc2229.cpp:35:  Missing space before {  [whitespace/braces] [5]
+examples/example_rfc2229.cpp:42:  Missing space before {  [whitespace/braces] [5]
+examples/example_rfc2229.cpp:45:  Missing space before {  [whitespace/braces] [5]
+examples/example_rfc2229.cpp:23:  Add #include <vector> for vector<>  [build/include_what_you_use] [4]
+examples/example_rpc.cpp:11:  public: should be indented +1 space inside class rpc_interface  [whitespace/indent] [3]
+examples/example_rpc.cpp:13:  Using deprecated casting style.  Use static_cast<int>(...) instead  [readability/casting] [4]
+examples/example_rpc.cpp:15:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_rpc.cpp:15:  Using deprecated casting style.  Use static_cast<double>(...) instead  [readability/casting] [4]
+examples/example_rpc.cpp:17:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_rpc.cpp:21:  Redundant blank line at the end of a code block should be deleted.  [whitespace/blank_line] [3]
+examples/example_rpc.cpp:26:  Missing space before {  [whitespace/braces] [5]
+examples/example_rpc.cpp:27:  Missing space before {  [whitespace/braces] [5]
+examples/example_rpc.cpp:28:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_rpc.cpp:31:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_rpc.cpp:32:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_rpc.cpp:39:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_rpc.cpp:46:  Missing space before {  [whitespace/braces] [5]
+examples/example_rpc.cpp:20:  Add #include <memory> for shared_ptr<>  [build/include_what_you_use] [4]
+examples/example_rpc.cpp:31:  Add #include <string> for string  [build/include_what_you_use] [4]
+examples/example_rpc.cpp:32:  Add #include <vector> for vector<>  [build/include_what_you_use] [4]
+examples/example_sqlite.cpp:14:  Missing space before {  [whitespace/braces] [5]
+examples/example_sqlite.cpp:15:  Do not use namespace using-directives.  Use using-declarations instead.  [build/namespaces] [5]
+examples/example_sqlite.cpp:16:  Missing space before {  [whitespace/braces] [5]
+examples/example_sqlite.cpp:20:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_sqlite.cpp:30:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_sqlite.cpp:38:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+examples/example_sqlite.cpp:39:  Missing space before {  [whitespace/braces] [5]
+examples/example_sqlite.cpp:45:  Missing space before {  [whitespace/braces] [5]
+examples/example_sqlite.cpp:48:  Missing space before {  [whitespace/braces] [5]
+examples/example_sqlite.cpp:51:  Missing space before {  [whitespace/braces] [5]
+examples/example_sqlite.cpp:54:  Missing space before {  [whitespace/braces] [5]
+examples/example_sqlite.cpp:19:  Add #include <string> for string  [build/include_what_you_use] [4]
+examples/example_string.cpp:4:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:16:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:18:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:18:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:19:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:19:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:21:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:25:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:30:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:31:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:32:  public: should be indented +1 space inside class data_page  [whitespace/indent] [3]
+include/xtd/btree.hpp:33:  Do not leave a blank line after "public:"  [whitespace/blank_line] [3]
+include/xtd/btree.hpp:39:  Redundant blank line at the end of a code block should be deleted.  [whitespace/blank_line] [3]
+include/xtd/btree.hpp:40:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:44:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:45:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:46:  public: should be indented +1 space inside class data_page  [whitespace/indent] [3]
+include/xtd/btree.hpp:47:  Do not leave a blank line after "public:"  [whitespace/blank_line] [3]
+include/xtd/btree.hpp:53:  Redundant blank line at the end of a code block should be deleted.  [whitespace/blank_line] [3]
+include/xtd/btree.hpp:54:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:56:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:58:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:59:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:62:  public: should be indented +1 space inside class page_loader  [whitespace/indent] [3]
+include/xtd/btree.hpp:63:  Do not leave a blank line after "public:"  [whitespace/blank_line] [3]
+include/xtd/btree.hpp:64:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:64:  Single-parameter constructors should be marked explicit.  [runtime/explicit] [4]
+include/xtd/btree.hpp:66:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:71:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:73:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:74:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:74:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+include/xtd/btree.hpp:75:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+include/xtd/btree.hpp:76:  public: should be indented +1 space inside class lru_cache  [whitespace/indent] [3]
+include/xtd/btree.hpp:79:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+include/xtd/btree.hpp:82:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:85:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+include/xtd/btree.hpp:88:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:93:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:94:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:95:  public: should be indented +1 space inside class file_header  [whitespace/indent] [3]
+include/xtd/btree.hpp:101:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:108:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:109:  Do not indent within a namespace.  [whitespace/indent_namespace] [4]
+include/xtd/btree.hpp:111:  public: should be indented +1 space inside class leaf  [whitespace/indent] [3]
+include/xtd/btree.hpp:111:  "public:" should be preceded by a blank line  [whitespace/blank_line] [3]
+include/xtd/btree.hpp:128:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:132:  Missing space before {  [whitespace/braces] [5]
+include/xtd/btree.hpp:133:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
