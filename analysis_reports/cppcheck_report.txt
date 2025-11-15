@@ -1,0 +1,1025 @@
+.build/CMakeFiles/3.28.3/CompilerIdC/CMakeCCompilerId.c:0:0: information: Too many #ifdef configurations - cppcheck only checks 12 of 151 configurations. Use --force to check all configurations. [toomanyconfigs]
+
+^
+.build/CMakeFiles/3.28.3/CompilerIdCXX/CMakeCXXCompilerId.cpp:0:0: information: Too many #ifdef configurations - cppcheck only checks 12 of 149 configurations. Use --force to check all configurations. [toomanyconfigs]
+
+^
+.build/_deps/gtest-src/googlemock/src/gmock-all.cc:39:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-all.cc:42:0: information: Include file: "src/gmock-cardinalities.cc" not found. [missingInclude]
+#include "src/gmock-cardinalities.cc"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-all.cc:43:0: information: Include file: "src/gmock-internal-utils.cc" not found. [missingInclude]
+#include "src/gmock-internal-utils.cc"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-all.cc:44:0: information: Include file: "src/gmock-matchers.cc" not found. [missingInclude]
+#include "src/gmock-matchers.cc"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-all.cc:45:0: information: Include file: "src/gmock-spec-builders.cc" not found. [missingInclude]
+#include "src/gmock-spec-builders.cc"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-all.cc:46:0: information: Include file: "src/gmock.cc" not found. [missingInclude]
+#include "src/gmock.cc"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-cardinalities.cc:34:0: information: Include file: "gmock/gmock-cardinalities.h" not found. [missingInclude]
+#include "gmock/gmock-cardinalities.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-cardinalities.cc:42:0: information: Include file: "gmock/internal/gmock-internal-utils.h" not found. [missingInclude]
+#include "gmock/internal/gmock-internal-utils.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-cardinalities.cc:43:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-internal-utils.cc:36:0: information: Include file: "gmock/internal/gmock-internal-utils.h" not found. [missingInclude]
+#include "gmock/internal/gmock-internal-utils.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-internal-utils.cc:48:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-internal-utils.cc:49:0: information: Include file: "gmock/internal/gmock-port.h" not found. [missingInclude]
+#include "gmock/internal/gmock-port.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-internal-utils.cc:50:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-matchers.cc:35:0: information: Include file: "gmock/gmock-matchers.h" not found. [missingInclude]
+#include "gmock/gmock-matchers.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-spec-builders.cc:35:0: information: Include file: "gmock/gmock-spec-builders.h" not found. [missingInclude]
+#include "gmock/gmock-spec-builders.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-spec-builders.cc:47:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-spec-builders.cc:48:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock-spec-builders.cc:49:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock.cc:30:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock.cc:32:0: information: Include file: "gmock/internal/gmock-port.h" not found. [missingInclude]
+#include "gmock/internal/gmock-port.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock_main.cc:32:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/src/gmock_main.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-actions_test.cc:47:0: information: Include file: "gmock/gmock-actions.h" not found. [missingInclude]
+#include "gmock/gmock-actions.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-actions_test.cc:57:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-actions_test.cc:58:0: information: Include file: "gmock/internal/gmock-port.h" not found. [missingInclude]
+#include "gmock/internal/gmock-port.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-actions_test.cc:59:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-actions_test.cc:60:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-actions_test.cc:109:1: error: syntax error [syntaxError]
+TEST(TypeTraits, Conjunction) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock-cardinalities_test.cc:34:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-cardinalities_test.cc:35:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-cardinalities_test.cc:36:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-cardinalities_test.cc:62:1: error: syntax error [syntaxError]
+TEST(CardinalityTest, IsDefaultConstructable) { Cardinality c; }
+^
+.build/_deps/gtest-src/googlemock/test/gmock-function-mocker_test.cc:39:0: information: Include file: "gmock/gmock-function-mocker.h" not found. [missingInclude]
+#include "gmock/gmock-function-mocker.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-function-mocker_test.cc:53:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-function-mocker_test.cc:54:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-function-mocker_test.cc:304:1: error: syntax error [syntaxError]
+TYPED_TEST(FunctionMockerTest, MocksVoidFunction) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock-internal-utils_test.cc:34:0: information: Include file: "gmock/internal/gmock-internal-utils.h" not found. [missingInclude]
+#include "gmock/internal/gmock-internal-utils.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-internal-utils_test.cc:45:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-internal-utils_test.cc:46:0: information: Include file: "gmock/internal/gmock-port.h" not found. [missingInclude]
+#include "gmock/internal/gmock-port.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-internal-utils_test.cc:47:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-internal-utils_test.cc:48:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-internal-utils_test.cc:56:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-internal-utils_test.cc:279:5: error: There is an unknown macro here somewhere. Configuration is required. If GTEST_INTENTIONAL_CONST_COND_POP_ is a macro then please configure it. [unknownMacro]
+    GTEST_INTENTIONAL_CONST_COND_POP_()
+    ^
+.build/_deps/gtest-src/googlemock/test/gmock-matchers-arithmetic_test.cc:42:0: information: Include file: "test/gmock-matchers_test.h" not found. [missingInclude]
+#include "test/gmock-matchers_test.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-matchers-arithmetic_test.cc:59:1: error: syntax error [syntaxError]
+TEST(Eq2Test, CanDescribeSelf) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock-matchers-comparisons_test.cc:42:0: information: Include file: "test/gmock-matchers_test.h" not found. [missingInclude]
+#include "test/gmock-matchers_test.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-matchers-comparisons_test.cc:50:1: error: syntax error [syntaxError]
+TEST_P(MonotonicMatcherTestP, IsPrintable) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock-matchers-containers_test.cc:42:0: information: Include file: "test/gmock-matchers_test.h" not found. [missingInclude]
+#include "test/gmock-matchers_test.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-matchers-containers_test.cc:62:1: error: syntax error [syntaxError]
+TEST(ContainsTest, WorksWithMoveOnly) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock-matchers-misc_test.cc:42:0: information: Include file: "test/gmock-matchers_test.h" not found. [missingInclude]
+#include "test/gmock-matchers_test.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-matchers-misc_test.cc:63:1: error: syntax error [syntaxError]
+TEST(AddressTest, Const) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock-more-actions_test.cc:39:0: information: Include file: "gmock/gmock-more-actions.h" not found. [missingInclude]
+#include "gmock/gmock-more-actions.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-more-actions_test.cc:46:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-more-actions_test.cc:47:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-more-actions_test.cc:48:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-more-actions_test.cc:1303:5: error: There is an unknown macro here somewhere. Configuration is required. If GTEST_INTENTIONAL_CONST_COND_POP_ is a macro then please configure it. [unknownMacro]
+    GTEST_INTENTIONAL_CONST_COND_POP_()
+    ^
+.build/_deps/gtest-src/googlemock/test/gmock-nice-strict_test.cc:30:0: information: Include file: "gmock/gmock-nice-strict.h" not found. [missingInclude]
+#include "gmock/gmock-nice-strict.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-nice-strict_test.cc:35:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-nice-strict_test.cc:36:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-nice-strict_test.cc:37:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-nice-strict_test.cc:241:1: error: syntax error [syntaxError]
+TEST(NiceMockTest, AllowsExpectedCall) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock-nice-strict_test.cc:145:1: error: syntax error [syntaxError]
+TEST(RawMockTest, WarningForUninterestingCall) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock-port_test.cc:34:0: information: Include file: "gmock/internal/gmock-port.h" not found. [missingInclude]
+#include "gmock/internal/gmock-port.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-port_test.cc:36:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-pp-string_test.cc:35:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-pp-string_test.cc:36:0: information: Include file: "gmock/internal/gmock-pp.h" not found. [missingInclude]
+#include "gmock/internal/gmock-pp.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-pp-string_test.cc:60:3: error: syntax error [syntaxError]
+  EXPECT_EXPANSION("+=", GMOCK_PP_CAT(+, =));
+  ^
+.build/_deps/gtest-src/googlemock/test/gmock-pp_test.cc:1:0: information: Include file: "gmock/internal/gmock-pp.h" not found. [missingInclude]
+#include "gmock/internal/gmock-pp.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-pp_test.cc:23:35: error: syntax error [syntaxError]
+static_assert(GMOCK_PP_HAS_COMMA(b, ), "");
+                                  ^
+.build/_deps/gtest-src/googlemock/test/gmock-spec-builders_test.cc:34:0: information: Include file: "gmock/gmock-spec-builders.h" not found. [missingInclude]
+#include "gmock/gmock-spec-builders.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-spec-builders_test.cc:42:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-spec-builders_test.cc:43:0: information: Include file: "gmock/internal/gmock-port.h" not found. [missingInclude]
+#include "gmock/internal/gmock-port.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-spec-builders_test.cc:44:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-spec-builders_test.cc:45:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-spec-builders_test.cc:46:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock-spec-builders_test.cc:76:1: error: syntax error [syntaxError]
+TEST(MockMethodTest, CanInstantiateWithIncompleteArgType) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:38:0: information: Include file: "test/gmock-actions_test.cc" not found. [missingInclude]
+#include "test/gmock-actions_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:39:0: information: Include file: "test/gmock-cardinalities_test.cc" not found. [missingInclude]
+#include "test/gmock-cardinalities_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:40:0: information: Include file: "test/gmock-internal-utils_test.cc" not found. [missingInclude]
+#include "test/gmock-internal-utils_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:41:0: information: Include file: "test/gmock-matchers-arithmetic_test.cc" not found. [missingInclude]
+#include "test/gmock-matchers-arithmetic_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:42:0: information: Include file: "test/gmock-matchers-comparisons_test.cc" not found. [missingInclude]
+#include "test/gmock-matchers-comparisons_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:43:0: information: Include file: "test/gmock-matchers-containers_test.cc" not found. [missingInclude]
+#include "test/gmock-matchers-containers_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:44:0: information: Include file: "test/gmock-matchers-misc_test.cc" not found. [missingInclude]
+#include "test/gmock-matchers-misc_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:45:0: information: Include file: "test/gmock-more-actions_test.cc" not found. [missingInclude]
+#include "test/gmock-more-actions_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:46:0: information: Include file: "test/gmock-nice-strict_test.cc" not found. [missingInclude]
+#include "test/gmock-nice-strict_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:47:0: information: Include file: "test/gmock-port_test.cc" not found. [missingInclude]
+#include "test/gmock-port_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:48:0: information: Include file: "test/gmock-spec-builders_test.cc" not found. [missingInclude]
+#include "test/gmock-spec-builders_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_all_test.cc:49:0: information: Include file: "test/gmock_test.cc" not found. [missingInclude]
+#include "test/gmock_test.cc"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_ex_test.cc:32:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_ex_test.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_ex_test.cc:55:1: error: syntax error [syntaxError]
+TEST(DefaultValueTest, ThrowsRuntimeErrorWhenNoDefaultValue) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock_leak_test_.cc:35:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_leak_test_.cc:58:1: error: syntax error [syntaxError]
+TEST(LeakTest, LeakedMockWithExpectCallCausesFailureWhenLeakCheckingIsEnabled) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock_link2_test.cc:38:0: information: Include file: "test/gmock_link_test.h" not found. [missingInclude]
+#include "test/gmock_link_test.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_link_test.cc:38:0: information: Include file: "test/gmock_link_test.h" not found. [missingInclude]
+#include "test/gmock_link_test.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_output_test_.cc:37:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_output_test_.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_stress_test.cc:33:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_stress_test.cc:34:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_stress_test.cc:184:1: error: syntax error [syntaxError]
+TEST(StressTest, CanUseGMockWithThreads) {
+^
+.build/_deps/gtest-src/googlemock/test/gmock_test.cc:34:0: information: Include file: "gmock/gmock.h" not found. [missingInclude]
+#include "gmock/gmock.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_test.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googlemock/test/gmock_test.cc:39:0: information: Include file: "gtest/internal/custom/gtest.h" not found. [missingInclude]
+#include "gtest/internal/custom/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample10_unittest.cc:35:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample10_unittest.cc:93:1: error: syntax error [syntaxError]
+TEST(ListenersTest, DoesNotLeak) {
+^
+.build/_deps/gtest-src/googletest/samples/sample1_unittest.cc:46:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample1_unittest.cc:100:1: error: syntax error [syntaxError]
+TEST(FactorialTest, Zero) { EXPECT_EQ(1, Factorial(0)); }
+^
+.build/_deps/gtest-src/googletest/samples/sample2_unittest.cc:42:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample2_unittest.cc:78:1: error: syntax error [syntaxError]
+TEST(MyString, ConstructorFromCString) {
+^
+.build/_deps/gtest-src/googletest/samples/sample3_unittest.cc:64:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample3_unittest.cc:117:1: error: syntax error [syntaxError]
+TEST_F(QueueTestSmpl3, DefaultConstructor) {
+^
+.build/_deps/gtest-src/googletest/samples/sample4_unittest.cc:32:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample5_unittest.cc:50:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample5_unittest.cc:95:1: error: syntax error [syntaxError]
+TEST_F(IntegerFunctionTest, Factorial) {
+^
+.build/_deps/gtest-src/googletest/samples/sample6_unittest.cc:35:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample6_unittest.cc:95:1: error: syntax error [syntaxError]
+TYPED_TEST(PrimeTableTest, ReturnsFalseForNonPrimes) {
+^
+.build/_deps/gtest-src/googletest/samples/sample7_unittest.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample7_unittest.cc:75:1: error: syntax error [syntaxError]
+TEST_P(PrimeTableTestSmpl7, ReturnsFalseForNonPrimes) {
+^
+.build/_deps/gtest-src/googletest/samples/sample8_unittest.cc:36:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample8_unittest.cc:105:1: error: syntax error [syntaxError]
+TEST_P(PrimeTableTest, ReturnsFalseForNonPrimes) {
+^
+.build/_deps/gtest-src/googletest/samples/sample9_unittest.cc:35:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/samples/sample9_unittest.cc:83:1: error: syntax error [syntaxError]
+TEST(CustomOutputTest, PrintsMessage) {
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:41:0: information: Include file: "src/gtest-assertion-result.cc" not found. [missingInclude]
+#include "src/gtest-assertion-result.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:42:0: information: Include file: "src/gtest-death-test.cc" not found. [missingInclude]
+#include "src/gtest-death-test.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:43:0: information: Include file: "src/gtest-filepath.cc" not found. [missingInclude]
+#include "src/gtest-filepath.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:44:0: information: Include file: "src/gtest-matchers.cc" not found. [missingInclude]
+#include "src/gtest-matchers.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:45:0: information: Include file: "src/gtest-port.cc" not found. [missingInclude]
+#include "src/gtest-port.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:46:0: information: Include file: "src/gtest-printers.cc" not found. [missingInclude]
+#include "src/gtest-printers.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:47:0: information: Include file: "src/gtest-test-part.cc" not found. [missingInclude]
+#include "src/gtest-test-part.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:48:0: information: Include file: "src/gtest-typed-test.cc" not found. [missingInclude]
+#include "src/gtest-typed-test.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-all.cc:49:0: information: Include file: "src/gtest.cc" not found. [missingInclude]
+#include "src/gtest.cc"
+^
+.build/_deps/gtest-src/googletest/src/gtest-assertion-result.cc:34:0: information: Include file: "gtest/gtest-assertion-result.h" not found. [missingInclude]
+#include "gtest/gtest-assertion-result.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-assertion-result.cc:39:0: information: Include file: "gtest/gtest-message.h" not found. [missingInclude]
+#include "gtest/gtest-message.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:33:0: information: Include file: "gtest/gtest-death-test.h" not found. [missingInclude]
+#include "gtest/gtest-death-test.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:38:0: information: Include file: "gtest/internal/custom/gtest.h" not found. [missingInclude]
+#include "gtest/internal/custom/gtest.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:39:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:84:0: information: Include file: "gtest/gtest-message.h" not found. [missingInclude]
+#include "gtest/gtest-message.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:85:0: information: Include file: "gtest/internal/gtest-string.h" not found. [missingInclude]
+#include "gtest/internal/gtest-string.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:86:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:1369:30: style: Variable 'child_pid' is reassigned a value before the old one has been used. [redundantAssignment]
+  if (use_fork && (child_pid = fork()) == 0) {
+                             ^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:1361:15: note: child_pid is assigned
+    child_pid = clone(&ExecDeathTestChildMain, stack_top, SIGCHLD, &args);
+              ^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:1369:30: note: child_pid is overwritten
+  if (use_fork && (child_pid = fork()) == 0) {
+                             ^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:192:64: error: Uninitialized variable: &result [uninitvar]
+    if (GTEST_KILLED_BY_SIGNAL_OVERRIDE_(signum_, exit_status, &result)) {
+                                                               ^
+.build/_deps/gtest-src/googletest/src/gtest-death-test.cc:1208:7: style: struct member 'ExecDeathTestArgs::close_fd' is never used. [unusedStructMember]
+  int close_fd;       // File descriptor to close; the read end of a pipe
+      ^
+.build/_deps/gtest-src/googletest/src/gtest-filepath.cc:30:0: information: Include file: "gtest/internal/gtest-filepath.h" not found. [missingInclude]
+#include "gtest/internal/gtest-filepath.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-filepath.cc:34:0: information: Include file: "gtest/gtest-message.h" not found. [missingInclude]
+#include "gtest/gtest-message.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-filepath.cc:35:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-filepath.cc:48:0: information: Include file: "gtest/internal/gtest-string.h" not found. [missingInclude]
+#include "gtest/internal/gtest-string.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-matchers.cc:35:0: information: Include file: "gtest/gtest-matchers.h" not found. [missingInclude]
+#include "gtest/gtest-matchers.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-matchers.cc:39:0: information: Include file: "gtest/internal/gtest-internal.h" not found. [missingInclude]
+#include "gtest/internal/gtest-internal.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-matchers.cc:40:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:0:0: information: Too many #ifdef configurations - cppcheck only checks 12 of 23 configurations. Use --force to check all configurations. [toomanyconfigs]
+
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:30:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:84:0: information: Include file: "gtest/gtest-message.h" not found. [missingInclude]
+#include "gtest/gtest-message.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:85:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:86:0: information: Include file: "gtest/internal/gtest-internal.h" not found. [missingInclude]
+#include "gtest/internal/gtest-internal.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:87:0: information: Include file: "gtest/internal/gtest-string.h" not found. [missingInclude]
+#include "gtest/internal/gtest-string.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:88:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:1029:1: error: There is an unknown macro here somewhere. Configuration is required. If GTEST_DISABLE_MSC_DEPRECATED_PUSH_ is a macro then please configure it. [unknownMacro]
+GTEST_DISABLE_MSC_DEPRECATED_PUSH_()
+^
+.build/_deps/gtest-src/googletest/src/gtest-port.cc:1146:1: error: There is an unknown macro here somewhere. Configuration is required. If GTEST_DISABLE_MSC_DEPRECATED_POP_ is a macro then please configure it. [unknownMacro]
+GTEST_DISABLE_MSC_DEPRECATED_POP_()
+^
+.build/_deps/gtest-src/googletest/src/gtest-printers.cc:43:0: information: Include file: "gtest/gtest-printers.h" not found. [missingInclude]
+#include "gtest/gtest-printers.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-printers.cc:54:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-printers.cc:55:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-test-part.cc:33:0: information: Include file: "gtest/gtest-test-part.h" not found. [missingInclude]
+#include "gtest/gtest-test-part.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-test-part.cc:35:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-test-part.cc:36:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-typed-test.cc:30:0: information: Include file: "gtest/gtest-typed-test.h" not found. [missingInclude]
+#include "gtest/gtest-typed-test.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest-typed-test.cc:32:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:0:0: information: Too many #ifdef configurations - cppcheck only checks 12 of 38 configurations. Use --force to check all configurations. [toomanyconfigs]
+
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:58:0: information: Include file: "gtest/gtest-assertion-result.h" not found. [missingInclude]
+#include "gtest/gtest-assertion-result.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:59:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:60:0: information: Include file: "gtest/internal/custom/gtest.h" not found. [missingInclude]
+#include "gtest/internal/custom/gtest.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:124:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:3276:1: error: There is an unknown macro here somewhere. Configuration is required. If GTEST_ATTRIBUTE_PRINTF_ is a macro then please configure it. [unknownMacro]
+GTEST_ATTRIBUTE_PRINTF_(2, 3)
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:137:0: information: Include file: "absl/debugging/failure_signal_handler.h" not found. [missingInclude]
+#include "absl/debugging/failure_signal_handler.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:138:0: information: Include file: "absl/debugging/stacktrace.h" not found. [missingInclude]
+#include "absl/debugging/stacktrace.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:139:0: information: Include file: "absl/debugging/symbolize.h" not found. [missingInclude]
+#include "absl/debugging/symbolize.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:140:0: information: Include file: "absl/flags/parse.h" not found. [missingInclude]
+#include "absl/flags/parse.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:141:0: information: Include file: "absl/flags/usage.h" not found. [missingInclude]
+#include "absl/flags/usage.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:142:0: information: Include file: "absl/strings/str_cat.h" not found. [missingInclude]
+#include "absl/strings/str_cat.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest.cc:143:0: information: Include file: "absl/strings/str_replace.h" not found. [missingInclude]
+#include "absl/strings/str_replace.h"
+^
+.build/_deps/gtest-src/googletest/src/gtest_main.cc:32:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-break-on-failure-unittest_.cc:40:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-catch-exceptions-test_.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-color-test_.cc:36:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-color-test_.cc:37:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-death-test-test.cc:33:0: information: Include file: "gtest/gtest-death-test.h" not found. [missingInclude]
+#include "gtest/gtest-death-test.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-death-test-test.cc:34:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-death-test-test.cc:35:0: information: Include file: "gtest/internal/gtest-filepath.h" not found. [missingInclude]
+#include "gtest/internal/gtest-filepath.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-death-test-test.cc:1425:3: error: There is an unknown macro here somewhere. Configuration is required. If EXPECT_DEATH_IF_SUPPORTED is a macro then please configure it. [unknownMacro]
+  EXPECT_DEATH_IF_SUPPORTED(;, "");
+  ^
+.build/_deps/gtest-src/googletest/test/googletest-death-test-test.cc:59:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-death-test-test.cc:60:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-death-test-test.cc:744:3: error: There is an unknown macro here somewhere. Configuration is required. If ASSERT_DEBUG_DEATH is a macro then please configure it. [unknownMacro]
+  ASSERT_DEBUG_DEATH(GTEST_LOG_(INFO) << "In ASSERT_DEBUG_DEATH"; return, "")
+  ^
+.build/_deps/gtest-src/googletest/test/googletest-death-test-test.cc:1340:27: error: There is an unknown macro here somewhere. Configuration is required. If EXPECT_DEATH_IF_SUPPORTED is a macro then please configure it. [unknownMacro]
+  EXPECT_NONFATAL_FAILURE(EXPECT_DEATH_IF_SUPPORTED(;, ""), "");
+                          ^
+.build/_deps/gtest-src/googletest/test/googletest-death-test_ex_test.cc:33:0: information: Include file: "gtest/gtest-death-test.h" not found. [missingInclude]
+#include "gtest/gtest-death-test.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-death-test_ex_test.cc:34:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-death-test_ex_test.cc:42:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-env-var-test_.cc:35:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-env-var-test_.cc:36:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-failfast-unittest_.cc:39:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-failfast-unittest_.cc:47:1: error: syntax error [syntaxError]
+TEST_F(HasFixtureTest, Test0) {}
+^
+.build/_deps/gtest-src/googletest/test/googletest-filepath-test.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-filepath-test.cc:39:0: information: Include file: "gtest/internal/gtest-filepath.h" not found. [missingInclude]
+#include "gtest/internal/gtest-filepath.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-filepath-test.cc:40:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-filepath-test.cc:134:23: error: There is an unknown macro here somewhere. Configuration is required. If GTEST_PATH_SEP_ is a macro then please configure it. [unknownMacro]
+      FilePath("adir" GTEST_PATH_SEP_ "afile").RemoveDirectoryName().string());
+                      ^
+.build/_deps/gtest-src/googletest/test/googletest-filter-unittest_.cc:39:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-filter-unittest_.cc:47:1: error: syntax error [syntaxError]
+TEST_F(FooTest, Abc) {}
+^
+.build/_deps/gtest-src/googletest/test/googletest-global-environment-unittest_.cc:35:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-global-environment-unittest_.cc:50:1: error: syntax error [syntaxError]
+TEST(SomeTest, DoesFoo) { FAIL() << "Unexpected call"; }
+^
+.build/_deps/gtest-src/googletest/test/googletest-list-tests-unittest_.cc:39:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-listener-test.cc:37:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-listener-test.cc:38:0: information: Include file: "gtest/internal/custom/gtest.h" not found. [missingInclude]
+#include "gtest/internal/custom/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-listener-test.cc:224:1: error: syntax error [syntaxError]
+TEST_F(ListenerTest, DoesFoo) {
+^
+.build/_deps/gtest-src/googletest/test/googletest-message-test.cc:33:0: information: Include file: "gtest/gtest-message.h" not found. [missingInclude]
+#include "gtest/gtest-message.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-message-test.cc:34:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-message-test.cc:49:1: error: syntax error [syntaxError]
+TEST(MessageTest, CopyConstructor) {
+^
+.build/_deps/gtest-src/googletest/test/googletest-options-test.cc:39:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-options-test.cc:50:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-options-test.cc:63:1: error: syntax error [syntaxError]
+TEST(XmlOutputTest, GetOutputFormatDefault) {
+^
+.build/_deps/gtest-src/googletest/test/googletest-output-test_.cc:38:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-output-test_.cc:39:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-output-test_.cc:40:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-output-test_.cc:98:26: error: syntax error [syntaxError]
+INSTANTIATE_TEST_SUITE_P(, EmptyBasenameParamInst, testing::Values(1));
+                         ^
+.build/_deps/gtest-src/googletest/test/googletest-output-test_.cc:1050:3: error: There is an unknown macro here somewhere. Configuration is required. If GTEST_DISABLE_MSC_WARNINGS_POP_ is a macro then please configure it. [unknownMacro]
+  GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4127
+  ^
+.build/_deps/gtest-src/googletest/test/googletest-param-test-invalid-name1-test_.cc:30:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test-invalid-name1-test_.cc:35:1: error: syntax error [syntaxError]
+TEST_P(DummyTest, Dummy) {}
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test-invalid-name2-test_.cc:30:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test-invalid-name2-test_.cc:40:1: error: syntax error [syntaxError]
+TEST_P(DummyTest, Dummy) {}
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test-test.cc:35:0: information: Include file: "test/googletest-param-test-test.h" not found. [missingInclude]
+#include "test/googletest-param-test-test.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test-test.cc:45:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test-test.cc:46:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"  // for UnitTestOptions
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test-test.cc:1081:1: error: syntax error [syntaxError]
+TEST_P(NotInstantiatedTest, Used) {}
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test2-test.cc:34:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-param-test2-test.cc:35:0: information: Include file: "test/googletest-param-test-test.h" not found. [missingInclude]
+#include "test/googletest-param-test-test.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-port-test.cc:0:0: information: Too many #ifdef configurations - cppcheck only checks 12 of 15 configurations. Use --force to check all configurations. [toomanyconfigs]
+
+^
+.build/_deps/gtest-src/googletest/test/googletest-port-test.cc:33:0: information: Include file: "gtest/internal/gtest-port.h" not found. [missingInclude]
+#include "gtest/internal/gtest-port.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-port-test.cc:46:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-port-test.cc:47:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-port-test.cc:48:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-port-test.cc:69:1: error: syntax error [syntaxError]
+TEST(IsXDigitTest, ReturnsFalseForNarrowNonAscii) {
+^
+.build/_deps/gtest-src/googletest/test/googletest-printers-test.cc:52:0: information: Include file: "gtest/gtest-printers.h" not found. [missingInclude]
+#include "gtest/gtest-printers.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-printers-test.cc:53:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-printers-test.cc:293:1: error: syntax error [syntaxError]
+TEST(PrintEnumTest, AnonymousEnum) {
+^
+.build/_deps/gtest-src/googletest/test/googletest-setuptestsuite-test_.cc:30:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-shuffle-test_.cc:32:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-shuffle-test_.cc:48:1: error: syntax error [syntaxError]
+TEST_F(A, A) {}
+^
+.build/_deps/gtest-src/googletest/test/googletest-test-part-test.cc:30:0: information: Include file: "gtest/gtest-test-part.h" not found. [missingInclude]
+#include "gtest/gtest-test-part.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-test-part-test.cc:31:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-test-part-test.cc:54:1: error: syntax error [syntaxError]
+TEST_F(TestPartResultTest, ConstructorWorks) {
+^
+.build/_deps/gtest-src/googletest/test/googletest-throw-on-failure-test_.cc:41:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/googletest-uninitialized-test_.cc:30:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest-typed-test2_test.cc:32:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest-typed-test2_test.cc:33:0: information: Include file: "test/gtest-typed-test_test.h" not found. [missingInclude]
+#include "test/gtest-typed-test_test.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest-typed-test_test.cc:30:0: information: Include file: "test/gtest-typed-test_test.h" not found. [missingInclude]
+#include "test/gtest-typed-test_test.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest-typed-test_test.cc:36:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest-typed-test_test.cc:158:1: error: syntax error [syntaxError]
+TYPED_TEST(NumericTest, DefaultIsZero) { EXPECT_EQ(0, TypeParam()); }
+^
+.build/_deps/gtest-src/googletest/test/gtest-unittest-api_test.cc:39:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest-unittest-api_test.cc:100:1: error: syntax error [syntaxError]
+TYPED_TEST(TestSuiteWithCommentTest, Dummy) {}
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:35:0: information: Include file: "test/googletest-filepath-test.cc" not found. [missingInclude]
+#include "test/googletest-filepath-test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:36:0: information: Include file: "test/googletest-message-test.cc" not found. [missingInclude]
+#include "test/googletest-message-test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:37:0: information: Include file: "test/googletest-options-test.cc" not found. [missingInclude]
+#include "test/googletest-options-test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:38:0: information: Include file: "test/googletest-port-test.cc" not found. [missingInclude]
+#include "test/googletest-port-test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:39:0: information: Include file: "test/googletest-test-part-test.cc" not found. [missingInclude]
+#include "test/googletest-test-part-test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:40:0: information: Include file: "test/gtest-typed-test2_test.cc" not found. [missingInclude]
+#include "test/gtest-typed-test2_test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:41:0: information: Include file: "test/gtest-typed-test_test.cc" not found. [missingInclude]
+#include "test/gtest-typed-test_test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:42:0: information: Include file: "test/gtest_pred_impl_unittest.cc" not found. [missingInclude]
+#include "test/gtest_pred_impl_unittest.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:43:0: information: Include file: "test/gtest_prod_test.cc" not found. [missingInclude]
+#include "test/gtest_prod_test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:44:0: information: Include file: "test/gtest_skip_test.cc" not found. [missingInclude]
+#include "test/gtest_skip_test.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:45:0: information: Include file: "test/gtest_unittest.cc" not found. [missingInclude]
+#include "test/gtest_unittest.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_all_test.cc:46:0: information: Include file: "test/production.cc" not found. [missingInclude]
+#include "test/production.cc"
+^
+.build/_deps/gtest-src/googletest/test/gtest_assert_by_exception_test.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_environment_test.cc:36:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_environment_test.cc:37:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_environment_test.cc:100:1: error: syntax error [syntaxError]
+TEST(FooTest, Bar) { test_was_run = true; }
+^
+.build/_deps/gtest-src/googletest/test/gtest_help_test_.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_list_output_unittest_.cc:41:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_main_unittest.cc:30:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_no_test_unittest.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_pred_impl_unittest.cc:49:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_pred_impl_unittest.cc:50:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_premature_exit_test.cc:36:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_premature_exit_test.cc:79:1: error: syntax error [syntaxError]
+TEST_F(PrematureExitDeathTest, FileExistsDuringExecutionOfDeathTest) {
+^
+.build/_deps/gtest-src/googletest/test/production.h:36:0: information: Include file: "gtest/gtest_prod.h" not found. [missingInclude]
+#include "gtest/gtest_prod.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_prod_test.cc:34:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_repeat_test.cc:36:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_repeat_test.cc:37:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_repeat_test.cc:73:1: error: syntax error [syntaxError]
+TEST(FooTest, ShouldFail) {
+^
+.build/_deps/gtest-src/googletest/test/gtest_skip_in_environment_setup_test.cc:35:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_skip_test.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_sole_header_test.cc:34:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_sole_header_test.cc:41:3: error: There is an unknown macro here somewhere. Configuration is required. If EXPECT_NO_FATAL_FAILURE is a macro then please configure it. [unknownMacro]
+  EXPECT_NO_FATAL_FAILURE(;);
+  ^
+.build/_deps/gtest-src/googletest/test/gtest_stress_test.cc:35:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_stress_test.cc:36:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_stress_test.cc:116:1: error: syntax error [syntaxError]
+TEST(StressTest, CanUseScopedTraceAndAssertionsInManyThreads) {
+^
+.build/_deps/gtest-src/googletest/test/gtest_test_macro_stack_footprint_test.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_testbridge_test_.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_throw_on_failure_ex_test.cc:38:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_unittest.cc:0:0: information: Too many #ifdef configurations - cppcheck only checks 12 of 26 configurations. Use --force to check all configurations. [toomanyconfigs]
+
+^
+.build/_deps/gtest-src/googletest/test/gtest_unittest.cc:34:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_unittest.cc:69:0: information: Include file: "gtest/gtest-spi.h" not found. [missingInclude]
+#include "gtest/gtest-spi.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_unittest.cc:70:0: information: Include file: "src/gtest-internal-inl.h" not found. [missingInclude]
+#include "src/gtest-internal-inl.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_unittest.cc:5297:26: error: syntax error [syntaxError]
+INSTANTIATE_TEST_SUITE_P(, CodeLocationForTESTP, Values(0));
+                         ^
+.build/_deps/gtest-src/googletest/test/gtest_xml_outfile1_test_.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_xml_outfile2_test_.cc:33:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+.build/_deps/gtest-src/googletest/test/gtest_xml_output_unittest_.cc:40:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+examples/dummy_library.cpp:5:0: information: Include file: "xtd/xtd.hpp" not found. [missingInclude]
+#include "xtd/xtd.hpp"
+^
+examples/example_mapped_vector.cpp:10:7: style: struct member 'person::age' is never used. [unusedStructMember]
+  int age;
+      ^
+examples/example_mapped_vector.cpp:11:8: style: struct member 'person::first_name' is never used. [unusedStructMember]
+  char first_name[50];
+       ^
+examples/example_mapped_vector.cpp:12:8: style: struct member 'person::last_name' is never used. [unusedStructMember]
+  char last_name[50];
+       ^
+examples/example_mapped_vector.cpp:13:7: style: struct member 'person::ssn' is never used. [unusedStructMember]
+  int ssn;
+      ^
+examples/example_parse1.cpp:52:16: style: Variable 'err' can be declared as reference to const [constVariableReference]
+    for (auto& err : errors) {
+               ^
+examples/example_parse1.cpp:30:26: style: Parameter 'argv' can be declared as const array [constParameter]
+int main(int argc, char* argv[]) {
+                         ^
+examples/example_parse2.cpp:20:3: error: There is an unknown macro here somewhere. Configuration is required. If STRING_ is a macro then please configure it. [unknownMacro]
+  STRING_(blue)
+  ^
+tests/tests.cpp:8:0: information: Include file: "xtd/xtd.hpp" not found. [missingInclude]
+#include "xtd/xtd.hpp"
+^
+tests/tests.cpp:12:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+tests/tests.cpp:136:0: information: Include file: "gtest/gtest.h" not found. [missingInclude]
+#include "gtest/gtest.h"
+^
+tests/test_source_location.hpp:41:19: style: Condition 'a==b' is always true [knownConditionTrueFalse]
+    ASSERT_TRUE(a == b);
+                  ^
+tests/test_source_location.hpp:40:7: note: b is assigned 'a' here.
+    b = a;
+      ^
+tests/test_source_location.hpp:41:19: note: Condition 'a==b' is always true
+    ASSERT_TRUE(a == b);
+                  ^
+tests/test_source_location.hpp:20:5: style: Redundant initialization for 'b'. The initialized value is overwritten before it is read. [redundantInitialization]
+  b = a;
+    ^
+tests/test_source_location.hpp:19:10: note: b is initialized
+  auto b = here();
+         ^
+tests/test_source_location.hpp:20:5: note: b is overwritten
+  b = a;
+    ^
+tests/test_source_location.hpp:29:5: warning: Redundant assignment of 'b' to itself. [selfAssignment]
+  b = a;
+    ^
+tests/test_recursive_spin_lock.hpp:29:24: style: Local variable 'locker' shadows outer variable [shadowVariable]
+      sl::scope_locker locker(oLock);
+                       ^
+tests/test_recursive_spin_lock.hpp:25:22: note: Shadowed declaration
+    sl::scope_locker locker(oLock);
+                     ^
+tests/test_recursive_spin_lock.hpp:29:24: note: Shadow variable
+      sl::scope_locker locker(oLock);
+                       ^
+tests/test_recursive_spin_lock.hpp:30:12: style: Local variable 'fn' shadows outer variable [shadowVariable]
+      auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
+           ^
+tests/test_recursive_spin_lock.hpp:26:10: note: Shadowed declaration
+    auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
+         ^
+tests/test_recursive_spin_lock.hpp:30:12: note: Shadow variable
+      auto fn = std::async(std::launch::async, [&](){ return oLock.try_lock(); });
+           ^
+tests/test_rpc.hpp:29:19: style: Variable 'oVal' can be declared as reference to const [constVariableReference]
+      for (auto & oVal : oVals) { dRet += oVal; }
+                  ^
+tests/test_rpc.hpp:29:40: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+      for (auto & oVal : oVals) { dRet += oVal; }
+                                       ^
+.build/_deps/gtest-src/googletest/test/googletest-list-tests-unittest_.cc:79:1: error: The one definition rule is violated, different classes/structs have the same name 'ValueParamTest' [ctuOneDefinitionRuleViolation]
+class ValueParamTest : public testing::TestWithParam<MyType> {};
+^
+.build/_deps/gtest-src/googletest/test/gtest_list_output_unittest_.cc:51:1: note: The one definition rule is violated, different classes/structs have the same name 'ValueParamTest'
+class ValueParamTest : public ::testing::TestWithParam<int> {};
+^
+.build/_deps/gtest-src/googletest/test/googletest-list-tests-unittest_.cc:79:1: note: The one definition rule is violated, different classes/structs have the same name 'ValueParamTest'
+class ValueParamTest : public testing::TestWithParam<MyType> {};
+^
+.build/_deps/gtest-src/googletest/test/googletest-list-tests-unittest_.cc:79:1: error: The one definition rule is violated, different classes/structs have the same name 'ValueParamTest' [ctuOneDefinitionRuleViolation]
+class ValueParamTest : public testing::TestWithParam<MyType> {};
+^
+.build/_deps/gtest-src/googletest/test/gtest_xml_output_unittest_.cc:161:1: note: The one definition rule is violated, different classes/structs have the same name 'ValueParamTest'
+class ValueParamTest : public TestWithParam<int> {};
+^
+.build/_deps/gtest-src/googletest/test/googletest-list-tests-unittest_.cc:79:1: note: The one definition rule is violated, different classes/structs have the same name 'ValueParamTest'
+class ValueParamTest : public testing::TestWithParam<MyType> {};
+^
+nofile:0:0: information: Active checkers: There was critical errors (use --checkers-report=<filename> to see details) [checkersReport]
+

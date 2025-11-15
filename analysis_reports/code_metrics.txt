@@ -1,0 +1,19 @@
+=== File Count ===
+Total C++ files: 150
+Header files (.hpp, .h): 124
+Source files (.cpp): 26
+
+=== Lines of Code ===
+ 14963 total
+
+=== Largest Files ===
+ 14963 total
+   685 ./include/xtd/grammars/RFC5322.hpp
+   630 ./include/xtd/socket.hpp
+   619 ./include/xtd/string.hpp
+   571 ./include/xtd/parse.hpp
+   443 ./include/xtd/concurrent/hash_map.hpp
+   409 ./include/xtd/rpc.hpp
+   398 ./tests/mocks/rpc.hpp
+   392 ./include/xtd/sqlite.hpp
+   361 ./include/xtd/btree.hpp

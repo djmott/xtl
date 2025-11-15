@@ -1,0 +1,438 @@
+[1/50] Processing file /workspace/examples/dummy_library.cpp.
+1 error generated.
+Error while processing /workspace/examples/dummy_library.cpp.
+[2/50] Processing file /workspace/examples/example_btree.cpp.
+1 error generated.
+Error while processing /workspace/examples/example_btree.cpp.
+[3/50] Processing file /workspace/examples/example_callback.cpp.
+2 errors generated.
+Error while processing /workspace/examples/example_callback.cpp.
+[4/50] Processing file /workspace/examples/example_dynamic_library.cpp.
+3 errors generated.
+Error while processing /workspace/examples/example_dynamic_library.cpp.
+[5/50] Processing file /workspace/examples/example_event_trace.cpp.
+4 errors generated.
+Error while processing /workspace/examples/example_event_trace.cpp.
+[6/50] Processing file /workspace/examples/example_exception.cpp.
+4 errors generated.
+Error while processing /workspace/examples/example_exception.cpp.
+[7/50] Processing file /workspace/examples/example_logging.cpp.
+5 errors generated.
+Error while processing /workspace/examples/example_logging.cpp.
+[8/50] Processing file /workspace/examples/example_mapped_file.cpp.
+6 errors generated.
+Error while processing /workspace/examples/example_mapped_file.cpp.
+[9/50] Processing file /workspace/examples/example_mapped_vector.cpp.
+7 errors generated.
+Error while processing /workspace/examples/example_mapped_vector.cpp.
+[10/50] Processing file /workspace/examples/example_nlp.cpp.
+8 errors generated.
+Error while processing /workspace/examples/example_nlp.cpp.
+[11/50] Processing file /workspace/examples/example_parse1.cpp.
+9 errors generated.
+Error while processing /workspace/examples/example_parse1.cpp.
+[12/50] Processing file /workspace/examples/example_parse2.cpp.
+10 errors generated.
+Error while processing /workspace/examples/example_parse2.cpp.
+[13/50] Processing file /workspace/examples/example_pdf.cpp.
+11 errors generated.
+Error while processing /workspace/examples/example_pdf.cpp.
+[14/50] Processing file /workspace/examples/example_rfc1035.cpp.
+12 errors generated.
+Error while processing /workspace/examples/example_rfc1035.cpp.
+[15/50] Processing file /workspace/examples/example_rfc2229.cpp.
+13 errors generated.
+Error while processing /workspace/examples/example_rfc2229.cpp.
+[16/50] Processing file /workspace/examples/example_rpc.cpp.
+14 errors generated.
+Error while processing /workspace/examples/example_rpc.cpp.
+[17/50] Processing file /workspace/examples/example_sqlite.cpp.
+15 errors generated.
+Error while processing /workspace/examples/example_sqlite.cpp.
+[18/50] Processing file /workspace/examples/example_string.cpp.
+15 errors generated.
+Error while processing /workspace/examples/example_string.cpp.
+[19/50] Processing file /workspace/include/xtd/btree.hpp.
+16 errors generated.
+Error while processing /workspace/include/xtd/btree.hpp.
+[20/50] Processing file /workspace/include/xtd/callback.hpp.
+17 errors generated.
+Error while processing /workspace/include/xtd/callback.hpp.
+[21/50] Processing file /workspace/include/xtd/com/com_class_factory.hpp.
+2 warnings and 34 errors generated.
+Error while processing /workspace/include/xtd/com/com_class_factory.hpp.
+[22/50] Processing file /workspace/include/xtd/com/com_data_object.hpp.
+2 warnings and 34 errors generated.
+Error while processing /workspace/include/xtd/com/com_data_object.hpp.
+[23/50] Processing file /workspace/include/xtd/com/com_dll.hpp.
+2 warnings and 54 errors generated.
+Error while processing /workspace/include/xtd/com/com_dll.hpp.
+[24/50] Processing file /workspace/include/xtd/com/com_exception.hpp.
+2 warnings and 55 errors generated.
+Error while processing /workspace/include/xtd/com/com_exception.hpp.
+[25/50] Processing file /workspace/include/xtd/com/com.hpp.
+2 warnings and 56 errors generated.
+Error while processing /workspace/include/xtd/com/com.hpp.
+[26/50] Processing file /workspace/include/xtd/com/com_initializer.hpp.
+2 warnings and 65 errors generated.
+Error while processing /workspace/include/xtd/com/com_initializer.hpp.
+[27/50] Processing file /workspace/include/xtd/com/com_object.hpp.
+2 warnings and 66 errors generated.
+Error while processing /workspace/include/xtd/com/com_object.hpp.
+[28/50] Processing file /workspace/include/xtd/com/com_pointer.hpp.
+2 warnings and 67 errors generated.
+Error while processing /workspace/include/xtd/com/com_pointer.hpp.
+[29/50] Processing file /workspace/include/xtd/concurrent/concurrent.hpp.
+2 warnings and 68 errors generated.
+Error while processing /workspace/include/xtd/concurrent/concurrent.hpp.
+[30/50] Processing file /workspace/include/xtd/concurrent/hash_map.hpp.
+2 warnings and 69 errors generated.
+Error while processing /workspace/include/xtd/concurrent/hash_map.hpp.
+[31/50] Processing file /workspace/include/xtd/concurrent/queue.hpp.
+2 warnings and 69 errors generated.
+Error while processing /workspace/include/xtd/concurrent/queue.hpp.
+[32/50] Processing file /workspace/include/xtd/concurrent/recursive_spin_lock.hpp.
+2 warnings and 70 errors generated.
+Error while processing /workspace/include/xtd/concurrent/recursive_spin_lock.hpp.
+[33/50] Processing file /workspace/include/xtd/concurrent/rw_lock.hpp.
+2 warnings and 71 errors generated.
+Error while processing /workspace/include/xtd/concurrent/rw_lock.hpp.
+[34/50] Processing file /workspace/include/xtd/concurrent/spin_lock.hpp.
+2 warnings and 72 errors generated.
+Error while processing /workspace/include/xtd/concurrent/spin_lock.hpp.
+[35/50] Processing file /workspace/include/xtd/concurrent/stack.hpp.
+2 warnings and 73 errors generated.
+Error while processing /workspace/include/xtd/concurrent/stack.hpp.
+[36/50] Processing file /workspace/include/xtd/debug.hpp.
+2 warnings and 74 errors generated.
+Error while processing /workspace/include/xtd/debug.hpp.
+[37/50] Processing file /workspace/include/xtd/decorated_object.hpp.
+2 warnings and 75 errors generated.
+Error while processing /workspace/include/xtd/decorated_object.hpp.
+[38/50] Processing file /workspace/include/xtd/dynamic_library.hpp.
+2 warnings and 76 errors generated.
+Error while processing /workspace/include/xtd/dynamic_library.hpp.
+[39/50] Processing file /workspace/include/xtd/dynamic_object.hpp.
+2 warnings and 77 errors generated.
+Error while processing /workspace/include/xtd/dynamic_object.hpp.
+[40/50] Processing file /workspace/include/xtd/event_trace.hpp.
+2 warnings and 78 errors generated.
+Error while processing /workspace/include/xtd/event_trace.hpp.
+[41/50] Processing file /workspace/include/xtd/exception.hpp.
+2 warnings and 79 errors generated.
+Error while processing /workspace/include/xtd/exception.hpp.
+[42/50] Processing file /workspace/include/xtd/executable.hpp.
+2 warnings and 80 errors generated.
+Error while processing /workspace/include/xtd/executable.hpp.
+[43/50] Processing file /workspace/include/xtd/filesystem.hpp.
+2 warnings and 81 errors generated.
+Error while processing /workspace/include/xtd/filesystem.hpp.
+[44/50] Processing file /workspace/include/xtd/grammars/iso32000-1.hpp.
+2 warnings and 82 errors generated.
+Error while processing /workspace/include/xtd/grammars/iso32000-1.hpp.
+[45/50] Processing file /workspace/include/xtd/grammars/RFC1035.hpp.
+2 warnings and 83 errors generated.
+Error while processing /workspace/include/xtd/grammars/RFC1035.hpp.
+[46/50] Processing file /workspace/include/xtd/grammars/RFC1123.hpp.
+2 warnings and 85 errors generated.
+Error while processing /workspace/include/xtd/grammars/RFC1123.hpp.
+[47/50] Processing file /workspace/include/xtd/grammars/RFC1950.hpp.
+2 warnings and 85 errors generated.
+Error while processing /workspace/include/xtd/grammars/RFC1950.hpp.
+[48/50] Processing file /workspace/include/xtd/grammars/RFC1951.hpp.
+2 warnings and 85 errors generated.
+Error while processing /workspace/include/xtd/grammars/RFC1951.hpp.
+[49/50] Processing file /workspace/include/xtd/grammars/RFC1952.hpp.
+2 warnings and 85 errors generated.
+Error while processing /workspace/include/xtd/grammars/RFC1952.hpp.
+[50/50] Processing file /workspace/include/xtd/grammars/rfc2229.hpp.
+2 warnings and 86 errors generated.
+Error while processing /workspace/include/xtd/grammars/rfc2229.hpp.
+error: too many errors emitted, stopping now [clang-diagnostic-error]
+/workspace/examples/dummy_library.cpp:5:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    5 | #include "xtd/xtd.hpp"
+      |          ^~~~~~~~~~~~~
+/workspace/examples/example_callback.cpp:6:10: error: 'iostream' file not found [clang-diagnostic-error]
+    6 | #include <iostream>
+      |          ^~~~~~~~~~
+/workspace/examples/example_dynamic_library.cpp:6:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    6 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/examples/example_event_trace.cpp:6:10: error: 'xtd/debug.hpp' file not found [clang-diagnostic-error]
+    6 | #include <xtd/debug.hpp>
+      |          ^~~~~~~~~~~~~~~
+/workspace/examples/example_logging.cpp:5:10: error: 'xtd/log.hpp' file not found [clang-diagnostic-error]
+    5 | #include <xtd/log.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/examples/example_mapped_file.cpp:6:10: error: 'xtd/filesystem.hpp' file not found [clang-diagnostic-error]
+    6 | #include <xtd/filesystem.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~~
+/workspace/examples/example_mapped_vector.cpp:6:10: error: 'xtd/mapped_vector.hpp' file not found [clang-diagnostic-error]
+    6 | #include <xtd/mapped_vector.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+/workspace/examples/example_nlp.cpp:4:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    4 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/examples/example_parse1.cpp:6:10: error: 'iostream' file not found [clang-diagnostic-error]
+    6 | #include <iostream>
+      |          ^~~~~~~~~~
+/workspace/examples/example_parse2.cpp:6:10: error: 'xtd/parse.hpp' file not found [clang-diagnostic-error]
+    6 | #include <xtd/parse.hpp>
+      |          ^~~~~~~~~~~~~~~
+/workspace/examples/example_pdf.cpp:5:10: error: 'xtd/grammars/iso32000-1.hpp' file not found [clang-diagnostic-error]
+    5 | #include <xtd/grammars/iso32000-1.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/examples/example_rfc1035.cpp:7:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/examples/example_rfc2229.cpp:7:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/examples/example_rpc.cpp:5:10: error: 'xtd/rpc.hpp' file not found [clang-diagnostic-error]
+    5 | #include <xtd/rpc.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/examples/example_sqlite.cpp:8:10: error: 'xtd/sqlite.hpp' file not found [clang-diagnostic-error]
+    8 | #include <xtd/sqlite.hpp>
+      |          ^~~~~~~~~~~~~~~~
+/workspace/include/xtd/btree.hpp:7:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/callback.hpp:8:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    8 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/com/com.hpp:7:10: error: 'atomic' file not found [clang-diagnostic-error]
+    7 | #include <atomic>
+      |          ^~~~~~~~
+/workspace/include/xtd/com/com_class_factory.hpp:9:59: error: unknown template name 'Object' [clang-diagnostic-error]
+    9 |                 template <typename _ObjectT> struct ClassFactory : com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > {
+      |                                                                         ^
+/workspace/include/xtd/com/com_class_factory.hpp:9:101: error: use of undeclared identifier 'IClassFactory' [clang-diagnostic-error]
+    9 |                 template <typename _ObjectT> struct ClassFactory : com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > {
+      |                                                                                                                   ^
+/workspace/include/xtd/com/com_class_factory.hpp:9:101: error: use of undeclared identifier 'IClassFactory'; did you mean 'ClassFactory'? [clang-diagnostic-error]
+    9 |                 template <typename _ObjectT> struct ClassFactory : com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > {
+      |                                                                                                                   ^~~~~~~~~~~~~
+      |                                                                                                                   ClassFactory
+/workspace/include/xtd/com/com_class_factory.hpp:9:39: note: 'ClassFactory' declared here
+    9 |                 template <typename _ObjectT> struct ClassFactory : com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > {
+      |                                                     ^
+/workspace/include/xtd/com/com_class_factory.hpp:10:26: error: no template named 'Object' in namespace 'xtd::com' [clang-diagnostic-error]
+   10 |                         using _super_t = com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > ;
+      |                                          ~~~~~^
+/workspace/include/xtd/com/com_class_factory.hpp:10:68: error: unknown type name 'IClassFactory'; did you mean 'ClassFactory'? [clang-diagnostic-error]
+   10 |                         using _super_t = com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > ;
+      |                                                                                         ^~~~~~~~~~~~~
+      |                                                                                         ClassFactory
+/workspace/include/xtd/com/com_class_factory.hpp:9:39: note: 'ClassFactory' declared here
+    9 |                 template <typename _ObjectT> struct ClassFactory : com::Object < ClassFactory<_ObjectT>, nullptr, IClassFactory > {
+      |                                                     ^
+/workspace/include/xtd/com/com_class_factory.hpp:12:12: error: unknown type name 'HRESULT' [clang-diagnostic-error]
+   12 |                         virtual HRESULT __stdcall CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppvObject) final {
+      |                                 ^
+/workspace/include/xtd/com/com_class_factory.hpp:12:20: warning: '__stdcall' calling convention is not supported for this target [clang-diagnostic-ignored-attributes]
+   12 |                         virtual HRESULT __stdcall CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppvObject) final {
+      |                                         ^
+/workspace/include/xtd/com/com_class_factory.hpp:12:45: error: unknown type name 'IUnknown' [clang-diagnostic-error]
+   12 |                         virtual HRESULT __stdcall CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppvObject) final {
+      |                                                                  ^
+/workspace/include/xtd/com/com_class_factory.hpp:12:66: error: unknown type name 'REFIID' [clang-diagnostic-error]
+   12 |                         virtual HRESULT __stdcall CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppvObject) final {
+      |                                                                                       ^
+/workspace/include/xtd/com/com_class_factory.hpp:14:27: error: use of undeclared identifier 'CLASS_E_NOAGGREGATION' [clang-diagnostic-error]
+   14 |                                 if (pUnkOuter) return CLASS_E_NOAGGREGATION;
+      |                                                       ^
+/workspace/include/xtd/com/com_class_factory.hpp:15:28: error: use of undeclared identifier 'E_POINTER' [clang-diagnostic-error]
+   15 |                                 if (!ppvObject) return E_POINTER;
+      |                                                        ^
+/workspace/include/xtd/com/com_class_factory.hpp:17:23: error: use of undeclared identifier 'E_OUTOFMEMORY' [clang-diagnostic-error]
+   17 |                                 if (!pObj) return E_OUTOFMEMORY;
+      |                                                   ^
+/workspace/include/xtd/com/com_class_factory.hpp:19:9: error: use of undeclared identifier 'S_OK' [clang-diagnostic-error]
+   19 |                                 if (S_OK != hr) delete pObj;
+      |                                     ^
+/workspace/include/xtd/com/com_class_factory.hpp:23:12: error: unknown type name 'HRESULT' [clang-diagnostic-error]
+   23 |                         virtual HRESULT __stdcall LockServer(BOOL fLock) final {
+      |                                 ^
+/workspace/include/xtd/com/com_class_factory.hpp:23:20: warning: '__stdcall' calling convention is not supported for this target [clang-diagnostic-ignored-attributes]
+   23 |                         virtual HRESULT __stdcall LockServer(BOOL fLock) final {
+      |                                         ^
+/workspace/include/xtd/com/com_class_factory.hpp:23:41: error: unknown type name 'BOOL' [clang-diagnostic-error]
+   23 |                         virtual HRESULT __stdcall LockServer(BOOL fLock) final {
+      |                                                              ^
+/workspace/include/xtd/com/com_class_factory.hpp:24:13: error: use of undeclared identifier 'GlobalDLLLock' [clang-diagnostic-error]
+   24 |                                 fLock ? GlobalDLLLock()++ : GlobalDLLLock()--;
+      |                                         ^
+/workspace/include/xtd/com/com_class_factory.hpp:24:33: error: use of undeclared identifier 'GlobalDLLLock' [clang-diagnostic-error]
+   24 |                                 fLock ? GlobalDLLLock()++ : GlobalDLLLock()--;
+      |                                                             ^
+/workspace/include/xtd/com/com_class_factory.hpp:25:12: error: use of undeclared identifier 'S_OK' [clang-diagnostic-error]
+   25 |                                 return S_OK;
+      |                                        ^
+/workspace/include/xtd/com/com_dll.hpp:17:77: error: unknown type name 'tstring' [clang-diagnostic-error]
+   17 |                 template <> struct ThreadingModelName < ThreadingModel::Single > { static tstring Value() { return __("Single"); } };
+      |                                                                                           ^
+/workspace/include/xtd/com/com_dll.hpp:17:102: error: use of undeclared identifier '__' [clang-diagnostic-error]
+   17 |                 template <> struct ThreadingModelName < ThreadingModel::Single > { static tstring Value() { return __("Single"); } };
+      |                                                                                                                    ^
+/workspace/include/xtd/com/com_dll.hpp:18:80: error: unknown type name 'tstring' [clang-diagnostic-error]
+   18 |                 template <> struct ThreadingModelName < ThreadingModel::Apartment > { static tstring Value() { return __("Apartment"); } };
+      |                                                                                              ^
+/workspace/include/xtd/com/com_dll.hpp:18:105: error: use of undeclared identifier '__' [clang-diagnostic-error]
+   18 |                 template <> struct ThreadingModelName < ThreadingModel::Apartment > { static tstring Value() { return __("Apartment"); } };
+      |                                                                                                                       ^
+/workspace/include/xtd/com/com_dll.hpp:19:75: error: unknown type name 'tstring' [clang-diagnostic-error]
+   19 |                 template <> struct ThreadingModelName < ThreadingModel::Free > { static tstring Value() { return __("Free"); } };
+      |                                                                                         ^
+/workspace/include/xtd/com/com_dll.hpp:19:100: error: use of undeclared identifier '__' [clang-diagnostic-error]
+   19 |                 template <> struct ThreadingModelName < ThreadingModel::Free > { static tstring Value() { return __("Free"); } };
+      |                                                                                                                  ^
+/workspace/include/xtd/com/com_dll.hpp:20:75: error: unknown type name 'tstring' [clang-diagnostic-error]
+   20 |                 template <> struct ThreadingModelName < ThreadingModel::Both > { static tstring Value() { return __("Both"); } };
+      |                                                                                         ^
+/workspace/include/xtd/com/com_dll.hpp:20:100: error: use of undeclared identifier '__' [clang-diagnostic-error]
+   20 |                 template <> struct ThreadingModelName < ThreadingModel::Both > { static tstring Value() { return __("Both"); } };
+      |                                                                                                                  ^
+/workspace/include/xtd/com/com_dll.hpp:22:64: error: unknown type name 'LPCTSTR' [clang-diagnostic-error]
+   22 |                 template <typename _DLLDecl, ThreadingModel _ThreadingModel, LPCTSTR _Name, typename ... _Objects> struct DLL;
+      |                                                                              ^
+/workspace/include/xtd/com/com_dll.hpp:24:64: error: unknown type name 'LPCTSTR' [clang-diagnostic-error]
+   24 |                 template <typename _DLLDecl, ThreadingModel _ThreadingModel, LPCTSTR _Name> struct DLL < _DLLDecl, _ThreadingModel, _Name > {
+      |                                                                              ^
+/workspace/include/xtd/com/com_dll.hpp:26:12: error: unknown type name 'HRESULT' [clang-diagnostic-error]
+   26 |                         virtual HRESULT DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv) {
+      |                                 ^
+/workspace/include/xtd/com/com_dll.hpp:26:38: error: unknown type name 'REFCLSID' [clang-diagnostic-error]
+   26 |                         virtual HRESULT DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv) {
+      |                                                           ^
+/workspace/include/xtd/com/com_dll.hpp:26:55: error: unknown type name 'REFIID' [clang-diagnostic-error]
+   26 |                         virtual HRESULT DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv) {
+      |                                                                            ^
+/workspace/include/xtd/com/com_dll.hpp:26:68: error: unknown type name 'LPVOID' [clang-diagnostic-error]
+   26 |                         virtual HRESULT DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv) {
+      |                                                                                         ^
+/workspace/include/xtd/com/com_dll.hpp:33:12: error: unknown type name 'HRESULT' [clang-diagnostic-error]
+   33 |                         virtual HRESULT DllCanUnloadNow() { return (0 == GlobalDLLLock().load() ? S_OK : S_FALSE); }
+      |                                 ^
+/workspace/include/xtd/com/com_dll.hpp:34:12: error: unknown type name 'HRESULT' [clang-diagnostic-error]
+   34 |                         virtual HRESULT DllRegisterServer() { _DLLDecl::Register(); return S_OK; }
+      |                                 ^
+/workspace/include/xtd/com/com_dll.hpp:35:12: error: unknown type name 'HRESULT' [clang-diagnostic-error]
+   35 |                         virtual HRESULT DllUnregisterServer() { _DLLDecl::Unregister(); return S_OK; }
+      |                                 ^
+/workspace/include/xtd/com/com_dll.hpp:38:12: error: unknown type name 'HRESULT' [clang-diagnostic-error]
+   38 |                                 static HRESULT DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv) { return Get().DllGetClassObject(rclsid, riid, ppv); }
+      |                                        ^
+/workspace/include/xtd/com/com_dll.hpp:38:38: error: unknown type name 'REFCLSID' [clang-diagnostic-error]
+   38 |                                 static HRESULT DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv) { return Get().DllGetClassObject(rclsid, riid, ppv); }
+      |                                                                  ^
+/workspace/include/xtd/com/com_exception.hpp:7:10: error: 'xtd/exception.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/exception.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~
+/workspace/include/xtd/com/com_initializer.hpp:6:2: error: platform not supported for COM [clang-diagnostic-error]
+    6 | #error platform not supported for COM
+      |  ^
+/workspace/include/xtd/com/com_initializer.hpp:14:15: error: unknown type name 'COINIT' [clang-diagnostic-error]
+   14 |     template <COINIT _CoInit>
+      |               ^
+/workspace/include/xtd/com/com_initializer.hpp:16:28: error: use of undeclared identifier 'S_OK' [clang-diagnostic-error]
+   16 |       ~Initializer() { if (S_OK == _hInit) CoUninitialize(); _hInit = S_FALSE; }
+      |                            ^
+/workspace/include/xtd/com/com_initializer.hpp:16:44: error: use of undeclared identifier 'CoUninitialize' [clang-diagnostic-error]
+   16 |       ~Initializer() { if (S_OK == _hInit) CoUninitialize(); _hInit = S_FALSE; }
+      |                                            ^
+/workspace/include/xtd/com/com_initializer.hpp:16:71: error: use of undeclared identifier 'S_FALSE' [clang-diagnostic-error]
+   16 |       ~Initializer() { if (S_OK == _hInit) CoUninitialize(); _hInit = S_FALSE; }
+      |                                                                       ^
+/workspace/include/xtd/com/com_initializer.hpp:25:30: error: use of undeclared identifier 'S_FALSE' [clang-diagnostic-error]
+   25 |       Initializer() : _hInit(S_FALSE) {
+      |                              ^
+/workspace/include/xtd/com/com_initializer.hpp:26:9: error: use of undeclared identifier 'GlobalDLLLock' [clang-diagnostic-error]
+   26 |         GlobalDLLLock();
+      |         ^
+/workspace/include/xtd/com/com_initializer.hpp:27:18: error: use of undeclared identifier 'CoInitializeEx'; did you mean 'Initializer'? [clang-diagnostic-error]
+   27 |         _hInit = CoInitializeEx(0, _CoInit);
+      |                  ^
+/workspace/include/xtd/com/com_initializer.hpp:15:12: note: 'Initializer' declared here
+   15 |     struct Initializer {
+      |            ^
+   16 |       ~Initializer() { if (S_OK == _hInit) CoUninitialize(); _hInit = S_FALSE; }
+   17 |       static Initializer& Get() {
+   18 |         static Initializer _Initalizer;
+   19 |         return _Initalizer;
+   20 |       }
+   21 |       struct StaticInitializer {
+   22 |         StaticInitializer() { Get(); }
+   23 |       };
+   24 |     private:
+   25 |       Initializer() : _hInit(S_FALSE) {
+   26 |         GlobalDLLLock();
+   27 |         _hInit = CoInitializeEx(0, _CoInit);
+      |                  ~~~~~~~~~~~~~~
+      |                  Initializer
+/workspace/include/xtd/com/com_initializer.hpp:29:7: error: unknown type name 'HRESULT' [clang-diagnostic-error]
+   29 |       HRESULT _hInit;
+      |       ^
+/workspace/include/xtd/com/com_object.hpp:7:10: error: 'atomic' file not found [clang-diagnostic-error]
+    7 | #include <atomic>
+      |          ^~~~~~~~
+/workspace/include/xtd/com/com_pointer.hpp:7:10: error: 'xtd/unique_id.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/unique_id.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~
+/workspace/include/xtd/concurrent/concurrent.hpp:7:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/concurrent/hash_map.hpp:7:10: error: 'xtd/concurrent/concurrent.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/concurrent/concurrent.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/include/xtd/concurrent/recursive_spin_lock.hpp:8:10: error: 'xtd/concurrent/concurrent.hpp' file not found [clang-diagnostic-error]
+    8 | #include <xtd/concurrent/concurrent.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/include/xtd/concurrent/rw_lock.hpp:7:10: error: 'xtd/concurrent/concurrent.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/concurrent/concurrent.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/include/xtd/concurrent/spin_lock.hpp:7:10: error: 'xtd/concurrent/concurrent.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/concurrent/concurrent.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/include/xtd/concurrent/stack.hpp:7:10: error: 'xtd/concurrent/concurrent.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/concurrent/concurrent.hpp>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/include/xtd/debug.hpp:8:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    8 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/decorated_object.hpp:7:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/dynamic_library.hpp:9:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    9 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/dynamic_object.hpp:7:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    7 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/event_trace.hpp:9:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    9 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/exception.hpp:9:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    9 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/executable.hpp:10:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+   10 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/filesystem.hpp:8:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    8 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/grammars/RFC1035.hpp:7:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    7 | #include "xtd/xtd.hpp"
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/grammars/RFC1123.hpp:14:25: error: expected namespace name [clang-diagnostic-error]
+   14 |                         using namespace xtd::Parser;
+      |                                         ~~~~~^
+/workspace/include/xtd/grammars/RFC1123.hpp:15:25: error: no member named 'Parser' in namespace 'xtd' [clang-diagnostic-error]
+   15 |                         using namespace xtd::Parser::MultiByte;
+      |                                         ~~~~~^
+/workspace/include/xtd/grammars/iso32000-1.hpp:6:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    6 | #include "xtd/xtd.hpp"
+      |          ^~~~~~~~~~~~~
+/workspace/include/xtd/grammars/rfc2229.hpp:6:10: error: 'xtd/xtd.hpp' file not found [clang-diagnostic-error]
+    6 | #include <xtd/xtd.hpp>
+      |          ^~~~~~~~~~~~~
+Found compiler error(s).
