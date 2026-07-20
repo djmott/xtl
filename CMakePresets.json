@@ -1,0 +1,322 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "ucrt64-base",
+      "hidden": true,
+      "description": "MSYS2 UCRT64 MinGW-w64 toolchain (Ninja)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "cmakeExecutable": "C:/msys64/ucrt64/bin/cmake.exe",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
+        "CMAKE_RC_COMPILER": "C:/msys64/ucrt64/bin/windres.exe",
+        "CMAKE_MAKE_PROGRAM": "C:/msys64/ucrt64/bin/ninja.exe"
+      },
+      "environment": {
+        "PATH": "C:/msys64/ucrt64/bin;C:/msys64/usr/bin;$penv{PATH}"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "ucrt64-debug",
+      "displayName": "MSYS2 UCRT64 Debug",
+      "inherits": "ucrt64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "ucrt64-release",
+      "displayName": "MSYS2 UCRT64 Release",
+      "inherits": "ucrt64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "ucrt64-relwithdebinfo",
+      "displayName": "MSYS2 UCRT64 RelWithDebInfo",
+      "inherits": "ucrt64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "msys-base",
+      "hidden": true,
+      "description": "MSYS2 MSYS toolchain (Ninja)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "cmakeExecutable": "C:/msys64/usr/bin/cmake.exe",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "C:/msys64/usr/bin/gcc.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/usr/bin/g++.exe",
+        "CMAKE_RC_COMPILER": "C:/msys64/usr/bin/windres.exe",
+        "CMAKE_MAKE_PROGRAM": "C:/msys64/usr/bin/ninja.exe"
+      },
+      "environment": {
+        "PATH": "C:/msys64/usr/bin;$penv{PATH}"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "msys-debug",
+      "displayName": "MSYS2 MSYS Debug",
+      "inherits": "msys-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "msys-release",
+      "displayName": "MSYS2 MSYS Release",
+      "inherits": "msys-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "msys-relwithdebinfo",
+      "displayName": "MSYS2 MSYS RelWithDebInfo",
+      "inherits": "msys-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "mingw64-base",
+      "hidden": true,
+      "description": "MSYS2 MINGW64 MinGW-w64 toolchain (Ninja)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "cmakeExecutable": "C:/msys64/mingw64/bin/cmake.exe",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/gcc.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/g++.exe",
+        "CMAKE_RC_COMPILER": "C:/msys64/mingw64/bin/windres.exe",
+        "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe"
+      },
+      "environment": {
+        "PATH": "C:/msys64/mingw64/bin;C:/msys64/usr/bin;$penv{PATH}"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "mingw64-debug",
+      "displayName": "MSYS2 MINGW64 Debug",
+      "inherits": "mingw64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "mingw64-release",
+      "displayName": "MSYS2 MINGW64 Release",
+      "inherits": "mingw64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "mingw64-relwithdebinfo",
+      "displayName": "MSYS2 MINGW64 RelWithDebInfo",
+      "inherits": "mingw64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "clang64-base",
+      "hidden": true,
+      "description": "MSYS2 CLANG64 LLVM toolchain (Ninja)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "cmakeExecutable": "C:/msys64/clang64/bin/cmake.exe",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "C:/msys64/clang64/bin/clang.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/clang64/bin/clang++.exe",
+        "CMAKE_RC_COMPILER": "C:/msys64/clang64/bin/llvm-windres.exe",
+        "CMAKE_MAKE_PROGRAM": "C:/msys64/clang64/bin/ninja.exe"
+      },
+      "environment": {
+        "PATH": "C:/msys64/clang64/bin;C:/msys64/usr/bin;$penv{PATH}"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "clang64-debug",
+      "displayName": "MSYS2 CLANG64 Debug",
+      "inherits": "clang64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "clang64-release",
+      "displayName": "MSYS2 CLANG64 Release",
+      "inherits": "clang64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "clang64-relwithdebinfo",
+      "displayName": "MSYS2 CLANG64 RelWithDebInfo",
+      "inherits": "clang64-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ucrt64-debug",
+      "displayName": "MSYS2 UCRT64 Debug",
+      "configurePreset": "ucrt64-debug"
+    },
+    {
+      "name": "ucrt64-release",
+      "displayName": "MSYS2 UCRT64 Release",
+      "configurePreset": "ucrt64-release"
+    },
+    {
+      "name": "ucrt64-relwithdebinfo",
+      "displayName": "MSYS2 UCRT64 RelWithDebInfo",
+      "configurePreset": "ucrt64-relwithdebinfo"
+    },
+    {
+      "name": "msys-debug",
+      "displayName": "MSYS2 MSYS Debug",
+      "configurePreset": "msys-debug"
+    },
+    {
+      "name": "msys-release",
+      "displayName": "MSYS2 MSYS Release",
+      "configurePreset": "msys-release"
+    },
+    {
+      "name": "msys-relwithdebinfo",
+      "displayName": "MSYS2 MSYS RelWithDebInfo",
+      "configurePreset": "msys-relwithdebinfo"
+    },
+    {
+      "name": "mingw64-debug",
+      "displayName": "MSYS2 MINGW64 Debug",
+      "configurePreset": "mingw64-debug"
+    },
+    {
+      "name": "mingw64-release",
+      "displayName": "MSYS2 MINGW64 Release",
+      "configurePreset": "mingw64-release"
+    },
+    {
+      "name": "mingw64-relwithdebinfo",
+      "displayName": "MSYS2 MINGW64 RelWithDebInfo",
+      "configurePreset": "mingw64-relwithdebinfo"
+    },
+    {
+      "name": "clang64-debug",
+      "displayName": "MSYS2 CLANG64 Debug",
+      "configurePreset": "clang64-debug"
+    },
+    {
+      "name": "clang64-release",
+      "displayName": "MSYS2 CLANG64 Release",
+      "configurePreset": "clang64-release"
+    },
+    {
+      "name": "clang64-relwithdebinfo",
+      "displayName": "MSYS2 CLANG64 RelWithDebInfo",
+      "configurePreset": "clang64-relwithdebinfo"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ucrt64-debug",
+      "displayName": "MSYS2 UCRT64 Debug",
+      "configurePreset": "ucrt64-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "ucrt64-release",
+      "displayName": "MSYS2 UCRT64 Release",
+      "configurePreset": "ucrt64-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "msys-debug",
+      "displayName": "MSYS2 MSYS Debug",
+      "configurePreset": "msys-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "msys-release",
+      "displayName": "MSYS2 MSYS Release",
+      "configurePreset": "msys-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "mingw64-debug",
+      "displayName": "MSYS2 MINGW64 Debug",
+      "configurePreset": "mingw64-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "mingw64-release",
+      "displayName": "MSYS2 MINGW64 Release",
+      "configurePreset": "mingw64-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "clang64-debug",
+      "displayName": "MSYS2 CLANG64 Debug",
+      "configurePreset": "clang64-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "clang64-release",
+      "displayName": "MSYS2 CLANG64 Release",
+      "configurePreset": "clang64-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}
