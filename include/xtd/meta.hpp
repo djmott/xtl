@@ -143,6 +143,11 @@ namespace xtd{
     using type = typename _::template _get_parameter<_ParamNum, _ReturnT(_ArgTs...)>::type;
   };
 
+  template <uint8_t _ParamNum, typename _ReturnT, typename ... _ArgTs> struct get_parameter<_ParamNum, _ReturnT(_ArgTs...)> {
+    static_assert(sizeof...(_ArgTs) >= _ParamNum, "Specified parameter index exceeds number of parameters in function");
+    using type = typename _::template _get_parameter<_ParamNum, _ReturnT(_ArgTs...)>::type;
+  };
+
   //test for t::type member
   template <typename, typename = void> struct has_type_member : std::false_type{};
   template <typename _Ty> struct has_type_member<_Ty, void_t<typename _Ty::type>> : std::true_type{};

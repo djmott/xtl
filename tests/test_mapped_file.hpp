@@ -74,3 +74,42 @@ TEST_F(test_mapped_file, write){
   xtd::filesystem::remove(oPath);
 
 }
+
+TEST_F(test_mapped_file, reopen_after_grow){
+  auto oPath = xtd::filesystem::temp_directory_path() /= "test_mapped_file.dat";
+  {
+    xtd::mapped_file<((size_t)-1)> oFile(oPath);
+    {
+      auto oPage = oFile.get<mapped_file_test_struct>(0);
+      oPage->age = 123;
+      strcpy(oPage->first_name, "Groucho");
+      strcpy(oPage->last_name, "Marx");
+      oPage->ssn = 456;
+    }
+    {
+      auto oPage = oFile.get<mapped_file_test_struct>(1);
+      oPage->age = 456;
+      strcpy(oPage->first_name, "Harpo");
+      strcpy(oPage->last_name, "Marx");
+      oPage->ssn = 789;
+    }
+  }
+  {
+    xtd::mapped_file<((size_t)-1)> oFile(oPath);
+    {
+      auto oPage = oFile.get<mapped_file_test_struct>(0);
+      EXPECT_EQ(oPage->age, 123);
+      EXPECT_STREQ(oPage->first_name, "Groucho");
+      EXPECT_STREQ(oPage->last_name, "Marx");
+      EXPECT_EQ(oPage->ssn, 456);
+    }
+    {
+      auto oPage = oFile.get<mapped_file_test_struct>(1);
+      EXPECT_EQ(oPage->age, 456);
+      EXPECT_STREQ(oPage->first_name, "Harpo");
+      EXPECT_STREQ(oPage->last_name, "Marx");
+      EXPECT_EQ(oPage->ssn, 789);
+    }
+  }
+  xtd::filesystem::remove(oPath);
+}

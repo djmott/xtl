@@ -11,7 +11,7 @@ auto get_dummy_library = []() -> xtd::dynamic_library::pointer {
   auto sPath = xtd::executable::this_executable().path();
 #if (XTD_OS_UNIX == XTD_OS)
   sPath.replace_filename("libdummy_library_test.so");
-#elif (XTD_OS_MSYS == XTD_OS)
+#elif (XTD_OS_Cygwin == XTD_OS)
   sPath.replace_filename("msys-dummy_library_test.dll");
 #elif (XTD_OS_MINGW == XTD_OS)
   sPath.replace_filename("libdummy_library_test.dll");

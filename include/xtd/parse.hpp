@@ -121,6 +121,7 @@ namespace xtd {
     template <typename _decl_t, typename _impl_t = _decl_t>
     class rule : public rule_base {
     public:
+      using iterator_type = rule_base::iterator_type;
       using decl_type = _decl_t;
       using impl_type = _impl_t;
       using rule_type = rule<_decl_t, _impl_t>;
@@ -162,6 +163,7 @@ namespace xtd {
 
     template <> class not_<> : public rule<not_<>> {
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<not_<>>;
       template <typename ... _child_rule_ts>
       explicit not_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
@@ -169,7 +171,7 @@ namespace xtd {
       bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
         if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-        if (empty() || this->front()->parse(ctx, begin, end)) {
+        if (this->empty() || this->front()->parse(ctx, begin, end)) {
           ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
             this->type(), backup, "Negative assertion failed",
             begin != end ? std::string(1, *begin) : "EOF"));
@@ -184,6 +186,7 @@ namespace xtd {
     template <typename _head_t, typename ... _tail_ts>
     class not_<_head_t, _tail_ts...> : public rule<not_<_head_t, _tail_ts...>> {
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<not_<_head_t, _tail_ts...>>;
       template <typename ... _child_rule_ts>
       explicit not_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
@@ -225,6 +228,7 @@ namespace xtd {
 
     template <> class or_<> : public rule<or_<>> {
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<or_<>>;
       template <typename ... _child_rule_ts>
       explicit or_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
@@ -254,6 +258,7 @@ namespace xtd {
     template <typename _ty>
     class one_or_more_ : public rule<one_or_more_<_ty>> {
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<one_or_more_<_ty>>;
       template <typename ... _child_rule_ts>
       explicit one_or_more_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
@@ -261,7 +266,7 @@ namespace xtd {
       bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
         if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-        if (empty()) {
+        if (this->empty()) {
           ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
             this->type(), backup, "One_or_more rule has no child", ""));
           begin = backup;
@@ -296,12 +301,13 @@ namespace xtd {
     template <typename _ty>
     class zero_or_more_ : public rule<zero_or_more_<_ty>> {
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<zero_or_more_<_ty>>;
       template <typename ... _child_rule_ts>
       explicit zero_or_more_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
       bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
-        if (empty()) return true;
+        if (this->empty()) return true;
         auto child = this->front();
         while (true) {
           auto backup = begin;
@@ -321,12 +327,13 @@ namespace xtd {
     template <typename _ty>
     class zero_or_one_ : public rule<zero_or_one_<_ty>> {
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<zero_or_one_<_ty>>;
       template <typename ... _child_rule_ts>
       explicit zero_or_one_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
       bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
-        if (empty()) return true;
+        if (this->empty()) return true;
         auto backup = begin;
         if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
         auto child = this->front();
@@ -347,6 +354,7 @@ namespace xtd {
       std::string _matched;
 
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<string<char[_len], _str>>;
       static constexpr size_t length = _len - 1;
       string() = default;
@@ -379,6 +387,8 @@ namespace xtd {
       char _matched = 0;
 
     public:
+      using iterator_type = rule_base::iterator_type;
+
       bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
         if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
@@ -404,6 +414,7 @@ namespace xtd {
       char _matched = 0;
 
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<characters<_first, _last>>;
 
       bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
@@ -459,6 +470,7 @@ namespace xtd {
       }
 
     public:
+      using iterator_type = rule_base::iterator_type;
       using _super_t = rule<regex<char[_len], _str>>;
       static constexpr size_t length = _len - 1;
 

@@ -138,8 +138,8 @@ namespace basic_grammar {
 }
 
 template <typename _element_t> bool can_parse(std::string src) {
-  basic_grammar::start_rule::pointer_type ast;
-  return xtd::parser < _element_t, true, xtd::parse::whitespace<' ', '\r', '\t'>>::parse(src.begin(), src.end(), ast);
+  std::shared_ptr<_element_t> ast;
+  return xtd::parser<_element_t, true, xtd::parse::whitespace<' ', '\r', '\t'>>::parse(src.cbegin(), src.cend(), ast);
 }
 
 TEST(test_parser, basic_identifier){
@@ -200,113 +200,119 @@ TEST(test_parser, basic_dim_statement) {
 
 TEST(test_parser, basic_dim_statements) {
   std::string s = "dim a\ndim b\ndim c\n";
-  basic_grammar::start_rule::pointer_type ast;
-  EXPECT_TRUE(basic_grammar::parser::parse(s.begin(), s.end(), ast));
+  std::shared_ptr<basic_grammar::start_rule> ast;
+  EXPECT_TRUE(basic_grammar::parser::parse(s.cbegin(), s.cend(), ast));
 }
 
 TEST(test_parser, basic_input_statement) {
   std::string s = "xx123=input\n";
-  basic_grammar::start_rule::pointer_type ast;
-  EXPECT_TRUE(basic_grammar::parser::parse(s.begin(), s.end(), ast));
+  std::shared_ptr<basic_grammar::start_rule> ast;
+  EXPECT_TRUE(basic_grammar::parser::parse(s.cbegin(), s.cend(), ast));
   s = "xx123=input()\n";
-  EXPECT_FALSE(basic_grammar::parser::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(basic_grammar::parser::parse(s.cbegin(), s.cend(), ast));
 }
 
 #if 0
 TEST(test_parser, character_no_case){
   std::string s = "p";
   using test_parse = xtd::parser<test_grammar::P, true>;
-  basic_grammar::start_rule::pointer_type ast;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  std::shared_ptr<test_grammar::P> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "x";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 TEST(test_parser, character_case){
   std::string s = "P";
   using test_parse = xtd::parser<test_grammar::P>;
-  basic_grammar::start_rule::pointer_type ast;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  std::shared_ptr<test_grammar::P> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "p";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 TEST(test_parser, string_no_case){
   std::string s = "Snafoo";
   using test_parse = xtd::parser<test_grammar::Snafoo, true>;
-  basic_grammar::start_rule::pointer_type ast;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  std::shared_ptr<test_grammar::Snafoo> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "Snafoooo";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "Squeegy";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 TEST(test_parser, string_case){
   std::string s = "Snafoo";
   using test_parse = xtd::parser<test_grammar::Snafoo>;
-  basic_grammar::start_rule::pointer_type ast;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  std::shared_ptr<test_grammar::Snafoo> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "Snafoooo";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "snafoo";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 TEST(test_parser, DISABLED_regex_no_case){
   NOTE("GCCs regex implementation is absolute trash")
   using test_parse = xtd::parser<test_grammar::Alphabet, true>;
   std::string s = "abc1";
-  basic_grammar::start_rule::pointer_type ast;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  std::shared_ptr<test_grammar::Alphabet> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "abc2";
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "abc3";
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "ab4";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 
 TEST(test_parser, DISABLED_regex_case){
   using test_parse = xtd::parser<test_grammar::Alphabet, false>;
   std::string s = "ABC1";
-  basic_grammar::start_rule::pointer_type ast;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  std::shared_ptr<test_grammar::Alphabet> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "ABC2";
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "ABC3";
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "AB4";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end(), ast));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 TEST(test_parser, rule_and){
   std::string s = "PDQ";
   using namespace test_grammar;
-  using test_parse = xtd::parser<xtd::parse::and_<P,D,Q>>;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end()));
+  using rule_t = xtd::parse::and_<P, D, Q>;
+  using test_parse = xtd::parser<rule_t>;
+  std::shared_ptr<rule_t> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "QDP";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 
 TEST(test_parser, rule_or){
   std::string s = "P";
   using namespace test_grammar;
-  using test_parse = xtd::parser<xtd::parse::or_<P, D, Q>>;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end()));
+  using rule_t = xtd::parse::or_<P, D, Q>;
+  using test_parse = xtd::parser<rule_t>;
+  std::shared_ptr<rule_t> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "XYZ";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 TEST(test_parser, rule_zero_or_more){
   std::string s= "PPP";
   using namespace test_grammar;
-  using test_parse = xtd::parser<xtd::parse::zero_or_more_<P>>;
-  EXPECT_TRUE(test_parse::parse(s.begin(), s.end()));
+  using rule_t = xtd::parse::zero_or_more_<P>;
+  using test_parse = xtd::parser<rule_t>;
+  std::shared_ptr<rule_t> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
   s = "XYZ";
-  EXPECT_FALSE(test_parse::parse(s.begin(), s.end()));
+  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
 
@@ -315,11 +321,16 @@ TEST(test_parser, rule_zero_or_one){
   std::string s= "PD";
   using namespace xtd::parse;
   using namespace test_grammar;
-  EXPECT_FALSE(xtd::parser<zero_or_one_<P>>::parse(s.begin(), s.end()));
-  using grammar = xtd::parser<and_<zero_or_one_<P>, zero_or_one_<P>, zero_or_one_<P>>>;
-  EXPECT_FALSE(grammar::parse(s.begin(), s.end()));
-  using grammar2 = xtd::parser<and_<zero_or_one_<P>, zero_or_one_<D>>>;
-  EXPECT_TRUE(grammar2::parse(s.begin(), s.end()));
+  std::shared_ptr<zero_or_one_<P>> ast1;
+  EXPECT_FALSE(xtd::parser<zero_or_one_<P>>::parse(s.cbegin(), s.cend(), ast1));
+  using rule_t = and_<zero_or_one_<P>, zero_or_one_<P>, zero_or_one_<P>>;
+  using grammar = xtd::parser<rule_t>;
+  std::shared_ptr<rule_t> ast2;
+  EXPECT_FALSE(grammar::parse(s.cbegin(), s.cend(), ast2));
+  using rule2_t = and_<zero_or_one_<P>, zero_or_one_<D>>;
+  using grammar2 = xtd::parser<rule2_t>;
+  std::shared_ptr<rule2_t> ast3;
+  EXPECT_TRUE(grammar2::parse(s.cbegin(), s.cend(), ast3));
 }
 
 TEST(test_parser, isa){
@@ -327,7 +338,8 @@ TEST(test_parser, isa){
   using namespace test_grammar;
   using pdq = xtd::parse::one_or_more_<xtd::parse::or_<P, D, Q>>;
   using test_parse = xtd::parser<pdq>;
-  auto oAST = test_parse::parse(s.begin(), s.end());
+  std::shared_ptr<pdq> oAST;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), oAST));
   EXPECT_TRUE(oAST);
   EXPECT_TRUE(oAST->isa(typeid(pdq)));
   ASSERT_EQ(oAST->type(), typeid(pdq));

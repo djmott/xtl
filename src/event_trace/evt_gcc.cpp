@@ -11,11 +11,13 @@ extern "C" {
 
 
   // cppcheck-suppress unusedFunction
+  __attribute__((no_instrument_function))
   void __cyg_profile_func_enter(void *, void * /*call_site*/){
     //__xtd_EventEnter("");
   }
 
   // cppcheck-suppress unusedFunction
+  __attribute__((no_instrument_function))
   void __cyg_profile_func_exit(void *, void * /*call_site*/){
    //__xtd_EventLeave();
   }

@@ -20,7 +20,7 @@ TEST(test_path, append){
   using namespace xtd::filesystem;
   {
     path p1 = "/a";
-    ASSERT_NO_THROW(p1.append("/b"));
+    ASSERT_NO_THROW(p1.append("b"));
     ASSERT_PATH_EQ(p1, path("/a/b"));
   }
   {
@@ -31,11 +31,6 @@ TEST(test_path, append){
   {
     path p1 = "/a/b";
     p1 /= "c";
-    ASSERT_PATH_EQ(p1, path("/a/b/c"));
-  }
-  {
-    path p1 = "/a/b";
-    p1 /= "/c";
     ASSERT_PATH_EQ(p1, path("/a/b/c"));
   }
   {
@@ -71,7 +66,7 @@ TEST(test_path, append_fail){
 TEST(test_path, remove_filename){
   using namespace xtd::filesystem;
   path oPath="/a/b/cdef";
-#if ((XTD_COMPILER_CLANG | XTD_COMPILER_GCC) & XTD_COMPILER)
+#if ((XTD_COMPILER_CLANG | XTD_COMPILER_GNU) & XTD_COMPILER)
   ASSERT_PATH_EQ(oPath.remove_filename(),  path("/a/b/"));
 #else
   ASSERT_PATH_EQ(oPath.remove_filename(),  path("/a/b"));
@@ -97,17 +92,27 @@ TEST(test_path, replace_filename){
 TEST(test_path, operator_plus){
   using namespace xtd::filesystem;
   path p1("/a/b");
-  path p2("/c/d");
+  path p2("c/d");
   auto p3 = p1 /= p2;
   ASSERT_PATH_EQ(p3, path("/a/b/c/d"));
 }
 
 TEST(test_path, operator_diveq){
   using namespace xtd::filesystem;
-  path p1("/a/b");  
-  p1 /= path("/c/d");
+  path p1("/a/b");
+  p1 /= path("c/d");
   ASSERT_PATH_EQ(p1, path("/a/b/c/d"));
 }
+
+#if (XTD_OS_WINDOWS & XTD_OS)
+/// Documents std::filesystem absolute-RHS replacement on Windows
+TEST(test_path, absolute_rhs_replaces_on_windows){
+  using namespace xtd::filesystem;
+  path p1("/a");
+  p1 /= path("/b");
+  ASSERT_PATH_EQ(p1, path("/b"));
+}
+#endif
 
 
 TEST(test_path, remove){

@@ -3,6 +3,8 @@ xtd::callback system and unit tests
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
+#include <memory>
+#include <string>
 #include <xtd/callback.hpp>
 
 /// callback object initialization test
@@ -139,4 +141,75 @@ TEST(test_callback, result_policy_empty_throws){
   xtd::callback<int()> c;
   ASSERT_THROW(c(xtd::callback<int()>::result_policy::return_first), std::runtime_error);
   ASSERT_THROW(c(xtd::callback<int()>::result_policy::return_last), std::runtime_error);
+}
+
+/// multi-subscriber fan-out copies args to each receiver (void and non-void)
+TEST(test_callback, multi_subscriber_copyable_args){
+  {
+    int a = 0, b = 0;
+    xtd::callback<void(int, std::string)> c;
+    c.connect([&a](int x, std::string s){ a = x + static_cast<int>(s.size()); });
+    c.connect([&b](int x, std::string s){ b = x * static_cast<int>(s.size()); });
+    c(3, std::string("hi"));
+    ASSERT_EQ(a, 5);
+    ASSERT_EQ(b, 6);
+  }
+  {
+    int a = 0, b = 0;
+    xtd::callback<int(int, std::string)> c;
+    c.connect([&a](int x, std::string s){ a = x + static_cast<int>(s.size()); return a; });
+    c.connect([&b](int x, std::string s){ b = x * static_cast<int>(s.size()); return b; });
+    ASSERT_EQ(c(3, std::string("hi")), 6);
+    ASSERT_EQ(a, 5);
+    ASSERT_EQ(b, 6);
+  }
+}
+
+/// result_policy still invokes every subscriber with intact copies
+TEST(test_callback, result_policy_multi_subscriber_preserves_args){
+  int calls = 0;
+  int sum = 0;
+  xtd::callback<int(int)> c;
+  c.connect([&](int x){ ++calls; sum += x; return 1; });
+  c.connect([&](int x){ ++calls; sum += x; return 2; });
+  c.connect([&](int x){ ++calls; sum += x; return 3; });
+  ASSERT_EQ(c(xtd::callback<int(int)>::result_policy::return_first, 10), 1);
+  ASSERT_EQ(calls, 3);
+  ASSERT_EQ(sum, 30);
+  calls = 0;
+  sum = 0;
+  ASSERT_EQ(c(xtd::callback<int(int)>::result_policy::return_last, 7), 3);
+  ASSERT_EQ(calls, 3);
+  ASSERT_EQ(sum, 21);
+}
+
+/// member invoker receives parameters
+TEST(test_callback, member_invoker_with_args){
+  struct dest{
+    int total = 0;
+    void add(int x, int y){ total = x + y; }
+    int mul(int x, int y){ total = x * y; return total; }
+  };
+  dest oDest;
+  xtd::callback<void(int, int)> cv;
+  cv.connect<dest, &dest::add>(&oDest);
+  cv(4, 5);
+  ASSERT_EQ(oDest.total, 9);
+
+  xtd::callback<int(int, int)> cr;
+  cr.connect<dest, &dest::mul>(&oDest);
+  ASSERT_EQ(cr(6, 7), 42);
+  ASSERT_EQ(oDest.total, 42);
+}
+
+/// single subscriber can accept move-only args by value
+TEST(test_callback, single_subscriber_unique_ptr_move){
+  int value = 0;
+  xtd::callback<void(std::unique_ptr<int>)> c;
+  c.connect([&value](std::unique_ptr<int> p){
+    ASSERT_TRUE(p);
+    value = *p;
+  });
+  c(std::make_unique<int>(42));
+  ASSERT_EQ(value, 42);
 }

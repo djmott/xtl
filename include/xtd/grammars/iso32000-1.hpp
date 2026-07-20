@@ -42,6 +42,12 @@ namespace xtd{
       using EOL = parse::and_<CR,LF>;
       REGEX(COMMENT, "\\%[^\\r\\n]*");
 
+#ifdef True
+  #undef True
+#endif
+#ifdef False
+  #undef False
+#endif
       STRING(True, "true");
       STRING(False, "false");
 

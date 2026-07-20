@@ -17,7 +17,7 @@ namespace command_line {
 
   STRING(color, "--color:");
   STRING_(red);
-  STRING_(blue)
+  STRING_(blue);
   STRING_(green);
   using colors = or_<red, blue, green>;
   using color_param = and_<color, colors >;
@@ -30,8 +30,9 @@ namespace command_line {
 int main(int argc, char * argv[]){
   for (int i=1 ; i<argc ; ++i){
     std::string sArg = argv[i];
-    auto oCommandLine = xtd::parser<command_line::parameter>::parse(sArg.begin(), sArg.end());
-    if (!oCommandLine) continue;
+    std::shared_ptr<command_line::parameter> oCommandLine;
+    if (!xtd::parser<command_line::parameter>::parse(sArg.cbegin(), sArg.cend(), oCommandLine))
+      continue;
   }
 
   return argc;

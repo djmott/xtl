@@ -12,7 +12,7 @@ TEST(test_process, DISABLED_system_processes){
   ASSERT_GT(oSystemProcesses.size(), static_cast<size_t>(1));
 }
 
-#if ((XTD_OS_LINUX | XTD_OS_WINDOWS) & XTD_OS)
+#if ((XTD_OS_Linux | XTD_OS_WINDOWS) & XTD_OS)
 TEST(test_process, DISABLED_enum_libraries){
   xtd::dynamic_library::map oLibs;
   ASSERT_NO_THROW(oLibs = xtd::process::this_process().libraries());

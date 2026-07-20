@@ -10,8 +10,10 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <stdexcept>
 #include <functional>
+#include <cstdint>
 
 #if (XTD_HAS_CODECVT)
   #include <codecvt>

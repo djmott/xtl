@@ -148,8 +148,17 @@ namespace xtd{
     }
     explicit mapped_file(const filesystem::path& Path)
       : _hFile(xtd::windows::exception::throw_if(CreateFileA(Path.string().c_str(), GENERIC_READ|GENERIC_WRITE, FILE_SHARE_WRITE|FILE_SHARE_READ, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr), [](HANDLE h){ return nullptr==h || INVALID_HANDLE_VALUE==h; }))
-      , _hMap(xtd::windows::exception::throw_if(CreateFileMapping(_hFile, nullptr, PAGE_READWRITE, 0, static_cast<DWORD>(_super_t::page_size()), nullptr), [](HANDLE h){ return nullptr == h || INVALID_HANDLE_VALUE == h; }))
-      {}
+      , _hMap(nullptr)
+      {
+        LARGE_INTEGER fileSize;
+        xtd::windows::exception::throw_if(GetFileSizeEx(_hFile, &fileSize), [](BOOL b){return FALSE == b; });
+        LARGE_INTEGER mapSize;
+        mapSize.QuadPart = static_cast<LONGLONG>(_super_t::page_size());
+        if (fileSize.QuadPart > mapSize.QuadPart) {
+          mapSize = fileSize;
+        }
+        _hMap = xtd::windows::exception::throw_if(CreateFileMapping(_hFile, nullptr, PAGE_READWRITE, mapSize.HighPart, mapSize.LowPart, nullptr), [](HANDLE h){ return nullptr == h || INVALID_HANDLE_VALUE == h; });
+      }
 
 
 

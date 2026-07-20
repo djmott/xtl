@@ -30,17 +30,19 @@
   #define TRUE   1
 #endif
 
-#if !defined(True)
-  #define True   1
+#ifdef True
+  #undef True
 #endif
+#define True   1
 
 #if !defined(FALSE)
   #define FALSE    0
 #endif
 
-#if !defined(False)
-  #define False    0
+#ifdef False
+  #undef False
 #endif
+#define False  0
 
 #define XTD_VERBOSE_BUILD @XTD_VERBOSE_BUILD@;
 
@@ -53,8 +55,10 @@
 #define XTD_CPU_x86_64  XTD_CPU_AMD64
 #define XTD_CPU_ARM     (XTD_CPU_INTEL << 2)
 #define XTD_CPU_aarch64 XTD_CPU_ARM
+#define XTD_CPU_arm     XTD_CPU_ARM
+#define XTD_CPU_intel   XTD_CPU_INTEL
 
-#define XTD_CPU XTD_CPU_@CMAKE_SYSTEM_PROCESSOR@
+#define XTD_CPU XTD_CPU_@XTD_SYSTEM_PROCESSOR@
 
 enum class target_cpus{
   intel = XTD_CPU_INTEL,
@@ -64,7 +68,7 @@ enum class target_cpus{
   aarch64 = XTD_CPU_ARM,
 };
 
-static constexpr target_cpus target_cpu = target_cpus::@CMAKE_SYSTEM_PROCESSOR@;
+static constexpr target_cpus target_cpu = target_cpus::@XTD_SYSTEM_PROCESSOR@;
 
 #define XTD_OS_BARE_METAL 0
 #define XTD_OS_UNIX       1
@@ -74,7 +78,10 @@ static constexpr target_cpus target_cpu = target_cpus::@CMAKE_SYSTEM_PROCESSOR@;
 #define XTD_OS_WINDOWS    (XTD_OS_UNIX << 3)
 #define XTD_OS_Windows    XTD_OS_WINDOWS
 #define XTD_OS_MINGW      ((XTD_OS_UNIX << 4) | XTD_OS_WINDOWS)
+#define XTD_OS_MinGW      XTD_OS_MINGW
 #define XTD_OS_CYGWIN     ((XTD_OS_UNIX << 5) | XTD_OS_UNIX)
+#define XTD_OS_Cygwin     XTD_OS_CYGWIN
+#define XTD_OS_MSys2      XTD_OS_CYGWIN
 
 enum class target_systems{
   bare_metal = XTD_OS_BARE_METAL,
@@ -88,9 +95,9 @@ enum class target_systems{
   Cygwin = MSys2,
 };
 
-#define XTD_OS XTD_OS_@CMAKE_SYSTEM_NAME@
+#define XTD_OS XTD_OS_@XTD_SYSTEM_NAME@
 
-static constexpr target_systems target_system = target_systems::@CMAKE_SYSTEM_NAME@;
+static constexpr target_systems target_system = target_systems::@XTD_SYSTEM_NAME@;
 
 
 #define XTD_COMPILER_UNKNOWN 0
@@ -102,6 +109,8 @@ static constexpr target_systems target_system = target_systems::@CMAKE_SYSTEM_NA
 #define XTD_COMPILER_INTELLLVM  (XTD_COMPILER_APPLE_CLANG << 5)
 #define XTD_COMPILER_MSVC  (XTD_COMPILER_APPLE_CLANG << 6)
 #define XTD_COMPILER_GNU  (XTD_COMPILER_APPLE_CLANG << 7)
+#define XTD_COMPILER_GCC  XTD_COMPILER_GNU
+#define XTD_COMPILER_MINGW @XTD_COMPILER_MINGW@
 
 #define XTD_COMPILER  XTD_COMPILER_@CMAKE_CXX_COMPILER_ID@
 

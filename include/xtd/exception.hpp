@@ -9,6 +9,7 @@ generic and special purpose exceptions
 #include <xtd/xtd.hpp>
 
 #include <exception>
+#include <cstdint>
 #include <xtd/source_location.hpp>
 #include <xtd/string.hpp>
 /**

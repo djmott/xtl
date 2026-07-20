@@ -2,22 +2,19 @@
 
 cmake_minimum_required(VERSION 3.23)
 
+project(XTL LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-
-enable_language(CXX)
 
 set(default_build_type "Release")
 if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
   set(default_build_type "Debug")
 endif()
- 
+
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
-
-project(XTL)
 
 include(CheckIncludeFile)
 include(CheckIncludeFileCXX)
@@ -246,9 +243,61 @@ falsify_undefined(XTD_USE_DBGHELP)
 falsify_undefined(XTD_HAS_UUID)
 falsify_undefined(CMAKE_COLOR_MAKEFILE)
 
+# XTD_SYSTEM_NAME — must match XTD_OS_<token> and target_systems::<token>
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+  set(XTD_SYSTEM_NAME "Windows")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  set(XTD_SYSTEM_NAME "Linux")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "CYGWIN")
+  set(XTD_SYSTEM_NAME "Cygwin")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "MSYS")
+  if(MINGW)
+    set(XTD_SYSTEM_NAME "MinGW")
+  else()
+    set(XTD_SYSTEM_NAME "Cygwin")
+  endif()
+else()
+  message(FATAL_ERROR
+    "Unsupported CMAKE_SYSTEM_NAME='${CMAKE_SYSTEM_NAME}'. "
+    "XTL recognizes Windows, Linux, CYGWIN, MSYS.")
+endif()
+
+# XTD_SYSTEM_PROCESSOR — must match XTD_CPU_<token> and target_cpus::<token>
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(AMD64|amd64|x86_64)$")
+  set(XTD_SYSTEM_PROCESSOR "x86_64")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)$")
+  set(XTD_SYSTEM_PROCESSOR "aarch64")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(armv7l|armv7|arm)$")
+  set(XTD_SYSTEM_PROCESSOR "arm")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(i[3-6]86|x86)$")
+  set(XTD_SYSTEM_PROCESSOR "intel")
+else()
+  message(FATAL_ERROR
+    "Unsupported CMAKE_SYSTEM_PROCESSOR='${CMAKE_SYSTEM_PROCESSOR}'.")
+endif()
+
+# CMake-facing identifiers for tests/examples; header macros use the same tokens.
+set(XTD_OS "XTD_OS_${XTD_SYSTEM_NAME}")
+set(XTD_COMPILER "XTD_COMPILER_${CMAKE_CXX_COMPILER_ID}")
+# MinGW reports CMAKE_CXX_COMPILER_ID=GNU; only enable XTD_COMPILER_MINGW when MINGW.
+if(MINGW)
+  set(XTD_COMPILER_MINGW "XTD_COMPILER_GNU")
+else()
+  set(XTD_COMPILER_MINGW "0")
+endif()
+
+message(STATUS "XTL platform: OS=${XTD_SYSTEM_NAME} CPU=${XTD_SYSTEM_PROCESSOR} "
+               "compiler=${XTD_COMPILER} mingw=${XTD_COMPILER_MINGW} "
+               "(from ${CMAKE_SYSTEM_NAME}/${CMAKE_SYSTEM_PROCESSOR})")
+
 configure_file(include/xtd/xtd.hpp.in include/xtd/xtd.hpp @ONLY)
 
 add_library(xtl STATIC src/xtl.cpp ${CMAKE_CURRENT_BINARY_DIR}/include/xtd/xtd.hpp)
+
+# GNU -finstrument-functions hooks must live in libxtl; keep this TU uninstrumented.
+if(XTD_COMPILER MATCHES "XTD_COMPILER_GNU")
+  target_sources(xtl PRIVATE src/event_trace/evt_gcc.cpp)
+endif()
 
 target_include_directories(xtl PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/include)
 
@@ -259,6 +308,7 @@ endif()
 
 option(XTD_BUILD_TESTS "Build tests" FALSE)
 if(XTD_BUILD_TESTS)
+  enable_testing()
   FetchContent_Declare(gtest
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG        release-1.12.1

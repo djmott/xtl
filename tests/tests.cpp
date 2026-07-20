@@ -56,12 +56,16 @@ main system and unit test entry point
   #include "test_exception.hpp"
 #endif
 
-#if (ON==TEST_EXCUTABLE)
+#if (ON==TEST_EXECUTABLE)
   #include "test_executable.hpp"
 #endif
 
 #if (ON==TEST_LOGGING)
   #include "test_logging.hpp"
+#endif
+
+#if (ON==TEST_LRU_CACHE)
+  #include "test_lru_cache.hpp"
 #endif
 
 #if (ON==TEST_META)
@@ -108,7 +112,7 @@ main system and unit test entry point
   #include "test_socket.hpp"
 #endif
 
-#if (ON==TEST_SOCKET)
+#if (ON==TEST_SOURCE_LOCATION)
   #include "test_source_location.hpp"
 #endif
 
@@ -124,7 +128,7 @@ main system and unit test entry point
   #include "test_string.hpp"
 #endif
 
-#if (ON==TEST_UNIQUE_ID && XTD_HAS_UUID)
+#if (ON==TEST_UNIQUE_ID)
   #include "test_unique_id.hpp"
 #endif
 

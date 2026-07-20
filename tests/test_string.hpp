@@ -27,6 +27,12 @@ TEST(test_string, to_upper){
   ASSERT_STREQ(s.c_str(), "ABCD");
 }
 
+TEST(test_string, reverse){
+  xtd::string s = "abcd";
+  s.reverse();
+  ASSERT_STREQ(s.c_str(), "dcba");
+  ASSERT_STREQ(s.reverse().c_str(), "abcd"); // chain + round-trip
+}
 
 TEST(test_string, ltrim){
   xtd::string s = "        a";

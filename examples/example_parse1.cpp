@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
   std::string sParam = argv[1];
 
   // AST pointer and error list
-  command_line::parameter::pointer_type oAST;
+  std::shared_ptr<command_line::parameter> oAST;
   xtd::parse::parse_error<std::string::const_iterator>::vector errors;
 
   // The parser type alias

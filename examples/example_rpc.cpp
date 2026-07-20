@@ -13,7 +13,7 @@ public:
   class Echo : public xtd::rpc::rpc_call<Echo, std::string(std::string)>{};
   class Average : public xtd::rpc::rpc_call<Average, double(std::vector<double>)>{};
 
-  using server_type = xtd::rpc::server<xtd::rpc::tcp_transport, Ping, Add, Echo, Average>;
+  using server_type = xtd::rpc::rpc_server<xtd::rpc::tcp_transport, Ping, Add, Echo, Average>;
   using client_type = typename server_type::client_type;
 
   using server_pointer_type = std::shared_ptr<server_type>;
@@ -25,10 +25,10 @@ public:
 int main(){
   try{
     rpc_interface::server_type oServer(xtd::socket::ipv4address("0.0.0.0", 9977));
-    oServer.attach<rpc_interface::Ping>([](){return 0; });
-    oServer.attach<rpc_interface::Add>([](int a, int b){ return a + b; });
-    oServer.attach<rpc_interface::Echo>([](const std::string& sval) -> std::string{ return std::string(sval); });
-    oServer.attach<rpc_interface::Average>([](const std::vector<double>& oVals) -> double{
+    oServer.get<rpc_interface::Ping>().attach([](){return 0; });
+    oServer.get<rpc_interface::Add>().attach([](int a, int b){ return a + b; });
+    oServer.get<rpc_interface::Echo>().attach([](const std::string& sval) -> std::string{ return std::string(sval); });
+    oServer.get<rpc_interface::Average>().attach([](const std::vector<double>& oVals) -> double{
       double dRet = 0;
       for (auto & oVal : oVals){ dRet += oVal; }
       dRet /= oVals.size();

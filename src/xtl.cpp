@@ -14,14 +14,14 @@
 #if (XTD_COMPILER_MSVC & XTD_COMPILER)
   NOTE("Compiler : MSVC")
   NOTE("Binary must be compiled with /Gh and /GH to generate event trace")
-#elif (XTD_COMPILER_GCC & XTD_COMPILER)
-  NOTE("Compiler : GCC");
+#elif (XTD_COMPILER_MINGW & XTD_COMPILER)
+  NOTE("Compiler : MinGW")
+  NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
+#elif (XTD_COMPILER_GNU & XTD_COMPILER)
+  NOTE("Compiler : GNU");
   NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
 #elif (XTD_COMPILER_CLANG & XTD_COMPILER)
   NOTE("Compiler : CLANG");
-  NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
-#elif (XTD_COMPILER_MINGW & XTD_COMPILER)
-  NOTE("Compiler : MinGW")
   NOTE("Binary must be compiled with -finstrument-functions to generate event trace")
 #endif
 

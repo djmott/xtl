@@ -10,6 +10,7 @@ Single producer - multiple subscriber callback
 #include <memory>
 #include <vector>
 #include <stdexcept>
+#include <type_traits>
 
 
 namespace xtd{
@@ -66,7 +67,7 @@ namespace xtd{
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}  //NOSONAR
       member_invoker(const member_invoker& oSrc) : _dest(oSrc._dest){}  //NOSONAR
       explicit member_invoker(_dest_t* dest) : _dest(dest){} //NOSONAR
-      virtual _return_t invoke(_arg_ts...oArgs) const override { return (_dest->*_member)(oArgs...); }
+      virtual _return_t invoke(_arg_ts...oArgs) const override { return (_dest->*_member)(std::forward<_arg_ts>(oArgs)...); }
       _dest_t * _dest;
     };
 
@@ -90,28 +91,43 @@ namespace xtd{
       if (_invokers.empty()){
         throw std::runtime_error("callback invoked with no receivers");
       }
-      _return_t oRet{};
-      typename invoker::vector::size_type i = 0;
-      for (const auto & oInvoker : _invokers){
-        if ((result_policy::return_first == result && 0 == i) || (result_policy::return_last == result && (_invokers.size() - 1) == i)){
-          oRet = oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
-        } else{
-          oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
+      // Copyable args: multi-cast via lvalue copies. Move-only: single subscriber + forward.
+      if constexpr ((std::is_copy_constructible_v<_arg_ts> && ...)) {
+        _return_t oRet{};
+        typename invoker::vector::size_type i = 0;
+        for (const auto & oInvoker : _invokers){
+          if ((result_policy::return_first == result && 0 == i) || (result_policy::return_last == result && (_invokers.size() - 1) == i)){
+            oRet = oInvoker->invoke(oArgs...);
+          } else{
+            oInvoker->invoke(oArgs...);
+          }
+          ++i;
         }
-        ++i;
+        return oRet;
+      } else {
+        if (_invokers.size() > 1){
+          throw std::runtime_error("move-only callback args require a single subscriber");
+        }
+        return _invokers.front()->invoke(std::forward<_arg_ts>(oArgs)...);
       }
-      return oRet;
     }
     //invokes all the attached targets and returns the result of the last target
     _return_t operator()(_arg_ts...oArgs) const{
       if (_invokers.empty()){
         throw std::runtime_error("callback invoked with no receivers");
       }
-      _return_t oRet{};
-      for (const auto & oInvoker : _invokers){
-        oRet = oInvoker->invoke(std::forward<_arg_ts>(oArgs)...);
+      if constexpr ((std::is_copy_constructible_v<_arg_ts> && ...)) {
+        _return_t oRet{};
+        for (const auto & oInvoker : _invokers){
+          oRet = oInvoker->invoke(oArgs...);
+        }
+        return oRet;
+      } else {
+        if (_invokers.size() > 1){
+          throw std::runtime_error("move-only callback args require a single subscriber");
+        }
+        return _invokers.front()->invoke(std::forward<_arg_ts>(oArgs)...);
       }
-      return oRet;
     }
 
     /// connect a class instance and member function
@@ -178,7 +194,7 @@ namespace xtd{
       member_invoker(member_invoker&& oSrc) : _dest(oSrc._dest){}
       member_invoker(const member_invoker& oSrc) : _dest(oSrc._dest){}
       explicit member_invoker(_dest_t* dest) : _dest(dest){}
-      virtual return_type invoke(_arg_ts...oArgs)const override { (_dest->*_member)(oArgs...); }
+      virtual return_type invoke(_arg_ts...oArgs)const override { (_dest->*_member)(std::forward<_arg_ts>(oArgs)...); }
       _dest_t * _dest;
     };
 
@@ -193,8 +209,17 @@ namespace xtd{
 
 
     void operator()(_arg_ts...oArgs) const{
-      for (auto & oInvoker : _invokers){
-        oInvoker->invoke(oArgs...);
+      if constexpr ((std::is_copy_constructible_v<_arg_ts> && ...)) {
+        for (auto & oInvoker : _invokers){
+          oInvoker->invoke(oArgs...);
+        }
+      } else {
+        if (_invokers.size() > 1){
+          throw std::runtime_error("move-only callback args require a single subscriber");
+        }
+        if (!_invokers.empty()){
+          _invokers.front()->invoke(std::forward<_arg_ts>(oArgs)...);
+        }
       }
     }
 

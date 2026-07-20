@@ -6,10 +6,16 @@ xtd::mapped_vector system and unit tests
 #pragma once
 
 #include <xtd/mapped_vector.hpp>
-#include <xtd/unique_id.hpp>
+
+namespace {
+  inline xtd::filesystem::path mapped_vector_temp_path() {
+    static int32_t n = 0;
+    return xtd::filesystem::temp_directory_path() /= xtd::string::format("mv_test_", ++n).c_str();
+  }
+}
 
 TEST(test_mapped_vector, initialization){
-  auto oPath = xtd::filesystem::temp_directory_path() /= xtd::string::format(xtd::unique_id()).c_str();
+  auto oPath = mapped_vector_temp_path();
   {
     ASSERT_NO_THROW(xtd::mapped_vector<double> oDoubles(oPath));
   }
@@ -17,7 +23,7 @@ TEST(test_mapped_vector, initialization){
 }
 
 TEST(test_mapped_vector, insert){
-  auto oPath = xtd::filesystem::temp_directory_path() /= xtd::string::format(xtd::unique_id()).c_str();
+  auto oPath = mapped_vector_temp_path();
   {
     xtd::mapped_vector<double> oDoubles(oPath);
     for (size_t i = 1; i < 0x10000; i++){
@@ -29,7 +35,7 @@ TEST(test_mapped_vector, insert){
 }
 
 TEST(test_mapped_vector, iterate){
-  auto oPath = xtd::filesystem::temp_directory_path() /= xtd::string::format(xtd::unique_id()).c_str();
+  auto oPath = mapped_vector_temp_path();
   D_(DUMP(oPath.string()));
   {
     using vector_t = xtd::mapped_vector<uint64_t>;

@@ -7,10 +7,17 @@ transport neutral light weight IPC/RPC library
 
 #include <xtd/xtd.hpp>
 
-#include <thread>
-#include <mutex>
-#include <condition_variable>
+#include <cassert>
+#include <cstdint>
+#include <functional>
 #include <future>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <type_traits>
+#include <typeinfo>
+#include <vector>
+#include <condition_variable>
 
 #include <xtd/socket.hpp>
 #include <xtd/concurrent/hash_map.hpp>
@@ -122,6 +129,7 @@ namespace xtd{
     };
 
     struct payload : std::vector<uint8_t> {
+      using _super_t = std::vector<uint8_t>;
       payload() : vector(sizeof(size_t), 0) {}
       template <typename _ty> _ty peek() const {
         static_assert(std::is_pod<_ty>::value, "Invalid POD type for peek");
@@ -133,7 +141,6 @@ namespace xtd{
       }
     };
 
-#if 0
     /** tcp/ip transport
     */
     class tcp_transport {
@@ -202,7 +209,7 @@ namespace xtd{
       }
 
     };
-#endif
+
     /*
      * anonymous_pipe_transport
      */
@@ -279,7 +286,7 @@ namespace xtd{
       template <typename _impl_t> using client_from_impl = typename std::conditional< std::is_same<_impl_t, _head_t>::value, _this_t, typename _super_t::template client_from_impl<_impl_t>>::type;
 
       template <typename _ty, typename ... _arg_ts> typename _ty::return_type call(_arg_ts&&...oArgs) {
-        return static_cast<client_from_impl<_ty>&>(*this)._call<typename _ty::return_type>(std::forward<_arg_ts>(oArgs)...);
+        return static_cast<client_from_impl<_ty>&>(*this).template _call<typename _ty::return_type>(std::forward<_arg_ts>(oArgs)...);
       }
 
     protected:
@@ -369,8 +376,8 @@ namespace xtd{
       void stop_server() { transport_type::stop_server(); }
 
     protected:
-      friend struct pipe_transport;
-      friend struct pipe_transport;
+      friend class tcp_transport;
+      friend struct anonymous_pipe_transport;
       call_type _call;
 
       bool invoke(payload& oPayload) {

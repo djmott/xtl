@@ -8,8 +8,6 @@ lru cache
 
 #include <deque>
 
-TODO("Write unit tests for lru_cache")
-
 namespace xtd{
 
   template <typename _key_t, typename _value_t, size_t _cache_size, typename _loader_t = _value_t(*)(const _key_t&)>
