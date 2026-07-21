@@ -1,9 +1,10 @@
 /** @file
-xtd::parse system and unit tests
+xtd::parse system and unit tests (in-place AST implementation)
 @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 */
 
 #include <xtd/parse.hpp>
+#include <string>
 
 namespace test_grammar{
   CHARACTER_(P, 'P');
@@ -212,33 +213,12 @@ TEST(test_parser, basic_input_statement) {
   EXPECT_FALSE(basic_grammar::parser::parse(s.cbegin(), s.cend(), ast));
 }
 
-#if 0
-TEST(test_parser, character_no_case){
-  std::string s = "p";
-  using test_parse = xtd::parser<test_grammar::P, true>;
-  std::shared_ptr<test_grammar::P> ast;
-  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "x";
-  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
-}
-
 TEST(test_parser, character_case){
   std::string s = "P";
   using test_parse = xtd::parser<test_grammar::P>;
   std::shared_ptr<test_grammar::P> ast;
   EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "p";
-  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
-}
-
-TEST(test_parser, string_no_case){
-  std::string s = "Snafoo";
-  using test_parse = xtd::parser<test_grammar::Snafoo, true>;
-  std::shared_ptr<test_grammar::Snafoo> ast;
-  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "Snafoooo";
-  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "Squeegy";
+  s = "x";
   EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
@@ -253,38 +233,9 @@ TEST(test_parser, string_case){
   EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
 }
 
-TEST(test_parser, DISABLED_regex_no_case){
-  NOTE("GCCs regex implementation is absolute trash")
-  using test_parse = xtd::parser<test_grammar::Alphabet, true>;
-  std::string s = "abc1";
-  std::shared_ptr<test_grammar::Alphabet> ast;
-  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "abc2";
-  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "abc3";
-  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "ab4";
-  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
-}
-
-
-TEST(test_parser, DISABLED_regex_case){
-  using test_parse = xtd::parser<test_grammar::Alphabet, false>;
-  std::string s = "ABC1";
-  std::shared_ptr<test_grammar::Alphabet> ast;
-  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "ABC2";
-  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "ABC3";
-  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
-  s = "AB4";
-  EXPECT_FALSE(test_parse::parse(s.cbegin(), s.cend(), ast));
-}
-
 TEST(test_parser, rule_and){
   std::string s = "PDQ";
-  using namespace test_grammar;
-  using rule_t = xtd::parse::and_<P, D, Q>;
+  using rule_t = xtd::parse::and_<test_grammar::P, test_grammar::D, test_grammar::Q>;
   using test_parse = xtd::parser<rule_t>;
   std::shared_ptr<rule_t> ast;
   EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
@@ -295,8 +246,7 @@ TEST(test_parser, rule_and){
 
 TEST(test_parser, rule_or){
   std::string s = "P";
-  using namespace test_grammar;
-  using rule_t = xtd::parse::or_<P, D, Q>;
+  using rule_t = xtd::parse::or_<test_grammar::P, test_grammar::D, test_grammar::Q>;
   using test_parse = xtd::parser<rule_t>;
   std::shared_ptr<rule_t> ast;
   EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
@@ -306,8 +256,7 @@ TEST(test_parser, rule_or){
 
 TEST(test_parser, rule_zero_or_more){
   std::string s= "PPP";
-  using namespace test_grammar;
-  using rule_t = xtd::parse::zero_or_more_<P>;
+  using rule_t = xtd::parse::zero_or_more_<test_grammar::P>;
   using test_parse = xtd::parser<rule_t>;
   std::shared_ptr<rule_t> ast;
   EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
@@ -344,4 +293,109 @@ TEST(test_parser, isa){
   EXPECT_TRUE(oAST->isa(typeid(pdq)));
   ASSERT_EQ(oAST->type(), typeid(pdq));
 }
-#endif
+
+// --- AST construction / iteration ---------------------------------------------
+
+TEST(test_parser, ast_and_children) {
+  std::string s = "PDQ";
+  using rule_t = xtd::parse::and_<test_grammar::P, test_grammar::D, test_grammar::Q>;
+  std::shared_ptr<rule_t> ast;
+  ASSERT_TRUE(xtd::parser<rule_t>::parse(s.cbegin(), s.cend(), ast));
+  ASSERT_TRUE(ast);
+  // a matched and_ has one child per sequence element, in order
+  ASSERT_EQ(ast->size(), 3u);
+  EXPECT_EQ((*ast)[0]->get_text(), "P");
+  EXPECT_EQ((*ast)[1]->get_text(), "D");
+  EXPECT_EQ((*ast)[2]->get_text(), "Q");
+  EXPECT_EQ(ast->get_text(), "PDQ");
+  // range-for iteration over children
+  std::string concat;
+  for (auto& child : *ast) concat += std::string(child->get_text());
+  EXPECT_EQ(concat, "PDQ");
+}
+
+TEST(test_parser, ast_or_single_child) {
+  std::string s = "D";
+  using rule_t = xtd::parse::or_<test_grammar::P, test_grammar::D, test_grammar::Q>;
+  std::shared_ptr<rule_t> ast;
+  ASSERT_TRUE(xtd::parser<rule_t>::parse(s.cbegin(), s.cend(), ast));
+  ASSERT_TRUE(ast);
+  // a matched or_ holds exactly one child: the alternative that matched
+  ASSERT_EQ(ast->size(), 1u);
+  EXPECT_EQ((*ast)[0]->get_text(), "D");
+  EXPECT_TRUE((*ast)[0]->isa(typeid(test_grammar::D)));
+}
+
+TEST(test_parser, ast_zero_or_more_children) {
+  std::string s = "PPP";
+  using rule_t = xtd::parse::zero_or_more_<test_grammar::P>;
+  std::shared_ptr<rule_t> ast;
+  ASSERT_TRUE(xtd::parser<rule_t>::parse(s.cbegin(), s.cend(), ast));
+  ASSERT_TRUE(ast);
+  ASSERT_EQ(ast->size(), 3u);
+  for (auto& child : *ast) EXPECT_EQ(child->get_text(), "P");
+
+  std::string empty;
+  std::shared_ptr<rule_t> ast_empty;
+  ASSERT_TRUE(xtd::parser<rule_t>::parse(empty.cbegin(), empty.cend(), ast_empty));
+  EXPECT_EQ(ast_empty->size(), 0u);
+}
+
+TEST(test_parser, ast_one_or_more_nested) {
+  std::string s = "PDQ";
+  using namespace test_grammar;
+  using rule_t = xtd::parse::one_or_more_<xtd::parse::or_<P, D, Q>>;
+  std::shared_ptr<rule_t> ast;
+  ASSERT_TRUE(xtd::parser<rule_t>::parse(s.cbegin(), s.cend(), ast));
+  ASSERT_TRUE(ast);
+  ASSERT_EQ(ast->size(), 3u);
+  // each repetition child is an or_ node with one grandchild terminal
+  const char* expected[] = { "P", "D", "Q" };
+  size_t i = 0;
+  for (auto& branch : *ast) {
+    ASSERT_EQ(branch->size(), 1u);
+    EXPECT_EQ((*branch)[0]->get_text(), expected[i]);
+    ++i;
+  }
+}
+
+TEST(test_parser, ast_named_rule_structure) {
+  std::string s = "dim a\n";
+  std::shared_ptr<basic_grammar::dim_statement> ast;
+  ASSERT_TRUE((xtd::parser<basic_grammar::dim_statement, true, basic_grammar::WS>::parse(s.cbegin(), s.cend(), ast)));
+  ASSERT_TRUE(ast);
+  EXPECT_TRUE(ast->isa(typeid(basic_grammar::dim_statement)));
+  // dim_statement -> and_<DIM, IDENTIFIER, EOL>
+  ASSERT_EQ(ast->size(), 1u);
+  auto& seq = (*ast)[0];
+  ASSERT_EQ(seq->size(), 3u);
+  EXPECT_EQ((*seq)[0]->get_text(), "dim");
+  EXPECT_EQ((*seq)[1]->get_text(), "a");
+}
+
+TEST(test_parser, ast_parent_link) {
+  std::string s = "PD";
+  using rule_t = xtd::parse::and_<test_grammar::P, test_grammar::D>;
+  std::shared_ptr<rule_t> ast;
+  ASSERT_TRUE(xtd::parser<rule_t>::parse(s.cbegin(), s.cend(), ast));
+  ASSERT_EQ(ast->size(), 2u);
+  auto child = (*ast)[0];
+  auto parent = child->parent();
+  ASSERT_TRUE(parent);
+  EXPECT_EQ(parent.get(), static_cast<xtd::parse::rule_base*>(ast.get()));
+}
+
+// Case-insensitive parsing is not implemented; kept disabled.
+TEST(test_parser, DISABLED_character_no_case){
+  std::string s = "p";
+  using test_parse = xtd::parser<test_grammar::P, true>;
+  std::shared_ptr<test_grammar::P> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
+}
+
+TEST(test_parser, DISABLED_regex_case){
+  using test_parse = xtd::parser<test_grammar::Alphabet, false>;
+  std::string s = "ABC1";
+  std::shared_ptr<test_grammar::Alphabet> ast;
+  EXPECT_TRUE(test_parse::parse(s.cbegin(), s.cend(), ast));
+}

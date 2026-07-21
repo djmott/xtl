@@ -330,7 +330,7 @@ namespace xtd{
 #if defined(_UNICODE) || defined(UNICODE)
         sPath += xtd::string::format(oPath.string());
 #else
-        sPath += oPath.tstring();
+        sPath += oPath.string();
 #endif
         
         exception::throw_if(_pDB, sqlite3_open_v2(sPath.c_str(),&_pDB, flags, nullptr), 

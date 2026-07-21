@@ -17,6 +17,7 @@ See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
 #include <regex>
 #include <typeinfo>
 #include <string_view>
+#include <iterator>
 #include <cctype>
 
 namespace xtd {
@@ -27,15 +28,6 @@ namespace xtd {
 
     // Forward declarations
     class rule_base;
-
-    // Skip whitespace helper function
-    template<typename Iterator>
-    void skip_ws(Iterator& begin, Iterator& end, bool ignore_whitespace) {
-      if (!ignore_whitespace) return;
-      while (begin != end && (*begin == ' ' || *begin == '\t' || *begin == '\n' || *begin == '\r')) {
-        ++begin;
-      }
-    }
 
     // Parse error structure
     template <typename iterator_t>
@@ -55,6 +47,17 @@ namespace xtd {
       }
     };
 
+    // Case-insensitive character helpers
+    inline char to_lower_ch(char c) { return (c >= 'A' && c <= 'Z') ? static_cast<char>(c - 'A' + 'a') : c; }
+    inline char swap_case_ch(char c) {
+      if (c >= 'A' && c <= 'Z') return static_cast<char>(c - 'A' + 'a');
+      if (c >= 'a' && c <= 'z') return static_cast<char>(c - 'a' + 'A');
+      return c;
+    }
+    inline bool char_match(char a, char b, bool ignore_case) {
+      return ignore_case ? (to_lower_ch(a) == to_lower_ch(b)) : (a == b);
+    }
+
     // Context structure
     template <typename iterator_t>
     struct context {
@@ -62,15 +65,37 @@ namespace xtd {
       iterator_type begin;
       iterator_type end;
       bool ignore_whitespace;
+      bool ignore_case;
+      std::string whitespace_chars;
       std::shared_ptr<rule_base> start_rule;
       typename parse_error<iterator_t>::vector parse_errors;
 
-      context(iterator_type b, iterator_type e, bool ignore_ws = true)
-        : begin(b), end(e), ignore_whitespace(ignore_ws) {
+      context(iterator_type b, iterator_type e, bool ignore_ws = true, std::string ws = " \t\n\r", bool ignore_case_ = false)
+        : begin(b), end(e), ignore_whitespace(ignore_ws), ignore_case(ignore_case_), whitespace_chars(std::move(ws)) {
+      }
+
+      bool is_whitespace(char c) const {
+        return ignore_whitespace && whitespace_chars.find(c) != std::string::npos;
       }
     };
 
-    // Rule base class
+    // Skip whitespace helper: honors the context's configured whitespace set.
+    template<typename Iterator, typename iterator_t>
+    void skip_ws(Iterator& begin, Iterator& end, const context<iterator_t>& ctx) {
+      while (begin != end && ctx.is_whitespace(*begin)) {
+        ++begin;
+      }
+    }
+
+    /** Rule base class.
+     *
+     * A rule node IS-A vector of child rule nodes. When a grammar rule matches,
+     * its `parse()` instantiates a node of that rule's own specialization, adds
+     * the matched child node(s) to it, and returns the node. A failed match
+     * returns nullptr and consumes no input. On overall success the returned
+     * root is a fully-formed, iterable AST: iterate a node to visit its
+     * children; leaves expose the matched text via `get_text()`.
+     */
     class rule_base
       : public std::vector<std::shared_ptr<rule_base>>,
       public std::enable_shared_from_this<rule_base> {
@@ -94,34 +119,42 @@ namespace xtd {
 
       pointer_type parent() { return _parent.lock(); }
 
-      virtual bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) = 0;
+      /// Parses input starting at `begin`. Returns the matched AST node on
+      /// success (nullptr on failure). Advances `begin` past consumed input.
+      virtual pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) = 0;
 
-      virtual std::string_view get_text() const { return ""; }
+      /// Matched text. Composite nodes return the whole matched span; leaf
+      /// terminals override this to return their own matched value.
+      virtual std::string_view get_text() const {
+        return (_span_ptr && _span_len) ? std::string_view(_span_ptr, _span_len) : std::string_view();
+      }
+
+      /// Adds a matched child node and wires its parent link.
+      void add_child(const pointer_type& child) {
+        child->_parent = this->weak_from_this();
+        super_t::push_back(child);
+      }
+
+    protected:
+      /// Records the [begin, end) span this node matched so composite nodes can
+      /// report their matched text.
+      void record_span(iterator_type begin, iterator_type end) {
+        _span_len = static_cast<size_t>(std::distance(begin, end));
+        _span_ptr = (_span_len > 0) ? &*begin : nullptr;
+      }
 
     private:
-      void set_parent(weak_ptr_t oParent) {
-        _parent = oParent;
-        auto oThis = shared_from_this();
-        for (auto& oChild : static_cast<super_t&>(*this)) {
-          oChild->set_parent(oThis);
-        }
-      }
       std::weak_ptr<rule_base> _parent;
+      const char* _span_ptr = nullptr;
+      size_t _span_len = 0;
     };
-
-    // Helper to clone rules for AST building
-    template <typename RuleT>
-    std::shared_ptr<RuleT> clone_rule(const std::shared_ptr<RuleT>& src) {
-      auto clone = std::make_shared<RuleT>(*src);
-      clone->set_parent(src->parent());
-      return clone;
-    }
 
     // Rule template using CRTP
     template <typename _decl_t, typename _impl_t = _decl_t>
     class rule : public rule_base {
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using decl_type = _decl_t;
       using impl_type = _impl_t;
       using rule_type = rule<_decl_t, _impl_t>;
@@ -142,44 +175,52 @@ namespace xtd {
         return typeid(_decl_t);
       }
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
-        auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-        for (auto& child : *this) {
-          if (!child->parse(ctx, begin, end)) {
-            ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
-              this->type(), backup, "Sequence element failed",
-              begin != end ? std::string(1, *begin) : "EOF"));
-            begin = backup;
-            return false;
-          }
+      // Named rule (decl != impl): delegate to the implementation rule and adopt
+      // the parsed implementation as this node's single child. Combinators and
+      // terminals (decl == impl) override parse() and never reach the delegating
+      // branch.
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        if constexpr (std::is_same_v<_decl_t, _impl_t>) {
+          // No implementation to delegate to; matches empty. Real behavior is
+          // supplied by the combinator/terminal overrides.
+          this->clear();
+          this->record_span(begin, begin);
+          return this->shared_from_this();
         }
-        return true;
+        else {
+          auto backup = begin;
+          this->clear();
+          auto child = std::make_shared<_impl_t>()->parse(ctx, begin, end);
+          if (!child) {
+            begin = backup;
+            return nullptr;
+          }
+          this->add_child(child);
+          this->record_span(backup, begin);
+          return this->shared_from_this();
+        }
       }
     };
 
-    // NOT combinator
+    // NOT combinator (negative lookahead: matches when the child does NOT match,
+    // consumes no input, and produces an empty node).
     template <typename ...> class not_;
 
     template <> class not_<> : public rule<not_<>> {
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<not_<>>;
       template <typename ... _child_rule_ts>
       explicit not_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
-        auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-        if (this->empty() || this->front()->parse(ctx, begin, end)) {
-          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
-            this->type(), backup, "Negative assertion failed",
-            begin != end ? std::string(1, *begin) : "EOF"));
-          begin = backup;
-          return false;
-        }
-        begin = backup;
-        return true;
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        (void)ctx; (void)end;
+        // No child to negate; treat as a failed assertion.
+        ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+          this->type(), begin, "Negative assertion has no child",
+          begin != end ? std::string(1, *begin) : "EOF"));
+        return nullptr;
       }
     };
 
@@ -187,113 +228,200 @@ namespace xtd {
     class not_<_head_t, _tail_ts...> : public rule<not_<_head_t, _tail_ts...>> {
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<not_<_head_t, _tail_ts...>>;
       template <typename ... _child_rule_ts>
       explicit not_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        skip_ws(begin, end, ctx);
 
         auto temp_begin = begin;
-        bool all_matched = true;
-        for (auto& child : *this) {
-          if (!child->parse(ctx, temp_begin, end)) {
-            all_matched = false;
-            break;
-          }
-        }
+        bool all_matched = try_seq<_head_t, _tail_ts...>(ctx, temp_begin, end);
 
+        begin = backup; // negative lookahead never consumes input
         if (all_matched) {
           ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
             this->type(), backup, "Negative assertion failed",
             begin != end ? std::string(1, *begin) : "EOF"));
-          begin = backup;
-          return false;
+          return nullptr;
         }
 
-        begin = backup;
-        return true;
+        this->clear();
+        this->record_span(backup, backup);
+        return this->shared_from_this();
+      }
+
+    private:
+      template <typename _t0, typename ... _tn>
+      bool try_seq(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) {
+        auto child = std::make_shared<_t0>()->parse(ctx, begin, end);
+        if (!child) return false;
+        if constexpr (sizeof...(_tn) > 0) {
+          return try_seq<_tn...>(ctx, begin, end);
+        }
+        else {
+          return true;
+        }
       }
     };
 
-    // AND combinator (uses default sequence implementation)
+    // AND combinator: matches each child rule in sequence and, on success,
+    // instantiates an and_ node holding every matched child in order.
     template <typename ...> class and_;
-    template <> class and_<> : public rule<and_<>> {};
-    template <typename _head_t, typename ... _tail_ts>
-    class and_<_head_t, _tail_ts...> : public rule<and_<_head_t, _tail_ts...>> {};
 
-    // OR combinator
+    template <> class and_<> : public rule<and_<>> {
+    public:
+      using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
+      using _super_t = rule<and_<>>;
+      template <typename ... _child_rule_ts>
+      explicit and_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
+
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        (void)ctx; (void)end;
+        this->clear();
+        this->record_span(begin, begin); // empty sequence matches empty
+        return this->shared_from_this();
+      }
+    };
+
+    template <typename _head_t, typename ... _tail_ts>
+    class and_<_head_t, _tail_ts...> : public rule<and_<_head_t, _tail_ts...>> {
+    public:
+      using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
+      using _super_t = rule<and_<_head_t, _tail_ts...>>;
+      template <typename ... _child_rule_ts>
+      explicit and_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
+
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        this->clear();
+        if (!try_all<_head_t, _tail_ts...>(ctx, begin, end)) {
+          begin = backup;
+          this->clear();
+          return nullptr;
+        }
+        this->record_span(backup, begin);
+        return this->shared_from_this();
+      }
+
+    private:
+      template <typename _t0, typename ... _tn>
+      bool try_all(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) {
+        auto child = std::make_shared<_t0>()->parse(ctx, begin, end);
+        if (!child) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), begin, "Sequence element failed",
+            begin != end ? std::string(1, *begin) : "EOF"));
+          return false;
+        }
+        this->add_child(child);
+        if constexpr (sizeof...(_tn) > 0) {
+          return try_all<_tn...>(ctx, begin, end);
+        }
+        else {
+          return true;
+        }
+      }
+    };
+
+    // OR combinator: tries each alternative in order and, on the first success,
+    // instantiates an or_ node holding the single matched alternative.
     template <typename ...> class or_;
 
     template <> class or_<> : public rule<or_<>> {
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<or_<>>;
       template <typename ... _child_rule_ts>
       explicit or_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
-        auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-        typename parse_error<iterator_type>::vector branch_errors;
-        for (auto& child : *this) {
-          auto child_backup = begin;
-          if (child->parse(ctx, begin, end)) return true;
-          branch_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
-            child->type(), child_backup, "Alternative branch failed",
-            child_backup != end ? std::string(1, *child_backup) : "EOF"));
-          begin = backup;
-        }
-        ctx.parse_errors.insert(ctx.parse_errors.end(), branch_errors.begin(), branch_errors.end());
-        begin = backup;
-        return false;
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        (void)ctx; (void)begin; (void)end;
+        return nullptr; // no alternatives can match
       }
     };
 
     template <typename _head_t, typename ... _tail_ts>
-    class or_<_head_t, _tail_ts...> : public rule<or_<_head_t, _tail_ts...>> {};
+    class or_<_head_t, _tail_ts...> : public rule<or_<_head_t, _tail_ts...>> {
+    public:
+      using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
+      using _super_t = rule<or_<_head_t, _tail_ts...>>;
+      template <typename ... _child_rule_ts>
+      explicit or_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
+
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        this->clear();
+        auto child = try_any<_head_t, _tail_ts...>(ctx, begin, end, backup);
+        if (!child) {
+          begin = backup;
+          return nullptr;
+        }
+        this->add_child(child);
+        this->record_span(backup, begin);
+        return this->shared_from_this();
+      }
+
+    private:
+      template <typename _t0, typename ... _tn>
+      pointer_type try_any(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end, iterator_type backup) {
+        auto child = std::make_shared<_t0>()->parse(ctx, begin, end);
+        if (child) return child;
+        begin = backup;
+        if constexpr (sizeof...(_tn) > 0) {
+          return try_any<_tn...>(ctx, begin, end, backup);
+        }
+        else {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup, "No alternative matched",
+            backup != end ? std::string(1, *backup) : "EOF"));
+          return nullptr;
+        }
+      }
+    };
 
     // ONE_OR_MORE combinator
     template <typename _ty>
     class one_or_more_ : public rule<one_or_more_<_ty>> {
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<one_or_more_<_ty>>;
       template <typename ... _child_rule_ts>
       explicit one_or_more_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-        if (this->empty()) {
-          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
-            this->type(), backup, "One_or_more rule has no child", ""));
-          begin = backup;
-          return false;
-        }
-        auto child = this->front();
+        this->clear();
 
-        if (!child->parse(ctx, begin, end)) {
+        auto first = std::make_shared<_ty>()->parse(ctx, begin, end);
+        if (!first) {
           ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
             this->type(), backup, "One_or_more requires at least one match",
             begin != end ? std::string(1, *begin) : "EOF"));
           begin = backup;
-          return false;
+          return nullptr;
         }
-        this->push_back(clone_rule(child));
+        this->add_child(first);
 
-        while (true) {
+        while (begin != end) {
           auto loop_backup = begin;
-          if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-          if (begin == end || !child->parse(ctx, begin, end)) {
+          auto child = std::make_shared<_ty>()->parse(ctx, begin, end);
+          if (!child) {
             begin = loop_backup;
             break;
           }
-          if (begin == loop_backup) break;
-          this->push_back(clone_rule(child));
+          if (begin == loop_backup) break; // no progress guard
+          this->add_child(child);
         }
-        return true;
+        this->record_span(backup, begin);
+        return this->shared_from_this();
       }
     };
 
@@ -302,24 +430,26 @@ namespace xtd {
     class zero_or_more_ : public rule<zero_or_more_<_ty>> {
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<zero_or_more_<_ty>>;
       template <typename ... _child_rule_ts>
       explicit zero_or_more_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
-        if (this->empty()) return true;
-        auto child = this->front();
-        while (true) {
-          auto backup = begin;
-          if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-          if (begin == end || !child->parse(ctx, begin, end)) {
-            begin = backup;
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+        auto backup = begin;
+        this->clear();
+        while (begin != end) {
+          auto loop_backup = begin;
+          auto child = std::make_shared<_ty>()->parse(ctx, begin, end);
+          if (!child) {
+            begin = loop_backup;
             break;
           }
-          if (begin == backup) break;
-          this->push_back(clone_rule(child));
+          if (begin == loop_backup) break; // no progress guard
+          this->add_child(child);
         }
-        return true;
+        this->record_span(backup, begin);
+        return this->shared_from_this();
       }
     };
 
@@ -328,21 +458,23 @@ namespace xtd {
     class zero_or_one_ : public rule<zero_or_one_<_ty>> {
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<zero_or_one_<_ty>>;
       template <typename ... _child_rule_ts>
       explicit zero_or_one_(_child_rule_ts&& ... oChildRules) : _super_t(std::forward<_child_rule_ts>(oChildRules)...) {}
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
-        if (this->empty()) return true;
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-        auto child = this->front();
-        if (child->parse(ctx, begin, end)) {
-          this->push_back(clone_rule(child));
-          return true;
+        this->clear();
+        auto child = std::make_shared<_ty>()->parse(ctx, begin, end);
+        if (child) {
+          this->add_child(child);
         }
-        begin = backup;
-        return true;
+        else {
+          begin = backup;
+        }
+        this->record_span(backup, begin);
+        return this->shared_from_this();
       }
     };
 
@@ -355,26 +487,28 @@ namespace xtd {
 
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<string<char[_len], _str>>;
       static constexpr size_t length = _len - 1;
       string() = default;
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        skip_ws(begin, end, ctx);
         constexpr const char* lit = _str;
+        auto match_start = begin;
         for (size_t i = 0; i < length; ++i) {
-          if (begin == end || *begin != lit[i]) {
+          if (begin == end || !char_match(*begin, lit[i], ctx.ignore_case)) {
             ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
               this->type(), backup, std::string("Expected string: ") + lit,
               begin != end ? std::string(1, *begin) : "EOF"));
             begin = backup;
-            return false;
+            return nullptr;
           }
           ++begin;
         }
-        _matched = std::string(lit, length);
-        return true;
+        _matched = std::string(match_start, begin); // actual matched input
+        return this->shared_from_this();
       }
 
       std::string_view get_text() const override { return _matched; }
@@ -388,20 +522,21 @@ namespace xtd {
 
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
-        if (begin == end || *begin != _value) {
+        skip_ws(begin, end, ctx);
+        if (begin == end || !char_match(*begin, _value, ctx.ignore_case)) {
           ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
             this->type(), backup, std::string("Expected character: '") + _value + "'",
             begin != end ? std::string(1, *begin) : "EOF"));
           begin = backup;
-          return false;
+          return nullptr;
         }
         _matched = *begin;
         ++begin;
-        return true;
+        return this->shared_from_this();
       }
 
       std::string_view get_text() const override { return std::string_view(&_matched, 1); }
@@ -415,44 +550,36 @@ namespace xtd {
 
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<characters<_first, _last>>;
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        skip_ws(begin, end, ctx);
         if (begin == end) {
           ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
             this->type(), backup, "Expected character in range",
             "EOF"));
           begin = backup;
-          return false;
+          return nullptr;
         }
 
         char c = *begin;
-        if constexpr (_first <= _last) {
-          if (c < _first || c > _last) {
-            ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
-              this->type(), backup,
-              std::string("Expected character in range [") + _first + "-" + _last + "]",
-              std::string(1, c)));
-            begin = backup;
-            return false;
-          }
-        }
-        else {
-          if (c > _first || c < _last) {
-            ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
-              this->type(), backup,
-              std::string("Expected character in range [") + _last + "-" + _first + "]",
-              std::string(1, c)));
-            begin = backup;
-            return false;
-          }
+        auto in_range = [](char x) {
+          return (_first <= _last) ? (x >= _first && x <= _last) : (x <= _first && x >= _last);
+        };
+        if (!in_range(c) && !(ctx.ignore_case && in_range(swap_case_ch(c)))) {
+          ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
+            this->type(), backup,
+            std::string("Expected character in range [") + _first + "-" + _last + "]",
+            std::string(1, c)));
+          begin = backup;
+          return nullptr;
         }
 
         _matched = c;
         ++begin;
-        return true;
+        return this->shared_from_this();
       }
 
       std::string_view get_text() const override { return std::string_view(&_matched, 1); }
@@ -471,18 +598,19 @@ namespace xtd {
 
     public:
       using iterator_type = rule_base::iterator_type;
+      using pointer_type = rule_base::pointer_type;
       using _super_t = rule<regex<char[_len], _str>>;
       static constexpr size_t length = _len - 1;
 
-      bool parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
+      pointer_type parse(context<iterator_type>& ctx, iterator_type& begin, iterator_type& end) override {
         auto backup = begin;
-        if (ctx.ignore_whitespace) skip_ws(begin, end, ctx.ignore_whitespace);
+        skip_ws(begin, end, ctx);
 
         if (begin == end) {
           ctx.parse_errors.emplace_back(std::make_shared<parse_error<iterator_type>>(
             this->type(), backup, "Expected regex match", "EOF"));
           begin = backup;
-          return false;
+          return nullptr;
         }
 
         std::match_results<iterator_type> matches;
@@ -494,7 +622,7 @@ namespace xtd {
             this->type(), backup, std::string("Expected regex: ") + _str,
             begin != end ? std::string(begin, begin + std::min<size_t>(10, end - begin)) + "..." : "EOF"));
           begin = backup;
-          return false;
+          return nullptr;
         }
 
         if (matches.empty() || matches.position(0) != 0) {
@@ -502,12 +630,12 @@ namespace xtd {
             this->type(), backup, "Regex match not at beginning",
             std::string(begin, begin + std::min<size_t>(10, end - begin)) + "..."));
           begin = backup;
-          return false;
+          return nullptr;
         }
 
         _matched = matches.str(0);
         begin += _matched.length();
-        return true;
+        return this->shared_from_this();
       }
 
       std::string_view get_text() const override { return _matched; }
@@ -518,6 +646,7 @@ namespace xtd {
     class whitespace {
     public:
       using whitespace_type = whitespace<_chs...>;
+      static std::string chars() { return std::string{ _chs... }; }
     };
 
     // Macros for convenience
@@ -554,10 +683,11 @@ namespace xtd {
     static bool parse(_iterator_t begin, _iterator_t end,
       std::shared_ptr<_rule_t>& ast,
       typename parse::parse_error<_iterator_t>::vector& errors) {
-      parse::context<_iterator_t> ctx(begin, end, true);
+      parse::context<_iterator_t> ctx(begin, end, true, _whitespace_t::chars(), _ignore_case);
       auto start_rule = std::make_shared<_rule_t>();
 
-      if (!start_rule->parse(ctx, begin, end)) {
+      auto result = start_rule->parse(ctx, begin, end);
+      if (!result) {
         errors = ctx.parse_errors;
         return false;
       }
@@ -569,7 +699,7 @@ namespace xtd {
         return false;
       }
 
-      ast = start_rule;
+      ast = std::static_pointer_cast<_rule_t>(result);
       return true;
     }
 

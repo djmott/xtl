@@ -3,7 +3,18 @@
 
 */
 
+#include <iostream>
+#include <string>
 #include <xtd/parse.hpp>
+
+static void print_ast(const xtd::parse::rule_base::pointer_type& node, int depth) {
+  if (!node) return;
+  std::cout << std::string(static_cast<size_t>(depth) * 2, ' ') << node->type().name();
+  auto text = node->get_text();
+  if (!text.empty()) std::cout << " = \"" << std::string(text) << "\"";
+  std::cout << "\n";
+  for (auto& child : *node) print_ast(child, depth + 1);
+}
 
 namespace command_line {
   using namespace xtd::parse;
@@ -33,6 +44,8 @@ int main(int argc, char * argv[]){
     std::shared_ptr<command_line::parameter> oCommandLine;
     if (!xtd::parser<command_line::parameter>::parse(sArg.cbegin(), sArg.cend(), oCommandLine))
       continue;
+    std::cout << "Parsed \"" << sArg << "\":\n";
+    print_ast(oCommandLine, 1);
   }
 
   return argc;

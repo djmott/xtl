@@ -7,7 +7,7 @@
 #include <xtd/filesystem.hpp>
 
 bool import_pos(){
-  auto oPath = xtd::filesystem::home_directory_path() + "/xtl.db";
+  auto oPath = xtd::filesystem::home_directory_path() /= "xtl.db";
   auto oDB = xtd::sqlite::database::open_database(oPath);
   auto oRS = oDB->execute_reader<int>("Select Count(*) From sqlite_master Where Type='table' And Name='scowl_pos';");
   if (!oRS->next() || !oRS->get<0>()){

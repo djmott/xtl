@@ -27,7 +27,13 @@ namespace xtd {
       using let_dig_hyp = _::or_<let_dig, hyphen>;
       using ldh_str = _::one_or_more_<let_dig_hyp>;
       // <label> ::= <letter> [ [ <ldh-str> ] <let-dig> ]
-      using label = _::and_<letter, _::zero_or_one_<_::and_<_::zero_or_one_<ldh_str>, let_dig>>>;
+      //
+      // The strict ABNF is not directly expressible in a (non-backtracking) PEG:
+      // a greedy <ldh-str> consumes the characters the trailing <let-dig> needs.
+      // This PEG-friendly form ("letter followed by any run of let-dig-hyphen")
+      // accepts all valid preferred-syntax labels (it additionally tolerates a
+      // trailing hyphen, which strict RFC 1035 forbids).
+      using label = _::and_<letter, _::zero_or_more_<let_dig_hyp>>;
       using subdomain = _::and_<label, _::zero_or_more_<_::and_<dot, label>>>;
 
       struct domain : _::rule<domain, subdomain> {

@@ -4,9 +4,20 @@
  *
 */
 
+#include <iostream>
+#include <string>
 #include <xtd/xtd.hpp>
 #include <xtd/grammars/RFC1035.hpp>
 #include <xtd/debug.hpp>
+
+static void print_ast(const xtd::parse::rule_base::pointer_type& node, int depth) {
+  if (!node) return;
+  std::cout << std::string(static_cast<size_t>(depth) * 2, ' ') << node->type().name();
+  auto text = node->get_text();
+  if (!text.empty()) std::cout << " = \"" << std::string(text) << "\"";
+  std::cout << "\n";
+  for (auto& child : *node) print_ast(child, depth + 1);
+}
 
 int main(int argc, char* argv[]) {
   try {
@@ -17,6 +28,8 @@ int main(int argc, char* argv[]) {
       ERR("Failed to parse domain: ", input);
       return 1;
     }
+    std::cout << "Parsed domain \"" << input << "\":\n";
+    print_ast(ast, 1);
     return 0;
   }
   catch (const xtd::exception& ex) {

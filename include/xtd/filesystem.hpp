@@ -17,6 +17,7 @@ handle necessary filesystem and path functionality until C++17 is finalized
 #else
   #include <xtd/exception.hpp>
   #include <xtd/meta.hpp>
+  #include <xtd/windows/exception.hpp>
 #endif
 
 #include <xtd/exception.hpp>
@@ -227,9 +228,27 @@ namespace xtd{
 
 //Custom extensions to std::filesystem
 
+#if (XTD_HAS_FILESYSTEM) || (XTD_HAS_EXP_FILESYSTEM)
+
 namespace xtd{
   namespace filesystem{
 
+#if (XTD_OS_WINDOWS & XTD_OS)
+    inline path home_directory_path() {
+      LPWSTR sRet = nullptr;
+      xtd::windows::exception::throw_if(::SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &sRet), [](HRESULT h) { return FAILED(h); });
+      std::wstring sTemp(sRet);
+      ::CoTaskMemFree(sRet);
+      return path(sTemp);
+    }
+#elif (XTD_OS_UNIX & XTD_OS)
+    inline path home_directory_path(){
+      return path(getpwuid(getuid())->pw_dir);
+    }
+#endif
+
   }
 }
+
+#endif
 

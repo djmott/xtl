@@ -42,6 +42,7 @@ set(TEST_SOURCE
   test_mapped_vector.hpp
   test_meta.hpp
   test_parse.hpp
+  test_parse_ast.hpp
   test_path.hpp
   test_process.hpp
   test_rw_lock.hpp
@@ -77,12 +78,13 @@ build_option(TEST_LRU_CACHE "test xtd::lru_cache")
 build_option(TEST_MAPPED_FILE "test xtd::mapped_file")
 build_option(TEST_MAPPED_VECTOR "test xtd::mapped_vector")
 build_option(TEST_META "test meta programming")
-#build_option(TEST_PARSE "test xtd::parse")
+build_option(TEST_PARSE "test xtd::parse")
+build_option(TEST_PARSE_AST "test xtd::parse_ast")
 build_option(TEST_PATH "test xtd::filesystem::path")
 build_option(TEST_PROCESS "test xtd::process")
 build_option(TEST_READ_WRITE_LOCK "test xtd::concurrent::rw_lock")
 build_option(TEST_RECURSIVE_SPIN_LOCK "test xtd::concurrent::recursive_spin_lock")
-#build_option(TEST_RPC "test xtd::rpc")
+build_option(TEST_RPC "test xtd::rpc")
 build_option(TEST_SHARED_MEM_OBJ "test xtd::shared_mem_obj")
 build_option(TEST_SOCKET "test xtd::socket")
 build_option(TEST_SOURCE_LOCATION "test xtd::source_location")

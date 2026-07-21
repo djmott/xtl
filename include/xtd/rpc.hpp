@@ -7,10 +7,11 @@ transport neutral light weight IPC/RPC library
 
 #include <xtd/xtd.hpp>
 
-#include <cassert>
+#include <atomic>
 #include <cstdint>
 #include <functional>
 #include <future>
+#include <limits>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -36,6 +37,10 @@ namespace xtd{
      * payload
      */
     using payload_t = std::vector<uint8_t>;
+
+    /** reserved leading id, marshaled as the first size_t of a response payload,
+    used to flag that the payload carries a marshaled exception message instead of a return value. */
+    static const size_t exception_marker = (std::numeric_limits<size_t>::max)();
 
     template <bool _skip_in_only, typename ...> struct marshaler;
 
@@ -147,8 +152,8 @@ namespace xtd{
       socket::ipv4address _address;
       xtd::socket::ipv4_tcp_stream _socket;
       std::unique_ptr<std::thread> _server_thread;
-      bool _stop_server;
-      xtd::concurrent::hash_map<std::thread::id, std::thread> _clients;
+      std::atomic<bool> _stop_server;
+      std::vector<std::thread> _clients;
       bool _client_connected;
 
     public:
@@ -157,45 +162,69 @@ namespace xtd{
       tcp_transport(const socket::ipv4address& oAddress)
         : _address(oAddress), _socket(), _server_thread(), _stop_server(false), _clients(), _client_connected(false) {}
 
+      ~tcp_transport() {
+        if (_server_thread) stop_server();
+      }
+
       template <typename _server_t> void start_server(_server_t& oServer) {
         _stop_server = false;
         std::shared_ptr<std::promise<void>> oServerStarted(new std::promise<void>);
-        _server_thread = xtd::make_unique<std::thread>([&, &oServer, oServerStarted] {
-          oServerStarted->set_value();
+        _server_thread = xtd::make_unique<std::thread>([this, &oServer, oServerStarted] {
           _socket.bind(_address);
-          bool ExitThread = false;
-          payload oPayload;
-          while (!_stop_server && !ExitThread) {
-            _socket.listen();
-            auto oClient = _socket.accept<xtd::socket::ipv4_tcp_stream>();
-            std::shared_ptr<xtd::socket::ipv4_tcp_stream> oClientSocket(new xtd::socket::ipv4_tcp_stream(std::move(oClient)));
-            std::thread oClientThread([&, oClientSocket, &oServer]() {
-              oClientSocket->onError.connect([&ExitThread]() {
+          _socket.listen();
+          oServerStarted->set_value();
+          while (!_stop_server) {
+            std::shared_ptr<xtd::socket::ipv4_tcp_stream> oClientSocket;
+            try {
+              oClientSocket = std::make_shared<xtd::socket::ipv4_tcp_stream>(_socket.accept<xtd::socket::ipv4_tcp_stream>());
+            } catch (const xtd::exception&) {
+              break; // listen socket closed by stop_server() (or accept failure); leave the accept loop
+            }
+            if (_stop_server) break;
+            _clients.emplace_back([this, oClientSocket, &oServer] {
+              bool ExitThread = false;
+              bool bResponseReady = false;
+              payload oPayload;
+              oClientSocket->onError.connect([&ExitThread] {
                 ERR("Socket error");
                 ExitThread = true;
               });
-              oClientSocket->onRead.connect([&]() {
+              oClientSocket->onRead.connect([&] {
                 oClientSocket->read<payload::_super_t>(oPayload);
+                size_t iPayloadSize;
+                marshaler<false, size_t>::unmarshal(oPayload, iPayloadSize); // strip length header, leaving [call-id][args]
                 oServer.invoke(oPayload);
+                bResponseReady = true;
               });
-              oClientSocket->onWrite.connect([&]() {
-                if (oPayload.size()) {
+              oClientSocket->onWrite.connect([&] {
+                if (bResponseReady) {
                   oClientSocket->write<payload::_super_t>(oPayload);
+                  bResponseReady = false;
+                  oPayload = payload();
                 }
               });
-              payload oPayload;
-              for (;;) {
-                oClientSocket->select(250);
+              try {
+                while (!_stop_server && !ExitThread) {
+                  oClientSocket->select(250);
+                }
+              } catch (const xtd::exception&) {
+                // client disconnected or socket error; end this worker cleanly
               }
             });
-            oClientThread.detach();
           }
+          for (auto& oClientThread : _clients) {
+            if (oClientThread.joinable()) oClientThread.join();
+          }
+          _clients.clear();
         });
         oServerStarted->get_future().get();
       }
       void stop_server() {
-        //TODO: implement stop_server
-        TODO("implement stop_server")
+        _stop_server = true;
+        _socket.close();
+        if (_server_thread && _server_thread->joinable()) {
+          _server_thread->join();
+        }
       }
 
       void transact(payload& oPayload) {
@@ -205,7 +234,8 @@ namespace xtd{
         }
         _socket.write<typename payload::_super_t>(oPayload);
         _socket.read<typename payload::_super_t>(oPayload);
-
+        size_t iPayloadSize;
+        marshaler<false, size_t>::unmarshal(oPayload, iPayloadSize); // strip length header, leaving [call-id][return]
       }
 
     };
@@ -268,6 +298,35 @@ namespace xtd{
       bool _running = false;
     };
 
+    /*
+     * null_transport - in-process loopback (no IPC), useful for unit-testing rpc logic
+     */
+    struct null_transport {
+      using pointer_type = std::shared_ptr<null_transport>;
+      struct shared_state { std::function<bool(payload&)> handler; };
+
+      null_transport(std::shared_ptr<shared_state> oState) : _state(oState) {}
+
+      template <typename _server_t> void start_server(_server_t& oServer) {
+        _state->handler = [&oServer](payload& oPayload) -> bool {
+          size_t iPayloadSize;
+          marshaler<false, size_t>::unmarshal(oPayload, iPayloadSize); // strip length header, leaving [call-id][args]
+          return oServer.invoke(oPayload);
+        };
+      }
+      void stop_server() { _state->handler = nullptr; }
+
+      void transact(payload& oPayload) {
+        if (!_state->handler) throw xtd::exception(here(), "null_transport server not running");
+        oPayload.embed_length();
+        _state->handler(oPayload);
+        size_t iPayloadSize;
+        marshaler<false, size_t>::unmarshal(oPayload, iPayloadSize); // strip response length header
+      }
+    private:
+      std::shared_ptr<shared_state> _state;
+    };
+
 
     /*
      * rpc_client
@@ -297,11 +356,14 @@ namespace xtd{
         marshaler<false, size_t>::marshal(oPayload, typeid(_head_t).hash_code());
         marshaler<false, _arg_ts...>::marshal(oPayload, std::forward<_arg_ts>(oArgs)...);
         transport_type::transact(oPayload);
-        _return_t oRet;
-        if (typeid(_head_t).hash_code() != oPayload.peek<size_t>()) {
-          assert(false);
-          //TODO: unmarshal exception and throw
+        if (exception_marker == oPayload.peek<size_t>()) {
+          size_t iMarker;
+          marshaler<false, size_t>::unmarshal(oPayload, iMarker);
+          std::string sWhat;
+          marshaler<false, std::string&>::unmarshal(oPayload, sWhat);
+          throw xtd::exception(here(), sWhat);
         }
+        _return_t oRet;
         size_t icalltypeid;
         marshaler<false, size_t>::unmarshal(oPayload, icalltypeid);
         marshaler<false, _return_t&>::unmarshal(oPayload, oRet);
@@ -352,7 +414,11 @@ namespace xtd{
       template <typename ... _arg_ts> rpc_server(_arg_ts&&...oArgs) : _transport_t(std::forward<_arg_ts>(oArgs)...) {}
     protected:
       bool invoke(payload& oPayload) {
-        return false;
+        oPayload = payload();
+        marshaler<false, size_t>::marshal(oPayload, exception_marker);
+        std::string sWhat("xtd::rpc: no handler for call");
+        marshaler<false, std::string&>::marshal(oPayload, sWhat);
+        return true;
       }
     };
 
@@ -378,13 +444,22 @@ namespace xtd{
     protected:
       friend class tcp_transport;
       friend struct anonymous_pipe_transport;
+      friend struct null_transport;
       call_type _call;
 
       bool invoke(payload& oPayload) {
         if (typeid(_head_t).hash_code() != oPayload.peek<size_t>()) return _super_t::invoke(oPayload);
         size_t iCallID;
         marshaler<false, size_t>::unmarshal(oPayload, iCallID);
-        return _call.invoke(oPayload);
+        try {
+          return _call.invoke(oPayload);
+        } catch (const std::exception& ex) {
+          oPayload = payload();
+          marshaler<false, size_t>::marshal(oPayload, exception_marker);
+          std::string sWhat(ex.what());
+          marshaler<false, std::string&>::marshal(oPayload, sWhat);
+          return true;
+        }
       }
     };
 
