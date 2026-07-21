@@ -88,6 +88,10 @@ main system and unit test entry point
   #include "test_parse_ast.hpp"
 #endif
 
+#if (ON==TEST_RFC3986)
+  #include "test_rfc3986.hpp"
+#endif
+
 #if (ON==TEST_PATH)
   #include "test_path.hpp"
 #endif

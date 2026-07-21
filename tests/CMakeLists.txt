@@ -43,6 +43,7 @@ set(TEST_SOURCE
   test_meta.hpp
   test_parse.hpp
   test_parse_ast.hpp
+  test_rfc3986.hpp
   test_path.hpp
   test_process.hpp
   test_rw_lock.hpp
@@ -80,6 +81,7 @@ build_option(TEST_MAPPED_VECTOR "test xtd::mapped_vector")
 build_option(TEST_META "test meta programming")
 build_option(TEST_PARSE "test xtd::parse")
 build_option(TEST_PARSE_AST "test xtd::parse_ast")
+build_option(TEST_RFC3986 "test RFC3986 URI grammar")
 build_option(TEST_PATH "test xtd::filesystem::path")
 build_option(TEST_PROCESS "test xtd::process")
 build_option(TEST_READ_WRITE_LOCK "test xtd::concurrent::rw_lock")

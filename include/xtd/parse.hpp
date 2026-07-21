@@ -105,6 +105,7 @@ namespace xtd {
       using weak_ptr_t = std::weak_ptr<rule_base>;
       using super_t = std::vector<pointer_type>;
       using vector_type = super_t;
+      using ptr = pointer_type;
 
       template <typename ... _child_ts>
       rule_base(_child_ts&& ... oChildRules)
