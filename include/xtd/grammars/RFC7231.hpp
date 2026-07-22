@@ -1,322 +1,553 @@
-#ifndef __RFC_7231_HPP_INCLUDED__
-#define __RFC_7231_HPP_INCLUDED__
+/** @file
+ * RFC 7231 Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content.
+ * @copyright David Mott (c) 2016. Distributed under the Boost Software License Version 1.0. See LICENSE.md or http://boost.org/LICENSE_1_0.txt for details.
+ *
+ * https://tools.ietf.org/html/rfc7231
+ *
+ * PEG notes:
+ * - Header rules match header values only (no field-name / ":" prefix).
+ * - Empty whitespace-skip context required (same as RFC7230):
+ *   xtd::parser with Rule, false, and empty whitespace<>.
+ * - No Repeat; bounded counts (2DIGIT, 4DIGIT, star-3DIGIT) are hand-expanded.
+ * - media_range tries star/star then type/star before type/subtype.
+ * - codings prefers identity and star literals before content-coding token.
+ * - HTTP_date tries IMF-fixdate before obs-date.
+ */
 
-/*
-Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content
-https://tools.ietf.org/html/rfc7231
-*/
+#pragma once
+
+#include "xtd/xtd.hpp"
+#include "xtd/parse.hpp"
+#include "xtd/grammars/RFC7230.hpp"
+#include "xtd/grammars/RFC5322.hpp"
+#include "xtd/grammars/RFC4647.hpp"
+#include "xtd/grammars/RFC5646.hpp"
 
 namespace xtd {
-	namespace Grammars {
-		namespace RFC7231 {
-			using namespace xtd::Parser;
-			using namespace xtd::Parser::MultiByte;
-#pragma region("forward declerations")
-			struct accept;
-			struct Accept_Charset;
-			struct Accept_Encoding;
-			struct Accept_Language;
-			struct Allow;
-			struct Content_Encoding;
-			struct Content_Language;
-			struct Content_Location;
-			struct Content_Type;
-			struct Date;
-			struct Expect;
-			struct From;
-			struct HTTP_date;
-			struct IMF_fixdate;
-			struct Location;
-			struct Max_Forwards;
-			struct Referer;
-			struct Retry_After;
-			struct Server;
-			struct User_Agent;
-			struct Vary;
-			struct accept_ext;
-			struct accept_params;
-			struct asctime_date;
-			struct charset;
-			struct codings;
-			struct content_coding;
-			struct date1;
-			struct date2;
-			struct date3;
-			struct day;
-			struct day_name;
-			struct day_name_1;
-			struct delay_seconds;
-			struct hour;
-			struct media_range;
-			struct media_type;
-			struct method;
-			struct minute;
-			struct month;
-			struct obs_date;
-			struct parameter;
-			struct product;
-			struct product_version;
-			struct qvalue;
-			struct rfc850_date;
-			struct second;
-			struct subtype;
-			struct time_of_day;
-			struct type;
-			struct weight;
-			struct year;
-#pragma endregion
+  namespace Grammars {
+    namespace RFC7231 {
 
-#pragma region("strings")
-			STRING(QEQUAL, "q=");
-			STRING(_100_continue, "100-continue");
-			STRING(GMT, "GMT");
-			STRING(identity, "identity");
-			STRING(Mon, "Mon");
-			STRING(Tue, "Tue");
-			STRING(Wed, "Wed");
-			STRING(Thu, "Thu");
-			STRING(Fri, "Fri");
-			STRING(Sat, "Sat");
-			STRING(Sun, "Sun");
-			STRING(Monday, "Monday");
-			STRING(Tuesday, "Tuesday");
-			STRING(Wednesday, "Wednesday");
-			STRING(Thursday, "Thursday");
-			STRING(Friday, "Friday");
-			STRING(Saturday, "Saturday");
-			STRING(Sunday, "Sunday");
-			STRING(media_range_all, "*/*");
-			STRING(media_subrange_all, "/*");
-			STRING(Jan, "Jan");
-			STRING(Feb, "Feb");
-			STRING(Mar, "Mar");
-			STRING(Apr, "Apr");
-			STRING(May, "May");
-			STRING(Jun, "Jun");
-			STRING(Jul, "Jul");
-			STRING(Aug, "Aug");
-			STRING(Sep, "Sep");
-			STRING(Oct, "Oct");
-			STRING(Nov, "Nov");
-			STRING(Dec, "Dec");
-#pragma endregion
+      namespace P = xtd::parse;
 
 #pragma region("imports")
-			using language_range = RFC4647::language_range;
-			using language_tag = RFC5646::Language_Tag;
-			using mailbox = RFC5322::mailbox;
+      using language_range = RFC4647::language_range;
+      using language_tag = RFC5646::Language_Tag;
+      using mailbox = RFC5322::mailbox;
 
-			using BWS = RFC7230::BWS;
-			using OWS = RFC7230::OWS;
-			using RWS = RFC7230::RWS;
-			using URI_reference = RFC7230::URI_reference;
-			using absolute_URI = RFC7230::absolute_URI;
-			using comment = RFC7230::comment;
-			using field_name = RFC7230::field_name;
-			using partial_URI = RFC7230::partial_URI;
-			using quoted_string = RFC7230::quoted_string;
-			using token = RFC7230::token;
+      using BWS = RFC7230::BWS;
+      using OWS = RFC7230::OWS;
+      using RWS = RFC7230::RWS;
+      using URI_reference = RFC7230::URI_reference;
+      using absolute_URI = RFC7230::absolute_URI;
+      using comment = RFC7230::comment;
+      using field_name = RFC7230::field_name;
+      using partial_URI = RFC7230::partial_URI;
+      using quoted_string = RFC7230::quoted_string;
+      using token = RFC7230::token;
+
+      using DIGIT = RFC7230::DIGIT;
+      using SP = RFC7230::SP;
 #pragma endregion
 
-#pragma region("rules")
-			//Accept = [ ( "," / ( media-range [ accept-params ] ) ) *( OWS "," [OWS ( media-range [ accept-params ] ) ] ) ]
-			struct accept : Rule < accept, ZeroOrOne< Or<Comma, And<media_range, ZeroOrOne<accept_params>>, ZeroOrMore<OWS, Comma, ZeroOrOne< OWS, media_range, ZeroOrOne<accept_params>>>>> > {};
-
-			//Accept-Charset = *( "," OWS ) ( ( charset / "*" ) [ weight ] ) *( OWS "," [ OWS ( ( charset / "*" ) [ weight ] ) ] )
-			struct Accept_Charset : Rule < Accept_Charset, ZeroOrMore<Comma, OWS>, Or<charset, Asterisk>, ZeroOrOne<weight>, ZeroOrMore< OWS, Comma, ZeroOrOne<OWS, Or<charset, Asterisk>, ZeroOrOne<weight>>> > {};
-
-			//Accept-Encoding = [ ( "," / ( codings [ weight ] ) ) *( OWS "," [ OWS ( codings [ weight ] ) ] ) ]
-			struct Accept_Encoding : Rule < Accept_Encoding, ZeroOrOne<Or<Comma, And<codings, ZeroOrOne<weight>>>, ZeroOrMore<OWS, Comma, ZeroOrOne<OWS, codings, ZeroOrOne<weight>>>> > {};
-
-			//Accept-Language = *( "," OWS ) ( language-range [ weight ] ) *( OWS "," [ OWS ( language-range [ weight ] ) ] )
-			struct Accept_Language : Rule < Accept_Language, ZeroOrMore<Comma, OWS>, language_range, ZeroOrOne<weight>, ZeroOrMore<OWS, Comma, ZeroOrOne<OWS, language_range, ZeroOrOne<weight>>> > {};
-
-			//Allow = [ ( "," / method ) *( OWS "," [ OWS method ] ) ]
-			struct Allow : Rule < Allow, ZeroOrOne<Or<Comma, method>, ZeroOrMore<OWS, Comma, ZeroOrOne<OWS, method>>> > {};
-
-			//Content-Encoding = *( "," OWS ) content-coding *( OWS "," [ OWS content-coding ] )
-			struct Content_Encoding : Rule < Content_Encoding, ZeroOrMore<Comma, OWS>, content_coding, ZeroOrMore<OWS, Comma, ZeroOrOne<OWS, content_coding>> > {};
-
-			//Content-Language = *( "," OWS ) language-tag *( OWS "," [ OWS language-tag ] )
-			struct Content_Language : Rule < Content_Language, ZeroOrMore<Comma, OWS>, language_tag, ZeroOrMore<OWS, Comma, ZeroOrOne<OWS, language_tag>> > {};
-
-			//Content-Location = absolute-URI / partial-URI
-			struct Content_Location : Rule < Content_Location, Or<absolute_URI, partial_URI> > {};
-
-			//Content-Type = media-type
-			struct Content_Type : Rule < Content_Type, media_type > {};
-
-			//Date = HTTP-date
-			struct Date : Rule < Date, HTTP_date > {};
-
-			//Expect = "100-continue"
-			struct Expect : Rule < Expect, _100_continue > {};
-
-			//From = mailbox
-			struct From : Rule < From, mailbox > {};
-
-			//HTTP-date = IMF-fixdate / obs-date
-			struct HTTP_date : Rule < HTTP_date, Or<IMF_fixdate, obs_date> > {};
-
-			//IMF-fixdate = day-name "," SP date1 SP time-of-day SP GMT
-			struct IMF_fixdate : Rule < IMF_fixdate, day_name, Comma, Space, date1, Space, time_of_day, Space, GMT > {};
-
-			//Location = URI-reference
-			struct Location : Rule < Location, URI_reference > {};
-
-			//Max-Forwards = 1*DIGIT
-			struct Max_Forwards : Rule < Max_Forwards, OneOrMore<Digit> > {};
-
-			//Referer = absolute-URI / partial-URI
-			struct Referer : Rule < Referer, Or<absolute_URI, partial_URI> > {};
-
-			//Retry-After = HTTP-date / delay-seconds
-			struct Retry_After : Rule < Retry_After, Or<HTTP_date, delay_seconds> > {};
-
-			//Server = product *( RWS ( product / comment ) )
-			struct Server : Rule < Server, ZeroOrMore<RWS, Or<product, comment>> > {};
-
-			//User-Agent = product *( RWS ( product / comment ) )
-			struct User_Agent : Rule < User_Agent, product, ZeroOrMore<RWS, Or<product, comment>> > {};
-
-			//Vary = "*" / ( *( "," OWS ) field-name *( OWS "," [ OWS field-name ] ) )
-			struct Vary : Rule < Vary, Or<Asterisk, And<ZeroOrMore<Comma, OWS>, field_name, ZeroOrMore<OWS, Comma, ZeroOrOne<OWS, field_name>>>> > {};
-
-			//accept-ext = OWS ";" OWS token [ "=" ( token / quoted-string ) ]
-			struct accept_ext : Rule < accept_ext, OWS, SemiColon, OWS, token, ZeroOrOne<Equal, Or<token, quoted_string>> > {};
-
-			//accept-params = weight *accept-ext
-			struct accept_params : Rule < accept_params, weight, ZeroOrMore<accept_ext> > {};
-
-			//asctime-date = day-name SP date3 SP time-of-day SP year
-			struct asctime_date : Rule < asctime_date, day_name, Space, date3, Space, time_of_day, Space, year > {};
-
-			//charset = token
-			struct charset : Rule < charset, token > {};
-
-			//codings = content-coding / "identity" / "*"
-			struct codings : Rule < codings, Or<content_coding, identity, Asterisk> > {};
-
-			//content-coding = token
-			struct content_coding : Rule < content_coding, token > {};
-
-			//date1 = day SP month SP year
-			struct date1 : Rule < date1, day, Space, month, Space, year > {};
-
-			//date2 = day "-" month "-" 2DIGIT
-			struct date2 : Rule < date2, day, Hyphen, month, Hyphen, Repeat<Digit, 2> > {};
-
-			//date3 = month SP ( 2DIGIT / ( SP DIGIT ) )
-			struct date3 : Rule < date3, month, Space, Or<Repeat<Digit, 2>, And<Space, Digit>> > {};
-
-			//day = 2DIGIT
-			struct day : Rule < day, Repeat<Digit, 2> > {};
-
-			/*
-			day-name = %x4D.6F.6E ; Mon
-			/ %x54.75.65 ; Tue
-			/ %x57.65.64 ; Wed
-			/ %x54.68.75 ; Thu
-			/ %x46.72.69 ; Fri
-			/ %x53.61.74 ; Sat
-			/ %x53.75.6E ; Sun
-			*/
-			struct day_name : Rule < day_name, Or<Mon, Tue, Wed, Thu, Fri, Sat, Sun> > {};
-			/*
-			day-name-l = %x4D.6F.6E.64.61.79 ; Monday
-			/ %x54.75.65.73.64.61.79 ; Tuesday
-			/ %x57.65.64.6E.65.73.64.61.79 ; Wednesday
-			/ %x54.68.75.72.73.64.61.79 ; Thursday
-			/ %x46.72.69.64.61.79 ; Friday
-			/ %x53.61.74.75.72.64.61.79 ; Saturday
-			/ %x53.75.6E.64.61.79 ; Sunday
-			*/
-			struct day_name_1 : Rule < day_name_1, Or<Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday> > {};
-
-			//delay-seconds = 1*DIGIT
-			struct delay_seconds : Rule < delay_seconds, OneOrMore<Digit> > {};
-
-			//hour = 2DIGIT
-			struct hour : Rule < hour, Repeat<Digit, 2> > {};
-
-			//media-range = ( "*/*" / ( type "/*" ) / ( type "/" subtype ) ) *( OWS ";" OWS parameter )
-			struct media_range : Rule < media_range, Or<media_range_all, And<type, media_subrange_all>, And<type, ForwardSlash, subtype>>, ZeroOrMore<OWS, SemiColon, OWS, parameter> > {};
-
-			//media-type = type "/" subtype *( OWS ";" OWS parameter )
-			struct media_type : Rule < media_type, type, ForwardSlash, subtype, ZeroOrMore<OWS, SemiColon, parameter> > {};
-
-			//method = token
-			struct method : Rule < method, token > {};
-
-			//minute = 2DIGIT
-			struct minute : Rule < minute, Repeat<Digit, 2> > {};
-
-			/*
-			month = %x4A.61.6E ; Jan
-			/ %x46.65.62 ; Feb
-			/ %x4D.61.72 ; Mar
-			/ %x41.70.72 ; Apr
-			/ %x4D.61.79 ; May
-			/ %x4A.75.6E ; Jun
-			/ %x4A.75.6C ; Jul
-			/ %x41.75.67 ; Aug
-			/ %x53.65.70 ; Sep
-			/ %x4F.63.74 ; Oct
-			/ %x4E.6F.76 ; Nov
-			/ %x44.65.63 ; Dec
-			*/
-			struct month : Rule < month, Or<Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec> > {};
-
-			//obs-date = rfc850-date / asctime-date
-			struct obs_date : Rule < obs_date, Or<rfc850_date, asctime_date> > {};
-
-			//parameter = token "=" ( token / quoted-string )
-			struct parameter : Rule < parameter, token, Equal, Or<token, quoted_string> > {};
-
-			//product = token [ "/" product-version ]
-			struct product : Rule < product, token, ZeroOrOne<ForwardSlash, product_version> > {};
-
-			//product-version = token
-			struct product_version : Rule < product_version, token > {};
-
-			//qvalue = ( "0" [ "." *3DIGIT ] ) / ( "1" [ "." *3"0" ] )
-			struct qvalue : Rule < qvalue, Or<And<_0, ZeroOrOne<Period, Repeat<Digit, 0, 3>>>, And<_1, ZeroOrOne<Period, Repeat<_0, 0, 3>>>> > {};
-
-			//rfc850-date = day-name-l "," SP date2 SP time-of-day SP GMT
-			struct rfc850_date : Rule < rfc850_date, day_name_1, Comma, Space, date2, Space, time_of_day, Space, GMT > {};
-
-			//second = 2DIGIT
-			struct second : Rule < second, Repeat<Digit, 2> > {};
-			//subtype = token
-			struct subtype : Rule < subtype, token > {};
-			//time-of-day = hour ":" minute ":" second
-			struct time_of_day : Rule < time_of_day, hour, Colon, minute, Colon, second > {};
-
-			//type = token
-			struct type : Rule < type, token > {};
-
-			//weight = OWS ";" OWS "q=" qvalue
-			struct weight : Rule < weight, OWS, SemiColon, QEQUAL, qvalue > {};
-
-			//year = 4DIGIT
-			struct year : Rule < year, Repeat<Digit, 4> > {};
+#pragma region("punctuation terminals")
+      CHARACTER_(Colon, ':');
+      CHARACTER_(ForwardSlash, '/');
+      CHARACTER_(Asterisk, '*');
+      CHARACTER_(Comma, ',');
+      CHARACTER_(SemiColon, ';');
+      CHARACTER_(Equal, '=');
+      CHARACTER_(Hyphen, '-');
+      CHARACTER_(Period, '.');
+      CHARACTER_(_0, '0');
+      CHARACTER_(_1, '1');
+      CHARACTER_(_q, 'q');
 #pragma endregion
-		}
-	}
+
+#pragma region("string terminals")
+      STRING(_100_continue, "100-continue");
+      STRING(GMT, "GMT");
+      STRING(identity, "identity");
+      STRING(Mon, "Mon");
+      STRING(Tue, "Tue");
+      STRING(Wed, "Wed");
+      STRING(Thu, "Thu");
+      STRING(Fri, "Fri");
+      STRING(Sat, "Sat");
+      STRING(Sun, "Sun");
+      STRING(Monday, "Monday");
+      STRING(Tuesday, "Tuesday");
+      STRING(Wednesday, "Wednesday");
+      STRING(Thursday, "Thursday");
+      STRING(Friday, "Friday");
+      STRING(Saturday, "Saturday");
+      STRING(Sunday, "Sunday");
+      STRING(media_range_all, "*/*");
+      STRING(media_subrange_all, "/*");
+      STRING(Jan, "Jan");
+      STRING(Feb, "Feb");
+      STRING(Mar, "Mar");
+      STRING(Apr, "Apr");
+      STRING(May, "May");
+      STRING(Jun, "Jun");
+      STRING(Jul, "Jul");
+      STRING(Aug, "Aug");
+      STRING(Sep, "Sep");
+      STRING(Oct, "Oct");
+      STRING(Nov, "Nov");
+      STRING(Dec, "Dec");
+#pragma endregion
+
+#pragma region("forward declarations")
+      struct accept;
+      struct Accept_Charset;
+      struct Accept_Encoding;
+      struct Accept_Language;
+      struct Allow;
+      struct Content_Encoding;
+      struct Content_Language;
+      struct Content_Location;
+      struct Content_Type;
+      struct Date;
+      struct Expect;
+      struct From;
+      struct HTTP_date;
+      struct IMF_fixdate;
+      struct Location;
+      struct Max_Forwards;
+      struct Referer;
+      struct Retry_After;
+      struct Server;
+      struct User_Agent;
+      struct Vary;
+      struct accept_ext;
+      struct accept_params;
+      struct asctime_date;
+      struct charset;
+      struct codings;
+      struct content_coding;
+      struct date1;
+      struct date2;
+      struct date3;
+      struct day;
+      struct day_name;
+      struct day_name_1;
+      struct delay_seconds;
+      struct hour;
+      struct media_range;
+      struct media_type;
+      struct method;
+      struct minute;
+      struct month;
+      struct obs_date;
+      struct parameter;
+      struct product;
+      struct product_version;
+      struct qvalue;
+      struct rfc850_date;
+      struct second;
+      struct subtype;
+      struct time_of_day;
+      struct type;
+      struct weight;
+      struct year;
+#pragma endregion
+
+#pragma region("bounded helpers")
+      using digit_2 = P::and_<DIGIT, DIGIT>;
+      using digit_4 = P::and_<DIGIT, DIGIT, DIGIT, DIGIT>;
+      using up_to_3DIGIT = P::zero_or_one_<P::and_<
+        DIGIT, P::zero_or_one_<P::and_<DIGIT, P::zero_or_one_<DIGIT>>>
+      >>;
+      using up_to_3zero = P::zero_or_one_<P::and_<
+        _0, P::zero_or_one_<P::and_<_0, P::zero_or_one_<_0>>>
+      >>;
+#pragma endregion
+
+#pragma region("date / time atoms")
+      struct day_name : P::rule<day_name, P::or_<Mon, Tue, Wed, Thu, Fri, Sat, Sun>> {
+        template <typename... Ts>
+        day_name(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct day_name_1 : P::rule<day_name_1, P::or_<
+        Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+      >> {
+        template <typename... Ts>
+        day_name_1(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct month : P::rule<month, P::or_<
+        Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+      >> {
+        template <typename... Ts>
+        month(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct day : P::rule<day, digit_2> {
+        template <typename... Ts>
+        day(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct hour : P::rule<hour, digit_2> {
+        template <typename... Ts>
+        hour(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct minute : P::rule<minute, digit_2> {
+        template <typename... Ts>
+        minute(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct second : P::rule<second, digit_2> {
+        template <typename... Ts>
+        second(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct year : P::rule<year, digit_4> {
+        template <typename... Ts>
+        year(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // date1 = day SP month SP year
+      struct date1 : P::rule<date1, P::and_<day, SP, month, SP, year>> {
+        template <typename... Ts>
+        date1(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // date2 = day "-" month "-" 2DIGIT
+      struct date2 : P::rule<date2, P::and_<day, Hyphen, month, Hyphen, digit_2>> {
+        template <typename... Ts>
+        date2(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // date3 = month SP ( 2DIGIT / ( SP DIGIT ) )
+      struct date3 : P::rule<date3, P::and_<
+        month, SP, P::or_<digit_2, P::and_<SP, DIGIT>>
+      >> {
+        template <typename... Ts>
+        date3(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // time-of-day = hour ":" minute ":" second
+      struct time_of_day : P::rule<time_of_day, P::and_<hour, Colon, minute, Colon, second>> {
+        template <typename... Ts>
+        time_of_day(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // IMF-fixdate = day-name "," SP date1 SP time-of-day SP GMT
+      struct IMF_fixdate : P::rule<IMF_fixdate, P::and_<
+        day_name, Comma, SP, date1, SP, time_of_day, SP, GMT
+      >> {
+        template <typename... Ts>
+        IMF_fixdate(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // rfc850-date = day-name-l "," SP date2 SP time-of-day SP GMT
+      struct rfc850_date : P::rule<rfc850_date, P::and_<
+        day_name_1, Comma, SP, date2, SP, time_of_day, SP, GMT
+      >> {
+        template <typename... Ts>
+        rfc850_date(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // asctime-date = day-name SP date3 SP time-of-day SP year
+      struct asctime_date : P::rule<asctime_date, P::and_<
+        day_name, SP, date3, SP, time_of_day, SP, year
+      >> {
+        template <typename... Ts>
+        asctime_date(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // obs-date = rfc850-date / asctime-date
+      struct obs_date : P::rule<obs_date, P::or_<rfc850_date, asctime_date>> {
+        template <typename... Ts>
+        obs_date(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // HTTP-date = IMF-fixdate / obs-date
+      struct HTTP_date : P::rule<HTTP_date, P::or_<IMF_fixdate, obs_date>> {
+        template <typename... Ts>
+        HTTP_date(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+#pragma endregion
+
+#pragma region("media / quality / product")
+      // qvalue = ( "0" [ "." *3DIGIT ] ) / ( "1" [ "." *3"0" ] )
+      struct qvalue : P::rule<qvalue, P::or_<
+        P::and_<_0, P::zero_or_one_<P::and_<Period, up_to_3DIGIT>>>,
+        P::and_<_1, P::zero_or_one_<P::and_<Period, up_to_3zero>>>
+      >> {
+        template <typename... Ts>
+        qvalue(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // weight = OWS ";" OWS "q=" qvalue
+      struct weight : P::rule<weight, P::and_<OWS, SemiColon, OWS, _q, Equal, qvalue>> {
+        template <typename... Ts>
+        weight(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // parameter = token "=" ( token / quoted-string )
+      struct parameter : P::rule<parameter, P::and_<
+        token, Equal, P::or_<token, quoted_string>
+      >> {
+        template <typename... Ts>
+        parameter(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct type : P::rule<type, token> {
+        template <typename... Ts>
+        type(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct subtype : P::rule<subtype, token> {
+        template <typename... Ts>
+        subtype(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // media-type = type "/" subtype *( OWS ";" OWS parameter )
+      struct media_type : P::rule<media_type, P::and_<
+        type, ForwardSlash, subtype,
+        P::zero_or_more_<P::and_<OWS, SemiColon, OWS, parameter>>
+      >> {
+        template <typename... Ts>
+        media_type(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // media-range = ( "*/*" / ( type "/*" ) / ( type "/" subtype ) ) *( OWS ";" OWS parameter )
+      struct media_range : P::rule<media_range, P::and_<
+        P::or_<
+          media_range_all,
+          P::and_<type, media_subrange_all>,
+          P::and_<type, ForwardSlash, subtype>
+        >,
+        P::zero_or_more_<P::and_<OWS, SemiColon, OWS, parameter>>
+      >> {
+        template <typename... Ts>
+        media_range(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // accept-ext = OWS ";" OWS token [ "=" ( token / quoted-string ) ]
+      struct accept_ext : P::rule<accept_ext, P::and_<
+        OWS, SemiColon, OWS, token,
+        P::zero_or_one_<P::and_<Equal, P::or_<token, quoted_string>>>
+      >> {
+        template <typename... Ts>
+        accept_ext(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // accept-params = weight *accept-ext
+      struct accept_params : P::rule<accept_params, P::and_<weight, P::zero_or_more_<accept_ext>>> {
+        template <typename... Ts>
+        accept_params(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct charset : P::rule<charset, token> {
+        template <typename... Ts>
+        charset(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct content_coding : P::rule<content_coding, token> {
+        template <typename... Ts>
+        content_coding(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // codings = content-coding / "identity" / "*"
+      // Prefer literals before generic token so "*" / "identity" are distinct when used alone.
+      struct codings : P::rule<codings, P::or_<identity, Asterisk, content_coding>> {
+        template <typename... Ts>
+        codings(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct method : P::rule<method, token> {
+        template <typename... Ts>
+        method(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      struct product_version : P::rule<product_version, token> {
+        template <typename... Ts>
+        product_version(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // product = token [ "/" product-version ]
+      struct product : P::rule<product, P::and_<
+        token, P::zero_or_one_<P::and_<ForwardSlash, product_version>>
+      >> {
+        template <typename... Ts>
+        product(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // delay-seconds = 1*DIGIT
+      struct delay_seconds : P::rule<delay_seconds, P::one_or_more_<DIGIT>> {
+        template <typename... Ts>
+        delay_seconds(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+#pragma endregion
+
+#pragma region("header values")
+      // Accept = [ ( "," / ( media-range [ accept-params ] ) )
+      //           *( OWS "," [ OWS ( media-range [ accept-params ] ) ] ) ]
+      struct accept : P::rule<accept, P::zero_or_one_<P::and_<
+        P::or_<Comma, P::and_<media_range, P::zero_or_one_<accept_params>>>,
+        P::zero_or_more_<P::and_<OWS, Comma, P::zero_or_one_<P::and_<
+          OWS, media_range, P::zero_or_one_<accept_params>
+        >>>>
+      >>> {
+        template <typename... Ts>
+        accept(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Accept-Charset = *( "," OWS ) ( ( charset / "*" ) [ weight ] )
+      //                 *( OWS "," [ OWS ( ( charset / "*" ) [ weight ] ) ] )
+      struct Accept_Charset : P::rule<Accept_Charset, P::and_<
+        P::zero_or_more_<P::and_<Comma, OWS>>,
+        P::or_<charset, Asterisk>, P::zero_or_one_<weight>,
+        P::zero_or_more_<P::and_<OWS, Comma, P::zero_or_one_<P::and_<
+          OWS, P::or_<charset, Asterisk>, P::zero_or_one_<weight>
+        >>>>
+      >> {
+        template <typename... Ts>
+        Accept_Charset(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Accept-Encoding = [ ( "," / ( codings [ weight ] ) )
+      //                    *( OWS "," [ OWS ( codings [ weight ] ) ] ) ]
+      struct Accept_Encoding : P::rule<Accept_Encoding, P::zero_or_one_<P::and_<
+        P::or_<Comma, P::and_<codings, P::zero_or_one_<weight>>>,
+        P::zero_or_more_<P::and_<OWS, Comma, P::zero_or_one_<P::and_<
+          OWS, codings, P::zero_or_one_<weight>
+        >>>>
+      >>> {
+        template <typename... Ts>
+        Accept_Encoding(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Accept-Language = *( "," OWS ) ( language-range [ weight ] )
+      //                  *( OWS "," [ OWS ( language-range [ weight ] ) ] )
+      struct Accept_Language : P::rule<Accept_Language, P::and_<
+        P::zero_or_more_<P::and_<Comma, OWS>>,
+        language_range, P::zero_or_one_<weight>,
+        P::zero_or_more_<P::and_<OWS, Comma, P::zero_or_one_<P::and_<
+          OWS, language_range, P::zero_or_one_<weight>
+        >>>>
+      >> {
+        template <typename... Ts>
+        Accept_Language(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Allow = [ ( "," / method ) *( OWS "," [ OWS method ] ) ]
+      struct Allow : P::rule<Allow, P::zero_or_one_<P::and_<
+        P::or_<Comma, method>,
+        P::zero_or_more_<P::and_<OWS, Comma, P::zero_or_one_<P::and_<OWS, method>>>>
+      >>> {
+        template <typename... Ts>
+        Allow(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Content-Encoding = *( "," OWS ) content-coding *( OWS "," [ OWS content-coding ] )
+      struct Content_Encoding : P::rule<Content_Encoding, P::and_<
+        P::zero_or_more_<P::and_<Comma, OWS>>,
+        content_coding,
+        P::zero_or_more_<P::and_<OWS, Comma, P::zero_or_one_<P::and_<OWS, content_coding>>>>
+      >> {
+        template <typename... Ts>
+        Content_Encoding(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Content-Language = *( "," OWS ) language-tag *( OWS "," [ OWS language-tag ] )
+      struct Content_Language : P::rule<Content_Language, P::and_<
+        P::zero_or_more_<P::and_<Comma, OWS>>,
+        language_tag,
+        P::zero_or_more_<P::and_<OWS, Comma, P::zero_or_one_<P::and_<OWS, language_tag>>>>
+      >> {
+        template <typename... Ts>
+        Content_Language(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Content-Location = absolute-URI / partial-URI
+      struct Content_Location : P::rule<Content_Location, P::or_<absolute_URI, partial_URI>> {
+        template <typename... Ts>
+        Content_Location(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Content-Type = media-type
+      struct Content_Type : P::rule<Content_Type, media_type> {
+        template <typename... Ts>
+        Content_Type(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Date = HTTP-date
+      struct Date : P::rule<Date, HTTP_date> {
+        template <typename... Ts>
+        Date(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Expect = "100-continue"
+      struct Expect : P::rule<Expect, _100_continue> {
+        template <typename... Ts>
+        Expect(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // From = mailbox
+      struct From : P::rule<From, mailbox> {
+        template <typename... Ts>
+        From(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Location = URI-reference
+      struct Location : P::rule<Location, URI_reference> {
+        template <typename... Ts>
+        Location(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Max-Forwards = 1*DIGIT
+      struct Max_Forwards : P::rule<Max_Forwards, P::one_or_more_<DIGIT>> {
+        template <typename... Ts>
+        Max_Forwards(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Referer = absolute-URI / partial-URI
+      struct Referer : P::rule<Referer, P::or_<absolute_URI, partial_URI>> {
+        template <typename... Ts>
+        Referer(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Retry-After = HTTP-date / delay-seconds
+      struct Retry_After : P::rule<Retry_After, P::or_<HTTP_date, delay_seconds>> {
+        template <typename... Ts>
+        Retry_After(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Server = product *( RWS ( product / comment ) )
+      struct Server : P::rule<Server, P::and_<
+        product, P::zero_or_more_<P::and_<RWS, P::or_<product, comment>>>
+      >> {
+        template <typename... Ts>
+        Server(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // User-Agent = product *( RWS ( product / comment ) )
+      struct User_Agent : P::rule<User_Agent, P::and_<
+        product, P::zero_or_more_<P::and_<RWS, P::or_<product, comment>>>
+      >> {
+        template <typename... Ts>
+        User_Agent(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+
+      // Vary = "*" / ( *( "," OWS ) field-name *( OWS "," [ OWS field-name ] ) )
+      struct Vary : P::rule<Vary, P::or_<
+        Asterisk,
+        P::and_<
+          P::zero_or_more_<P::and_<Comma, OWS>>,
+          field_name,
+          P::zero_or_more_<P::and_<OWS, Comma, P::zero_or_one_<P::and_<OWS, field_name>>>>
+        >
+      >> {
+        template <typename... Ts>
+        Vary(Ts&&... a) : rule(std::forward<Ts>(a)...) {}
+      };
+#pragma endregion
+
+    }
+  }
 }
-
-#endif //__RFC_7231_HPP_INCLUDED__
-
-#if __BUILD_UNIT_TESTS__
-
-class RFC7231_Test : public ParserTest < RFC7231_Test > {
-public:
-
-	//2.7.1.  http URI Scheme
-	TEST_METHOD(RFC7231_Tests) {
-		using namespace xtd::Grammars;
-		PassGrammar<RFC7231::accept>("text/html");// , application / xhtml + xml, application / xml; q = 0.9, image / webp, */*;q=0.8"));
-	}
-};
-
-#endif //__BUILD_DEBUG__

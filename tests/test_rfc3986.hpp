@@ -9,7 +9,7 @@
 #include <typeinfo>
 #include <vector>
 
-namespace {
+namespace rfc3986_test {
 
   namespace rfc = xtd::Grammars::RFC3986;
 
@@ -44,9 +44,10 @@ namespace {
     EXPECT_TRUE(ast_has(n, typeid(Child))) << "missing AST node: " << typeid(Child).name();
   }
 
-} // namespace
+}
 
 TEST(RFC3986, PercentEncoding) {
+  using namespace rfc3986_test;
   for (const char* s : {"%20", "%ff", "%00", "%AB", "%ab", "%9F"}) {
     ExpectPass<rfc::pct_encoded>(s);
   }
@@ -56,6 +57,7 @@ TEST(RFC3986, PercentEncoding) {
 }
 
 TEST(RFC3986, Unreserved) {
+  using namespace rfc3986_test;
   for (const char* s : {"a", "Z", "0", "9", "-", ".", "_", "~"}) {
     ExpectPass<rfc::unreserved>(s);
   }
@@ -65,6 +67,7 @@ TEST(RFC3986, Unreserved) {
 }
 
 TEST(RFC3986, GenDelims) {
+  using namespace rfc3986_test;
   for (const char* s : {":", "/", "?", "#", "[", "]", "@"}) {
     ExpectPass<rfc::gen_delims>(s);
   }
@@ -74,6 +77,7 @@ TEST(RFC3986, GenDelims) {
 }
 
 TEST(RFC3986, SubDelims) {
+  using namespace rfc3986_test;
   for (const char* s : {"!", "$", "&", "'", "(", ")", "*", "+", ",", ";", "="}) {
     ExpectPass<rfc::sub_delims>(s);
   }
@@ -83,6 +87,7 @@ TEST(RFC3986, SubDelims) {
 }
 
 TEST(RFC3986, Scheme) {
+  using namespace rfc3986_test;
   for (const char* s : {"http", "HTTP", "a", "a+b.-", "ftp", "https", "file"}) {
     ExpectPass<rfc::scheme>(s);
   }
@@ -92,6 +97,7 @@ TEST(RFC3986, Scheme) {
 }
 
 TEST(RFC3986, UserinfoPortAuthority) {
+  using namespace rfc3986_test;
   for (const char* s : {"", "user", "user:pass", "%20%ff", "-_~", "!$&'", "..."}) {
     ExpectPass<rfc::userinfo>(s);
   }
@@ -117,6 +123,7 @@ TEST(RFC3986, UserinfoPortAuthority) {
 }
 
 TEST(RFC3986, DecOctetAndIPv4) {
+  using namespace rfc3986_test;
   for (const char* s : {"0", "9", "10", "99", "100", "199", "200", "249", "250", "255"}) {
     ExpectPass<rfc::dec_octet>(s);
   }
@@ -133,6 +140,7 @@ TEST(RFC3986, DecOctetAndIPv4) {
 }
 
 TEST(RFC3986, IPv6AndLiteral) {
+  using namespace rfc3986_test;
   const char* pass_ipv6[] = {
     "2001:db8:85a3:0:0:8a2e:370:7334",
     "0:0:0:0:0:FFFF:129.144.52.38",
@@ -168,6 +176,7 @@ TEST(RFC3986, IPv6AndLiteral) {
 }
 
 TEST(RFC3986, Host) {
+  using namespace rfc3986_test;
   ExpectPass<rfc::host>("example.com");
   ExpectPass<rfc::host>("192.168.1.1");
   ExpectPass<rfc::host>("[::1]");
@@ -177,6 +186,7 @@ TEST(RFC3986, Host) {
 }
 
 TEST(RFC3986, Paths) {
+  using namespace rfc3986_test;
   ExpectPass<rfc::path_abempty>("");
   ExpectPass<rfc::path_abempty>("/");
   ExpectPass<rfc::path_abempty>("/a");
@@ -207,6 +217,7 @@ TEST(RFC3986, Paths) {
 }
 
 TEST(RFC3986, QueryFragment) {
+  using namespace rfc3986_test;
   ExpectPass<rfc::query>("");
   ExpectPass<rfc::query>("a=b");
   ExpectPass<rfc::query>("a=b&c=d");
@@ -220,6 +231,7 @@ TEST(RFC3986, QueryFragment) {
 }
 
 TEST(RFC3986, URI_PassPermutations) {
+  using namespace rfc3986_test;
   const char* pass[] = {
     "foo://example.com:8042/over/there?name=ferret#nose",
     "urn:example:animal:ferret:nose",
@@ -261,6 +273,7 @@ TEST(RFC3986, URI_PassPermutations) {
 }
 
 TEST(RFC3986, URI_FailPermutations) {
+  using namespace rfc3986_test;
   const char* fail[] = {
     "",
     " ",
@@ -286,6 +299,7 @@ TEST(RFC3986, URI_FailPermutations) {
 }
 
 TEST(RFC3986, AbsoluteURI) {
+  using namespace rfc3986_test;
   ExpectPass<rfc::absolute_URI>("http://example.com/path?x=1");
   ExpectPass<rfc::absolute_URI>("urn:example:animal:ferret:nose");
   ExpectPass<rfc::absolute_URI>("foo:");
@@ -296,6 +310,7 @@ TEST(RFC3986, AbsoluteURI) {
 }
 
 TEST(RFC3986, RelativeRefAndURIReference) {
+  using namespace rfc3986_test;
   const char* rel_pass[] = {
     "//example.com/path",
     "/absolute",
@@ -324,6 +339,7 @@ TEST(RFC3986, RelativeRefAndURIReference) {
 }
 
 TEST(RFC3986, HierPart) {
+  using namespace rfc3986_test;
   ExpectPass<rfc::hier_part>("//fnord/squeegy");
   ExpectPass<rfc::hier_part>("//example.com");
   ExpectPass<rfc::hier_part>("/abs");
@@ -332,6 +348,7 @@ TEST(RFC3986, HierPart) {
 }
 
 TEST(RFC3986, AST_Shape_RFCExample) {
+  using namespace rfc3986_test;
   std::shared_ptr<rfc::URI> ast;
   ASSERT_TRUE(parse_all(std::string("foo://example.com:8042/over/there?name=ferret#nose"), ast));
   ExpectHas<rfc::scheme>(*ast);
@@ -346,6 +363,7 @@ TEST(RFC3986, AST_Shape_RFCExample) {
 }
 
 TEST(RFC3986, AST_Shape_HttpWithUserinfo) {
+  using namespace rfc3986_test;
   std::shared_ptr<rfc::URI> ast;
   ASSERT_TRUE(parse_all(std::string("https://user:pass@192.168.0.1:8443/a/b?x=1#frag"), ast));
   ExpectHas<rfc::scheme>(*ast);
@@ -359,6 +377,7 @@ TEST(RFC3986, AST_Shape_HttpWithUserinfo) {
 }
 
 TEST(RFC3986, AST_Shape_IPv6Literal) {
+  using namespace rfc3986_test;
   std::shared_ptr<rfc::URI> ast;
   ASSERT_TRUE(parse_all(std::string("http://[2001:db8::1]/"), ast));
   ExpectHas<rfc::IP_literal>(*ast);
@@ -366,6 +385,7 @@ TEST(RFC3986, AST_Shape_IPv6Literal) {
 }
 
 TEST(RFC3986, AST_Shape_Urn) {
+  using namespace rfc3986_test;
   std::shared_ptr<rfc::URI> ast;
   ASSERT_TRUE(parse_all(std::string("urn:example:animal:ferret:nose"), ast));
   ExpectHas<rfc::scheme>(*ast);

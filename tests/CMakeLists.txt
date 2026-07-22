@@ -44,6 +44,14 @@ set(TEST_SOURCE
   test_parse.hpp
   test_parse_ast.hpp
   test_rfc3986.hpp
+  test_rfc5322.hpp
+  test_rfc5536.hpp
+  test_rfc4647.hpp
+  test_rfc5646.hpp
+  test_rfc7230.hpp
+  test_rfc7231.hpp
+  test_rfc7232.hpp
+  test_rfc7233.hpp
   test_path.hpp
   test_process.hpp
   test_rw_lock.hpp
@@ -82,6 +90,14 @@ build_option(TEST_META "test meta programming")
 build_option(TEST_PARSE "test xtd::parse")
 build_option(TEST_PARSE_AST "test xtd::parse_ast")
 build_option(TEST_RFC3986 "test RFC3986 URI grammar")
+build_option(TEST_RFC5322 "test RFC5322 Internet Message Format grammar")
+build_option(TEST_RFC5536 "test RFC5536 Netnews article grammar")
+build_option(TEST_RFC4647 "test RFC4647 basic language-range grammar")
+build_option(TEST_RFC5646 "test RFC5646 Language-Tag grammar")
+build_option(TEST_RFC7230 "test RFC7230 HTTP/1.1 message syntax grammar")
+build_option(TEST_RFC7231 "test RFC7231 HTTP/1.1 semantics grammar")
+build_option(TEST_RFC7232 "test RFC7232 HTTP/1.1 conditional requests grammar")
+build_option(TEST_RFC7233 "test RFC7233 HTTP/1.1 range requests grammar")
 build_option(TEST_PATH "test xtd::filesystem::path")
 build_option(TEST_PROCESS "test xtd::process")
 build_option(TEST_READ_WRITE_LOCK "test xtd::concurrent::rw_lock")

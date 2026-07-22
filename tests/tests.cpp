@@ -92,6 +92,38 @@ main system and unit test entry point
   #include "test_rfc3986.hpp"
 #endif
 
+#if (ON==TEST_RFC5322)
+  #include "test_rfc5322.hpp"
+#endif
+
+#if (ON==TEST_RFC5536)
+  #include "test_rfc5536.hpp"
+#endif
+
+#if (ON==TEST_RFC4647)
+  #include "test_rfc4647.hpp"
+#endif
+
+#if (ON==TEST_RFC5646)
+  #include "test_rfc5646.hpp"
+#endif
+
+#if (ON==TEST_RFC7230)
+  #include "test_rfc7230.hpp"
+#endif
+
+#if (ON==TEST_RFC7231)
+  #include "test_rfc7231.hpp"
+#endif
+
+#if (ON==TEST_RFC7232)
+  #include "test_rfc7232.hpp"
+#endif
+
+#if (ON==TEST_RFC7233)
+  #include "test_rfc7233.hpp"
+#endif
+
 #if (ON==TEST_PATH)
   #include "test_path.hpp"
 #endif

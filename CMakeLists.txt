@@ -102,6 +102,7 @@ set(XTD_GRAMMARS
   include/xtd/grammars/RFC4647.hpp
   include/xtd/grammars/RFC5234.hpp
   include/xtd/grammars/RFC5322.hpp
+  include/xtd/grammars/RFC5536.hpp
   include/xtd/grammars/RFC5646.hpp
   include/xtd/grammars/RFC7230.hpp
   include/xtd/grammars/RFC7231.hpp
